@@ -1,6 +1,9 @@
 name: Validate Contracts
 
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     paths:
       - 'contracts/**'
