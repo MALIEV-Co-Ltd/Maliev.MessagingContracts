@@ -15,9 +15,16 @@ foreach (var file in Directory.GetFiles(contractsPath, "*.json", SearchOption.Al
 {
     var schema = await JsonSchema.FromFileAsync(file);
     var schemaName = schema.Title ?? Path.GetFileNameWithoutExtension(file);
+
+    var directoryName = Path.GetDirectoryName(file);
+    if (string.IsNullOrEmpty(directoryName))
+    {
+        Console.WriteLine($"Warning: Could not determine directory for file {file}. Skipping.");
+        continue;
+    }
     
     // Determine namespace based on folder structure
-    var relativePath = Path.GetRelativePath(contractsPath, Path.GetDirectoryName(file));
+    var relativePath = Path.GetRelativePath(contractsPath, directoryName);
     var subNamespace = relativePath.Replace(Path.DirectorySeparatorChar, '.').Replace("schemas.", "");
     var fullNamespace = $"Maliev.MessagingContracts.{subNamespace}";
 
