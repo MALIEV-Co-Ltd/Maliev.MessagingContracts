@@ -22,7 +22,11 @@
     "url": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts/issues"
   },
   "homepage": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts#readme",
+  "dependencies": {
+    "@asyncapi/generator": "^2.11.0",
+    "@asyncapi/markdown-template": "^1.6.7"
+  },
   "devDependencies": {
-    "@asyncapi/cli": "^2.14.1"
+    "@asyncapi/cli": "^4.1.1"
   }
 }
