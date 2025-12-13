@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Command",
+  "type": "object",
+  "properties": {
+    "replyTo": {
+      "type": "string",
+      "description": "Optional queue for responses"
+    }
+  }
+}

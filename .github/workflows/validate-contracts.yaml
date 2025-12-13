@@ -1,0 +1,25 @@
+name: Validate Contracts
+
+on:
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - 'asyncapi/**'
+      - 'topology/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate AsyncAPI
+        run: npm test

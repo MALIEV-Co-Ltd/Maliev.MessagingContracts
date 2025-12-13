@@ -1,0 +1,16 @@
+asyncapi: '3.0.0'
+info:
+  title: Maliev Messaging Contracts
+  version: 1.0.0
+  description: Shared messaging contracts for Maliev ecosystem.
+channels:
+  user/created:
+    address: maliev.users.events.user-created
+    messages:
+      createUserCommand:
+        $ref: '#/components/messages/CreateUserCommand'
+components:
+  messages:
+    CreateUserCommand:
+      payload:
+        $ref: '../contracts/schemas/commands/create-user-command.json'

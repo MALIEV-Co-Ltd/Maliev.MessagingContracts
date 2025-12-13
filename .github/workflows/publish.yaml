@@ -1,0 +1,26 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Generate Contracts
+        run: dotnet run --project tools/Generator/Generator.csproj
+
+      - name: Build and Pack
+        run: dotnet pack generated/csharp/Maliev.MessagingContracts.csproj -c Release /p:Version=1.0.${{ github.run_number }}
+
+      - name: Push to GitHub Packages
+        run: dotnet nuget push "generated/csharp/bin/Release/*.nupkg" --source "https://nuget.pkg.github.com/MALIEV-Co-Ltd" --api-key ${{ secrets.GITOPS_PAT }} --skip-duplicate

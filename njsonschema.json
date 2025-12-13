@@ -1,0 +1,25 @@
+{
+  "runtime": "Net80",
+  "defaultVariables": null,
+  "documentGenerator": {
+    "fromDocument": {
+      "json": "",
+      "url": "",
+      "output": null,
+      "newLineBehavior": "Auto"
+    }
+  },
+  "codeGenerators": {
+    "csharp": {
+      "classStyle": "Record",
+      "jsonLibrary": "SystemTextJson",
+      "namespace": "Maliev.MessagingContracts",
+      "output": null,
+      "generateJsonMethods": false,
+      "generateDataAnnotations": false,
+      "generateNullableReferenceTypes": true,
+      "generateOptionalPropertiesAsNullable": true,
+      "propertyNameGeneratorType": null
+    }
+  }
+}
