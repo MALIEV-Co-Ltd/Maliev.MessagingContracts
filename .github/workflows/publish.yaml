@@ -1,27 +1,84 @@
-name: Publish Package
+name: Publish NuGet Package
 
 on:
   push:
     branches:
       - main
       - develop
+    paths:
+      - 'contracts/schemas/**'
+      - 'generated/csharp/**'
+      - 'tools/Generator/**'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Package version (e.g., 1.0.0)'
+        required: false
+        type: string
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  PROJECT_PATH: 'generated/csharp/Maliev.MessagingContracts.csproj'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Generate Contracts
         run: dotnet run --project tools/Generator/Generator.csproj
 
-      - name: Build and Pack
-        run: dotnet pack generated/csharp/Maliev.MessagingContracts.csproj -c Release /p:Version=1.0.${{ github.run_number }}
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          elif [ "${{ github.event_name }}" == "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+            VERSION="${VERSION#v}"
+          else
+            # Default to 1.0.x based on run number
+            VERSION="1.0.${{ github.run_number }}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Package version: $VERSION"
+
+      - name: Pack
+        run: >
+          dotnet pack ${{ env.PROJECT_PATH }}
+          --configuration Release
+          --no-build
+          -p:PackageVersion=${{ steps.version.outputs.version }}
+          --output ./nupkg
 
       - name: Push to GitHub Packages
-        run: dotnet nuget push "generated/csharp/bin/Release/*.nupkg" --source "https://nuget.pkg.github.com/MALIEV-Co-Ltd" --api-key ${{ secrets.GITOPS_PAT }} --skip-duplicate
+        run: >
+          dotnet nuget push ./nupkg/*.nupkg
+          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          --api-key ${{ secrets.GITHUB_TOKEN }}
+          --skip-duplicate
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: ./nupkg/*.nupkg
