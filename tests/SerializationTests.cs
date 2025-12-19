@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Xunit;
-using Maliev.MessagingContracts; 
+using Maliev.MessagingContracts.Generated; 
 
 namespace Maliev.MessagingContracts.Tests;
 

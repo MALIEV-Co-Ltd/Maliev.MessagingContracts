@@ -72,11 +72,10 @@ namespace Generator
             sb.AppendLine("// </auto-generated>");
             sb.AppendLine("//----------------------");
             sb.AppendLine();
-                    sb.AppendLine("using System.Text.Json.Serialization;");
-                    sb.AppendLine();
-                    sb.AppendLine("namespace Maliev.MessagingContracts");
-                    sb.AppendLine("{");
-            // Generate BaseMessage first
+                            sb.AppendLine("using System.Text.Json.Serialization;");
+                            sb.AppendLine();
+                            sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
+                            sb.AppendLine("{");            // Generate BaseMessage first
             Console.WriteLine("Generating BaseMessage...");
             await GenerateBaseMessage(sb);
 
