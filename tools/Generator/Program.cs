@@ -15,7 +15,7 @@ namespace Generator
         {
             var workspaceRoot = GetWorkspaceRoot(Directory.GetCurrentDirectory());
             var schemaRoot = Path.Combine(workspaceRoot, "contracts", "schemas");
-            var outputDir = Path.Combine(workspaceRoot, "generated", "csharp", "Contracts");
+            var outputDir = Path.Combine(workspaceRoot, "generated", "csharp");
             var outputFile = Path.Combine(outputDir, "MessagingContracts.cs");
 
             Console.WriteLine("Cleaning up existing generated files...");
