@@ -9,6 +9,8 @@ on:
       - 'contracts/schemas/**'
       - 'generated/csharp/**'
       - 'tools/Generator/**'
+      - 'scripts/**'
+      - '.github/workflows/publish.yaml'
   release:
     types: [published]
   workflow_dispatch:
