@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using NJsonSchema;
-using NJsonSchema.CodeGeneration.CSharp;
 
 namespace Generator
 {
