@@ -9,8 +9,54 @@ channels:
     messages:
       createUserCommand:
         $ref: '#/components/messages/CreateUserCommand'
+  customer/details:
+    address: maliev.customers.requests.get-details
+    messages:
+      getCustomerDetailsRequest:
+        $ref: '#/components/messages/GetCustomerDetailsRequest'
+      customerDetailsResponse:
+        $ref: '#/components/messages/CustomerDetailsResponse'
+  order/created:
+    address: maliev.orders.commands.create-order
+    messages:
+      createOrderCommand:
+        $ref: '#/components/messages/CreateOrderCommand'
+  payment/completed:
+    address: maliev.payments.events.completed
+    messages:
+      paymentCompletedEvent:
+        $ref: '#/components/messages/PaymentCompletedEvent'
+  payment/created:
+    address: maliev.payments.events.created
+    messages:
+      paymentCreatedEvent:
+        $ref: '#/components/messages/PaymentCreatedEvent'
+  payment/failed:
+    address: maliev.payments.events.failed
+    messages:
+      paymentFailedEvent:
+        $ref: '#/components/messages/PaymentFailedEvent'
+
 components:
   messages:
     CreateUserCommand:
       payload:
         $ref: '../contracts/schemas/commands/create-user-command.json'
+    GetCustomerDetailsRequest:
+      payload:
+        $ref: '../contracts/schemas/customers/get-customer-details-request.json'
+    CustomerDetailsResponse:
+      payload:
+        $ref: '../contracts/schemas/customers/customer-details-response.json'
+    CreateOrderCommand:
+      payload:
+        $ref: '../contracts/schemas/orders/create-order-command.json'
+    PaymentCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-completed-event.json'
+    PaymentCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-created-event.json'
+    PaymentFailedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-failed-event.json'

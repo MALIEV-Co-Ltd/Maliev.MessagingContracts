@@ -1,14 +1,10 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "DomainEvent",
-  "type": "object",
-  "properties": {
-    "aggregateId": {
-      "type": "string"
-    },
-    "occurredOn": {
-      "type": "string",
-      "format": "date-time"
-    }
-  }
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://maliev.com/schemas/shared/domain-event.json",
+    "title": "Domain Event",
+    "allOf": [
+        {
+            "$ref": "base-message.json"
+        }
+    ]
 }

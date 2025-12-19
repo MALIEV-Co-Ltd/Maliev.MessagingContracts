@@ -1,5 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://maliev.com/schemas/shared/notification-event.json",
     "title": "NotificationEvent",
     "description": "Event published to trigger a notification to one or more users.",
     "allOf": [
