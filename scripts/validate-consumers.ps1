@@ -8,7 +8,11 @@ $schemaFiles = Get-ChildItem -Path "contracts/schemas" -Recurse -Filter "*.json"
     $_.Name -ne "base-message.json"
 }
 
-$discoveredServices = (Get-Content "specs/001-define-messaging-contracts/discovery-report.md" | Where-Object { $_ -match 'Maliev\..*Service' } | ForEach-Object { ($_ -split '\|')[1].Trim() })
+$discoveredServices = (Get-Content "specs/001-define-messaging-contracts/discovery-report.md" | Where-Object { $_ -match 'Maliev\..*Service' } | ForEach-Object { 
+    $fullName = ($_ -split '\|')[1].Trim()
+    $shortName = $fullName -replace '^Maliev\.', ''
+    $fullName, $shortName
+}) | Select-Object -Unique
 
 $allConsumersExist = $true
 
