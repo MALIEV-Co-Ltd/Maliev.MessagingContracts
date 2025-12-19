@@ -43,6 +43,9 @@ jobs:
       - name: Generate Contracts
         run: dotnet run --project tools/Generator/Generator.csproj
 
+      - name: List generated files
+        run: ls -R generated/csharp
+
       - name: Restore dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
