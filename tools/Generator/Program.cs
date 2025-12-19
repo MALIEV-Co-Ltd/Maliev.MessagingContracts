@@ -72,11 +72,10 @@ namespace Generator
             sb.AppendLine("// </auto-generated>");
             sb.AppendLine("//----------------------");
             sb.AppendLine();
-            sb.AppendLine("using System.Text.Json.Serialization;");
-            sb.AppendLine();
-            sb.AppendLine("namespace Maliev.MessagingContracts.Contracts");
-            sb.AppendLine("{");
-
+                    sb.AppendLine("using System.Text.Json.Serialization;");
+                    sb.AppendLine();
+                    sb.AppendLine("namespace Maliev.MessagingContracts");
+                    sb.AppendLine("{");
             // Generate BaseMessage first
             Console.WriteLine("Generating BaseMessage...");
             await GenerateBaseMessage(sb);
@@ -223,15 +222,28 @@ namespace Generator
 
                     // Check if this is a payload object and generate nested type
                     string propType;
-                    if (propName.Equals("Payload", StringComparison.OrdinalIgnoreCase) &&
-                        prop.Value.TryGetProperty("type", out var typeEl) &&
+                    if (prop.Value.TryGetProperty("type", out var typeEl) &&
                         typeEl.GetString() == "object" &&
-                        prop.Value.TryGetProperty("properties", out var payloadProps))
+                        prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
-                        // Generate nested payload record
-                        var payloadTypeName = $"{className}Payload";
-                        GeneratePayloadRecord(sb, payloadTypeName, prop.Value);
-                        propType = payloadTypeName;
+                        // Generate nested record
+                        var nestedTypeName = propName.Equals("Payload", StringComparison.OrdinalIgnoreCase) 
+                            ? $"{className}Payload" 
+                            : $"{className}{propName}";
+                        
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value, className);
+                        propType = nestedTypeName;
+                    }
+                    else if (prop.Value.TryGetProperty("type", out var arrayType) &&
+                             arrayType.GetString() == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl) &&
+                             itemsEl.TryGetProperty("type", out var itemTypeEl) &&
+                             itemTypeEl.GetString() == "object")
+                    {
+                        // Generate record for array items
+                        var itemTypeName = $"{className}{propName}Item";
+                        GenerateNestedRecord(sb, itemTypeName, itemsEl, className);
+                        propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
                     }
                     else
                     {
@@ -281,26 +293,41 @@ namespace Generator
             sb.AppendLine();
         }
 
-        private void GeneratePayloadRecord(StringBuilder sb, string typeName, JsonElement payloadSchema)
+        private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema, string parentClassName)
         {
             var properties = new List<(string Name, string JsonName, string Type)>();
-            var requiredProps = new HashSet<string>();
 
-            if (payloadSchema.TryGetProperty("required", out var reqArray))
-            {
-                foreach (var req in reqArray.EnumerateArray())
-                {
-                    requiredProps.Add(req.GetString() ?? "");
-                }
-            }
-
-            if (payloadSchema.TryGetProperty("properties", out var props))
+            if (schema.TryGetProperty("properties", out var props))
             {
                 foreach (var prop in props.EnumerateObject())
                 {
                     var propName = ToPascalCase(prop.Name);
                     var jsonName = prop.Name;
-                    var propType = GetCSharpType(prop.Value, propName);
+                    string propType;
+
+                    if (prop.Value.TryGetProperty("type", out var typeEl) &&
+                        typeEl.GetString() == "object" &&
+                        prop.Value.TryGetProperty("properties", out var nestedProps))
+                    {
+                        var nestedTypeName = $"{typeName}{propName}";
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value, parentClassName);
+                        propType = nestedTypeName;
+                    }
+                    else if (prop.Value.TryGetProperty("type", out var arrayType) &&
+                             arrayType.GetString() == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl) &&
+                             itemsEl.TryGetProperty("type", out var itemTypeEl) &&
+                             itemTypeEl.GetString() == "object")
+                    {
+                        var itemTypeName = $"{typeName}{propName}Item";
+                        GenerateNestedRecord(sb, itemTypeName, itemsEl, parentClassName);
+                        propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                    }
+                    else
+                    {
+                        propType = GetCSharpType(prop.Value, propName);
+                    }
+
                     properties.Add((propName, jsonName, propType));
                 }
             }

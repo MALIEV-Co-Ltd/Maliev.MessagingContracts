@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "PaymentFailedEvent",
+    "description": "Event published when a payment transaction fails.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "transactionId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "idempotencyKey": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "providerName": {
+                    "type": "string"
+                },
+                "errorMessage": {
+                    "type": "string"
+                },
+                "providerErrorCode": {
+                    "type": "string"
+                },
+                "failedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "transactionId",
+                "amount",
+                "currency",
+                "errorMessage",
+                "failedAt"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}
