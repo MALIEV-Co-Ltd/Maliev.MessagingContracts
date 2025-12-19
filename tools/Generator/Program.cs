@@ -72,6 +72,8 @@ namespace Generator
             sb.AppendLine("// </auto-generated>");
             sb.AppendLine("//----------------------");
             sb.AppendLine();
+            sb.AppendLine("using System.Text.Json.Serialization;");
+            sb.AppendLine();
             sb.AppendLine("namespace Maliev.MessagingContracts.Contracts");
             sb.AppendLine("{");
 
@@ -84,12 +86,21 @@ namespace Generator
 
             // Collect and generate message contracts
             var messageSchemaFiles = new List<string>();
-            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers" })
+            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "shared" })
             {
                 var domainPath = Path.Combine(_schemaRoot, domainDir);
                 if (Directory.Exists(domainPath))
                 {
-                    messageSchemaFiles.AddRange(Directory.GetFiles(domainPath, "*.json"));
+                    var files = Directory.GetFiles(domainPath, "*.json", SearchOption.AllDirectories);
+                    // Filter out only the exact base schemas, not anything ending with them
+                    var filtered = files.Where(f => 
+                        !f.EndsWith("base-message.json", StringComparison.OrdinalIgnoreCase) && 
+                        !f.EndsWith("envelope.json", StringComparison.OrdinalIgnoreCase) &&
+                        !Path.GetFileName(f).Equals("command.json", StringComparison.OrdinalIgnoreCase) &&
+                        !Path.GetFileName(f).Equals("domain-event.json", StringComparison.OrdinalIgnoreCase) &&
+                        !Path.GetFileName(f).Equals("integration-event.json", StringComparison.OrdinalIgnoreCase)
+                    ).ToList();
+                    messageSchemaFiles.AddRange(filtered);
                 }
             }
 
@@ -110,22 +121,23 @@ namespace Generator
             sb.AppendLine("    /// The base structure that all Maliev messaging contracts MUST adhere to.");
             sb.AppendLine("    /// </summary>");
             sb.AppendLine("    public record BaseMessage(");
-            sb.AppendLine("        System.Guid MessageId,");
-            sb.AppendLine("        string MessageName,");
-            sb.AppendLine("        MessageType MessageType,");
-            sb.AppendLine("        string MessageVersion,");
-            sb.AppendLine("        string PublishedBy,");
-            sb.AppendLine("        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,");
-            sb.AppendLine("        System.Guid CorrelationId,");
-            sb.AppendLine("        System.Guid? CausationId,");
-            sb.AppendLine("        System.DateTimeOffset OccurredAtUtc,");
-            sb.AppendLine("        bool IsPublic");
+            sb.AppendLine("        [property: JsonPropertyName(\"messageId\")] System.Guid MessageId,");
+            sb.AppendLine("        [property: JsonPropertyName(\"messageName\")] string MessageName,");
+            sb.AppendLine("        [property: JsonPropertyName(\"messageType\")] MessageType MessageType,");
+            sb.AppendLine("        [property: JsonPropertyName(\"messageVersion\")] string MessageVersion,");
+            sb.AppendLine("        [property: JsonPropertyName(\"publishedBy\")] string PublishedBy,");
+            sb.AppendLine("        [property: JsonPropertyName(\"consumedBy\")] System.Collections.Generic.IReadOnlyList<string> ConsumedBy,");
+            sb.AppendLine("        [property: JsonPropertyName(\"correlationId\")] System.Guid CorrelationId,");
+            sb.AppendLine("        [property: JsonPropertyName(\"causationId\")] System.Guid? CausationId,");
+            sb.AppendLine("        [property: JsonPropertyName(\"occurredAtUtc\")] System.DateTimeOffset OccurredAtUtc,");
+            sb.AppendLine("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic");
             sb.AppendLine("    );");
             sb.AppendLine();
         }
 
         private void GenerateMessageTypeEnum(StringBuilder sb)
         {
+            sb.AppendLine("    [JsonConverter(typeof(JsonStringEnumConverter))]");
             sb.AppendLine("    public enum MessageType");
             sb.AppendLine("    {");
             sb.AppendLine("        Command,");
@@ -191,7 +203,7 @@ namespace Generator
         private async Task GenerateDerivedMessage(StringBuilder sb, JsonElement root, string className)
         {
             // Extract the payload schema and generate nested types if needed
-            var properties = new List<(string Name, string Type, bool Required)>();
+            var properties = new List<(string Name, string JsonName, string Type, bool Required)>();
             var requiredProps = new HashSet<string>();
 
             if (root.TryGetProperty("required", out var reqArray))
@@ -207,6 +219,7 @@ namespace Generator
                 foreach (var prop in props.EnumerateObject())
                 {
                     var propName = ToPascalCase(prop.Name);
+                    var jsonName = prop.Name;
 
                     // Check if this is a payload object and generate nested type
                     string propType;
@@ -226,14 +239,14 @@ namespace Generator
                     }
 
                     var isRequired = requiredProps.Contains(prop.Name);
-                    properties.Add((propName, propType, isRequired));
+                    properties.Add((propName, jsonName, propType, isRequired));
                 }
             }
 
             // Generate the message record that extends BaseMessage
             sb.Append($"    public record {className}(");
 
-            // Base class parameters first
+            // Base class parameters first - NO attributes here because they hide/override base properties incorrectly if attributed as property
             var baseParams = new[]
             {
                 "System.Guid MessageId",
@@ -249,9 +262,9 @@ namespace Generator
             };
 
             var allParams = baseParams.ToList();
-            foreach (var (Name, Type, _) in properties)
+            foreach (var (Name, JsonName, Type, _) in properties)
             {
-                allParams.Add($"{Type} {Name}");
+                allParams.Add($"[property: JsonPropertyName(\"{JsonName}\")] {Type} {Name}");
             }
 
             sb.AppendLine();
@@ -270,7 +283,7 @@ namespace Generator
 
         private void GeneratePayloadRecord(StringBuilder sb, string typeName, JsonElement payloadSchema)
         {
-            var properties = new List<(string Name, string Type)>();
+            var properties = new List<(string Name, string JsonName, string Type)>();
             var requiredProps = new HashSet<string>();
 
             if (payloadSchema.TryGetProperty("required", out var reqArray))
@@ -286,15 +299,16 @@ namespace Generator
                 foreach (var prop in props.EnumerateObject())
                 {
                     var propName = ToPascalCase(prop.Name);
+                    var jsonName = prop.Name;
                     var propType = GetCSharpType(prop.Value, propName);
-                    properties.Add((propName, propType));
+                    properties.Add((propName, jsonName, propType));
                 }
             }
 
             sb.Append($"    public record {typeName}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"{properties[i].Type} {properties[i].Name}");
+                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
                     sb.Append(", ");
@@ -306,22 +320,23 @@ namespace Generator
 
         private async Task GenerateStandaloneMessage(StringBuilder sb, JsonElement root, string className)
         {
-            var properties = new List<(string Name, string Type)>();
+            var properties = new List<(string Name, string JsonName, string Type)>();
 
             if (root.TryGetProperty("properties", out var props))
             {
                 foreach (var prop in props.EnumerateObject())
                 {
                     var propName = ToPascalCase(prop.Name);
+                    var jsonName = prop.Name;
                     var propType = GetCSharpType(prop.Value, propName);
-                    properties.Add((propName, propType));
+                    properties.Add((propName, jsonName, propType));
                 }
             }
 
             sb.Append($"    public record {className}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"{properties[i].Type} {properties[i].Name}");
+                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
                     sb.Append(", ");
