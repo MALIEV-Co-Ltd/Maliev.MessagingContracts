@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Payment Completed Event",
+    "description": "Event indicating that a payment has been successfully processed.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        },
+        {
+            "properties": {
+                "messageName": { "const": "PaymentCompletedEvent" },
+                "messageType": { "const": "Event" },
+                "publishedBy": { "const": "PaymentService" },
+                "consumedBy": { "const": ["NotificationService", "OrderService"] }
+            }
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "paymentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                }
+            },
+            "required": [
+                "orderId",
+                "paymentId",
+                "amount",
+                "currency"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

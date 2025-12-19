@@ -24,5 +24,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Detect Breaking Changes
+        run: |
+          git diff --quiet origin/${{ github.base_ref }} -- contracts/schemas/
+          if [ $? -ne 0 ]; then
+            echo "::error::Breaking change detected in schemas. Please increment the messageVersion and/or create a new message version."
+            exit 1
+          fi
+        shell: bash
+
+      - name: Validate Consumers
+        run: ./scripts/validate-consumers.ps1
+        shell: pwsh
+
       - name: Validate AsyncAPI
         run: npm test
