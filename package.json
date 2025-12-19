@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "asyncapi validate asyncapi/asyncapi.yaml",
+    "test": "npm run validate:asyncapi && npm run validate:schemas",
+    "validate:asyncapi": "asyncapi validate asyncapi/asyncapi.yaml",
+    "validate:schemas": "ajv validate -s contracts/schemas/shared/base-message.json -d contracts/schemas/**/*.json --all-errors",
     "gen-docs": "asyncapi generate fromTemplate asyncapi/asyncapi.yaml @asyncapi/html-template -o docs --force-write"
   },
   "repository": {
@@ -27,6 +29,7 @@
     "@asyncapi/markdown-template": "^1.6.7"
   },
   "devDependencies": {
-    "@asyncapi/cli": "^4.1.1"
+    "@asyncapi/cli": "^4.1.1",
+    "ajv-cli": "^5.0.0"
   }
 }

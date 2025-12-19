@@ -1,0 +1,24 @@
+{
+  "runtime": "Net80",
+
+  "documentGenerator": {
+    "fromJsonSchema": {
+      "schema": "${InputSchema}"
+    }
+  },
+
+  "codeGenerators": {
+    "jsonSchemaToCSharp": {
+      "className": "${ClassName}",
+      "namespace": "${Namespace}",
+      "output": "${OutputFile}",
+
+      "typeStyle": "Record",
+      "jsonLibrary": "SystemTextJson",
+
+      "generateDataAnnotations": true,
+      "requiredPropertiesMustBeDefined": true,
+      "generateOptionalPropertiesAsNullable": true
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Customer Details Response",
+    "description": "Response containing details for a specific customer.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        },
+        {
+            "properties": {
+                "messageName": { "const": "CustomerDetailsResponse" },
+                "messageType": { "const": "Response" },
+                "publishedBy": { "const": "CustomerService" },
+                "consumedBy": { "const": ["OrderService"] }
+            }
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                }
+            },
+            "required": [
+                "customerId",
+                "fullName",
+                "email"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}
