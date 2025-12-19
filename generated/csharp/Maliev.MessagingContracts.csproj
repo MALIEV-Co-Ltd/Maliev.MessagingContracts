@@ -13,8 +13,4 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Contracts/**/*.cs" />
-  </ItemGroup>
-
 </Project>

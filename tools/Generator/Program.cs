@@ -257,19 +257,19 @@ namespace Generator
             // Generate the message record that extends BaseMessage
             sb.Append($"    public record {className}(");
 
-            // Base class parameters first - NO attributes here because they hide/override base properties incorrectly if attributed as property
+            // Base class parameters first
             var baseParams = new[]
             {
-                "System.Guid MessageId",
-                "string MessageName",
-                "MessageType MessageType",
-                "string MessageVersion",
-                "string PublishedBy",
-                "System.Collections.Generic.IReadOnlyList<string> ConsumedBy",
-                "System.Guid CorrelationId",
-                "System.Guid? CausationId",
-                "System.DateTimeOffset OccurredAtUtc",
-                "bool IsPublic"
+                "[property: JsonPropertyName(\"messageId\")] System.Guid MessageId",
+                "[property: JsonPropertyName(\"messageName\")] string MessageName",
+                "[property: JsonPropertyName(\"messageType\")] MessageType MessageType",
+                "[property: JsonPropertyName(\"messageVersion\")] string MessageVersion",
+                "[property: JsonPropertyName(\"publishedBy\")] string PublishedBy",
+                "[property: JsonPropertyName(\"consumedBy\")] System.Collections.Generic.IReadOnlyList<string> ConsumedBy",
+                "[property: JsonPropertyName(\"correlationId\")] System.Guid CorrelationId",
+                "[property: JsonPropertyName(\"causationId\")] System.Guid? CausationId",
+                "[property: JsonPropertyName(\"occurredAtUtc\")] System.DateTimeOffset OccurredAtUtc",
+                "[property: JsonPropertyName(\"isPublic\")] bool IsPublic"
             };
 
             var allParams = baseParams.ToList();

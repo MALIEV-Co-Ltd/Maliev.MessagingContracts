@@ -2,17 +2,48 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "CreateUserCommand",
   "type": "object",
-  "properties": {
-    "username": {
-      "type": "string"
+  "allOf": [
+    {
+      "$ref": "../shared/base-message.json"
     },
-    "email": {
-      "type": "string",
-      "format": "email"
+    {
+      "properties": {
+        "messageName": {
+          "const": "CreateUserCommand"
+        },
+        "messageType": {
+          "const": "Command"
+        },
+        "publishedBy": {
+          "const": "AuthService"
+        },
+        "consumedBy": {
+          "const": [
+            "AuthService"
+          ]
+        }
+      }
+    }
+  ],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": [
+        "username",
+        "email"
+      ]
     }
   },
   "required": [
-    "username",
-    "email"
+    "payload"
   ]
 }
