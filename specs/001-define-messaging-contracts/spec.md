@@ -43,16 +43,16 @@ As a system architect, I need the agent to analyze the discovered communication 
 
 ### User Story 3 - Generate and Centralize Contracts (Priority: P3)
 
-As a system architect, I need the agent to generate concrete C# code for all defined contracts and commit them to the central `Maliev.MessagingContracts` repository.
+As a system architect, I need the agent to generate concrete C# code for all defined contracts from JSON Schemas and commit them to the central `Maliev.MessagingContracts` repository.
 
 **Why this priority**: This makes the defined architecture tangible and consumable by developers. It creates the single source of truth.
 
-**Independent Test**: This can be tested by providing a set of defined contracts and verifying that the agent generates compilable C# records in the correct repository structure.
+**Independent Test**: This can be tested by providing a set of JSON Schemas and verifying that the custom generator produces compilable C# records in the `generated/csharp/Contracts` directory.
 
 **Acceptance Scenarios**:
 
-1.  **Given** a set of defined message contracts, **When** the generation process is run, **Then** valid C# record files appear in the `Maliev.MessagingContracts/generated/csharp/Contracts` directory.
-2.  **Given** a generated C# contract, **When** it is inspected, **Then** it includes properties for correlation (`CorrelationId`) and follows established versioning patterns.
+1.  **Given** a set of JSON Schemas, **When** the custom generator is run, **Then** valid C# record files appear in the `Maliev.MessagingContracts/generated/csharp/Contracts` directory.
+2.  **Given** a generated C# contract, **When** it is inspected, **Then** it includes properties for correlation (`CorrelationId`), follows established versioning patterns, and uses `[JsonPropertyName]` attributes for robust serialization.
 
 ---
 
@@ -68,16 +68,17 @@ As a system architect, I need the agent to generate concrete C# code for all def
 -   **FR-002**: For each service, the system MUST identify its core domain responsibilities and primary data ownership.
 -   **FR-003**: The system MUST analyze source code to find existing HTTP API endpoints (e.g., ASP.NET Core controllers) and any message bus configurations (MassTransit/RabbitMQ).
 -   **FR-004**: The system MUST detect and document implicit cross-service workflows, such as direct synchronous `HttpClient` calls between services.
--   **FR-005**: The system MUST model all identified inter-service interactions as explicit Commands, Events, or Request/Response messages.
+-   **FR-005**: The system MUST model all identified inter-service interactions as explicit Commands, Events, or Request/Response messages using JSON Schema (Draft-07).
 -   **FR-006**: The system MUST define a single, authoritative publisher and one or more intended consumers for every message contract.
 -   **FR-007**: Any communication that must remain synchronous (HTTP) MUST be explicitly justified with a written rationale.
--   **FR-008**: The system MUST generate strongly-typed message contracts as C# `record` types.
+-   **FR-008**: The system MUST generate strongly-typed message contracts as C# `record` types from JSON Schemas using a custom generator.
 -   **FR-009**: The system MUST add all generated contract files to the `Maliev.MessagingContracts` repository.
 -   **FR-010**: All generated contracts MUST include fields for versioning, correlation (`CorrelationId`), and support for idempotency checks (`MessageId`).
--   **FR-011**: The specification for each contract MUST consider retry and failure semantics suitable for implementation in MassTransit (e.g., outbox/inbox patterns, dead-lettering).
--   **FR-012**: The final output MUST be a complete, executable set of contracts, with no "suggested" or "optional" patterns left for interpretation.
+-   **FR-011**: The specification for each contract MUST consider retry and failure semantics suitable for implementation in MassTransit.
+-   **FR-012**: The final output MUST be a complete, executable set of contracts.
 -   **FR-013**: When identifying data ownership, the system MUST prioritize the service whose core responsibility aligns with the data entity as the explicit single owner.
--   **FR-014**: The system MUST log informational messages detailing major progress steps, significant findings, and key decisions made during its operation.
+-   **FR-014**: The system MUST use `[JsonPropertyName]` attributes in generated C# models to ensure exact mapping to the JSON Schema names.
+-   **FR-015**: The system MUST log informational messages detailing major progress steps, significant findings, and key decisions made during its operation.
 
 ### Key Entities *(include if feature involves data)*
 
