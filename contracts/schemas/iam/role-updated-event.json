@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RoleUpdatedEvent",
+  "description": "Event published when a role's permissions are modified in the IAM service.",
+  "type": "object",
+  "properties": {
+    "roleId": {
+      "type": "string",
+      "description": "The unique identifier of the role."
+    },
+    "serviceName": {
+      "type": "string",
+      "description": "The name of the service that owns the role."
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp when the role was updated."
+    }
+  },
+  "required": [
+    "roleId",
+    "serviceName",
+    "updatedAt"
+  ]
+}

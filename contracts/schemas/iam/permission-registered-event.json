@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PermissionRegisteredEvent",
+  "description": "Event published when a new permission is registered by a service in the IAM service.",
+  "type": "object",
+  "properties": {
+    "permissionId": {
+      "type": "string",
+      "description": "The unique identifier of the permission (e.g., 'service.resource.action')."
+    },
+    "serviceName": {
+      "type": "string",
+      "description": "The name of the service that registered the permission."
+    },
+    "resourceType": {
+      "type": "string",
+      "description": "The type of resource this permission applies to."
+    },
+    "action": {
+      "type": "string",
+      "description": "The action allowed by this permission."
+    },
+    "registeredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp when the permission was registered."
+    }
+  },
+  "required": [
+    "permissionId",
+    "serviceName",
+    "resourceType",
+    "action",
+    "registeredAt"
+  ]
+}

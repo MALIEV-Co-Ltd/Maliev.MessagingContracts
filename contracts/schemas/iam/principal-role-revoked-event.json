@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PrincipalRoleRevokedEvent",
+  "description": "Event published when a role is revoked from a principal (service account) in the IAM service.",
+  "type": "object",
+  "properties": {
+    "bindingId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The unique identifier of the role binding that was revoked."
+    },
+    "principalId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The unique identifier of the principal."
+    },
+    "roleId": {
+      "type": "string",
+      "description": "The unique identifier of the role."
+    },
+    "revokedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp when the role was revoked."
+    }
+  },
+  "required": [
+    "bindingId",
+    "principalId",
+    "roleId",
+    "revokedAt"
+  ]
+}
