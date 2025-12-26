@@ -30,10 +30,9 @@ jobs:
         run: |
           # Only check if base_ref is available (pull requests)
           if [ -n "${{ github.base_ref }}" ]; then
-            git diff --quiet origin/${{ github.base_ref }} -- contracts/schemas/
-            if [ $? -ne 0 ]; then
+            git diff --quiet origin/${{ github.base_ref }} -- contracts/schemas/ || {
               echo "::warning::Schema changes detected. Ensure messageVersion is incremented if this were a production environment."
-            fi
+            }
           fi
         shell: bash
 
