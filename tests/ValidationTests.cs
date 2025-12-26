@@ -38,7 +38,7 @@ namespace Maliev.MessagingContracts.Tests
             var schemaContent = File.ReadAllText(schemaPath);
             var jsonNode = JsonNode.Parse(schemaContent);
             Assert.NotNull(jsonNode);
-            
+
             var allOf = jsonNode["allOf"] as JsonArray;
             if (allOf == null) return; // Skip if not using allOf structure for now
 
