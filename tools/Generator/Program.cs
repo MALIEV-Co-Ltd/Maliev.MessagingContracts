@@ -72,10 +72,10 @@ namespace Generator
             sb.AppendLine("// </auto-generated>");
             sb.AppendLine("//----------------------");
             sb.AppendLine();
-                            sb.AppendLine("using System.Text.Json.Serialization;");
-                            sb.AppendLine();
-                            sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
-                            sb.AppendLine("{");            // Generate BaseMessage first
+            sb.AppendLine("using System.Text.Json.Serialization;");
+            sb.AppendLine();
+            sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
+            sb.AppendLine("{");            // Generate BaseMessage first
             Console.WriteLine("Generating BaseMessage...");
             await GenerateBaseMessage(sb);
 
@@ -84,15 +84,15 @@ namespace Generator
 
             // Collect and generate message contracts
             var messageSchemaFiles = new List<string>();
-            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "shared" })
+            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "iam", "shared" })
             {
                 var domainPath = Path.Combine(_schemaRoot, domainDir);
                 if (Directory.Exists(domainPath))
                 {
                     var files = Directory.GetFiles(domainPath, "*.json", SearchOption.AllDirectories);
                     // Filter out only the exact base schemas, not anything ending with them
-                    var filtered = files.Where(f => 
-                        !f.EndsWith("base-message.json", StringComparison.OrdinalIgnoreCase) && 
+                    var filtered = files.Where(f =>
+                        !f.EndsWith("base-message.json", StringComparison.OrdinalIgnoreCase) &&
                         !f.EndsWith("envelope.json", StringComparison.OrdinalIgnoreCase) &&
                         !Path.GetFileName(f).Equals("command.json", StringComparison.OrdinalIgnoreCase) &&
                         !Path.GetFileName(f).Equals("domain-event.json", StringComparison.OrdinalIgnoreCase) &&
@@ -226,10 +226,10 @@ namespace Generator
                         prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
                         // Generate nested record
-                        var nestedTypeName = propName.Equals("Payload", StringComparison.OrdinalIgnoreCase) 
-                            ? $"{className}Payload" 
+                        var nestedTypeName = propName.Equals("Payload", StringComparison.OrdinalIgnoreCase)
+                            ? $"{className}Payload"
                             : $"{className}{propName}";
-                        
+
                         GenerateNestedRecord(sb, nestedTypeName, prop.Value, className);
                         propType = nestedTypeName;
                     }

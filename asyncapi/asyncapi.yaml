@@ -36,6 +36,26 @@ channels:
     messages:
       paymentFailedEvent:
         $ref: '#/components/messages/PaymentFailedEvent'
+  iam/role-updated:
+    address: maliev.iam.events.role-updated
+    messages:
+      roleUpdatedEvent:
+        $ref: '#/components/messages/RoleUpdatedEvent'
+  iam/principal-role-granted:
+    address: maliev.iam.events.principal-role-granted
+    messages:
+      principalRoleGrantedEvent:
+        $ref: '#/components/messages/PrincipalRoleGrantedEvent'
+  iam/principal-role-revoked:
+    address: maliev.iam.events.principal-role-revoked
+    messages:
+      principalRoleRevokedEvent:
+        $ref: '#/components/messages/PrincipalRoleRevokedEvent'
+  iam/permission-registered:
+    address: maliev.iam.events.permission-registered
+    messages:
+      permissionRegisteredEvent:
+        $ref: '#/components/messages/PermissionRegisteredEvent'
 
 components:
   messages:
@@ -60,3 +80,15 @@ components:
     PaymentFailedEvent:
       payload:
         $ref: '../contracts/schemas/payments/payment-failed-event.json'
+    RoleUpdatedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/role-updated-event.json'
+    PrincipalRoleGrantedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/principal-role-granted-event.json'
+    PrincipalRoleRevokedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/principal-role-revoked-event.json'
+    PermissionRegisteredEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/permission-registered-event.json'
