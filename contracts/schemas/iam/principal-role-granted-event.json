@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PrincipalRoleGrantedEvent",
+  "description": "Event published when a role is granted to a principal (service account) in the IAM service.",
+  "type": "object",
+  "properties": {
+    "bindingId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The unique identifier of the role binding."
+    },
+    "principalId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The unique identifier of the principal (user or service)."
+    },
+    "roleId": {
+      "type": "string",
+      "description": "The unique identifier of the role."
+    },
+    "resourceType": {
+      "type": "string",
+      "description": "The type of resource the role is granted on (e.g., 'system', 'customer')."
+    },
+    "resourceId": {
+      "type": "string",
+      "description": "The unique identifier of the specific resource instance."
+    },
+    "grantedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp when the role was granted."
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp when the grant expires."
+    }
+  },
+  "required": [
+    "bindingId",
+    "principalId",
+    "roleId",
+    "resourceType",
+    "resourceId",
+    "grantedAt",
+    "expiresAt"
+  ]
+}
