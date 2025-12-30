@@ -84,7 +84,7 @@ namespace Generator
 
             // Collect and generate message contracts
             var messageSchemaFiles = new List<string>();
-            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "iam", "shared" })
+            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "iam", "shared", "career", "compensation", "compliance", "employee", "leave", "lifecycle", "performance" })
             {
                 var domainPath = Path.Combine(_schemaRoot, domainDir);
                 if (Directory.Exists(domainPath))
