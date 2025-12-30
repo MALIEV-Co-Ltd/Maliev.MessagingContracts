@@ -104,9 +104,28 @@ namespace Generator
 
             foreach (var file in messageSchemaFiles.OrderBy(f => f))
             {
-                var className = GetClassName(file);
-                Console.WriteLine($"Generating {className}...");
-                await GenerateMessageClass(sb, file, className);
+                var schemaJson = await File.ReadAllTextAsync(file);
+                var schema = JsonDocument.Parse(schemaJson);
+                var root = schema.RootElement;
+
+                // Check if this file contains a "definitions" object with multiple events
+                if (root.TryGetProperty("definitions", out var definitions))
+                {
+                    // Generate a class for each definition
+                    foreach (var definition in definitions.EnumerateObject())
+                    {
+                        var className = definition.Name;
+                        Console.WriteLine($"Generating {className}...");
+                        await GenerateMessageClassFromDefinition(sb, definition.Value, className);
+                    }
+                }
+                else
+                {
+                    // Generate as a single message class (existing behavior)
+                    var className = GetClassName(file);
+                    Console.WriteLine($"Generating {className}...");
+                    await GenerateMessageClass(sb, file, className);
+                }
             }
 
             sb.AppendLine("}");
@@ -118,6 +137,16 @@ namespace Generator
             sb.AppendLine("    /// <summary>");
             sb.AppendLine("    /// The base structure that all Maliev messaging contracts MUST adhere to.");
             sb.AppendLine("    /// </summary>");
+            sb.AppendLine("    /// <param name=\"MessageId\">Unique identifier for the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageName\">Descriptive name of the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageType\">The type of message (Command, Event, etc.).</param>");
+            sb.AppendLine("    /// <param name=\"MessageVersion\">Semantic version of the message contract.</param>");
+            sb.AppendLine("    /// <param name=\"PublishedBy\">The service that published the message.</param>");
+            sb.AppendLine("    /// <param name=\"ConsumedBy\">List of services intended to consume the message.</param>");
+            sb.AppendLine("    /// <param name=\"CorrelationId\">Id used to correlate related messages across a flow.</param>");
+            sb.AppendLine("    /// <param name=\"CausationId\">Id of the message that caused this one.</param>");
+            sb.AppendLine("    /// <param name=\"OccurredAtUtc\">Timestamp of when the message occurred.</param>");
+            sb.AppendLine("    /// <param name=\"IsPublic\">True if the message is intended for external systems.</param>");
             sb.AppendLine("    public record BaseMessage(");
             sb.AppendLine("        [property: JsonPropertyName(\"messageId\")] System.Guid MessageId,");
             sb.AppendLine("        [property: JsonPropertyName(\"messageName\")] string MessageName,");
@@ -135,12 +164,19 @@ namespace Generator
 
         private void GenerateMessageTypeEnum(StringBuilder sb)
         {
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine("    /// Defines the types of messages supported in the MALIEV messaging system.");
+            sb.AppendLine("    /// </summary>");
             sb.AppendLine("    [JsonConverter(typeof(JsonStringEnumConverter))]");
             sb.AppendLine("    public enum MessageType");
             sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>Represents a request to perform an action.</summary>");
             sb.AppendLine("        Command,");
+            sb.AppendLine("        /// <summary>Represents notification of a fact that has occurred.</summary>");
             sb.AppendLine("        Event,");
+            sb.AppendLine("        /// <summary>Represents a request for information.</summary>");
             sb.AppendLine("        Request,");
+            sb.AppendLine("        /// <summary>Represents a response to a request.</summary>");
             sb.AppendLine("        Response");
             sb.AppendLine("    }");
             sb.AppendLine();
@@ -198,10 +234,157 @@ namespace Generator
             sb.AppendLine();
         }
 
+        private async Task GenerateMessageClassFromDefinition(StringBuilder sb, JsonElement definition, string className)
+        {
+            // Get description from definition
+            string description = "";
+            if (definition.TryGetProperty("description", out var desc))
+            {
+                description = desc.GetString() ?? "";
+            }
+
+            GeneratePayloadRecord(sb, definition, $"{className}Payload");
+
+            // Now generate the full event message that derives from BaseMessage
+            if (!string.IsNullOrEmpty(description))
+            {
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine($"    /// {description}");
+                sb.AppendLine("    /// </summary>");
+            }
+            sb.AppendLine("    /// <param name=\"Payload\">The specific data associated with this message.</param>");
+            sb.AppendLine($"    public record {className}(");
+
+            // Base class parameters first
+            var baseParams = new[]
+            {
+                "System.Guid MessageId",
+                "string MessageName",
+                "MessageType MessageType",
+                "string MessageVersion",
+                "string PublishedBy",
+                "System.Collections.Generic.IReadOnlyList<string> ConsumedBy",
+                "System.Guid CorrelationId",
+                "System.Guid? CausationId",
+                "System.DateTimeOffset OccurredAtUtc",
+                "bool IsPublic"
+            };
+
+            var allParams = baseParams.ToList();
+            allParams.Add($"[property: JsonPropertyName(\"payload\")] {className}Payload Payload");
+
+            sb.AppendLine();
+            for (int i = 0; i < allParams.Count; i++)
+            {
+                sb.Append($"        {allParams[i]}");
+                if (i < allParams.Count - 1)
+                {
+                    sb.AppendLine(",");
+                }
+            }
+            sb.AppendLine();
+            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
+            sb.AppendLine();
+            sb.AppendLine();
+        }
+
+        private void GeneratePayloadRecord(StringBuilder sb, JsonElement schema, string typeName)
+        {
+            var properties = new List<(string Name, string JsonName, string Type, string Description)>();
+
+            if (schema.TryGetProperty("properties", out var props))
+            {
+                foreach (var prop in props.EnumerateObject())
+                {
+                    var propName = ToPascalCase(prop.Name);
+                    var jsonName = prop.Name;
+                    string propType;
+                    string propDescription = "";
+
+                    if (prop.Value.TryGetProperty("description", out var pDesc))
+                    {
+                        propDescription = pDesc.GetString() ?? "";
+                    }
+
+                    // Extract the actual type string, handling nullable arrays
+                    var typeStr = GetTypeString(prop.Value);
+
+                    if (typeStr == "object" &&
+                        prop.Value.TryGetProperty("properties", out var nestedProps))
+                    {
+                        var nestedTypeName = $"{typeName}{propName}";
+                        GeneratePayloadRecord(sb, prop.Value, nestedTypeName);
+                        propType = nestedTypeName;
+                    }
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
+                    {
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            var itemTypeName = $"{typeName}{propName}Item";
+                            GeneratePayloadRecord(sb, itemsEl, itemTypeName);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
+                    }
+                    else
+                    {
+                        propType = GetCSharpType(prop.Value, propName);
+                    }
+
+                    properties.Add((propName, jsonName, propType, propDescription));
+                }
+            }
+
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine($"    /// Payload data for {typeName.Replace("Payload", "")}.");
+            sb.AppendLine("    /// </summary>");
+            foreach (var prop in properties)
+            {
+                if (!string.IsNullOrEmpty(prop.Description))
+                {
+                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
+                }
+            }
+
+            sb.Append($"    public record {typeName}(");
+            for (int i = 0; i < properties.Count; i++)
+            {
+                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                if (i < properties.Count - 1)
+                {
+                    sb.Append(", ");
+                }
+            }
+            sb.AppendLine(");");
+            sb.AppendLine();
+        }
+
+        private string GetTypeString(JsonElement element)
+        {
+            if (element.TryGetProperty("type", out var typeProp))
+            {
+                if (typeProp.ValueKind == JsonValueKind.Array)
+                {
+                    return typeProp.EnumerateArray()
+                        .Select(t => t.GetString())
+                        .Where(t => t != null)
+                        .FirstOrDefault(t => t != "null") ?? "object";
+                }
+                return typeProp.GetString() ?? "object";
+            }
+            return "object";
+        }
+
+
         private async Task GenerateDerivedMessage(StringBuilder sb, JsonElement root, string className)
         {
             // Extract the payload schema and generate nested types if needed
-            var properties = new List<(string Name, string JsonName, string Type, bool Required)>();
+            var properties = new List<(string Name, string JsonName, string Type, bool Required, string Description)>();
             var requiredProps = new HashSet<string>();
 
             if (root.TryGetProperty("required", out var reqArray))
@@ -218,6 +401,11 @@ namespace Generator
                 {
                     var propName = ToPascalCase(prop.Name);
                     var jsonName = prop.Name;
+                    string propDescription = "";
+                    if (prop.Value.TryGetProperty("description", out var pDesc))
+                    {
+                        propDescription = pDesc.GetString() ?? "";
+                    }
 
                     // Check if this is a payload object and generate nested type
                     string propType;
@@ -250,11 +438,18 @@ namespace Generator
                     }
 
                     var isRequired = requiredProps.Contains(prop.Name);
-                    properties.Add((propName, jsonName, propType, isRequired));
+                    properties.Add((propName, jsonName, propType, isRequired, propDescription));
                 }
             }
 
             // Generate the message record that extends BaseMessage
+            foreach (var prop in properties)
+            {
+                if (!string.IsNullOrEmpty(prop.Description))
+                {
+                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
+                }
+            }
             sb.Append($"    public record {className}(");
 
             // Base class parameters first
@@ -273,7 +468,7 @@ namespace Generator
             };
 
             var allParams = baseParams.ToList();
-            foreach (var (Name, JsonName, Type, _) in properties)
+            foreach (var (Name, JsonName, Type, _, _) in properties)
             {
                 allParams.Add($"[property: JsonPropertyName(\"{JsonName}\")] {Type} {Name}");
             }
@@ -294,7 +489,7 @@ namespace Generator
 
         private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema, string parentClassName)
         {
-            var properties = new List<(string Name, string JsonName, string Type)>();
+            var properties = new List<(string Name, string JsonName, string Type, string Description)>();
 
             if (schema.TryGetProperty("properties", out var props))
             {
@@ -303,6 +498,11 @@ namespace Generator
                     var propName = ToPascalCase(prop.Name);
                     var jsonName = prop.Name;
                     string propType;
+                    string propDescription = "";
+                    if (prop.Value.TryGetProperty("description", out var pDesc))
+                    {
+                        propDescription = pDesc.GetString() ?? "";
+                    }
 
                     if (prop.Value.TryGetProperty("type", out var typeEl) &&
                         typeEl.GetString() == "object" &&
@@ -327,10 +527,20 @@ namespace Generator
                         propType = GetCSharpType(prop.Value, propName);
                     }
 
-                    properties.Add((propName, jsonName, propType));
+                    properties.Add((propName, jsonName, propType, propDescription));
                 }
             }
 
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine($"    /// Nested data for {typeName}.");
+            sb.AppendLine("    /// </summary>");
+            foreach (var prop in properties)
+            {
+                if (!string.IsNullOrEmpty(prop.Description))
+                {
+                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
+                }
+            }
             sb.Append($"    public record {typeName}(");
             for (int i = 0; i < properties.Count; i++)
             {
@@ -346,7 +556,7 @@ namespace Generator
 
         private async Task GenerateStandaloneMessage(StringBuilder sb, JsonElement root, string className)
         {
-            var properties = new List<(string Name, string JsonName, string Type)>();
+            var properties = new List<(string Name, string JsonName, string Type, string Description)>();
 
             if (root.TryGetProperty("properties", out var props))
             {
@@ -354,11 +564,26 @@ namespace Generator
                 {
                     var propName = ToPascalCase(prop.Name);
                     var jsonName = prop.Name;
+                    string propDescription = "";
+                    if (prop.Value.TryGetProperty("description", out var pDesc))
+                    {
+                        propDescription = pDesc.GetString() ?? "";
+                    }
                     var propType = GetCSharpType(prop.Value, propName);
-                    properties.Add((propName, jsonName, propType));
+                    properties.Add((propName, jsonName, propType, propDescription));
                 }
             }
 
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine($"    /// Standalone message {className}.");
+            sb.AppendLine("    /// </summary>");
+            foreach (var prop in properties)
+            {
+                if (!string.IsNullOrEmpty(prop.Description))
+                {
+                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
+                }
+            }
             sb.Append($"    public record {className}(");
             for (int i = 0; i < properties.Count; i++)
             {
@@ -375,7 +600,24 @@ namespace Generator
         {
             if (propertySchema.TryGetProperty("type", out var typeProp))
             {
-                var typeStr = typeProp.GetString();
+                string typeStr;
+                bool isNullable = false;
+
+                // Handle type arrays like ["string", "null"]
+                if (typeProp.ValueKind == JsonValueKind.Array)
+                {
+                    var types = typeProp.EnumerateArray()
+                        .Select(t => t.GetString())
+                        .Where(t => t != null)
+                        .ToList();
+                    isNullable = types.Contains("null");
+                    typeStr = types.FirstOrDefault(t => t != "null") ?? "object";
+                }
+                else
+                {
+                    typeStr = typeProp.GetString() ?? "object";
+                }
+
                 if (typeStr == "object")
                 {
                     // Check if it has properties (it's a complex type)
@@ -397,23 +639,23 @@ namespace Generator
                     if (propertySchema.TryGetProperty("format", out var format))
                     {
                         var formatStr = format.GetString();
-                        if (formatStr == "uuid") return "System.Guid";
-                        if (formatStr == "date-time") return "System.DateTimeOffset";
-                        if (formatStr == "email") return "string";
+                        if (formatStr == "uuid") return isNullable ? "System.Guid?" : "System.Guid";
+                        if (formatStr == "date-time") return isNullable ? "System.DateTimeOffset?" : "System.DateTimeOffset";
+                        if (formatStr == "email") return isNullable ? "string?" : "string";
                     }
-                    return "string";
+                    return isNullable ? "string?" : "string";
                 }
                 else if (typeStr == "number")
                 {
-                    return "double";
+                    return isNullable ? "double?" : "double";
                 }
                 else if (typeStr == "integer")
                 {
-                    return "int";
+                    return isNullable ? "int?" : "int";
                 }
                 else if (typeStr == "boolean")
                 {
-                    return "bool";
+                    return isNullable ? "bool?" : "bool";
                 }
                 else if (typeStr == "array")
                 {
