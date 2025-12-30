@@ -72,6 +72,8 @@ namespace Generator
             sb.AppendLine("// </auto-generated>");
             sb.AppendLine("//----------------------");
             sb.AppendLine();
+            sb.AppendLine("#nullable enable");
+            sb.AppendLine();
             sb.AppendLine("using System.Text.Json.Serialization;");
             sb.AppendLine();
             sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
