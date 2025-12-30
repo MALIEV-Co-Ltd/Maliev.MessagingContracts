@@ -1,0 +1,104 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/employee-events",
+    "title": "Employee Domain Events",
+    "description": "Events published by the Employee Service for cross-service integration",
+    "definitions": {
+        "EmployeeCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new employee record is created",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeNumber": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "departmentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "positionId": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "uuid"
+                },
+                "managerId": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "uuid"
+                }
+            },
+            "required": [
+                "employeeId",
+                "employeeNumber",
+                "startDate",
+                "departmentId"
+            ]
+        },
+        "EmployeeTerminatedEvent": {
+            "type": "object",
+            "description": "Published when an employee is terminated",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "terminationDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "terminationReason": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "eligibleForRehire": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "employeeId",
+                "terminationDate"
+            ]
+        },
+        "DepartmentTransferredEvent": {
+            "type": "object",
+            "description": "Published when an employee transfers between departments",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "previousDepartmentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "newDepartmentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "employeeId",
+                "previousDepartmentId",
+                "newDepartmentId",
+                "effectiveDate"
+            ]
+        }
+    }
+}

@@ -50,6 +50,14 @@ To use these contracts in your .NET service:
 
 ## Project Structure
 - `contracts/schemas/`: Source JSON Schemas.
+  - `employee/`: Employee domain events (EmployeeCreated, Terminated, DepartmentTransferred)
+  - `leave/`: Leave domain events (LeaveRequest submitted/approved/rejected/cancelled, BalanceUpdated)
+  - `compensation/`: Compensation events (CompensationChanged, BenefitsEnrollmentUpdated, BulkSalaryIncrease)
+  - `lifecycle/`: Lifecycle events (Onboarding/Offboarding started/completed, AccessRevocationRequired)
+  - `performance/`: Performance events (ReviewCreated/Acknowledged, GoalCompleted, PIP initiated/completed)
+  - `compliance/`: Compliance events (WorkAuthorization expiring/expired)
+  - `career/`: Career events (TrainingCompleted, MandatoryTrainingOverdue, CertificationExpiring)
+  - `iam/`, `payments/`, `orders/`, `customers/`: Core domain schemas
 - `asyncapi/`: AsyncAPI 3.0 definitions for messaging topology.
 - `tools/Generator/`: Custom C# code generator.
 - `generated/csharp/`: The generated C# class library.

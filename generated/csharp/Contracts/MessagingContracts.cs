@@ -3,6 +3,8 @@
 //     Generated on 2025-12-26 09:31:47 UTC
 // </auto-generated>
 //----------------------
+#nullable enable
+
 
 using System.Text.Json.Serialization;
 
@@ -207,6 +209,708 @@ namespace Maliev.MessagingContracts.Generated
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
         [property: JsonPropertyName("payload")] NotificationEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Employee Events ---
+
+    /// <summary>
+    /// Published when a new employee record is created
+    /// </summary>
+    public record EmployeeCreatedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("employeeNumber")] string EmployeeNumber,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
+        [property: JsonPropertyName("departmentId")] System.Guid DepartmentId,
+        [property: JsonPropertyName("positionId")] System.Guid? PositionId,
+        [property: JsonPropertyName("managerId")] System.Guid? ManagerId
+    );
+
+    public record EmployeeCreatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] EmployeeCreatedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when an employee is terminated
+    /// </summary>
+    public record EmployeeTerminatedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("terminationDate")] System.DateTimeOffset TerminationDate,
+        [property: JsonPropertyName("terminationReason")] string? TerminationReason,
+        [property: JsonPropertyName("eligibleForRehire")] bool EligibleForRehire
+    );
+
+    public record EmployeeTerminatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] EmployeeTerminatedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when an employee transfers between departments
+    /// </summary>
+    public record DepartmentTransferredEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("previousDepartmentId")] System.Guid PreviousDepartmentId,
+        [property: JsonPropertyName("newDepartmentId")] System.Guid NewDepartmentId,
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate
+    );
+
+    public record DepartmentTransferredEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] DepartmentTransferredEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Compensation Events ---
+
+    /// <summary>
+    /// Published when compensation record is created or updated
+    /// </summary>
+    public record CompensationChangedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("compensationRecordId")] System.Guid CompensationRecordId,
+        [property: JsonPropertyName("newSalary")] decimal NewSalary,
+        [property: JsonPropertyName("previousSalary")] decimal PreviousSalary,
+        [property: JsonPropertyName("changePercentage")] decimal ChangePercentage,
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate,
+        [property: JsonPropertyName("changeReason")] string ChangeReason
+    );
+
+    public record CompensationChangedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CompensationChangedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when benefits enrollment changes
+    /// </summary>
+    public record BenefitsEnrollmentUpdatedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("benefitId")] System.Guid BenefitId,
+        [property: JsonPropertyName("status")] string Status,
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate
+    );
+
+    public record BenefitsEnrollmentUpdatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] BenefitsEnrollmentUpdatedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when bulk salary increase operation completes
+    /// </summary>
+    public record BulkSalaryIncreaseCompletedEventPayload(
+        [property: JsonPropertyName("jobId")] System.Guid JobId,
+        [property: JsonPropertyName("successCount")] int SuccessCount,
+        [property: JsonPropertyName("failureCount")] int FailureCount,
+        [property: JsonPropertyName("totalBudgetImpact")] decimal TotalBudgetImpact
+    );
+
+    public record BulkSalaryIncreaseCompletedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] BulkSalaryIncreaseCompletedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Compliance Events ---
+
+    /// <summary>
+    /// Published when authorization is expiring (30/60/90 days)
+    /// </summary>
+    public record WorkAuthorizationExpiringEventPayload(
+        [property: JsonPropertyName("authorizationId")] System.Guid AuthorizationId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("authorizationType")] string AuthorizationType,
+        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate,
+        [property: JsonPropertyName("daysUntilExpiration")] int DaysUntilExpiration
+    );
+
+    public record WorkAuthorizationExpiringEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] WorkAuthorizationExpiringEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when authorization has expired
+    /// </summary>
+    public record WorkAuthorizationExpiredEventPayload(
+        [property: JsonPropertyName("authorizationId")] System.Guid AuthorizationId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("authorizationType")] string AuthorizationType,
+        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate
+    );
+
+    public record WorkAuthorizationExpiredEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] WorkAuthorizationExpiredEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Leave Events ---
+
+    /// <summary>
+    /// Published when a leave request is submitted
+    /// </summary>
+    public record LeaveRequestSubmittedEventPayload(
+        [property: JsonPropertyName("requestId")] System.Guid RequestId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("leaveType")] string LeaveType,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
+        [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate,
+        [property: JsonPropertyName("totalDays")] double TotalDays
+    );
+
+    public record LeaveRequestSubmittedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] LeaveRequestSubmittedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when a leave request is approved
+    /// </summary>
+    public record LeaveRequestApprovedEventPayload(
+        [property: JsonPropertyName("requestId")] System.Guid RequestId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("approverId")] System.Guid ApproverId,
+        [property: JsonPropertyName("leaveType")] string LeaveType,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
+        [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate
+    );
+
+    public record LeaveRequestApprovedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] LeaveRequestApprovedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when a leave request is rejected
+    /// </summary>
+    public record LeaveRequestRejectedEventPayload(
+        [property: JsonPropertyName("requestId")] System.Guid RequestId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("approverId")] System.Guid ApproverId,
+        [property: JsonPropertyName("reason")] string Reason
+    );
+
+    public record LeaveRequestRejectedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] LeaveRequestRejectedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when a leave request is cancelled
+    /// </summary>
+    public record LeaveRequestCancelledEventPayload(
+        [property: JsonPropertyName("requestId")] System.Guid RequestId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId
+    );
+
+    public record LeaveRequestCancelledEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] LeaveRequestCancelledEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when leave balance changes
+    /// </summary>
+    public record LeaveBalanceUpdatedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("leaveType")] string LeaveType,
+        [property: JsonPropertyName("newBalance")] double NewBalance
+    );
+
+    public record LeaveBalanceUpdatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] LeaveBalanceUpdatedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Lifecycle Events ---
+
+    /// <summary>
+    /// Published when onboarding workflow is started
+    /// </summary>
+    public record OnboardingStartedEventPayload(
+        [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
+        [property: JsonPropertyName("totalItems")] int TotalItems
+    );
+
+    public record OnboardingStartedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] OnboardingStartedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when onboarding is completed
+    /// </summary>
+    public record OnboardingCompletedEventPayload(
+        [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate
+    );
+
+    public record OnboardingCompletedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] OnboardingCompletedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when offboarding workflow is started
+    /// </summary>
+    public record OffboardingStartedEventPayload(
+        [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("terminationDate")] System.DateTimeOffset TerminationDate,
+        [property: JsonPropertyName("terminationReason")] string? TerminationReason
+    );
+
+    public record OffboardingStartedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] OffboardingStartedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when offboarding is completed
+    /// </summary>
+    public record OffboardingCompletedEventPayload(
+        [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate
+    );
+
+    public record OffboardingCompletedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] OffboardingCompletedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when access revocation is required
+    /// </summary>
+    public record AccessRevocationRequiredEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate,
+        [property: JsonPropertyName("reason")] string Reason
+    );
+
+    public record AccessRevocationRequiredEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] AccessRevocationRequiredEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when an onboarding item is overdue
+    /// </summary>
+    public record OnboardingItemOverdueEventPayload(
+        [property: JsonPropertyName("itemId")] System.Guid ItemId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("itemTitle")] string ItemTitle,
+        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate
+    );
+
+    public record OnboardingItemOverdueEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] OnboardingItemOverdueEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Career Events ---
+
+    /// <summary>
+    /// Published when training is completed
+    /// </summary>
+    public record TrainingCompletedEventPayload(
+        [property: JsonPropertyName("trainingRecordId")] System.Guid TrainingRecordId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("courseName")] string CourseName,
+        [property: JsonPropertyName("completionDate")] System.DateTimeOffset CompletionDate,
+        [property: JsonPropertyName("certificationExpiration")] System.DateTimeOffset? CertificationExpiration
+    );
+
+    public record TrainingCompletedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] TrainingCompletedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when mandatory training is overdue
+    /// </summary>
+    public record MandatoryTrainingOverdueEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("trainingProgramId")] System.Guid TrainingProgramId,
+        [property: JsonPropertyName("trainingName")] string TrainingName,
+        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate,
+        [property: JsonPropertyName("daysOverdue")] int DaysOverdue
+    );
+
+    public record MandatoryTrainingOverdueEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] MandatoryTrainingOverdueEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when certification is expiring
+    /// </summary>
+    public record CertificationExpiringEventPayload(
+        [property: JsonPropertyName("trainingRecordId")] System.Guid TrainingRecordId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("courseName")] string CourseName,
+        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate,
+        [property: JsonPropertyName("daysUntilExpiration")] int DaysUntilExpiration
+    );
+
+    public record CertificationExpiringEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CertificationExpiringEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when candidate accepts job offer
+    /// </summary>
+    public record CandidateAcceptedEventPayload(
+        [property: JsonPropertyName("applicationId")] System.Guid ApplicationId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate
+    );
+
+    public record CandidateAcceptedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CandidateAcceptedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+
+    // --- Performance Events ---
+
+    /// <summary>
+    /// Published when performance review is created
+    /// </summary>
+    public record PerformanceReviewCreatedEventPayload(
+        [property: JsonPropertyName("reviewId")] System.Guid ReviewId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("reviewerId")] System.Guid ReviewerId,
+        [property: JsonPropertyName("reviewCycle")] string ReviewCycle,
+        [property: JsonPropertyName("reviewPeriodStart")] System.DateTimeOffset ReviewPeriodStart,
+        [property: JsonPropertyName("reviewPeriodEnd")] System.DateTimeOffset ReviewPeriodEnd
+    );
+
+    public record PerformanceReviewCreatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PerformanceReviewCreatedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when review is acknowledged
+    /// </summary>
+    public record PerformanceReviewAcknowledgedEventPayload(
+        [property: JsonPropertyName("reviewId")] System.Guid ReviewId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("overallRating")] int OverallRating,
+        [property: JsonPropertyName("acknowledgedDate")] System.DateTimeOffset AcknowledgedDate
+    );
+
+    public record PerformanceReviewAcknowledgedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PerformanceReviewAcknowledgedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when goal is completed
+    /// </summary>
+    public record GoalCompletedEventPayload(
+        [property: JsonPropertyName("goalId")] System.Guid GoalId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate
+    );
+
+    public record GoalCompletedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] GoalCompletedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when PIP is initiated
+    /// </summary>
+    public record PIPInitiatedEventPayload(
+        [property: JsonPropertyName("pipId")] System.Guid PipId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
+        [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate,
+        [property: JsonPropertyName("reason")] string Reason
+    );
+
+    public record PIPInitiatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PIPInitiatedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Published when PIP outcome is recorded
+    /// </summary>
+    public record PIPCompletedEventPayload(
+        [property: JsonPropertyName("pipId")] System.Guid PipId,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("outcome")] string Outcome,
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate
+    );
+
+    public record PIPCompletedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PIPCompletedEventPayload Payload
     ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
 
 }

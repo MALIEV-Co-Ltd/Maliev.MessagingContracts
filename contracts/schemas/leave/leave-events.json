@@ -1,0 +1,157 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/leave-events",
+    "title": "Leave Domain Events",
+    "description": "Events published by the Leave Service for cross-service integration",
+    "definitions": {
+        "LeaveRequestSubmittedEvent": {
+            "type": "object",
+            "description": "Published when a leave request is submitted",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "leaveType": {
+                    "type": "string",
+                    "enum": [
+                        "Annual",
+                        "Sick",
+                        "Personal",
+                        "Maternity",
+                        "Paternity",
+                        "Unpaid",
+                        "Bereavement",
+                        "Study"
+                    ]
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "totalDays": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "requestId",
+                "employeeId",
+                "leaveType",
+                "startDate",
+                "endDate",
+                "totalDays"
+            ]
+        },
+        "LeaveRequestApprovedEvent": {
+            "type": "object",
+            "description": "Published when a leave request is approved",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "approverId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "leaveType": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "requestId",
+                "employeeId",
+                "approverId",
+                "leaveType",
+                "startDate",
+                "endDate"
+            ]
+        },
+        "LeaveRequestRejectedEvent": {
+            "type": "object",
+            "description": "Published when a leave request is rejected",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "approverId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "requestId",
+                "employeeId",
+                "approverId",
+                "reason"
+            ]
+        },
+        "LeaveRequestCancelledEvent": {
+            "type": "object",
+            "description": "Published when a leave request is cancelled",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": [
+                "requestId",
+                "employeeId"
+            ]
+        },
+        "LeaveBalanceUpdatedEvent": {
+            "type": "object",
+            "description": "Published when leave balance changes",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "leaveType": {
+                    "type": "string"
+                },
+                "newBalance": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "employeeId",
+                "leaveType",
+                "newBalance"
+            ]
+        }
+    }
+}

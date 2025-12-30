@@ -1,0 +1,127 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/career-events",
+    "title": "Career Domain Events",
+    "description": "Events published by the Career Service for cross-service integration",
+    "definitions": {
+        "TrainingCompletedEvent": {
+            "type": "object",
+            "description": "Published when training is completed",
+            "properties": {
+                "trainingRecordId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "courseName": {
+                    "type": "string"
+                },
+                "completionDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "certificationExpiration": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "trainingRecordId",
+                "employeeId",
+                "courseName",
+                "completionDate"
+            ]
+        },
+        "MandatoryTrainingOverdueEvent": {
+            "type": "object",
+            "description": "Published when mandatory training is overdue",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "trainingProgramId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "trainingName": {
+                    "type": "string"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "daysOverdue": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "employeeId",
+                "trainingProgramId",
+                "trainingName",
+                "dueDate",
+                "daysOverdue"
+            ]
+        },
+        "CertificationExpiringEvent": {
+            "type": "object",
+            "description": "Published when certification is expiring",
+            "properties": {
+                "trainingRecordId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "courseName": {
+                    "type": "string"
+                },
+                "expirationDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "daysUntilExpiration": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "trainingRecordId",
+                "employeeId",
+                "courseName",
+                "expirationDate",
+                "daysUntilExpiration"
+            ]
+        },
+        "CandidateAcceptedEvent": {
+            "type": "object",
+            "description": "Published when candidate accepts job offer",
+            "properties": {
+                "applicationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "applicationId",
+                "employeeId",
+                "startDate"
+            ]
+        }
+    }
+}
