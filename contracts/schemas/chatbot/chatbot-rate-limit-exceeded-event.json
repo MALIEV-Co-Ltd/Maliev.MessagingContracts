@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Chatbot Rate Limit Exceeded Event",
+    "description": "Event published when a user exceeds the chatbot rate limit.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "userProfileId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the user profile"
+                },
+                "sessionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the chatbot session (nullable)"
+                },
+                "channel": {
+                    "type": "string",
+                    "enum": ["Website", "LINE", "Meta"],
+                    "description": "The channel where rate limit was exceeded"
+                },
+                "currentMessageCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The current message count for the user"
+                },
+                "rateLimitThreshold": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "The rate limit threshold (messages per hour)"
+                },
+                "resetAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the rate limit will reset"
+                }
+            },
+            "required": ["userProfileId", "channel", "currentMessageCount", "rateLimitThreshold", "resetAt"]
+        }
+    },
+    "required": ["payload"]
+}

@@ -56,6 +56,26 @@ channels:
     messages:
       permissionRegisteredEvent:
         $ref: '#/components/messages/PermissionRegisteredEvent'
+  chatbot/session-created:
+    address: maliev.chatbot.events.session-created
+    messages:
+      chatbotSessionCreatedEvent:
+        $ref: '#/components/messages/ChatbotSessionCreatedEvent'
+  chatbot/message-received:
+    address: maliev.chatbot.events.message-received
+    messages:
+      chatbotMessageReceivedEvent:
+        $ref: '#/components/messages/ChatbotMessageReceivedEvent'
+  chatbot/session-closed:
+    address: maliev.chatbot.events.session-closed
+    messages:
+      chatbotSessionClosedEvent:
+        $ref: '#/components/messages/ChatbotSessionClosedEvent'
+  chatbot/rate-limit-exceeded:
+    address: maliev.chatbot.events.rate-limit-exceeded
+    messages:
+      chatbotRateLimitExceededEvent:
+        $ref: '#/components/messages/ChatbotRateLimitExceededEvent'
 
 components:
   messages:
@@ -92,3 +112,15 @@ components:
     PermissionRegisteredEvent:
       payload:
         $ref: '../contracts/schemas/iam/permission-registered-event.json'
+    ChatbotSessionCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-session-created-event.json'
+    ChatbotMessageReceivedEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-message-received-event.json'
+    ChatbotSessionClosedEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-session-closed-event.json'
+    ChatbotRateLimitExceededEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-rate-limit-exceeded-event.json'

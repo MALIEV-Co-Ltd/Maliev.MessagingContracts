@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Chatbot Session Created Event",
+    "description": "Event published when a new chatbot session is created.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "sessionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the chatbot session"
+                },
+                "userProfileId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the user profile"
+                },
+                "channel": {
+                    "type": "string",
+                    "enum": ["Website", "LINE", "Meta"],
+                    "description": "The channel through which the session was initiated"
+                },
+                "language": {
+                    "type": "string",
+                    "enum": ["English", "Thai"],
+                    "description": "The language of the conversation"
+                },
+                "startTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the session started"
+                },
+                "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the session will expire"
+                }
+            },
+            "required": ["sessionId", "userProfileId", "channel", "language", "startTime", "expiresAt"]
+        }
+    },
+    "required": ["payload"]
+}
