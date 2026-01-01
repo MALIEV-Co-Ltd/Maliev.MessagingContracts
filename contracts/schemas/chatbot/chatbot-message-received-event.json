@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Chatbot Message Received Event",
+    "description": "Event published when a chatbot message is received and processed.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "sessionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the chatbot session"
+                },
+                "userProfileId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the user profile"
+                },
+                "channel": {
+                    "type": "string",
+                    "enum": ["Website", "LINE", "Meta"],
+                    "description": "The channel through which the message was received"
+                },
+                "language": {
+                    "type": "string",
+                    "enum": ["English", "Thai"],
+                    "description": "The language of the conversation"
+                },
+                "userMessageContent": {
+                    "type": "string",
+                    "description": "The content of the user's message"
+                },
+                "assistantResponseContent": {
+                    "type": "string",
+                    "description": "The content of the assistant's response"
+                },
+                "responseLatencyMs": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "The response latency in milliseconds"
+                },
+                "receivedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the message was received"
+                }
+            },
+            "required": ["sessionId", "userProfileId", "channel", "language", "userMessageContent", "assistantResponseContent", "responseLatencyMs", "receivedAt"]
+        }
+    },
+    "required": ["payload"]
+}

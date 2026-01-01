@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Chatbot Session Closed Event",
+    "description": "Event published when a chatbot session is closed or expired.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "sessionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the chatbot session"
+                },
+                "userProfileId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the user profile"
+                },
+                "channel": {
+                    "type": "string",
+                    "enum": ["Website", "LINE", "Meta"],
+                    "description": "The channel of the session"
+                },
+                "startTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the session started"
+                },
+                "endTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the session ended"
+                },
+                "totalMessageCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "The total number of messages in the session"
+                },
+                "closureReason": {
+                    "type": "string",
+                    "enum": ["Expired", "UserLeft", "AdminClosed"],
+                    "description": "The reason for session closure"
+                }
+            },
+            "required": ["sessionId", "userProfileId", "channel", "startTime", "endTime", "totalMessageCount", "closureReason"]
+        }
+    },
+    "required": ["payload"]
+}
