@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Get Customer Details Request",
+    "description": "Request to retrieve details for a specific customer.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        },
+        {
+            "properties": {
+                "messageName": { "const": "GetCustomerDetailsRequest" },
+                "messageType": { "const": "Request" },
+                "publishedBy": { "const": "OrderService" },
+                "consumedBy": { "const": ["CustomerService"] }
+            }
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": [
+                "customerId"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

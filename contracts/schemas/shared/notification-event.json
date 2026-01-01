@@ -1,0 +1,78 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://maliev.com/schemas/shared/notification-event.json",
+    "title": "NotificationEvent",
+    "description": "Event published to trigger a notification to one or more users.",
+    "allOf": [
+        {
+            "$ref": "base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "notificationType": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "string",
+                    "enum": [
+                        "standard",
+                        "critical"
+                    ]
+                },
+                "targetUsers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "userId": {
+                                "type": "string"
+                            },
+                            "userType": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "userId",
+                            "userType"
+                        ]
+                    }
+                },
+                "templateId": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "language": {
+                            "type": "string",
+                            "default": "en"
+                        },
+                        "source": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "required": [
+                "notificationType",
+                "priority",
+                "targetUsers",
+                "templateId",
+                "parameters"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

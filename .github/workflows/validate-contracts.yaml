@@ -1,0 +1,44 @@
+name: Validate Contracts
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - 'asyncapi/**'
+      - 'topology/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Detect Schema Changes
+        run: |
+          # Only check if base_ref is available (pull requests)
+          if [ -n "${{ github.base_ref }}" ]; then
+            git diff --quiet origin/${{ github.base_ref }} -- contracts/schemas/ || {
+              echo "::warning::Schema changes detected. Ensure messageVersion is incremented if this were a production environment."
+            }
+          fi
+        shell: bash
+
+      - name: Validate Consumers
+        run: ./scripts/validate-consumers.ps1
+        shell: pwsh
+
+      - name: Validate AsyncAPI
+        run: npm test

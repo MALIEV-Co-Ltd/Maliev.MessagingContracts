@@ -1,0 +1,126 @@
+asyncapi: '3.0.0'
+info:
+  title: Maliev Messaging Contracts
+  version: 1.0.0
+  description: Shared messaging contracts for Maliev ecosystem.
+channels:
+  user/created:
+    address: maliev.users.events.user-created
+    messages:
+      createUserCommand:
+        $ref: '#/components/messages/CreateUserCommand'
+  customer/details:
+    address: maliev.customers.requests.get-details
+    messages:
+      getCustomerDetailsRequest:
+        $ref: '#/components/messages/GetCustomerDetailsRequest'
+      customerDetailsResponse:
+        $ref: '#/components/messages/CustomerDetailsResponse'
+  order/created:
+    address: maliev.orders.commands.create-order
+    messages:
+      createOrderCommand:
+        $ref: '#/components/messages/CreateOrderCommand'
+  payment/completed:
+    address: maliev.payments.events.completed
+    messages:
+      paymentCompletedEvent:
+        $ref: '#/components/messages/PaymentCompletedEvent'
+  payment/created:
+    address: maliev.payments.events.created
+    messages:
+      paymentCreatedEvent:
+        $ref: '#/components/messages/PaymentCreatedEvent'
+  payment/failed:
+    address: maliev.payments.events.failed
+    messages:
+      paymentFailedEvent:
+        $ref: '#/components/messages/PaymentFailedEvent'
+  iam/role-updated:
+    address: maliev.iam.events.role-updated
+    messages:
+      roleUpdatedEvent:
+        $ref: '#/components/messages/RoleUpdatedEvent'
+  iam/principal-role-granted:
+    address: maliev.iam.events.principal-role-granted
+    messages:
+      principalRoleGrantedEvent:
+        $ref: '#/components/messages/PrincipalRoleGrantedEvent'
+  iam/principal-role-revoked:
+    address: maliev.iam.events.principal-role-revoked
+    messages:
+      principalRoleRevokedEvent:
+        $ref: '#/components/messages/PrincipalRoleRevokedEvent'
+  iam/permission-registered:
+    address: maliev.iam.events.permission-registered
+    messages:
+      permissionRegisteredEvent:
+        $ref: '#/components/messages/PermissionRegisteredEvent'
+  chatbot/session-created:
+    address: maliev.chatbot.events.session-created
+    messages:
+      chatbotSessionCreatedEvent:
+        $ref: '#/components/messages/ChatbotSessionCreatedEvent'
+  chatbot/message-received:
+    address: maliev.chatbot.events.message-received
+    messages:
+      chatbotMessageReceivedEvent:
+        $ref: '#/components/messages/ChatbotMessageReceivedEvent'
+  chatbot/session-closed:
+    address: maliev.chatbot.events.session-closed
+    messages:
+      chatbotSessionClosedEvent:
+        $ref: '#/components/messages/ChatbotSessionClosedEvent'
+  chatbot/rate-limit-exceeded:
+    address: maliev.chatbot.events.rate-limit-exceeded
+    messages:
+      chatbotRateLimitExceededEvent:
+        $ref: '#/components/messages/ChatbotRateLimitExceededEvent'
+
+components:
+  messages:
+    CreateUserCommand:
+      payload:
+        $ref: '../contracts/schemas/commands/create-user-command.json'
+    GetCustomerDetailsRequest:
+      payload:
+        $ref: '../contracts/schemas/customers/get-customer-details-request.json'
+    CustomerDetailsResponse:
+      payload:
+        $ref: '../contracts/schemas/customers/customer-details-response.json'
+    CreateOrderCommand:
+      payload:
+        $ref: '../contracts/schemas/orders/create-order-command.json'
+    PaymentCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-completed-event.json'
+    PaymentCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-created-event.json'
+    PaymentFailedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-failed-event.json'
+    RoleUpdatedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/role-updated-event.json'
+    PrincipalRoleGrantedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/principal-role-granted-event.json'
+    PrincipalRoleRevokedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/principal-role-revoked-event.json'
+    PermissionRegisteredEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/permission-registered-event.json'
+    ChatbotSessionCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-session-created-event.json'
+    ChatbotMessageReceivedEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-message-received-event.json'
+    ChatbotSessionClosedEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-session-closed-event.json'
+    ChatbotRateLimitExceededEvent:
+      payload:
+        $ref: '../contracts/schemas/chatbot/chatbot-rate-limit-exceeded-event.json'

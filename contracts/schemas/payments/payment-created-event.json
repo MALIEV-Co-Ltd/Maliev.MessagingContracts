@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "PaymentCreatedEvent",
+    "description": "Event published when a payment transaction is initially created.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "transactionId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "idempotencyKey": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": "string"
+                },
+                "providerName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "transactionId",
+                "amount",
+                "currency",
+                "customerId",
+                "orderId"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

@@ -1,0 +1,157 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/lifecycle-events",
+    "title": "Lifecycle Domain Events",
+    "description": "Events published by the Lifecycle Service for cross-service integration",
+    "definitions": {
+        "OnboardingStartedEvent": {
+            "type": "object",
+            "description": "Published when onboarding workflow is started",
+            "properties": {
+                "checklistId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "totalItems": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "checklistId",
+                "employeeId",
+                "startDate",
+                "totalItems"
+            ]
+        },
+        "OnboardingCompletedEvent": {
+            "type": "object",
+            "description": "Published when onboarding is completed",
+            "properties": {
+                "checklistId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "completedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "checklistId",
+                "employeeId",
+                "completedDate"
+            ]
+        },
+        "OffboardingStartedEvent": {
+            "type": "object",
+            "description": "Published when offboarding workflow is started",
+            "properties": {
+                "checklistId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "terminationDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "terminationReason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "checklistId",
+                "employeeId",
+                "terminationDate",
+                "terminationReason"
+            ]
+        },
+        "OffboardingCompletedEvent": {
+            "type": "object",
+            "description": "Published when offboarding is completed",
+            "properties": {
+                "checklistId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "completedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "checklistId",
+                "employeeId",
+                "completedDate"
+            ]
+        },
+        "AccessRevocationRequiredEvent": {
+            "type": "object",
+            "description": "Published when access revocation is required",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "employeeId",
+                "effectiveDate",
+                "reason"
+            ]
+        },
+        "OnboardingItemOverdueEvent": {
+            "type": "object",
+            "description": "Published when an onboarding item is overdue",
+            "properties": {
+                "itemId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "itemTitle": {
+                    "type": "string"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "itemId",
+                "employeeId",
+                "itemTitle",
+                "dueDate"
+            ]
+        }
+    }
+}

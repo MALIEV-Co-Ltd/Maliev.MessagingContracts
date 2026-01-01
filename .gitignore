@@ -1,0 +1,26 @@
+# Node.js
+node_modules/
+dist/
+build/
+*.log
+.env*
+coverage/
+
+# C#/.NET
+bin/
+obj/
+*.user
+*.suo
+packages/
+TestResults/
+
+# General
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+.claude/settings.local.json
+.gemini/settings.local.json

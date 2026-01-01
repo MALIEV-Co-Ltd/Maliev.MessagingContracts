@@ -1,0 +1,36 @@
+{
+  "name": "maliev.messagingcontracts",
+  "version": "1.0.0",
+  "description": "Maintain a central 'Messaging Contract' repository for the MALIEV ecosystem.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npm run validate:asyncapi && npm run validate:schemas",
+    "validate:asyncapi": "asyncapi validate asyncapi/asyncapi.yaml",
+    "validate:schemas": "ajv compile -c ajv-formats -s \"contracts/schemas/shared/*.json\" --all-errors",
+    "gen-docs": "asyncapi generate fromTemplate asyncapi/asyncapi.yaml @asyncapi/html-template -o docs --force-write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts/issues"
+  },
+  "homepage": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts#readme",
+  "dependencies": {
+    "@asyncapi/generator": "^2.11.0",
+    "@asyncapi/markdown-template": "^1.6.7"
+  },
+  "devDependencies": {
+    "@asyncapi/cli": "^4.1.1",
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

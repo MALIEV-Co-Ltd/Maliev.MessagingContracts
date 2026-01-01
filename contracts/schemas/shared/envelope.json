@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://maliev.com/schemas/shared/envelope.json",
+  "title": "MessageEnvelope",
+  "type": "object",
+  "required": [
+    "messageId",
+    "timestamp",
+    "source",
+    "type",
+    "data"
+  ],
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "traceparent": {
+      "type": "string",
+      "description": "W3C TraceContext traceparent"
+    },
+    "tracestate": {
+      "type": "string",
+      "description": "W3C TraceContext tracestate"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object"
+    }
+  }
+}

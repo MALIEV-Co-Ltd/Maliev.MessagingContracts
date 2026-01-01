@@ -1,0 +1,11 @@
+exchanges:
+  - name: maliev.users
+    type: topic
+    durable: true
+queues:
+  - name: maliev.users.commands.create-user
+    durable: true
+bindings:
+  - source: maliev.users
+    destination: maliev.users.commands.create-user
+    routing_key: users.commands.create

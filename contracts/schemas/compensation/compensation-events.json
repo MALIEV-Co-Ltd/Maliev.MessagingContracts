@@ -1,0 +1,102 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/compensation-events",
+    "title": "Compensation Domain Events",
+    "description": "Events published by the Compensation Service for cross-service integration",
+    "definitions": {
+        "CompensationChangedEvent": {
+            "type": "object",
+            "description": "Published when compensation record is created or updated",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "compensationRecordId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "newSalary": {
+                    "type": "number"
+                },
+                "previousSalary": {
+                    "type": "number"
+                },
+                "changePercentage": {
+                    "type": "number"
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "changeReason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "employeeId",
+                "compensationRecordId",
+                "newSalary",
+                "effectiveDate"
+            ]
+        },
+        "BenefitsEnrollmentUpdatedEvent": {
+            "type": "object",
+            "description": "Published when benefits enrollment changes",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "benefitId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "Active",
+                        "Pending",
+                        "Terminated",
+                        "OnHold"
+                    ]
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "employeeId",
+                "benefitId",
+                "status",
+                "effectiveDate"
+            ]
+        },
+        "BulkSalaryIncreaseCompletedEvent": {
+            "type": "object",
+            "description": "Published when bulk salary increase operation completes",
+            "properties": {
+                "jobId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "successCount": {
+                    "type": "integer"
+                },
+                "failureCount": {
+                    "type": "integer"
+                },
+                "totalBudgetImpact": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "jobId",
+                "successCount",
+                "failureCount",
+                "totalBudgetImpact"
+            ]
+        }
+    }
+}

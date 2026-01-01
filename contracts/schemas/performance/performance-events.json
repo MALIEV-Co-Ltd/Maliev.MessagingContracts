@@ -1,0 +1,171 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/performance-events",
+    "title": "Performance Domain Events",
+    "description": "Events published by the Performance Service for cross-service integration",
+    "definitions": {
+        "PerformanceReviewCreatedEvent": {
+            "type": "object",
+            "description": "Published when performance review is created",
+            "properties": {
+                "reviewId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "reviewerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "reviewCycle": {
+                    "type": "string",
+                    "enum": [
+                        "Annual",
+                        "SemiAnnual",
+                        "Quarterly",
+                        "Probation"
+                    ]
+                },
+                "reviewPeriodStart": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reviewPeriodEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "reviewId",
+                "employeeId",
+                "reviewerId",
+                "reviewCycle",
+                "reviewPeriodStart",
+                "reviewPeriodEnd"
+            ]
+        },
+        "PerformanceReviewAcknowledgedEvent": {
+            "type": "object",
+            "description": "Published when review is acknowledged",
+            "properties": {
+                "reviewId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "overallRating": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                },
+                "acknowledgedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "reviewId",
+                "employeeId",
+                "overallRating",
+                "acknowledgedDate"
+            ]
+        },
+        "GoalCompletedEvent": {
+            "type": "object",
+            "description": "Published when goal is completed",
+            "properties": {
+                "goalId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "completedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "goalId",
+                "employeeId",
+                "description",
+                "completedDate"
+            ]
+        },
+        "PIPInitiatedEvent": {
+            "type": "object",
+            "description": "Published when PIP is initiated",
+            "properties": {
+                "pipId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pipId",
+                "employeeId",
+                "startDate",
+                "endDate",
+                "reason"
+            ]
+        },
+        "PIPCompletedEvent": {
+            "type": "object",
+            "description": "Published when PIP outcome is recorded",
+            "properties": {
+                "pipId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "outcome": {
+                    "type": "string",
+                    "enum": [
+                        "Successful",
+                        "Unsuccessful",
+                        "ExtendedAgain"
+                    ]
+                },
+                "completedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "pipId",
+                "employeeId",
+                "outcome",
+                "completedDate"
+            ]
+        }
+    }
+}
