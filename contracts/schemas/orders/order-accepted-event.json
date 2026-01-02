@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order Accepted Event",
+    "description": "Event published when a customer accepts an order quote.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,33 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
+                "customerId": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "Unique identifier of the payment"
+                    "description": "Unique identifier of the customer"
                 },
-                "amount": {
+                "acceptedAmount": {
                     "type": "number",
-                    "description": "Amount paid"
+                    "description": "Accepted order amount"
                 },
                 "currency": {
                     "type": "string",
                     "pattern": "^[A-Z]{3}$",
                     "description": "Currency code (ISO 4217)"
+                },
+                "acceptedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when order was accepted"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "customerId",
+                "acceptedAmount",
+                "currency",
+                "acceptedAt"
             ]
         }
     },

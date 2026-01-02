@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order Quoted Event",
+    "description": "Event published when an order receives a quote.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,39 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "description": "Unique identifier of the payment"
-                },
-                "amount": {
+                "quotedAmount": {
                     "type": "number",
-                    "description": "Amount paid"
+                    "description": "Quoted amount for the order"
                 },
                 "currency": {
                     "type": "string",
                     "pattern": "^[A-Z]{3}$",
                     "description": "Currency code (ISO 4217)"
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Quote expiration date"
+                },
+                "quotedBy": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Employee who created the quote"
+                },
+                "quotedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when quote was created"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "quotedAmount",
+                "currency",
+                "validUntil",
+                "quotedBy",
+                "quotedAt"
             ]
         }
     },

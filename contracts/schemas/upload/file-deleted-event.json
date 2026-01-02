@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "File Deleted Event",
+    "description": "Event published when a file is deleted from storage.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the deleted file"
+                },
+                "uploadId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Upload batch identifier"
+                },
+                "serviceId": {
+                    "type": "string",
+                    "description": "Service that owns the file (e.g., 'order-service', 'invoice-service')"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "Storage path of the deleted file"
+                },
+                "deletedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when file was deleted"
+                },
+                "deletedBy": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "User who deleted the file (optional)"
+                },
+                "reason": {
+                    "type": ["string", "null"],
+                    "description": "Reason for deletion (optional)"
+                }
+            },
+            "required": [
+                "fileId",
+                "uploadId",
+                "serviceId",
+                "storagePath",
+                "deletedAt"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

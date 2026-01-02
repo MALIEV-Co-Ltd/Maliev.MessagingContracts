@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order In Progress Event",
+    "description": "Event published when work on an order begins.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,21 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
+                "startedAt": {
                     "type": "string",
-                    "format": "uuid",
-                    "description": "Unique identifier of the payment"
+                    "format": "date-time",
+                    "description": "Timestamp when work started"
                 },
-                "amount": {
-                    "type": "number",
-                    "description": "Amount paid"
-                },
-                "currency": {
-                    "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "Currency code (ISO 4217)"
+                "estimatedCompletionDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time",
+                    "description": "Estimated completion date (optional)"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "startedAt"
             ]
         }
     },

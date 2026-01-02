@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order Reopened Event",
+    "description": "Event published when a completed or cancelled order is reopened.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,27 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
+                "reopenedBy": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "Unique identifier of the payment"
+                    "description": "User who reopened the order"
                 },
-                "amount": {
-                    "type": "number",
-                    "description": "Amount paid"
-                },
-                "currency": {
+                "reopenedAt": {
                     "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "Currency code (ISO 4217)"
+                    "format": "date-time",
+                    "description": "Timestamp when order was reopened"
+                },
+                "reopenReason": {
+                    "type": "string",
+                    "description": "Reason for reopening the order"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "reopenedBy",
+                "reopenedAt",
+                "reopenReason"
             ]
         }
     },

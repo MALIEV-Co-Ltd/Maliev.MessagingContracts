@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Invoice Overdue Event",
+    "description": "Event published when an invoice becomes overdue (past due date with outstanding balance).",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the invoice"
+                },
+                "invoiceNumber": {
+                    "type": "string",
+                    "description": "Sequential invoice number"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Customer ID"
+                },
+                "outstandingBalance": {
+                    "type": "number",
+                    "description": "Outstanding balance amount"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "Currency code (ISO 4217)"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Original due date"
+                },
+                "daysOverdue": {
+                    "type": "integer",
+                    "description": "Number of days past due date"
+                },
+                "detectedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when overdue status was detected"
+                }
+            },
+            "required": [
+                "invoiceId",
+                "invoiceNumber",
+                "customerId",
+                "outstandingBalance",
+                "currency",
+                "dueDate",
+                "daysOverdue",
+                "detectedAt"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

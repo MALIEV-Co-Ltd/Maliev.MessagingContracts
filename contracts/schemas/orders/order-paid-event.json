@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order Paid Event",
+    "description": "Event published when payment for an order is completed.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -26,7 +26,7 @@
                     "format": "uuid",
                     "description": "Unique identifier of the payment"
                 },
-                "amount": {
+                "paidAmount": {
                     "type": "number",
                     "description": "Amount paid"
                 },
@@ -34,14 +34,20 @@
                     "type": "string",
                     "pattern": "^[A-Z]{3}$",
                     "description": "Currency code (ISO 4217)"
+                },
+                "paidAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when payment was completed"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
                 "paymentId",
-                "amount",
-                "currency"
+                "paidAmount",
+                "currency",
+                "paidAt"
             ]
         }
     },

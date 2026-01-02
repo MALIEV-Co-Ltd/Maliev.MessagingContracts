@@ -1,0 +1,71 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Invoice Created Event",
+    "description": "Event published when a new invoice is created.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the invoice"
+                },
+                "invoiceNumber": {
+                    "type": "string",
+                    "description": "Sequential invoice number"
+                },
+                "orderId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Associated order ID (if created from order)"
+                },
+                "orderNumber": {
+                    "type": ["string", "null"],
+                    "description": "Associated order number (if created from order)"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Customer ID"
+                },
+                "totalAmount": {
+                    "type": "number",
+                    "description": "Total invoice amount"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "Currency code (ISO 4217)"
+                },
+                "dueDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time",
+                    "description": "Payment due date"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Invoice creation timestamp"
+                }
+            },
+            "required": [
+                "invoiceId",
+                "invoiceNumber",
+                "customerId",
+                "totalAmount",
+                "currency",
+                "createdAt"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

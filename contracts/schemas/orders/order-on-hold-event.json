@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order On Hold Event",
+    "description": "Event published when an order is put on hold.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,27 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
+                "putOnHoldBy": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "Unique identifier of the payment"
+                    "description": "User who put the order on hold"
                 },
-                "amount": {
-                    "type": "number",
-                    "description": "Amount paid"
-                },
-                "currency": {
+                "putOnHoldAt": {
                     "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "Currency code (ISO 4217)"
+                    "format": "date-time",
+                    "description": "Timestamp when order was put on hold"
+                },
+                "holdReason": {
+                    "type": "string",
+                    "description": "Reason for putting order on hold"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "putOnHoldBy",
+                "putOnHoldAt",
+                "holdReason"
             ]
         }
     },

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order Shipped Event",
+    "description": "Event published when an order is shipped to the customer.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,29 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
+                "shippedAt": {
                     "type": "string",
-                    "format": "uuid",
-                    "description": "Unique identifier of the payment"
+                    "format": "date-time",
+                    "description": "Timestamp when order was shipped"
                 },
-                "amount": {
-                    "type": "number",
-                    "description": "Amount paid"
+                "trackingNumber": {
+                    "type": ["string", "null"],
+                    "description": "Shipping tracking number (optional)"
                 },
-                "currency": {
-                    "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "Currency code (ISO 4217)"
+                "carrier": {
+                    "type": ["string", "null"],
+                    "description": "Shipping carrier name (optional)"
+                },
+                "estimatedDeliveryDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time",
+                    "description": "Estimated delivery date (optional)"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "shippedAt"
             ]
         }
     },

@@ -507,6 +507,7 @@ namespace Generator
                     }
 
                     if (prop.Value.TryGetProperty("type", out var typeEl) &&
+                        typeEl.ValueKind == JsonValueKind.String &&
                         typeEl.GetString() == "object" &&
                         prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
@@ -515,9 +516,11 @@ namespace Generator
                         propType = nestedTypeName;
                     }
                     else if (prop.Value.TryGetProperty("type", out var arrayType) &&
+                             arrayType.ValueKind == JsonValueKind.String &&
                              arrayType.GetString() == "array" &&
                              prop.Value.TryGetProperty("items", out var itemsEl) &&
                              itemsEl.TryGetProperty("type", out var itemTypeEl) &&
+                             itemTypeEl.ValueKind == JsonValueKind.String &&
                              itemTypeEl.GetString() == "object")
                     {
                         var itemTypeName = $"{typeName}{propName}Item";

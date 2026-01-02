@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Payment Completed Event",
-    "description": "Event indicating that a payment has been successfully processed.",
+    "title": "Order Rejected Event",
+    "description": "Event published when an order is rejected.",
     "allOf": [
         {
             "$ref": "../shared/base-message.json"
@@ -21,27 +21,27 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
-                "paymentId": {
+                "rejectedBy": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "Unique identifier of the payment"
+                    "description": "Employee who rejected the order"
                 },
-                "amount": {
-                    "type": "number",
-                    "description": "Amount paid"
-                },
-                "currency": {
+                "rejectedAt": {
                     "type": "string",
-                    "pattern": "^[A-Z]{3}$",
-                    "description": "Currency code (ISO 4217)"
+                    "format": "date-time",
+                    "description": "Timestamp when order was rejected"
+                },
+                "rejectionReason": {
+                    "type": "string",
+                    "description": "Reason for rejection"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
-                "paymentId",
-                "amount",
-                "currency"
+                "rejectedBy",
+                "rejectedAt",
+                "rejectionReason"
             ]
         }
     },
