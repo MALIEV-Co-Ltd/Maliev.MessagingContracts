@@ -1,0 +1,99 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/pdf-events",
+    "title": "PDF Service Events",
+    "description": "Events published by the PDF Service for document generation",
+    "definitions": {
+        "PdfGenerationRequestedEvent": {
+            "type": "object",
+            "description": "Published when PDF generation is requested",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "documentType": {
+                    "type": "string",
+                    "enum": ["Invoice", "Receipt", "Quotation", "PurchaseOrder", "Report"]
+                },
+                "documentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "requestedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "requestedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "priority": {
+                    "type": "string",
+                    "enum": ["Low", "Normal", "High"]
+                }
+            },
+            "required": ["requestId", "documentType", "documentId", "requestedBy", "requestedAt", "priority"]
+        },
+        "PdfGenerationCompletedEvent": {
+            "type": "object",
+            "description": "Published when PDF generation completes successfully",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "documentType": {
+                    "type": "string"
+                },
+                "documentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "pdfUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "fileSize": {
+                    "type": "integer"
+                },
+                "completedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "processingTimeMs": {
+                    "type": "integer"
+                }
+            },
+            "required": ["requestId", "documentType", "documentId", "pdfUrl", "fileSize", "completedAt", "processingTimeMs"]
+        },
+        "PdfGenerationFailedEvent": {
+            "type": "object",
+            "description": "Published when PDF generation fails",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "documentType": {
+                    "type": "string"
+                },
+                "documentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "errorMessage": {
+                    "type": "string"
+                },
+                "failedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "retryable": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["requestId", "documentType", "documentId", "errorMessage", "failedAt", "retryable"]
+        }
+    }
+}

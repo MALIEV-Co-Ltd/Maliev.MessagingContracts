@@ -1,0 +1,117 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/receipt-events",
+    "title": "Receipt Domain Events",
+    "description": "Events published by the Receipt Service for transaction documentation",
+    "definitions": {
+        "ReceiptCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new receipt is created",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "paymentMethod": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "customerId", "totalAmount", "currency", "paymentMethod", "createdAt"]
+        },
+        "ReceiptGeneratedEvent": {
+            "type": "object",
+            "description": "Published when receipt PDF is successfully generated",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "pdfUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "generatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "pdfUrl", "generatedAt"]
+        },
+        "ReceiptSentEvent": {
+            "type": "object",
+            "description": "Published when receipt is sent to customer",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "sentTo": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "customerId", "sentTo", "sentAt"]
+        },
+        "ReceiptVoidedEvent": {
+            "type": "object",
+            "description": "Published when receipt is voided/cancelled",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "voidedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "voidedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "voidReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "voidedBy", "voidedAt", "voidReason"]
+        }
+    }
+}

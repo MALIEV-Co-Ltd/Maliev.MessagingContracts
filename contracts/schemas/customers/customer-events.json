@@ -1,0 +1,140 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/customer-events",
+    "title": "Customer Domain Events",
+    "description": "Events published by the Customer Service for cross-service integration",
+    "definitions": {
+        "CustomerCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new customer is created",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "customerNumber": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "phone": {
+                    "type": ["string", "null"]
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["customerId", "customerNumber", "companyName", "email", "createdAt"]
+        },
+        "CustomerUpdatedEvent": {
+            "type": "object",
+            "description": "Published when customer information is updated",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "updatedFields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["customerId", "updatedFields", "updatedBy", "updatedAt"]
+        },
+        "CustomerDeletedEvent": {
+            "type": "object",
+            "description": "Published when customer is soft-deleted",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "deletedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "deletedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "deletionReason": {
+                    "type": ["string", "null"]
+                }
+            },
+            "required": ["customerId", "deletedBy", "deletedAt"]
+        },
+        "ContactCreatedEvent": {
+            "type": "object",
+            "description": "Published when a contact person is added to customer",
+            "properties": {
+                "contactId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "phone": {
+                    "type": ["string", "null"]
+                },
+                "isPrimary": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["contactId", "customerId", "fullName", "email", "isPrimary", "createdAt"]
+        },
+        "ContactUpdatedEvent": {
+            "type": "object",
+            "description": "Published when contact person information is updated",
+            "properties": {
+                "contactId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "updatedFields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["contactId", "customerId", "updatedFields", "updatedAt"]
+        }
+    }
+}

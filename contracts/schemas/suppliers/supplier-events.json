@@ -1,0 +1,140 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/supplier-events",
+    "title": "Supplier Domain Events",
+    "description": "Events published by the Supplier Service for vendor management",
+    "definitions": {
+        "SupplierCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new supplier is created",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "supplierCode": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "phone": {
+                    "type": ["string", "null"]
+                },
+                "status": {
+                    "type": "string",
+                    "enum": ["Pending", "Approved", "Active", "Suspended", "Terminated"]
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["supplierId", "supplierCode", "companyName", "email", "status", "createdAt"]
+        },
+        "SupplierUpdatedEvent": {
+            "type": "object",
+            "description": "Published when supplier information is updated",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "supplierCode": {
+                    "type": "string"
+                },
+                "updatedFields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["supplierId", "supplierCode", "updatedFields", "updatedBy", "updatedAt"]
+        },
+        "SupplierApprovedEvent": {
+            "type": "object",
+            "description": "Published when supplier is approved for business",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "supplierCode": {
+                    "type": "string"
+                },
+                "approvedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "approvedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["supplierId", "supplierCode", "approvedBy", "approvedAt"]
+        },
+        "SupplierSuspendedEvent": {
+            "type": "object",
+            "description": "Published when supplier is suspended",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "supplierCode": {
+                    "type": "string"
+                },
+                "suspendedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "suspendedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "suspensionReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["supplierId", "supplierCode", "suspendedBy", "suspendedAt", "suspensionReason"]
+        },
+        "SupplierTerminatedEvent": {
+            "type": "object",
+            "description": "Published when supplier relationship is terminated",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "supplierCode": {
+                    "type": "string"
+                },
+                "terminatedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "terminatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "terminationReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["supplierId", "supplierCode", "terminatedBy", "terminatedAt", "terminationReason"]
+        }
+    }
+}

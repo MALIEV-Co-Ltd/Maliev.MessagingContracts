@@ -1,0 +1,155 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/quotation-events",
+    "title": "Quotation Domain Events",
+    "description": "Events published by the Quotation Service for sales workflow",
+    "definitions": {
+        "QuotationCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new quotation is created",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "totalAmount", "currency", "validUntil", "createdBy", "createdAt"]
+        },
+        "QuotationSentEvent": {
+            "type": "object",
+            "description": "Published when quotation is sent to customer",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "sentTo": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "sentBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "sentTo", "sentAt", "sentBy"]
+        },
+        "QuotationAcceptedEvent": {
+            "type": "object",
+            "description": "Published when customer accepts quotation",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "acceptedAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "acceptedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "acceptedAmount", "currency", "acceptedAt"]
+        },
+        "QuotationRejectedEvent": {
+            "type": "object",
+            "description": "Published when customer rejects quotation",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "rejectedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "rejectionReason": {
+                    "type": ["string", "null"]
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "rejectedAt"]
+        },
+        "QuotationExpiredEvent": {
+            "type": "object",
+            "description": "Published when quotation validity period expires (background job)",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "expiredAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "validUntil", "expiredAt"]
+        }
+    }
+}

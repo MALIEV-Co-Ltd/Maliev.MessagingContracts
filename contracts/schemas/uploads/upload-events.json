@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/upload-events",
+    "title": "Upload Domain Events",
+    "description": "Events published by the Upload Service for file management",
+    "definitions": {
+        "FileUploadedEvent": {
+            "type": "object",
+            "description": "Published when a file is successfully uploaded",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "fileName": {
+                    "type": "string"
+                },
+                "fileSize": {
+                    "type": "integer"
+                },
+                "contentType": {
+                    "type": "string"
+                },
+                "objectPath": {
+                    "type": "string"
+                },
+                "uploadedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "uploadedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "relatedEntityType": {
+                    "type": ["string", "null"]
+                },
+                "relatedEntityId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                }
+            },
+            "required": ["fileId", "fileName", "fileSize", "contentType", "objectPath", "uploadedBy", "uploadedAt"]
+        },
+        "FileDeletedEvent": {
+            "type": "object",
+            "description": "Published when a file is deleted",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "fileName": {
+                    "type": "string"
+                },
+                "objectPath": {
+                    "type": "string"
+                },
+                "deletedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "deletedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "deletionReason": {
+                    "type": ["string", "null"]
+                }
+            },
+            "required": ["fileId", "fileName", "objectPath", "deletedBy", "deletedAt"]
+        }
+    }
+}

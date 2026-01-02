@@ -1,0 +1,158 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/material-events",
+    "title": "Material Domain Events",
+    "description": "Events published by the Material Service for inventory management",
+    "definitions": {
+        "MaterialCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new material is created",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "materialCode": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "unitPrice": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["materialId", "materialCode", "name", "category", "unit", "unitPrice", "currency", "createdAt"]
+        },
+        "MaterialUpdatedEvent": {
+            "type": "object",
+            "description": "Published when material information is updated",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "materialCode": {
+                    "type": "string"
+                },
+                "updatedFields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "updatedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["materialId", "materialCode", "updatedFields", "updatedBy", "updatedAt"]
+        },
+        "MaterialStockChangedEvent": {
+            "type": "object",
+            "description": "Published when material stock level changes",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "materialCode": {
+                    "type": "string"
+                },
+                "previousQuantity": {
+                    "type": "number"
+                },
+                "newQuantity": {
+                    "type": "number"
+                },
+                "changeReason": {
+                    "type": "string",
+                    "enum": ["Purchase", "Sale", "Adjustment", "Return", "Damaged", "Transfer"]
+                },
+                "referenceId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "changedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["materialId", "materialCode", "previousQuantity", "newQuantity", "changeReason", "changedAt"]
+        },
+        "MaterialLowStockEvent": {
+            "type": "object",
+            "description": "Published when material stock falls below reorder level (background job)",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "materialCode": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "currentQuantity": {
+                    "type": "number"
+                },
+                "reorderLevel": {
+                    "type": "number"
+                },
+                "detectedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["materialId", "materialCode", "name", "currentQuantity", "reorderLevel", "detectedAt"]
+        },
+        "MaterialDiscontinuedEvent": {
+            "type": "object",
+            "description": "Published when material is marked as discontinued",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "materialCode": {
+                    "type": "string"
+                },
+                "discontinuedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "discontinuedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reason": {
+                    "type": ["string", "null"]
+                },
+                "replacementMaterialId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                }
+            },
+            "required": ["materialId", "materialCode", "discontinuedBy", "discontinuedAt"]
+        }
+    }
+}

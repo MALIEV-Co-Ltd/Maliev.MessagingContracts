@@ -1,0 +1,159 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/auth-events",
+    "title": "Authentication Domain Events",
+    "description": "Events published by the Auth Service for security auditing and monitoring",
+    "definitions": {
+        "UserLoggedInEvent": {
+            "type": "object",
+            "description": "Published when user successfully logs in",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "ipAddress": {
+                    "type": "string"
+                },
+                "userAgent": {
+                    "type": ["string", "null"]
+                },
+                "loginMethod": {
+                    "type": "string",
+                    "enum": ["Password", "OAuth", "ServiceCredential"]
+                },
+                "loggedInAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "ipAddress", "loginMethod", "loggedInAt"]
+        },
+        "UserLoggedOutEvent": {
+            "type": "object",
+            "description": "Published when user logs out",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "loggedOutAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "loggedOutAt"]
+        },
+        "LoginFailedEvent": {
+            "type": "object",
+            "description": "Published when login attempt fails",
+            "properties": {
+                "userIdentifier": {
+                    "type": "string"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "ipAddress": {
+                    "type": "string"
+                },
+                "failureReason": {
+                    "type": "string",
+                    "enum": ["InvalidCredentials", "AccountLocked", "AccountNotFound", "RateLimitExceeded"]
+                },
+                "attemptedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userIdentifier", "userType", "ipAddress", "failureReason", "attemptedAt"]
+        },
+        "UserAccountLockedEvent": {
+            "type": "object",
+            "description": "Published when user account is locked due to failed login attempts",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "failedAttemptCount": {
+                    "type": "integer"
+                },
+                "lockedUntil": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "lockedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "failedAttemptCount", "lockedUntil", "lockedAt"]
+        },
+        "RefreshTokenRevokedEvent": {
+            "type": "object",
+            "description": "Published when refresh token is revoked",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "tokenFamilyId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "revocationReason": {
+                    "type": "string",
+                    "enum": ["UserLogout", "TokenReuse", "SecurityBreach", "Administrative"]
+                },
+                "revokedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "tokenFamilyId", "revocationReason", "revokedAt"]
+        },
+        "SuspiciousActivityDetectedEvent": {
+            "type": "object",
+            "description": "Published when suspicious authentication activity is detected",
+            "properties": {
+                "userId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "activityType": {
+                    "type": "string",
+                    "enum": ["RefreshTokenReuse", "IpAddressChange", "MultipleFailedAttempts", "UnusualLoginTime"]
+                },
+                "ipAddress": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "object"
+                },
+                "detectedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["activityType", "ipAddress", "detectedAt"]
+        }
+    }
+}
