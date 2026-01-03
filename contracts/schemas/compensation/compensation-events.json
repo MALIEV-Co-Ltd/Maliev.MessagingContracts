@@ -4,7 +4,7 @@
     "title": "Compensation Domain Events",
     "description": "Events published by the Compensation Service for cross-service integration",
     "definitions": {
-        "CompensationChangedEvent": {
+        "SalaryChangedEvent": {
             "type": "object",
             "description": "Published when compensation record is created or updated",
             "properties": {
@@ -40,7 +40,41 @@
                 "effectiveDate"
             ]
         },
-        "BenefitsEnrollmentUpdatedEvent": {
+        "BonusAwardedEvent": {
+            "type": "object",
+            "description": "Published when bonus is awarded to an employee",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "bonusId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "awardDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "employeeId",
+                "bonusId",
+                "amount",
+                "currency",
+                "awardDate"
+            ]
+        },
+        "BenefitEnrolledEvent": {
             "type": "object",
             "description": "Published when benefits enrollment changes",
             "properties": {

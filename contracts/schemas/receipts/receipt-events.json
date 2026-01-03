@@ -15,13 +15,14 @@
                 "receiptNumber": {
                     "type": "string"
                 },
-                "orderId": {
-                    "type": ["string", "null"],
-                    "format": "uuid"
-                },
-                "customerId": {
+                "invoiceId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Invoice ID for this receipt"
+                },
+                "customerName": {
+                    "type": "string",
+                    "description": "Customer name from invoice"
                 },
                 "totalAmount": {
                     "type": "number"
@@ -31,14 +32,15 @@
                     "pattern": "^[A-Z]{3}$"
                 },
                 "paymentMethod": {
-                    "type": "string"
+                    "type": ["string", "null"],
+                    "description": "Payment method used"
                 },
                 "createdAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["receiptId", "receiptNumber", "customerId", "totalAmount", "currency", "paymentMethod", "createdAt"]
+            "required": ["receiptId", "receiptNumber", "invoiceId", "customerName", "totalAmount", "currency", "createdAt"]
         },
         "ReceiptGeneratedEvent": {
             "type": "object",
@@ -46,21 +48,26 @@
             "properties": {
                 "receiptId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Receipt ID (Guid)"
                 },
                 "receiptNumber": {
-                    "type": "string"
-                },
-                "pdfUrl": {
                     "type": "string",
-                    "format": "uri"
+                    "description": "Receipt number"
+                },
+                "storageUrl": {
+                    "type": "string",
+                    "description": "URL where the PDF is stored"
+                },
+                "pdfReferenceId": {
+                    "type": "string",
+                    "description": "Reference ID in UploadService/PdfService"
                 },
                 "generatedAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["receiptId", "receiptNumber", "pdfUrl", "generatedAt"]
+            "required": ["receiptId", "receiptNumber", "storageUrl", "pdfReferenceId", "generatedAt"]
         },
         "ReceiptSentEvent": {
             "type": "object",
@@ -68,25 +75,35 @@
             "properties": {
                 "receiptId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Receipt ID (Guid)"
                 },
                 "receiptNumber": {
-                    "type": "string"
-                },
-                "customerId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Receipt number"
+                },
+                "customerName": {
+                    "type": "string",
+                    "description": "Customer name"
                 },
                 "sentTo": {
                     "type": "string",
-                    "format": "email"
+                    "description": "Destination (email, phone number, etc.)"
+                },
+                "channel": {
+                    "type": "string",
+                    "enum": ["Email", "SMS", "LINE", "WhatsApp"],
+                    "description": "Delivery channel used"
+                },
+                "sentBy": {
+                    "type": "string",
+                    "description": "Staff member ID who initiated the send"
                 },
                 "sentAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["receiptId", "receiptNumber", "customerId", "sentTo", "sentAt"]
+            "required": ["receiptId", "receiptNumber", "customerName", "sentTo", "channel", "sentBy", "sentAt"]
         },
         "ReceiptVoidedEvent": {
             "type": "object",
@@ -101,14 +118,15 @@
                 },
                 "voidedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Staff member ID who voided the receipt"
                 },
                 "voidedAt": {
                     "type": "string",
                     "format": "date-time"
                 },
                 "voidReason": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Reason for voiding the receipt"
                 }
             },
             "required": ["receiptId", "receiptNumber", "voidedBy", "voidedAt", "voidReason"]

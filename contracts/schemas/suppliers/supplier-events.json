@@ -10,31 +10,37 @@
             "properties": {
                 "supplierId": {
                     "type": "string",
-                    "format": "uuid"
-                },
-                "supplierCode": {
-                    "type": "string"
+                    "format": "uuid",
+                    "description": "Unique identifier of the supplier"
                 },
                 "companyName": {
-                    "type": "string"
-                },
-                "email": {
                     "type": "string",
-                    "format": "email"
+                    "description": "Legal company name of the supplier"
                 },
-                "phone": {
-                    "type": ["string", "null"]
+                "taxId": {
+                    "type": "string",
+                    "description": "Tax identification number"
+                },
+                "country": {
+                    "type": "string",
+                    "description": "Country where supplier is located"
                 },
                 "status": {
                     "type": "string",
-                    "enum": ["Pending", "Approved", "Active", "Suspended", "Terminated"]
+                    "enum": ["PendingApproval", "Active", "Suspended", "Inactive"],
+                    "description": "Current status of the supplier"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "description": "User ID who created the supplier"
                 },
                 "createdAt": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When the supplier was created"
                 }
             },
-            "required": ["supplierId", "supplierCode", "companyName", "email", "status", "createdAt"]
+            "required": ["supplierId", "companyName", "taxId", "country", "status", "createdBy", "createdAt"]
         },
         "SupplierUpdatedEvent": {
             "type": "object",
@@ -42,99 +48,62 @@
             "properties": {
                 "supplierId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the supplier"
                 },
-                "supplierCode": {
-                    "type": "string"
+                "companyName": {
+                    "type": "string",
+                    "description": "Current company name of the supplier"
                 },
-                "updatedFields": {
+                "changedFields": {
                     "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "description": "List of field names that were changed"
                 },
                 "updatedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who updated the supplier"
                 },
                 "updatedAt": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When the supplier was updated"
                 }
             },
-            "required": ["supplierId", "supplierCode", "updatedFields", "updatedBy", "updatedAt"]
+            "required": ["supplierId", "companyName", "changedFields", "updatedBy", "updatedAt"]
         },
-        "SupplierApprovedEvent": {
+        "SupplierStatusChangedEvent": {
             "type": "object",
-            "description": "Published when supplier is approved for business",
+            "description": "Published when supplier status changes",
             "properties": {
                 "supplierId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the supplier"
                 },
-                "supplierCode": {
-                    "type": "string"
-                },
-                "approvedBy": {
+                "oldStatus": {
                     "type": "string",
-                    "format": "uuid"
+                    "enum": ["PendingApproval", "Active", "Suspended", "Inactive"],
+                    "description": "Previous status of the supplier"
                 },
-                "approvedAt": {
+                "newStatus": {
                     "type": "string",
-                    "format": "date-time"
+                    "enum": ["PendingApproval", "Active", "Suspended", "Inactive"],
+                    "description": "New status of the supplier"
+                },
+                "changedBy": {
+                    "type": "string",
+                    "description": "User ID who changed the status"
+                },
+                "changedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the status changed"
                 }
             },
-            "required": ["supplierId", "supplierCode", "approvedBy", "approvedAt"]
-        },
-        "SupplierSuspendedEvent": {
-            "type": "object",
-            "description": "Published when supplier is suspended",
-            "properties": {
-                "supplierId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "supplierCode": {
-                    "type": "string"
-                },
-                "suspendedBy": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "suspendedAt": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "suspensionReason": {
-                    "type": "string"
-                }
-            },
-            "required": ["supplierId", "supplierCode", "suspendedBy", "suspendedAt", "suspensionReason"]
-        },
-        "SupplierTerminatedEvent": {
-            "type": "object",
-            "description": "Published when supplier relationship is terminated",
-            "properties": {
-                "supplierId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "supplierCode": {
-                    "type": "string"
-                },
-                "terminatedBy": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "terminatedAt": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "terminationReason": {
-                    "type": "string"
-                }
-            },
-            "required": ["supplierId", "supplierCode", "terminatedBy", "terminatedAt", "terminationReason"]
+            "required": ["supplierId", "oldStatus", "newStatus", "changedBy", "changedAt"]
         }
     }
 }

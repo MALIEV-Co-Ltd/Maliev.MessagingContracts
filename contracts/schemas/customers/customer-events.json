@@ -12,10 +12,15 @@
                     "type": "string",
                     "format": "uuid"
                 },
-                "customerNumber": {
+                "principalId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "IAM principal ID for the customer"
+                },
+                "firstName": {
                     "type": "string"
                 },
-                "companyName": {
+                "lastName": {
                     "type": "string"
                 },
                 "email": {
@@ -25,12 +30,25 @@
                 "phone": {
                     "type": ["string", "null"]
                 },
+                "segment": {
+                    "type": "string",
+                    "description": "Customer segment: Retail, Wholesale, Enterprise, Government"
+                },
+                "tier": {
+                    "type": "string",
+                    "description": "Customer tier: Bronze, Silver, Gold, Platinum, VIP"
+                },
+                "companyId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Optional link to Company entity"
+                },
                 "createdAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["customerId", "customerNumber", "companyName", "email", "createdAt"]
+            "required": ["customerId", "principalId", "firstName", "lastName", "email", "segment", "tier", "createdAt"]
         },
         "CustomerUpdatedEvent": {
             "type": "object",
@@ -41,21 +59,24 @@
                     "format": "uuid"
                 },
                 "updatedFields": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "object",
+                    "description": "Dictionary of changed fields with their new values",
+                    "additionalProperties": true
                 },
                 "updatedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Actor ID who performed the update"
+                },
+                "actorType": {
+                    "type": "string",
+                    "description": "Type of actor: Customer, Employee, System"
                 },
                 "updatedAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["customerId", "updatedFields", "updatedBy", "updatedAt"]
+            "required": ["customerId", "updatedFields", "updatedBy", "actorType", "updatedAt"]
         },
         "CustomerDeletedEvent": {
             "type": "object",
@@ -67,74 +88,18 @@
                 },
                 "deletedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Actor ID who performed the deletion"
+                },
+                "actorType": {
+                    "type": "string",
+                    "description": "Type of actor: Customer, Employee, System"
                 },
                 "deletedAt": {
                     "type": "string",
                     "format": "date-time"
-                },
-                "deletionReason": {
-                    "type": ["string", "null"]
                 }
             },
-            "required": ["customerId", "deletedBy", "deletedAt"]
-        },
-        "ContactCreatedEvent": {
-            "type": "object",
-            "description": "Published when a contact person is added to customer",
-            "properties": {
-                "contactId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "customerId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "fullName": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string",
-                    "format": "email"
-                },
-                "phone": {
-                    "type": ["string", "null"]
-                },
-                "isPrimary": {
-                    "type": "boolean"
-                },
-                "createdAt": {
-                    "type": "string",
-                    "format": "date-time"
-                }
-            },
-            "required": ["contactId", "customerId", "fullName", "email", "isPrimary", "createdAt"]
-        },
-        "ContactUpdatedEvent": {
-            "type": "object",
-            "description": "Published when contact person information is updated",
-            "properties": {
-                "contactId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "customerId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "updatedFields": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "updatedAt": {
-                    "type": "string",
-                    "format": "date-time"
-                }
-            },
-            "required": ["contactId", "customerId", "updatedFields", "updatedAt"]
+            "required": ["customerId", "deletedBy", "actorType", "deletedAt"]
         }
     }
 }

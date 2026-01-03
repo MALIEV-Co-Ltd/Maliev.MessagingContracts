@@ -16,8 +16,11 @@
                     "type": "string"
                 },
                 "orderId": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": ["string", "null"]
                 },
                 "customerId": {
                     "type": "string",
@@ -31,7 +34,7 @@
                     "pattern": "^[A-Z]{3}$"
                 },
                 "dueDate": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "format": "date-time"
                 },
                 "createdAt": {
@@ -39,7 +42,7 @@
                     "format": "date-time"
                 }
             },
-            "required": ["invoiceId", "invoiceNumber", "orderId", "customerId", "totalAmount", "currency", "dueDate", "createdAt"]
+            "required": ["invoiceId", "invoiceNumber", "customerId", "totalAmount", "currency", "createdAt"]
         },
         "InvoiceGeneratedEvent": {
             "type": "object",
@@ -108,22 +111,26 @@
                     "type": "string",
                     "format": "uuid"
                 },
-                "paidAmount": {
+                "allocatedAmount": {
                     "type": "number"
                 },
                 "currency": {
                     "type": "string",
                     "pattern": "^[A-Z]{3}$"
                 },
-                "paidAt": {
+                "remainingBalance": {
+                    "type": "number"
+                },
+                "allocatedAt": {
                     "type": "string",
                     "format": "date-time"
                 },
-                "remainingBalance": {
-                    "type": "number"
+                "allocatedBy": {
+                    "type": "string",
+                    "format": "uuid"
                 }
             },
-            "required": ["invoiceId", "invoiceNumber", "paymentId", "paidAmount", "currency", "paidAt", "remainingBalance"]
+            "required": ["invoiceId", "invoiceNumber", "paymentId", "allocatedAmount", "currency", "remainingBalance", "allocatedAt", "allocatedBy"]
         },
         "InvoiceOverdueEvent": {
             "type": "object",
@@ -168,6 +175,10 @@
                 "invoiceNumber": {
                     "type": "string"
                 },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
                 "cancelledBy": {
                     "type": "string",
                     "format": "uuid"
@@ -178,9 +189,13 @@
                 },
                 "cancellationReason": {
                     "type": "string"
+                },
+                "refundRequired": {
+                    "type": "boolean",
+                    "description": "Whether a refund is required (had previous payments)"
                 }
             },
-            "required": ["invoiceId", "invoiceNumber", "cancelledBy", "cancelledAt", "cancellationReason"]
+            "required": ["invoiceId", "invoiceNumber", "customerId", "cancelledBy", "cancelledAt", "cancellationReason", "refundRequired"]
         },
         "InvoiceFullyPaidEvent": {
             "type": "object",
@@ -193,6 +208,10 @@
                 "invoiceNumber": {
                     "type": "string"
                 },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
                 "totalAmount": {
                     "type": "number"
                 },
@@ -200,12 +219,17 @@
                     "type": "string",
                     "pattern": "^[A-Z]{3}$"
                 },
+                "lastPaymentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Payment ID that brought the balance to zero"
+                },
                 "fullyPaidAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["invoiceId", "invoiceNumber", "totalAmount", "currency", "fullyPaidAt"]
+            "required": ["invoiceId", "invoiceNumber", "customerId", "totalAmount", "currency", "lastPaymentId", "fullyPaidAt"]
         }
     }
 }

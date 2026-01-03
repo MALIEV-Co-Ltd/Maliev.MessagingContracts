@@ -10,33 +10,31 @@
             "properties": {
                 "materialId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the material"
                 },
-                "materialCode": {
-                    "type": "string"
+                "code": {
+                    "type": "string",
+                    "description": "Material code"
                 },
                 "name": {
-                    "type": "string"
-                },
-                "category": {
-                    "type": "string"
-                },
-                "unit": {
-                    "type": "string"
-                },
-                "unitPrice": {
-                    "type": "number"
-                },
-                "currency": {
                     "type": "string",
-                    "pattern": "^[A-Z]{3}$"
+                    "description": "Material name"
+                },
+                "pricePerUnit": {
+                    "type": "number",
+                    "description": "Price per unit"
+                },
+                "stockLevel": {
+                    "type": "integer",
+                    "description": "Initial stock level"
                 },
                 "createdAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["materialId", "materialCode", "name", "category", "unit", "unitPrice", "currency", "createdAt"]
+            "required": ["materialId", "code", "name", "pricePerUnit", "stockLevel", "createdAt"]
         },
         "MaterialUpdatedEvent": {
             "type": "object",
@@ -44,115 +42,44 @@
             "properties": {
                 "materialId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the material"
                 },
-                "materialCode": {
-                    "type": "string"
-                },
-                "updatedFields": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "updatedBy": {
+                "code": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Material code"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Material name"
                 },
                 "updatedAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": "Optimistic concurrency version"
                 }
             },
-            "required": ["materialId", "materialCode", "updatedFields", "updatedBy", "updatedAt"]
-        },
-        "MaterialStockChangedEvent": {
-            "type": "object",
-            "description": "Published when material stock level changes",
-            "properties": {
-                "materialId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "materialCode": {
-                    "type": "string"
-                },
-                "previousQuantity": {
-                    "type": "number"
-                },
-                "newQuantity": {
-                    "type": "number"
-                },
-                "changeReason": {
-                    "type": "string",
-                    "enum": ["Purchase", "Sale", "Adjustment", "Return", "Damaged", "Transfer"]
-                },
-                "referenceId": {
-                    "type": ["string", "null"],
-                    "format": "uuid"
-                },
-                "changedAt": {
-                    "type": "string",
-                    "format": "date-time"
-                }
-            },
-            "required": ["materialId", "materialCode", "previousQuantity", "newQuantity", "changeReason", "changedAt"]
-        },
-        "MaterialLowStockEvent": {
-            "type": "object",
-            "description": "Published when material stock falls below reorder level (background job)",
-            "properties": {
-                "materialId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "materialCode": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "currentQuantity": {
-                    "type": "number"
-                },
-                "reorderLevel": {
-                    "type": "number"
-                },
-                "detectedAt": {
-                    "type": "string",
-                    "format": "date-time"
-                }
-            },
-            "required": ["materialId", "materialCode", "name", "currentQuantity", "reorderLevel", "detectedAt"]
+            "required": ["materialId", "code", "name", "updatedAt", "version"]
         },
         "MaterialDiscontinuedEvent": {
             "type": "object",
-            "description": "Published when material is marked as discontinued",
+            "description": "Published when material is soft-deleted (discontinued)",
             "properties": {
                 "materialId": {
                     "type": "string",
-                    "format": "uuid"
-                },
-                "materialCode": {
-                    "type": "string"
-                },
-                "discontinuedBy": {
-                    "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the material"
                 },
                 "discontinuedAt": {
                     "type": "string",
-                    "format": "date-time"
-                },
-                "reason": {
-                    "type": ["string", "null"]
-                },
-                "replacementMaterialId": {
-                    "type": ["string", "null"],
-                    "format": "uuid"
+                    "format": "date-time",
+                    "description": "When the material was discontinued"
                 }
             },
-            "required": ["materialId", "materialCode", "discontinuedBy", "discontinuedAt"]
+            "required": ["materialId", "discontinuedAt"]
         }
     }
 }

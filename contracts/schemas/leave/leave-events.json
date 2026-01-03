@@ -152,6 +152,27 @@
                 "leaveType",
                 "newBalance"
             ]
+        },
+        "LeaveBalanceAdjustedEvent": {
+            "type": "object",
+            "description": "Published when leave balance changes",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "leaveType": {
+                    "type": "string"
+                },
+                "newBalance": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "employeeId",
+                "leaveType",
+                "newBalance"
+            ]
         }
     }
 }
