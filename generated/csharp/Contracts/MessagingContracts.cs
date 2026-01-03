@@ -936,6 +936,66 @@ namespace Maliev.MessagingContracts.Generated
     ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
 
     /// <summary>
+    /// Payload data for FileAnalyzedEventMetricsBoundingBox.
+    /// </summary>
+    public record FileAnalyzedEventPayloadMetricsBoundingBox([property: JsonPropertyName("x")] double X, [property: JsonPropertyName("y")] double Y, [property: JsonPropertyName("z")] double Z);
+
+    /// <summary>
+    /// Payload data for FileAnalyzedEventMetrics.
+    /// </summary>
+    public record FileAnalyzedEventPayloadMetrics([property: JsonPropertyName("volumeCm3")] double VolumeCm3, [property: JsonPropertyName("supportVolumeCm3")] double SupportVolumeCm3, [property: JsonPropertyName("surfaceAreaCm2")] double SurfaceAreaCm2, [property: JsonPropertyName("boundingBox")] FileAnalyzedEventPayloadMetricsBoundingBox BoundingBox, [property: JsonPropertyName("isManifold")] bool IsManifold, [property: JsonPropertyName("triangleCount")] int TriangleCount, [property: JsonPropertyName("eulerNumber")] int EulerNumber);
+
+    /// <summary>
+    /// Payload data for FileAnalyzedEvent.
+    /// </summary>
+    /// <param name="FileId">Unique identifier for the file</param>
+    public record FileAnalyzedEventPayload([property: JsonPropertyName("fileId")] string FileId, [property: JsonPropertyName("metrics")] FileAnalyzedEventPayloadMetrics Metrics, [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt);
+
+    /// <summary>
+    /// Published when a 3D file analysis completes successfully
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record FileAnalyzedEvent(
+
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] FileAnalyzedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
+    /// Payload data for FileAnalysisFailedEvent.
+    /// </summary>
+    /// <param name="FileId">Unique identifier for the file</param>
+    public record FileAnalysisFailedEventPayload([property: JsonPropertyName("fileId")] string FileId, [property: JsonPropertyName("errorCode")] string ErrorCode, [property: JsonPropertyName("details")] string? Details);
+
+    /// <summary>
+    /// Published when a 3D file analysis fails
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record FileAnalysisFailedEvent(
+
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] FileAnalysisFailedEventPayload Payload
+    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+
+    /// <summary>
     /// Event published when a new permission is registered by a service in the IAM service.
     /// </summary>
     /// <summary>
