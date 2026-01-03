@@ -9,15 +9,15 @@
             "description": "Published when a new purchase order is created",
             "properties": {
                 "purchaseOrderId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
                 },
                 "purchaseOrderNumber": {
                     "type": "string"
                 },
                 "supplierId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Supplier ID from SupplierService"
                 },
                 "totalAmount": {
                     "type": "number"
@@ -27,12 +27,12 @@
                     "pattern": "^[A-Z]{3}$"
                 },
                 "requestedDeliveryDate": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "format": "date-time"
                 },
                 "createdBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who created the purchase order"
                 },
                 "createdAt": {
                     "type": "string",
@@ -46,15 +46,15 @@
             "description": "Published when purchase order is approved",
             "properties": {
                 "purchaseOrderId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
                 },
                 "purchaseOrderNumber": {
                     "type": "string"
                 },
                 "approvedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who approved the purchase order"
                 },
                 "approvedAt": {
                     "type": "string",
@@ -68,15 +68,15 @@
             "description": "Published when PO is sent to supplier",
             "properties": {
                 "purchaseOrderId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
                 },
                 "purchaseOrderNumber": {
                     "type": "string"
                 },
                 "supplierId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Supplier ID from SupplierService"
                 },
                 "sentAt": {
                     "type": "string",
@@ -84,7 +84,7 @@
                 },
                 "sentBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who sent the purchase order"
                 }
             },
             "required": ["purchaseOrderId", "purchaseOrderNumber", "supplierId", "sentAt", "sentBy"]
@@ -94,8 +94,8 @@
             "description": "Published when goods are received from supplier",
             "properties": {
                 "purchaseOrderId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
                 },
                 "purchaseOrderNumber": {
                     "type": "string"
@@ -106,7 +106,7 @@
                 },
                 "receivedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who received the goods"
                 },
                 "isPartialReceipt": {
                     "type": "boolean"
@@ -119,15 +119,15 @@
             "description": "Published when purchase order is cancelled",
             "properties": {
                 "purchaseOrderId": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
                 },
                 "purchaseOrderNumber": {
                     "type": "string"
                 },
                 "cancelledBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who cancelled the purchase order"
                 },
                 "cancelledAt": {
                     "type": "string",

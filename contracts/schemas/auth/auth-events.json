@@ -10,28 +10,32 @@
             "properties": {
                 "userId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "The user's ID (UUID for users) or client ID (string for services)"
+                },
+                "principalId": {
+                    "type": ["string", "null"],
+                    "description": "The principal ID (UUID) used for IAM permission resolution"
                 },
                 "userType": {
                     "type": "string",
-                    "enum": ["Customer", "Employee"]
+                    "enum": ["Customer", "Employee", "Service"],
+                    "description": "Type of user (Customer/Employee) or Service for service-to-service auth"
                 },
                 "ipAddress": {
-                    "type": "string"
-                },
-                "userAgent": {
-                    "type": ["string", "null"]
+                    "type": ["string", "null"],
+                    "description": "IP address of the login attempt"
                 },
                 "loginMethod": {
                     "type": "string",
-                    "enum": ["Password", "OAuth", "ServiceCredential"]
+                    "enum": ["Password", "ServiceCredential"],
+                    "description": "Authentication method used"
                 },
                 "loggedInAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["userId", "userType", "ipAddress", "loginMethod", "loggedInAt"]
+            "required": ["userId", "userType", "loginMethod", "loggedInAt"]
         },
         "UserLoggedOutEvent": {
             "type": "object",
@@ -39,7 +43,7 @@
             "properties": {
                 "userId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID (UUID)"
                 },
                 "userType": {
                     "type": "string",
@@ -57,25 +61,33 @@
             "description": "Published when login attempt fails",
             "properties": {
                 "userIdentifier": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Username/email that was attempted"
+                },
+                "userId": {
+                    "type": ["string", "null"],
+                    "description": "User ID (UUID) if the user was found (null if user not found)"
                 },
                 "userType": {
                     "type": "string",
-                    "enum": ["Customer", "Employee"]
+                    "enum": ["Customer", "Employee"],
+                    "description": "Type of user attempting to log in"
                 },
                 "ipAddress": {
-                    "type": "string"
+                    "type": ["string", "null"],
+                    "description": "IP address of the failed attempt"
                 },
                 "failureReason": {
                     "type": "string",
-                    "enum": ["InvalidCredentials", "AccountLocked", "AccountNotFound", "RateLimitExceeded"]
+                    "enum": ["InvalidCredentials", "AccountLocked", "RateLimitExceeded"],
+                    "description": "Reason for login failure"
                 },
                 "attemptedAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["userIdentifier", "userType", "ipAddress", "failureReason", "attemptedAt"]
+            "required": ["userIdentifier", "userType", "failureReason", "attemptedAt"]
         },
         "UserAccountLockedEvent": {
             "type": "object",
@@ -83,7 +95,7 @@
             "properties": {
                 "userId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID (UUID)"
                 },
                 "userType": {
                     "type": "string",
@@ -109,7 +121,7 @@
             "properties": {
                 "userId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID (UUID)"
                 },
                 "userType": {
                     "type": "string",
@@ -117,7 +129,7 @@
                 },
                 "tokenFamilyId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Token family ID (UUID)"
                 },
                 "revocationReason": {
                     "type": "string",
@@ -136,24 +148,51 @@
             "properties": {
                 "userId": {
                     "type": ["string", "null"],
-                    "format": "uuid"
+                    "description": "User ID (UUID) if known, null for anonymous attacks"
+                },
+                "userType": {
+                    "type": ["string", "null"],
+                    "enum": ["Customer", "Employee"],
+                    "description": "Type of user if known"
                 },
                 "activityType": {
                     "type": "string",
-                    "enum": ["RefreshTokenReuse", "IpAddressChange", "MultipleFailedAttempts", "UnusualLoginTime"]
+                    "enum": ["RefreshTokenReuse"],
+                    "description": "Type of suspicious activity detected"
                 },
                 "ipAddress": {
-                    "type": "string"
+                    "type": ["string", "null"],
+                    "description": "IP address where activity originated"
                 },
-                "details": {
-                    "type": "object"
+                "tokenFamilyId": {
+                    "type": ["string", "null"],
+                    "description": "Token family ID (UUID) for token reuse events"
                 },
                 "detectedAt": {
                     "type": "string",
                     "format": "date-time"
                 }
             },
-            "required": ["activityType", "ipAddress", "detectedAt"]
+            "required": ["activityType", "detectedAt"]
+        },
+        "AccessTokenRevokedEvent": {
+            "type": "object",
+            "description": "Published when an access token is manually revoked",
+            "properties": {
+                "jti": {
+                    "type": "string",
+                    "description": "JWT ID (JTI) of the revoked token"
+                },
+                "userId": {
+                    "type": "string",
+                    "description": "User ID (UUID)"
+                },
+                "revokedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["jti", "userId", "revokedAt"]
         }
     }
 }

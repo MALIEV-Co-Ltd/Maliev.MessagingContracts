@@ -99,6 +99,34 @@
                 "newDepartmentId",
                 "effectiveDate"
             ]
+        },
+        "EmployeeDepartmentTransferredEvent": {
+            "type": "object",
+            "description": "Published when an employee transfers between departments",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "previousDepartmentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "newDepartmentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "employeeId",
+                "previousDepartmentId",
+                "newDepartmentId",
+                "effectiveDate"
+            ]
         }
     }
 }

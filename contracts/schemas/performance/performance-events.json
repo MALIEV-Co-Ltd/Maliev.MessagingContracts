@@ -47,9 +47,9 @@
                 "reviewPeriodEnd"
             ]
         },
-        "PerformanceReviewAcknowledgedEvent": {
+        "PerformanceReviewSubmittedEvent": {
             "type": "object",
-            "description": "Published when review is acknowledged",
+            "description": "Published when review is submitted",
             "properties": {
                 "reviewId": {
                     "type": "string",
@@ -64,7 +64,7 @@
                     "minimum": 1,
                     "maximum": 5
                 },
-                "acknowledgedDate": {
+                "submittedDate": {
                     "type": "string",
                     "format": "date-time"
                 }
@@ -73,7 +73,93 @@
                 "reviewId",
                 "employeeId",
                 "overallRating",
-                "acknowledgedDate"
+                "submittedDate"
+            ]
+        },
+        "PerformanceGoalCreatedEvent": {
+            "type": "object",
+            "description": "Published when performance goal is created",
+            "properties": {
+                "goalId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "targetDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "goalId",
+                "employeeId",
+                "description",
+                "targetDate"
+            ]
+        },
+        "PerformanceGoalCompletedEvent": {
+            "type": "object",
+            "description": "Published when goal is completed",
+            "properties": {
+                "goalId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "completedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "goalId",
+                "employeeId",
+                "description",
+                "completedDate"
+            ]
+        },
+        "PerformancePIPInitiatedEvent": {
+            "type": "object",
+            "description": "Published when PIP is initiated",
+            "properties": {
+                "pipId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pipId",
+                "employeeId",
+                "startDate",
+                "endDate",
+                "reason"
             ]
         },
         "GoalCompletedEvent": {

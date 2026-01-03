@@ -6,34 +6,27 @@
     "definitions": {
         "PdfGenerationRequestedEvent": {
             "type": "object",
-            "description": "Published when PDF generation is requested",
+            "description": "Published when async PDF generation is requested",
             "properties": {
                 "requestId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Unique ID for this PDF generation request (Guid)"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "description": "Reference ID of the source document (e.g., invoice ID, receipt ID)"
                 },
                 "documentType": {
                     "type": "string",
-                    "enum": ["Invoice", "Receipt", "Quotation", "PurchaseOrder", "Report"]
-                },
-                "documentId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "requestedBy": {
-                    "type": "string",
-                    "format": "uuid"
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "description": "Type of document being generated"
                 },
                 "requestedAt": {
                     "type": "string",
                     "format": "date-time"
-                },
-                "priority": {
-                    "type": "string",
-                    "enum": ["Low", "Normal", "High"]
                 }
             },
-            "required": ["requestId", "documentType", "documentId", "requestedBy", "requestedAt", "priority"]
+            "required": ["requestId", "referenceId", "documentType", "requestedAt"]
         },
         "PdfGenerationCompletedEvent": {
             "type": "object",
@@ -41,31 +34,27 @@
             "properties": {
                 "requestId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Unique ID for this PDF generation request (Guid)"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "description": "Reference ID of the source document"
                 },
                 "documentType": {
-                    "type": "string"
-                },
-                "documentId": {
                     "type": "string",
-                    "format": "uuid"
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "description": "Type of document that was generated"
                 },
-                "pdfUrl": {
+                "storageUrl": {
                     "type": "string",
-                    "format": "uri"
-                },
-                "fileSize": {
-                    "type": "integer"
+                    "description": "URL where the PDF is stored"
                 },
                 "completedAt": {
                     "type": "string",
                     "format": "date-time"
-                },
-                "processingTimeMs": {
-                    "type": "integer"
                 }
             },
-            "required": ["requestId", "documentType", "documentId", "pdfUrl", "fileSize", "completedAt", "processingTimeMs"]
+            "required": ["requestId", "referenceId", "documentType", "storageUrl", "completedAt"]
         },
         "PdfGenerationFailedEvent": {
             "type": "object",
@@ -73,27 +62,27 @@
             "properties": {
                 "requestId": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "Unique ID for this PDF generation request (Guid)"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "description": "Reference ID of the source document"
                 },
                 "documentType": {
-                    "type": "string"
-                },
-                "documentId": {
                     "type": "string",
-                    "format": "uuid"
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "description": "Type of document that failed to generate"
                 },
                 "errorMessage": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Error message describing the failure"
                 },
                 "failedAt": {
                     "type": "string",
                     "format": "date-time"
-                },
-                "retryable": {
-                    "type": "boolean"
                 }
             },
-            "required": ["requestId", "documentType", "documentId", "errorMessage", "failedAt", "retryable"]
+            "required": ["requestId", "referenceId", "documentType", "errorMessage", "failedAt"]
         }
     }
 }

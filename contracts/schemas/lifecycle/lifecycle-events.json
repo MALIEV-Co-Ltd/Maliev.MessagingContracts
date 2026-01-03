@@ -104,6 +104,56 @@
                 "completedDate"
             ]
         },
+        "LifecycleTaskCreatedEvent": {
+            "type": "object",
+            "description": "Published when onboarding/offboarding task is created",
+            "properties": {
+                "taskId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "taskTitle": {
+                    "type": "string"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "taskId",
+                "employeeId",
+                "taskTitle",
+                "dueDate"
+            ]
+        },
+        "LifecycleTaskCompletedEvent": {
+            "type": "object",
+            "description": "Published when lifecycle task is completed",
+            "properties": {
+                "taskId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "completedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "taskId",
+                "employeeId",
+                "completedDate"
+            ]
+        },
         "AccessRevocationRequiredEvent": {
             "type": "object",
             "description": "Published when access revocation is required",

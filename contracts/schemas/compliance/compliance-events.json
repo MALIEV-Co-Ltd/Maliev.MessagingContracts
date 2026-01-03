@@ -71,6 +71,33 @@
                 "authorizationType",
                 "expirationDate"
             ]
+        },
+        "ComplianceDocumentUploadedEvent": {
+            "type": "object",
+            "description": "Published when compliance document is uploaded",
+            "properties": {
+                "documentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "documentType": {
+                    "type": "string"
+                },
+                "uploadDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "documentId",
+                "employeeId",
+                "documentType",
+                "uploadDate"
+            ]
         }
     }
 }

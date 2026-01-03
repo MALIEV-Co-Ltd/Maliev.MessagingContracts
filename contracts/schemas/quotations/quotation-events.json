@@ -13,14 +13,16 @@
                     "format": "uuid"
                 },
                 "quotationNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Derived from quotation ID"
                 },
                 "customerId": {
                     "type": "string",
                     "format": "uuid"
                 },
                 "totalAmount": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "Total amount from current version"
                 },
                 "currency": {
                     "type": "string",
@@ -28,11 +30,12 @@
                 },
                 "validUntil": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "Validity period end date"
                 },
                 "createdBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "description": "User ID who created the quotation"
                 },
                 "createdAt": {
                     "type": "string",
@@ -41,39 +44,9 @@
             },
             "required": ["quotationId", "quotationNumber", "customerId", "totalAmount", "currency", "validUntil", "createdBy", "createdAt"]
         },
-        "QuotationSentEvent": {
-            "type": "object",
-            "description": "Published when quotation is sent to customer",
-            "properties": {
-                "quotationId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "quotationNumber": {
-                    "type": "string"
-                },
-                "customerId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "sentTo": {
-                    "type": "string",
-                    "format": "email"
-                },
-                "sentAt": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "sentBy": {
-                    "type": "string",
-                    "format": "uuid"
-                }
-            },
-            "required": ["quotationId", "quotationNumber", "customerId", "sentTo", "sentAt", "sentBy"]
-        },
         "QuotationAcceptedEvent": {
             "type": "object",
-            "description": "Published when customer accepts quotation",
+            "description": "Published when customer accepts quotation (status changes to Accepted)",
             "properties": {
                 "quotationId": {
                     "type": "string",
@@ -87,7 +60,8 @@
                     "format": "uuid"
                 },
                 "acceptedAmount": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "Total amount from current version"
                 },
                 "currency": {
                     "type": "string",
@@ -96,13 +70,17 @@
                 "acceptedAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "acceptedBy": {
+                    "type": "string",
+                    "description": "User ID who accepted the quotation"
                 }
             },
-            "required": ["quotationId", "quotationNumber", "customerId", "acceptedAmount", "currency", "acceptedAt"]
+            "required": ["quotationId", "quotationNumber", "customerId", "acceptedAmount", "currency", "acceptedAt", "acceptedBy"]
         },
-        "QuotationRejectedEvent": {
+        "QuotationCancelledEvent": {
             "type": "object",
-            "description": "Published when customer rejects quotation",
+            "description": "Published when quotation is cancelled",
             "properties": {
                 "quotationId": {
                     "type": "string",
@@ -115,19 +93,24 @@
                     "type": "string",
                     "format": "uuid"
                 },
-                "rejectedAt": {
+                "cancelledAt": {
                     "type": "string",
                     "format": "date-time"
                 },
-                "rejectionReason": {
-                    "type": ["string", "null"]
+                "cancelledBy": {
+                    "type": "string",
+                    "description": "User ID who cancelled the quotation"
+                },
+                "cancellationReason": {
+                    "type": ["string", "null"],
+                    "description": "Optional reason for cancellation"
                 }
             },
-            "required": ["quotationId", "quotationNumber", "customerId", "rejectedAt"]
+            "required": ["quotationId", "quotationNumber", "customerId", "cancelledAt", "cancelledBy"]
         },
         "QuotationExpiredEvent": {
             "type": "object",
-            "description": "Published when quotation validity period expires (background job)",
+            "description": "Published when quotation validity period expires (background job or manual status change)",
             "properties": {
                 "quotationId": {
                     "type": "string",
@@ -142,7 +125,8 @@
                 },
                 "validUntil": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "Original validity period end date"
                 },
                 "expiredAt": {
                     "type": "string",
