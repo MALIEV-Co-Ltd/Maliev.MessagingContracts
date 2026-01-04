@@ -1,0 +1,235 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/invoice-events",
+    "title": "Invoice Domain Events",
+    "description": "Events published by the Invoice Service for cross-service integration",
+    "definitions": {
+        "InvoiceCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new invoice is created",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "orderId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": ["string", "null"]
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "dueDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "customerId", "totalAmount", "currency", "createdAt"]
+        },
+        "InvoiceGeneratedEvent": {
+            "type": "object",
+            "description": "Published when invoice PDF is successfully generated",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "pdfUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "generatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "pdfUrl", "generatedAt"]
+        },
+        "InvoiceSentEvent": {
+            "type": "object",
+            "description": "Published when invoice is sent to customer",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "sentTo": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "sentBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "customerId", "sentTo", "sentAt", "sentBy"]
+        },
+        "InvoicePaymentReceivedEvent": {
+            "type": "object",
+            "description": "Published when payment is received for invoice",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "paymentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "allocatedAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "remainingBalance": {
+                    "type": "number"
+                },
+                "allocatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "allocatedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "paymentId", "allocatedAmount", "currency", "remainingBalance", "allocatedAt", "allocatedBy"]
+        },
+        "InvoiceOverdueEvent": {
+            "type": "object",
+            "description": "Published when invoice becomes overdue (background job)",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "daysOverdue": {
+                    "type": "integer"
+                },
+                "outstandingAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "customerId", "dueDate", "daysOverdue", "outstandingAmount", "currency"]
+        },
+        "InvoiceCancelledEvent": {
+            "type": "object",
+            "description": "Published when invoice is cancelled or voided",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "cancelledBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "cancelledAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "cancellationReason": {
+                    "type": "string"
+                },
+                "refundRequired": {
+                    "type": "boolean",
+                    "description": "Whether a refund is required (had previous payments)"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "customerId", "cancelledBy", "cancelledAt", "cancellationReason", "refundRequired"]
+        },
+        "InvoiceFullyPaidEvent": {
+            "type": "object",
+            "description": "Published when invoice is fully paid (remainingBalance = 0)",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "lastPaymentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Payment ID that brought the balance to zero"
+                },
+                "fullyPaidAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "customerId", "totalAmount", "currency", "lastPaymentId", "fullyPaidAt"]
+        }
+    }
+}

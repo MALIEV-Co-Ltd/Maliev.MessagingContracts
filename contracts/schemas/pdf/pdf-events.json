@@ -1,0 +1,88 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/pdf-events",
+    "title": "PDF Service Events",
+    "description": "Events published by the PDF Service for document generation",
+    "definitions": {
+        "PdfGenerationRequestedEvent": {
+            "type": "object",
+            "description": "Published when async PDF generation is requested",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "description": "Unique ID for this PDF generation request (Guid)"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "description": "Reference ID of the source document (e.g., invoice ID, receipt ID)"
+                },
+                "documentType": {
+                    "type": "string",
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "description": "Type of document being generated"
+                },
+                "requestedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["requestId", "referenceId", "documentType", "requestedAt"]
+        },
+        "PdfGenerationCompletedEvent": {
+            "type": "object",
+            "description": "Published when PDF generation completes successfully",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "description": "Unique ID for this PDF generation request (Guid)"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "description": "Reference ID of the source document"
+                },
+                "documentType": {
+                    "type": "string",
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "description": "Type of document that was generated"
+                },
+                "storageUrl": {
+                    "type": "string",
+                    "description": "URL where the PDF is stored"
+                },
+                "completedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["requestId", "referenceId", "documentType", "storageUrl", "completedAt"]
+        },
+        "PdfGenerationFailedEvent": {
+            "type": "object",
+            "description": "Published when PDF generation fails",
+            "properties": {
+                "requestId": {
+                    "type": "string",
+                    "description": "Unique ID for this PDF generation request (Guid)"
+                },
+                "referenceId": {
+                    "type": "string",
+                    "description": "Reference ID of the source document"
+                },
+                "documentType": {
+                    "type": "string",
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "description": "Type of document that failed to generate"
+                },
+                "errorMessage": {
+                    "type": "string",
+                    "description": "Error message describing the failure"
+                },
+                "failedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["requestId", "referenceId", "documentType", "errorMessage", "failedAt"]
+        }
+    }
+}

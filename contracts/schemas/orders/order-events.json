@@ -1,0 +1,348 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/order-events",
+    "title": "Order Domain Events",
+    "description": "Events published by the Order Service for cross-service integration (16-state workflow)",
+    "definitions": {
+        "OrderCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new order is created",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "assignedEmployeeId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                }
+            },
+            "required": ["orderId", "orderNumber", "customerId", "totalAmount", "currency", "createdAt"]
+        },
+        "OrderStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when order transitions between states in 16-state workflow",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "previousStatus": {
+                    "type": "string",
+                    "enum": [
+                        "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
+                        "Declined", "Accepted", "Expired", "Paid", "POIssued",
+                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                    ]
+                },
+                "newStatus": {
+                    "type": "string",
+                    "enum": [
+                        "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
+                        "Declined", "Accepted", "Expired", "Paid", "POIssued",
+                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                    ]
+                },
+                "changedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "changedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reason": {
+                    "type": ["string", "null"]
+                }
+            },
+            "required": ["orderId", "orderNumber", "previousStatus", "newStatus", "changedBy", "changedAt"]
+        },
+        "OrderQuotedEvent": {
+            "type": "object",
+            "description": "Published when order receives quotation (Reviewed → Quoted)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "quotedAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "quotedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["orderId", "orderNumber", "quotedAmount", "currency", "validUntil", "quotedBy", "quotedAt"]
+        },
+        "OrderAcceptedEvent": {
+            "type": "object",
+            "description": "Published when customer accepts quotation (Quoted → Accepted)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "acceptedAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "acceptedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["orderId", "orderNumber", "customerId", "acceptedAmount", "currency", "acceptedAt"]
+        },
+        "OrderPaidEvent": {
+            "type": "object",
+            "description": "Published when payment is completed (Accepted → Paid)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "paymentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "paidAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "paidAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["orderId", "orderNumber", "paymentId", "paidAmount", "currency", "paidAt"]
+        },
+        "OrderInProgressEvent": {
+            "type": "object",
+            "description": "Published when order enters production (Paid/POIssued → InProgress)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "startedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "estimatedCompletionDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                }
+            },
+            "required": ["orderId", "orderNumber", "startedAt"]
+        },
+        "OrderCompletedEvent": {
+            "type": "object",
+            "description": "Published when order production is finished (InProgress → Finished)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "completedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "completedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["orderId", "orderNumber", "completedAt", "completedBy"]
+        },
+        "OrderShippedEvent": {
+            "type": "object",
+            "description": "Published when order is shipped to customer (Finished → Shipped)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "shippedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "trackingNumber": {
+                    "type": ["string", "null"]
+                },
+                "carrier": {
+                    "type": ["string", "null"]
+                },
+                "estimatedDeliveryDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                }
+            },
+            "required": ["orderId", "orderNumber", "shippedAt"]
+        },
+        "OrderCancelledEvent": {
+            "type": "object",
+            "description": "Published when order is cancelled (Any → Cancelled)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "cancelledBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "cancelledAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "cancellationReason": {
+                    "type": "string"
+                },
+                "refundRequired": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["orderId", "orderNumber", "cancelledBy", "cancelledAt", "cancellationReason", "refundRequired"]
+        },
+        "OrderRejectedEvent": {
+            "type": "object",
+            "description": "Published when order is rejected during review (Reviewing → Rejected)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "rejectedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "rejectedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "rejectionReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["orderId", "orderNumber", "rejectedBy", "rejectedAt", "rejectionReason"]
+        },
+        "OrderOnHoldEvent": {
+            "type": "object",
+            "description": "Published when order production is paused (InProgress → OnHold)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "putOnHoldBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "putOnHoldAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "holdReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["orderId", "orderNumber", "putOnHoldBy", "putOnHoldAt", "holdReason"]
+        },
+        "OrderReopenedEvent": {
+            "type": "object",
+            "description": "Published when completed/shipped order is reopened (Finished/Shipped → Reopened)",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "reopenedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "reopenedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reopenReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["orderId", "orderNumber", "reopenedBy", "reopenedAt", "reopenReason"]
+        }
+    }
+}

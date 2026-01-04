@@ -1,0 +1,198 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/auth-events",
+    "title": "Authentication Domain Events",
+    "description": "Events published by the Auth Service for security auditing and monitoring",
+    "definitions": {
+        "UserLoggedInEvent": {
+            "type": "object",
+            "description": "Published when user successfully logs in",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "description": "The user's ID (UUID for users) or client ID (string for services)"
+                },
+                "principalId": {
+                    "type": ["string", "null"],
+                    "description": "The principal ID (UUID) used for IAM permission resolution"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee", "Service"],
+                    "description": "Type of user (Customer/Employee) or Service for service-to-service auth"
+                },
+                "ipAddress": {
+                    "type": ["string", "null"],
+                    "description": "IP address of the login attempt"
+                },
+                "loginMethod": {
+                    "type": "string",
+                    "enum": ["Password", "ServiceCredential"],
+                    "description": "Authentication method used"
+                },
+                "loggedInAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "loginMethod", "loggedInAt"]
+        },
+        "UserLoggedOutEvent": {
+            "type": "object",
+            "description": "Published when user logs out",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "description": "User ID (UUID)"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "loggedOutAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "loggedOutAt"]
+        },
+        "LoginFailedEvent": {
+            "type": "object",
+            "description": "Published when login attempt fails",
+            "properties": {
+                "userIdentifier": {
+                    "type": "string",
+                    "description": "Username/email that was attempted"
+                },
+                "userId": {
+                    "type": ["string", "null"],
+                    "description": "User ID (UUID) if the user was found (null if user not found)"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"],
+                    "description": "Type of user attempting to log in"
+                },
+                "ipAddress": {
+                    "type": ["string", "null"],
+                    "description": "IP address of the failed attempt"
+                },
+                "failureReason": {
+                    "type": "string",
+                    "enum": ["InvalidCredentials", "AccountLocked", "RateLimitExceeded"],
+                    "description": "Reason for login failure"
+                },
+                "attemptedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userIdentifier", "userType", "failureReason", "attemptedAt"]
+        },
+        "UserAccountLockedEvent": {
+            "type": "object",
+            "description": "Published when user account is locked due to failed login attempts",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "description": "User ID (UUID)"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "failedAttemptCount": {
+                    "type": "integer"
+                },
+                "lockedUntil": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "lockedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "failedAttemptCount", "lockedUntil", "lockedAt"]
+        },
+        "RefreshTokenRevokedEvent": {
+            "type": "object",
+            "description": "Published when refresh token is revoked",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "description": "User ID (UUID)"
+                },
+                "userType": {
+                    "type": "string",
+                    "enum": ["Customer", "Employee"]
+                },
+                "tokenFamilyId": {
+                    "type": "string",
+                    "description": "Token family ID (UUID)"
+                },
+                "revocationReason": {
+                    "type": "string",
+                    "enum": ["UserLogout", "TokenReuse", "SecurityBreach", "Administrative"]
+                },
+                "revokedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["userId", "userType", "tokenFamilyId", "revocationReason", "revokedAt"]
+        },
+        "SuspiciousActivityDetectedEvent": {
+            "type": "object",
+            "description": "Published when suspicious authentication activity is detected",
+            "properties": {
+                "userId": {
+                    "type": ["string", "null"],
+                    "description": "User ID (UUID) if known, null for anonymous attacks"
+                },
+                "userType": {
+                    "type": ["string", "null"],
+                    "enum": ["Customer", "Employee"],
+                    "description": "Type of user if known"
+                },
+                "activityType": {
+                    "type": "string",
+                    "enum": ["RefreshTokenReuse"],
+                    "description": "Type of suspicious activity detected"
+                },
+                "ipAddress": {
+                    "type": ["string", "null"],
+                    "description": "IP address where activity originated"
+                },
+                "tokenFamilyId": {
+                    "type": ["string", "null"],
+                    "description": "Token family ID (UUID) for token reuse events"
+                },
+                "detectedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["activityType", "detectedAt"]
+        },
+        "AccessTokenRevokedEvent": {
+            "type": "object",
+            "description": "Published when an access token is manually revoked",
+            "properties": {
+                "jti": {
+                    "type": "string",
+                    "description": "JWT ID (JTI) of the revoked token"
+                },
+                "userId": {
+                    "type": "string",
+                    "description": "User ID (UUID)"
+                },
+                "revokedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["jti", "userId", "revokedAt"]
+        }
+    }
+}

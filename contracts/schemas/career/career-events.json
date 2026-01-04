@@ -4,6 +4,33 @@
     "title": "Career Domain Events",
     "description": "Events published by the Career Service for cross-service integration",
     "definitions": {
+        "TrainingEnrolledEvent": {
+            "type": "object",
+            "description": "Published when employee enrolls in training",
+            "properties": {
+                "trainingRecordId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "courseName": {
+                    "type": "string"
+                },
+                "enrollmentDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "trainingRecordId",
+                "employeeId",
+                "courseName",
+                "enrollmentDate"
+            ]
+        },
         "TrainingCompletedEvent": {
             "type": "object",
             "description": "Published when training is completed",
@@ -36,6 +63,67 @@
                 "employeeId",
                 "courseName",
                 "completionDate"
+            ]
+        },
+        "CertificationAwardedEvent": {
+            "type": "object",
+            "description": "Published when certification is awarded",
+            "properties": {
+                "certificationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "certificationName": {
+                    "type": "string"
+                },
+                "awardedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "expirationDate": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "certificationId",
+                "employeeId",
+                "certificationName",
+                "awardedDate"
+            ]
+        },
+        "CertificationExpiredEvent": {
+            "type": "object",
+            "description": "Published when certification expires",
+            "properties": {
+                "certificationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "certificationName": {
+                    "type": "string"
+                },
+                "expirationDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "certificationId",
+                "employeeId",
+                "certificationName",
+                "expirationDate"
             ]
         },
         "MandatoryTrainingOverdueEvent": {

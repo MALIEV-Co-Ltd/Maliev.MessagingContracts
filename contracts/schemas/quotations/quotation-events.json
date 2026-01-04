@@ -1,0 +1,139 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/quotation-events",
+    "title": "Quotation Domain Events",
+    "description": "Events published by the Quotation Service for sales workflow",
+    "definitions": {
+        "QuotationCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new quotation is created",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string",
+                    "description": "Derived from quotation ID"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "totalAmount": {
+                    "type": "number",
+                    "description": "Total amount from current version"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Validity period end date"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "description": "User ID who created the quotation"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "totalAmount", "currency", "validUntil", "createdBy", "createdAt"]
+        },
+        "QuotationAcceptedEvent": {
+            "type": "object",
+            "description": "Published when customer accepts quotation (status changes to Accepted)",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "acceptedAmount": {
+                    "type": "number",
+                    "description": "Total amount from current version"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "acceptedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "acceptedBy": {
+                    "type": "string",
+                    "description": "User ID who accepted the quotation"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "acceptedAmount", "currency", "acceptedAt", "acceptedBy"]
+        },
+        "QuotationCancelledEvent": {
+            "type": "object",
+            "description": "Published when quotation is cancelled",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "cancelledAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "cancelledBy": {
+                    "type": "string",
+                    "description": "User ID who cancelled the quotation"
+                },
+                "cancellationReason": {
+                    "type": ["string", "null"],
+                    "description": "Optional reason for cancellation"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "cancelledAt", "cancelledBy"]
+        },
+        "QuotationExpiredEvent": {
+            "type": "object",
+            "description": "Published when quotation validity period expires (background job or manual status change)",
+            "properties": {
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quotationNumber": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Original validity period end date"
+                },
+                "expiredAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["quotationId", "quotationNumber", "customerId", "validUntil", "expiredAt"]
+        }
+    }
+}

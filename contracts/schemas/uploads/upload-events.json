@@ -1,0 +1,95 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/upload-events",
+    "title": "Upload Domain Events",
+    "description": "Events published by the Upload Service for file management",
+    "definitions": {
+        "FileUploadedEvent": {
+            "type": "object",
+            "description": "Published when a file upload completes successfully",
+            "properties": {
+                "uploadId": {
+                    "type": "string",
+                    "description": "Unique identifier for the upload"
+                },
+                "serviceId": {
+                    "type": "string",
+                    "description": "Service that initiated the upload (e.g., 'order-service', 'invoice-service')"
+                },
+                "fileName": {
+                    "type": "string",
+                    "description": "Original filename"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "Path in GCS bucket where file is stored"
+                },
+                "contentType": {
+                    "type": "string",
+                    "description": "MIME type of the file"
+                },
+                "fileSize": {
+                    "type": "integer",
+                    "description": "File size in bytes"
+                },
+                "downloadUrl": {
+                    "type": ["string", "null"],
+                    "description": "Signed URL for downloading the file (valid for 1 hour)"
+                },
+                "uploadedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "retentionPolicyId": {
+                    "type": ["string", "null"],
+                    "description": "ID of applied retention policy"
+                },
+                "expiresAt": {
+                    "type": ["string", "null"],
+                    "format": "date-time",
+                    "description": "When the file will expire based on retention policy"
+                },
+                "metadata": {
+                    "type": ["object", "null"],
+                    "description": "Custom metadata associated with the file"
+                }
+            },
+            "required": ["uploadId", "serviceId", "fileName", "storagePath", "contentType", "fileSize", "uploadedAt"]
+        },
+        "FileDeletedEvent": {
+            "type": "object",
+            "description": "Published when a file is deleted from storage",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique file identifier"
+                },
+                "uploadId": {
+                    "type": "string",
+                    "description": "Associated upload identifier"
+                },
+                "serviceId": {
+                    "type": "string",
+                    "description": "Service that owns the file"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "Path in GCS bucket where file was stored"
+                },
+                "deletedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "deletedBy": {
+                    "type": ["string", "null"],
+                    "description": "Service or user that initiated deletion"
+                },
+                "reason": {
+                    "type": ["string", "null"],
+                    "description": "Reason for deletion"
+                }
+            },
+            "required": ["fileId", "uploadId", "serviceId", "storagePath", "deletedAt"]
+        }
+    }
+}

@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/geometry-events",
+    "title": "Geometry Domain Events",
+    "description": "Events published by the Geometry Service after 3D file analysis",
+    "definitions": {
+        "FileAnalyzedEvent": {
+            "type": "object",
+            "description": "Published when a 3D file analysis completes successfully",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "metrics": {
+                    "type": "object",
+                    "properties": {
+                        "volumeCm3": {
+                            "type": "number"
+                        },
+                        "supportVolumeCm3": {
+                            "type": "number"
+                        },
+                        "surfaceAreaCm2": {
+                            "type": "number"
+                        },
+                        "boundingBox": {
+                            "type": "object",
+                            "properties": {
+                                "x": {
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "type": "number"
+                                },
+                                "z": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "isManifold": {
+                            "type": "boolean"
+                        },
+                        "triangleCount": {
+                            "type": "integer"
+                        },
+                        "eulerNumber": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "processedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "fileId",
+                "metrics",
+                "processedAt"
+            ]
+        },
+        "FileAnalysisFailedEvent": {
+            "type": "object",
+            "description": "Published when a 3D file analysis fails",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "errorCode": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "fileId",
+                "errorCode"
+            ]
+        }
+    }
+}

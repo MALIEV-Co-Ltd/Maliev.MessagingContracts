@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/supplier-events",
+    "title": "Supplier Domain Events",
+    "description": "Events published by the Supplier Service for vendor management",
+    "definitions": {
+        "SupplierCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new supplier is created",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the supplier"
+                },
+                "companyName": {
+                    "type": "string",
+                    "description": "Legal company name of the supplier"
+                },
+                "taxId": {
+                    "type": "string",
+                    "description": "Tax identification number"
+                },
+                "country": {
+                    "type": "string",
+                    "description": "Country where supplier is located"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": ["PendingApproval", "Active", "Suspended", "Inactive"],
+                    "description": "Current status of the supplier"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "description": "User ID who created the supplier"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the supplier was created"
+                }
+            },
+            "required": ["supplierId", "companyName", "taxId", "country", "status", "createdBy", "createdAt"]
+        },
+        "SupplierUpdatedEvent": {
+            "type": "object",
+            "description": "Published when supplier information is updated",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the supplier"
+                },
+                "companyName": {
+                    "type": "string",
+                    "description": "Current company name of the supplier"
+                },
+                "changedFields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of field names that were changed"
+                },
+                "updatedBy": {
+                    "type": "string",
+                    "description": "User ID who updated the supplier"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the supplier was updated"
+                }
+            },
+            "required": ["supplierId", "companyName", "changedFields", "updatedBy", "updatedAt"]
+        },
+        "SupplierStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when supplier status changes",
+            "properties": {
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the supplier"
+                },
+                "oldStatus": {
+                    "type": "string",
+                    "enum": ["PendingApproval", "Active", "Suspended", "Inactive"],
+                    "description": "Previous status of the supplier"
+                },
+                "newStatus": {
+                    "type": "string",
+                    "enum": ["PendingApproval", "Active", "Suspended", "Inactive"],
+                    "description": "New status of the supplier"
+                },
+                "changedBy": {
+                    "type": "string",
+                    "description": "User ID who changed the status"
+                },
+                "changedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the status changed"
+                }
+            },
+            "required": ["supplierId", "oldStatus", "newStatus", "changedBy", "changedAt"]
+        }
+    }
+}

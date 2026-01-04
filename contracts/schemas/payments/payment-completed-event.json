@@ -14,22 +14,31 @@
             "properties": {
                 "orderId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the order"
+                },
+                "orderNumber": {
+                    "type": "string",
+                    "description": "Human-readable order number"
                 },
                 "paymentId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier of the payment"
                 },
                 "amount": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "Amount paid"
                 },
                 "currency": {
                     "type": "string",
-                    "pattern": "^[A-Z]{3}$"
+                    "pattern": "^[A-Z]{3}$",
+                    "description": "Currency code (ISO 4217)"
                 }
             },
             "required": [
                 "orderId",
+                "orderNumber",
                 "paymentId",
                 "amount",
                 "currency"

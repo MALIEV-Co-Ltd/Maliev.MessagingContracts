@@ -1,0 +1,143 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/purchase-order-events",
+    "title": "Purchase Order Domain Events",
+    "description": "Events published by the Purchase Order Service for procurement workflow",
+    "definitions": {
+        "PurchaseOrderCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new purchase order is created",
+            "properties": {
+                "purchaseOrderId": {
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
+                },
+                "purchaseOrderNumber": {
+                    "type": "string"
+                },
+                "supplierId": {
+                    "type": "integer",
+                    "description": "Supplier ID from SupplierService"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "requestedDeliveryDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "description": "User ID who created the purchase order"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["purchaseOrderId", "purchaseOrderNumber", "supplierId", "totalAmount", "currency", "createdBy", "createdAt"]
+        },
+        "PurchaseOrderApprovedEvent": {
+            "type": "object",
+            "description": "Published when purchase order is approved",
+            "properties": {
+                "purchaseOrderId": {
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
+                },
+                "purchaseOrderNumber": {
+                    "type": "string"
+                },
+                "approvedBy": {
+                    "type": "string",
+                    "description": "User ID who approved the purchase order"
+                },
+                "approvedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["purchaseOrderId", "purchaseOrderNumber", "approvedBy", "approvedAt"]
+        },
+        "PurchaseOrderSentToSupplierEvent": {
+            "type": "object",
+            "description": "Published when PO is sent to supplier",
+            "properties": {
+                "purchaseOrderId": {
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
+                },
+                "purchaseOrderNumber": {
+                    "type": "string"
+                },
+                "supplierId": {
+                    "type": "integer",
+                    "description": "Supplier ID from SupplierService"
+                },
+                "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "sentBy": {
+                    "type": "string",
+                    "description": "User ID who sent the purchase order"
+                }
+            },
+            "required": ["purchaseOrderId", "purchaseOrderNumber", "supplierId", "sentAt", "sentBy"]
+        },
+        "PurchaseOrderReceivedEvent": {
+            "type": "object",
+            "description": "Published when goods are received from supplier",
+            "properties": {
+                "purchaseOrderId": {
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
+                },
+                "purchaseOrderNumber": {
+                    "type": "string"
+                },
+                "receivedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "receivedBy": {
+                    "type": "string",
+                    "description": "User ID who received the goods"
+                },
+                "isPartialReceipt": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["purchaseOrderId", "purchaseOrderNumber", "receivedAt", "receivedBy", "isPartialReceipt"]
+        },
+        "PurchaseOrderCancelledEvent": {
+            "type": "object",
+            "description": "Published when purchase order is cancelled",
+            "properties": {
+                "purchaseOrderId": {
+                    "type": "integer",
+                    "description": "Internal purchase order ID"
+                },
+                "purchaseOrderNumber": {
+                    "type": "string"
+                },
+                "cancelledBy": {
+                    "type": "string",
+                    "description": "User ID who cancelled the purchase order"
+                },
+                "cancelledAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "cancellationReason": {
+                    "type": "string"
+                }
+            },
+            "required": ["purchaseOrderId", "purchaseOrderNumber", "cancelledBy", "cancelledAt", "cancellationReason"]
+        }
+    }
+}

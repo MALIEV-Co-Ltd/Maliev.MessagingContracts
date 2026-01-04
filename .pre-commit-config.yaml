@@ -1,9 +1,30 @@
 repos:
 -   repo: local
     hooks:
+    -   id: validate-schemas
+        name: validate schemas
+        entry: npm test
+        language: system
+        files: \.(json|yaml|yml)$
+        pass_filenames: false
+
+    -   id: generate-contracts
+        name: generate contracts
+        entry: dotnet run --project tools/Generator/Generator.csproj
+        language: system
+        files: \.(json)$
+        pass_filenames: false
+
     -   id: dotnet-format
         name: dotnet format
         entry: dotnet format
         language: system
         files: \.(cs|vb)$
+        pass_filenames: false
+
+    -   id: verify-build
+        name: verify build
+        entry: dotnet build Maliev.MessagingContracts.sln -c Release
+        language: system
+        files: \.(cs|json)$
         pass_filenames: false

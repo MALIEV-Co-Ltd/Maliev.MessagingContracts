@@ -1,0 +1,135 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/receipt-events",
+    "title": "Receipt Domain Events",
+    "description": "Events published by the Receipt Service for transaction documentation",
+    "definitions": {
+        "ReceiptCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new receipt is created",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Invoice ID for this receipt"
+                },
+                "customerName": {
+                    "type": "string",
+                    "description": "Customer name from invoice"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "paymentMethod": {
+                    "type": ["string", "null"],
+                    "description": "Payment method used"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "invoiceId", "customerName", "totalAmount", "currency", "createdAt"]
+        },
+        "ReceiptGeneratedEvent": {
+            "type": "object",
+            "description": "Published when receipt PDF is successfully generated",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "description": "Receipt ID (Guid)"
+                },
+                "receiptNumber": {
+                    "type": "string",
+                    "description": "Receipt number"
+                },
+                "storageUrl": {
+                    "type": "string",
+                    "description": "URL where the PDF is stored"
+                },
+                "pdfReferenceId": {
+                    "type": "string",
+                    "description": "Reference ID in UploadService/PdfService"
+                },
+                "generatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "storageUrl", "pdfReferenceId", "generatedAt"]
+        },
+        "ReceiptSentEvent": {
+            "type": "object",
+            "description": "Published when receipt is sent to customer",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "description": "Receipt ID (Guid)"
+                },
+                "receiptNumber": {
+                    "type": "string",
+                    "description": "Receipt number"
+                },
+                "customerName": {
+                    "type": "string",
+                    "description": "Customer name"
+                },
+                "sentTo": {
+                    "type": "string",
+                    "description": "Destination (email, phone number, etc.)"
+                },
+                "channel": {
+                    "type": "string",
+                    "enum": ["Email", "SMS", "LINE", "WhatsApp"],
+                    "description": "Delivery channel used"
+                },
+                "sentBy": {
+                    "type": "string",
+                    "description": "Staff member ID who initiated the send"
+                },
+                "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "customerName", "sentTo", "channel", "sentBy", "sentAt"]
+        },
+        "ReceiptVoidedEvent": {
+            "type": "object",
+            "description": "Published when receipt is voided/cancelled",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "voidedBy": {
+                    "type": "string",
+                    "description": "Staff member ID who voided the receipt"
+                },
+                "voidedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "voidReason": {
+                    "type": "string",
+                    "description": "Reason for voiding the receipt"
+                }
+            },
+            "required": ["receiptId", "receiptNumber", "voidedBy", "voidedAt", "voidReason"]
+        }
+    }
+}

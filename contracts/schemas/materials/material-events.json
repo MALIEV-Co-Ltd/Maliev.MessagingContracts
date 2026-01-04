@@ -1,0 +1,85 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/material-events",
+    "title": "Material Domain Events",
+    "description": "Events published by the Material Service for inventory management",
+    "definitions": {
+        "MaterialCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new material is created",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the material"
+                },
+                "code": {
+                    "type": "string",
+                    "description": "Material code"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Material name"
+                },
+                "pricePerUnit": {
+                    "type": "number",
+                    "description": "Price per unit"
+                },
+                "stockLevel": {
+                    "type": "integer",
+                    "description": "Initial stock level"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["materialId", "code", "name", "pricePerUnit", "stockLevel", "createdAt"]
+        },
+        "MaterialUpdatedEvent": {
+            "type": "object",
+            "description": "Published when material information is updated",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the material"
+                },
+                "code": {
+                    "type": "string",
+                    "description": "Material code"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Material name"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": "Optimistic concurrency version"
+                }
+            },
+            "required": ["materialId", "code", "name", "updatedAt", "version"]
+        },
+        "MaterialDiscontinuedEvent": {
+            "type": "object",
+            "description": "Published when material is soft-deleted (discontinued)",
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the material"
+                },
+                "discontinuedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the material was discontinued"
+                }
+            },
+            "required": ["materialId", "discontinuedAt"]
+        }
+    }
+}

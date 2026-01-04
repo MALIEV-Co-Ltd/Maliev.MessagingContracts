@@ -2,125 +2,1117 @@ asyncapi: '3.0.0'
 info:
   title: Maliev Messaging Contracts
   version: 1.0.0
-  description: Shared messaging contracts for Maliev ecosystem.
+  description: |
+    Comprehensive event-driven architecture for Maliev microservices ecosystem.
+
+    **Total Events**: 98 (39 HR services + 59 business services)
+    **Services**: 22 microservices with async messaging
+    **Message Bus**: RabbitMQ via MassTransit
+    **Event Format**: CloudEvents-compatible with base metadata
+
+    ## Service Categories
+
+    ### Business Services (12)
+    - OrderService: 16-state order workflow (12 events)
+    - InvoiceService: Invoice lifecycle (7 events)
+    - PaymentService: Payment processing (3 events)
+    - CustomerService: Customer management (3 events)
+    - PurchaseOrderService: Procurement workflow (5 events)
+    - QuotationService: Quotation management (4 events)
+    - ReceiptService: Receipt generation (4 events)
+    - MaterialService: Inventory management (3 events)
+    - SupplierService: Supplier lifecycle (3 events)
+    - AuthService: Authentication & security (6 events)
+    - UploadService: File management (2 events)
+    - PdfService: PDF generation (3 events)
+
+    ### HR Services (10)
+    - EmployeeService: Employee lifecycle (3 events)
+    - LeaveService: Leave management (5 events)
+    - PerformanceService: Performance reviews (5 events)
+    - LifecycleService: Onboarding/offboarding (6 events)
+    - CareerService: Training & development (4 events)
+    - CompensationService: Salary & benefits (3 events)
+    - ComplianceService: Work authorization (2 events)
+    - ChatbotService: AI chatbot (4 events)
+    - IAMService: Identity & access (4 events)
+    - NotificationService: Multi-channel notifications (consumer only)
+
+servers:
+  development:
+    host: localhost:5672
+    protocol: amqp
+    description: Local RabbitMQ instance
+  staging:
+    host: maliev-rabbitmq-staging:5672
+    protocol: amqp
+    description: Staging environment RabbitMQ
+  production:
+    host: maliev-rabbitmq-prod:5672
+    protocol: amqp
+    description: Production RabbitMQ cluster
+
 channels:
-  user/created:
-    address: maliev.users.events.user-created
-    messages:
-      createUserCommand:
-        $ref: '#/components/messages/CreateUserCommand'
-  customer/details:
-    address: maliev.customers.requests.get-details
-    messages:
-      getCustomerDetailsRequest:
-        $ref: '#/components/messages/GetCustomerDetailsRequest'
-      customerDetailsResponse:
-        $ref: '#/components/messages/CustomerDetailsResponse'
+  # ==================== ORDER SERVICE ====================
   order/created:
-    address: maliev.orders.commands.create-order
+    address: maliev.orders.events.order-created
     messages:
-      createOrderCommand:
-        $ref: '#/components/messages/CreateOrderCommand'
-  payment/completed:
-    address: maliev.payments.events.completed
+      OrderCreatedEvent:
+        $ref: '#/components/messages/OrderCreatedEvent'
+
+  order/status-changed:
+    address: maliev.orders.events.order-status-changed
     messages:
-      paymentCompletedEvent:
-        $ref: '#/components/messages/PaymentCompletedEvent'
+      OrderStatusChangedEvent:
+        $ref: '#/components/messages/OrderStatusChangedEvent'
+
+  order/quoted:
+    address: maliev.orders.events.order-quoted
+    messages:
+      OrderQuotedEvent:
+        $ref: '#/components/messages/OrderQuotedEvent'
+
+  order/accepted:
+    address: maliev.orders.events.order-accepted
+    messages:
+      OrderAcceptedEvent:
+        $ref: '#/components/messages/OrderAcceptedEvent'
+
+  order/paid:
+    address: maliev.orders.events.order-paid
+    messages:
+      OrderPaidEvent:
+        $ref: '#/components/messages/OrderPaidEvent'
+
+  order/in-progress:
+    address: maliev.orders.events.order-in-progress
+    messages:
+      OrderInProgressEvent:
+        $ref: '#/components/messages/OrderInProgressEvent'
+
+  order/completed:
+    address: maliev.orders.events.order-completed
+    messages:
+      OrderCompletedEvent:
+        $ref: '#/components/messages/OrderCompletedEvent'
+
+  order/shipped:
+    address: maliev.orders.events.order-shipped
+    messages:
+      OrderShippedEvent:
+        $ref: '#/components/messages/OrderShippedEvent'
+
+  order/cancelled:
+    address: maliev.orders.events.order-cancelled
+    messages:
+      OrderCancelledEvent:
+        $ref: '#/components/messages/OrderCancelledEvent'
+
+  order/rejected:
+    address: maliev.orders.events.order-rejected
+    messages:
+      OrderRejectedEvent:
+        $ref: '#/components/messages/OrderRejectedEvent'
+
+  order/on-hold:
+    address: maliev.orders.events.order-on-hold
+    messages:
+      OrderOnHoldEvent:
+        $ref: '#/components/messages/OrderOnHoldEvent'
+
+  order/reopened:
+    address: maliev.orders.events.order-reopened
+    messages:
+      OrderReopenedEvent:
+        $ref: '#/components/messages/OrderReopenedEvent'
+
+  # ==================== INVOICE SERVICE ====================
+  invoice/created:
+    address: maliev.invoices.events.invoice-created
+    messages:
+      InvoiceCreatedEvent:
+        $ref: '#/components/messages/InvoiceCreatedEvent'
+
+  invoice/payment-received:
+    address: maliev.invoices.events.invoice-payment-received
+    messages:
+      InvoicePaymentReceivedEvent:
+        $ref: '#/components/messages/InvoicePaymentReceivedEvent'
+
+  invoice/overdue:
+    address: maliev.invoices.events.invoice-overdue
+    messages:
+      InvoiceOverdueEvent:
+        $ref: '#/components/messages/InvoiceOverdueEvent'
+
+  invoice/cancelled:
+    address: maliev.invoices.events.invoice-cancelled
+    messages:
+      InvoiceCancelledEvent:
+        $ref: '#/components/messages/InvoiceCancelledEvent'
+
+  invoice/fully-paid:
+    address: maliev.invoices.events.invoice-fully-paid
+    messages:
+      InvoiceFullyPaidEvent:
+        $ref: '#/components/messages/InvoiceFullyPaidEvent'
+
+  # ==================== PAYMENT SERVICE ====================
   payment/created:
-    address: maliev.payments.events.created
+    address: maliev.payments.events.payment-created
     messages:
-      paymentCreatedEvent:
+      PaymentCreatedEvent:
         $ref: '#/components/messages/PaymentCreatedEvent'
+
+  payment/completed:
+    address: maliev.payments.events.payment-completed
+    messages:
+      PaymentCompletedEvent:
+        $ref: '#/components/messages/PaymentCompletedEvent'
+
   payment/failed:
-    address: maliev.payments.events.failed
+    address: maliev.payments.events.payment-failed
     messages:
-      paymentFailedEvent:
+      PaymentFailedEvent:
         $ref: '#/components/messages/PaymentFailedEvent'
-  iam/role-updated:
-    address: maliev.iam.events.role-updated
+
+  # ==================== CUSTOMER SERVICE ====================
+  customer/created:
+    address: maliev.customers.events.customer-created
     messages:
-      roleUpdatedEvent:
-        $ref: '#/components/messages/RoleUpdatedEvent'
-  iam/principal-role-granted:
-    address: maliev.iam.events.principal-role-granted
+      CustomerCreatedEvent:
+        $ref: '#/components/messages/CustomerCreatedEvent'
+
+  customer/updated:
+    address: maliev.customers.events.customer-updated
     messages:
-      principalRoleGrantedEvent:
-        $ref: '#/components/messages/PrincipalRoleGrantedEvent'
-  iam/principal-role-revoked:
-    address: maliev.iam.events.principal-role-revoked
+      CustomerUpdatedEvent:
+        $ref: '#/components/messages/CustomerUpdatedEvent'
+
+  customer/deleted:
+    address: maliev.customers.events.customer-deleted
     messages:
-      principalRoleRevokedEvent:
-        $ref: '#/components/messages/PrincipalRoleRevokedEvent'
-  iam/permission-registered:
-    address: maliev.iam.events.permission-registered
+      CustomerDeletedEvent:
+        $ref: '#/components/messages/CustomerDeletedEvent'
+
+  # ==================== PURCHASE ORDER SERVICE ====================
+  purchase-order/created:
+    address: maliev.purchase-orders.events.purchase-order-created
     messages:
-      permissionRegisteredEvent:
-        $ref: '#/components/messages/PermissionRegisteredEvent'
+      PurchaseOrderCreatedEvent:
+        $ref: '#/components/messages/PurchaseOrderCreatedEvent'
+
+  purchase-order/approved:
+    address: maliev.purchase-orders.events.purchase-order-approved
+    messages:
+      PurchaseOrderApprovedEvent:
+        $ref: '#/components/messages/PurchaseOrderApprovedEvent'
+
+  purchase-order/sent-to-supplier:
+    address: maliev.purchase-orders.events.purchase-order-sent-to-supplier
+    messages:
+      PurchaseOrderSentToSupplierEvent:
+        $ref: '#/components/messages/PurchaseOrderSentToSupplierEvent'
+
+  purchase-order/received:
+    address: maliev.purchase-orders.events.purchase-order-received
+    messages:
+      PurchaseOrderReceivedEvent:
+        $ref: '#/components/messages/PurchaseOrderReceivedEvent'
+
+  purchase-order/cancelled:
+    address: maliev.purchase-orders.events.purchase-order-cancelled
+    messages:
+      PurchaseOrderCancelledEvent:
+        $ref: '#/components/messages/PurchaseOrderCancelledEvent'
+
+  # ==================== QUOTATION SERVICE ====================
+  quotation/created:
+    address: maliev.quotations.events.quotation-created
+    messages:
+      QuotationCreatedEvent:
+        $ref: '#/components/messages/QuotationCreatedEvent'
+
+  quotation/accepted:
+    address: maliev.quotations.events.quotation-accepted
+    messages:
+      QuotationAcceptedEvent:
+        $ref: '#/components/messages/QuotationAcceptedEvent'
+
+  quotation/cancelled:
+    address: maliev.quotations.events.quotation-cancelled
+    messages:
+      QuotationCancelledEvent:
+        $ref: '#/components/messages/QuotationCancelledEvent'
+
+  quotation/expired:
+    address: maliev.quotations.events.quotation-expired
+    messages:
+      QuotationExpiredEvent:
+        $ref: '#/components/messages/QuotationExpiredEvent'
+
+  # ==================== RECEIPT SERVICE ====================
+  receipt/created:
+    address: maliev.receipts.events.receipt-created
+    messages:
+      ReceiptCreatedEvent:
+        $ref: '#/components/messages/ReceiptCreatedEvent'
+
+  receipt/generated:
+    address: maliev.receipts.events.receipt-generated
+    messages:
+      ReceiptGeneratedEvent:
+        $ref: '#/components/messages/ReceiptGeneratedEvent'
+
+  receipt/sent:
+    address: maliev.receipts.events.receipt-sent
+    messages:
+      ReceiptSentEvent:
+        $ref: '#/components/messages/ReceiptSentEvent'
+
+  receipt/voided:
+    address: maliev.receipts.events.receipt-voided
+    messages:
+      ReceiptVoidedEvent:
+        $ref: '#/components/messages/ReceiptVoidedEvent'
+
+  # ==================== MATERIAL SERVICE ====================
+  material/created:
+    address: maliev.materials.events.material-created
+    messages:
+      MaterialCreatedEvent:
+        $ref: '#/components/messages/MaterialCreatedEvent'
+
+  material/updated:
+    address: maliev.materials.events.material-updated
+    messages:
+      MaterialUpdatedEvent:
+        $ref: '#/components/messages/MaterialUpdatedEvent'
+
+  material/discontinued:
+    address: maliev.materials.events.material-discontinued
+    messages:
+      MaterialDiscontinuedEvent:
+        $ref: '#/components/messages/MaterialDiscontinuedEvent'
+
+  # ==================== SUPPLIER SERVICE ====================
+  supplier/created:
+    address: maliev.suppliers.events.supplier-created
+    messages:
+      SupplierCreatedEvent:
+        $ref: '#/components/messages/SupplierCreatedEvent'
+
+  supplier/updated:
+    address: maliev.suppliers.events.supplier-updated
+    messages:
+      SupplierUpdatedEvent:
+        $ref: '#/components/messages/SupplierUpdatedEvent'
+
+  supplier/status-changed:
+    address: maliev.suppliers.events.supplier-status-changed
+    messages:
+      SupplierStatusChangedEvent:
+        $ref: '#/components/messages/SupplierStatusChangedEvent'
+
+  # ==================== AUTH SERVICE ====================
+  auth/user-logged-in:
+    address: maliev.auth.events.user-logged-in
+    messages:
+      UserLoggedInEvent:
+        $ref: '#/components/messages/UserLoggedInEvent'
+
+  auth/login-failed:
+    address: maliev.auth.events.login-failed
+    messages:
+      LoginFailedEvent:
+        $ref: '#/components/messages/LoginFailedEvent'
+
+  auth/user-account-locked:
+    address: maliev.auth.events.user-account-locked
+    messages:
+      UserAccountLockedEvent:
+        $ref: '#/components/messages/UserAccountLockedEvent'
+
+  auth/user-logged-out:
+    address: maliev.auth.events.user-logged-out
+    messages:
+      UserLoggedOutEvent:
+        $ref: '#/components/messages/UserLoggedOutEvent'
+
+  auth/refresh-token-revoked:
+    address: maliev.auth.events.refresh-token-revoked
+    messages:
+      RefreshTokenRevokedEvent:
+        $ref: '#/components/messages/RefreshTokenRevokedEvent'
+
+  auth/access-token-revoked:
+    address: maliev.auth.events.access-token-revoked
+    messages:
+      AccessTokenRevokedEvent:
+        $ref: '#/components/messages/AccessTokenRevokedEvent'
+
+  auth/suspicious-activity-detected:
+    address: maliev.auth.events.suspicious-activity-detected
+    messages:
+      SuspiciousActivityDetectedEvent:
+        $ref: '#/components/messages/SuspiciousActivityDetectedEvent'
+
+  # ==================== UPLOAD SERVICE ====================
+  upload/file-uploaded:
+    address: maliev.uploads.events.file-uploaded
+    messages:
+      FileUploadedEvent:
+        $ref: '#/components/messages/FileUploadedEvent'
+
+  upload/file-deleted:
+    address: maliev.uploads.events.file-deleted
+    messages:
+      FileDeletedEvent:
+        $ref: '#/components/messages/FileDeletedEvent'
+
+  # ==================== PDF SERVICE ====================
+  pdf/generation-requested:
+    address: maliev.pdf.events.pdf-generation-requested
+    messages:
+      PdfGenerationRequestedEvent:
+        $ref: '#/components/messages/PdfGenerationRequestedEvent'
+
+  pdf/generation-completed:
+    address: maliev.pdf.events.pdf-generation-completed
+    messages:
+      PdfGenerationCompletedEvent:
+        $ref: '#/components/messages/PdfGenerationCompletedEvent'
+
+  pdf/generation-failed:
+    address: maliev.pdf.events.pdf-generation-failed
+    messages:
+      PdfGenerationFailedEvent:
+        $ref: '#/components/messages/PdfGenerationFailedEvent'
+
+  # ==================== EMPLOYEE SERVICE ====================
+  employee/created:
+    address: maliev.employees.events.employee-created
+    messages:
+      EmployeeCreatedEvent:
+        $ref: '#/components/messages/EmployeeCreatedEvent'
+
+  employee/terminated:
+    address: maliev.employees.events.employee-terminated
+    messages:
+      EmployeeTerminatedEvent:
+        $ref: '#/components/messages/EmployeeTerminatedEvent'
+
+  employee/department-transferred:
+    address: maliev.employees.events.employee-department-transferred
+    messages:
+      EmployeeDepartmentTransferredEvent:
+        $ref: '#/components/messages/EmployeeDepartmentTransferredEvent'
+
+  # ==================== LEAVE SERVICE ====================
+  leave/request-submitted:
+    address: maliev.leave.events.leave-request-submitted
+    messages:
+      LeaveRequestSubmittedEvent:
+        $ref: '#/components/messages/LeaveRequestSubmittedEvent'
+
+  leave/request-approved:
+    address: maliev.leave.events.leave-request-approved
+    messages:
+      LeaveRequestApprovedEvent:
+        $ref: '#/components/messages/LeaveRequestApprovedEvent'
+
+  leave/request-rejected:
+    address: maliev.leave.events.leave-request-rejected
+    messages:
+      LeaveRequestRejectedEvent:
+        $ref: '#/components/messages/LeaveRequestRejectedEvent'
+
+  leave/request-cancelled:
+    address: maliev.leave.events.leave-request-cancelled
+    messages:
+      LeaveRequestCancelledEvent:
+        $ref: '#/components/messages/LeaveRequestCancelledEvent'
+
+  leave/balance-adjusted:
+    address: maliev.leave.events.leave-balance-adjusted
+    messages:
+      LeaveBalanceAdjustedEvent:
+        $ref: '#/components/messages/LeaveBalanceAdjustedEvent'
+
+  # ==================== PERFORMANCE SERVICE ====================
+  performance/review-created:
+    address: maliev.performance.events.performance-review-created
+    messages:
+      PerformanceReviewCreatedEvent:
+        $ref: '#/components/messages/PerformanceReviewCreatedEvent'
+
+  performance/review-submitted:
+    address: maliev.performance.events.performance-review-submitted
+    messages:
+      PerformanceReviewSubmittedEvent:
+        $ref: '#/components/messages/PerformanceReviewSubmittedEvent'
+
+  performance/goal-created:
+    address: maliev.performance.events.performance-goal-created
+    messages:
+      PerformanceGoalCreatedEvent:
+        $ref: '#/components/messages/PerformanceGoalCreatedEvent'
+
+  performance/goal-completed:
+    address: maliev.performance.events.performance-goal-completed
+    messages:
+      PerformanceGoalCompletedEvent:
+        $ref: '#/components/messages/PerformanceGoalCompletedEvent'
+
+  performance/pip-initiated:
+    address: maliev.performance.events.performance-pip-initiated
+    messages:
+      PerformancePIPInitiatedEvent:
+        $ref: '#/components/messages/PerformancePIPInitiatedEvent'
+
+  # ==================== LIFECYCLE SERVICE ====================
+  lifecycle/onboarding-started:
+    address: maliev.lifecycle.events.onboarding-started
+    messages:
+      OnboardingStartedEvent:
+        $ref: '#/components/messages/OnboardingStartedEvent'
+
+  lifecycle/onboarding-completed:
+    address: maliev.lifecycle.events.onboarding-completed
+    messages:
+      OnboardingCompletedEvent:
+        $ref: '#/components/messages/OnboardingCompletedEvent'
+
+  lifecycle/offboarding-started:
+    address: maliev.lifecycle.events.offboarding-started
+    messages:
+      OffboardingStartedEvent:
+        $ref: '#/components/messages/OffboardingStartedEvent'
+
+  lifecycle/offboarding-completed:
+    address: maliev.lifecycle.events.offboarding-completed
+    messages:
+      OffboardingCompletedEvent:
+        $ref: '#/components/messages/OffboardingCompletedEvent'
+
+  lifecycle/task-created:
+    address: maliev.lifecycle.events.lifecycle-task-created
+    messages:
+      LifecycleTaskCreatedEvent:
+        $ref: '#/components/messages/LifecycleTaskCreatedEvent'
+
+  lifecycle/task-completed:
+    address: maliev.lifecycle.events.lifecycle-task-completed
+    messages:
+      LifecycleTaskCompletedEvent:
+        $ref: '#/components/messages/LifecycleTaskCompletedEvent'
+
+  # ==================== CAREER SERVICE ====================
+  career/training-enrolled:
+    address: maliev.career.events.training-enrolled
+    messages:
+      TrainingEnrolledEvent:
+        $ref: '#/components/messages/TrainingEnrolledEvent'
+
+  career/training-completed:
+    address: maliev.career.events.training-completed
+    messages:
+      TrainingCompletedEvent:
+        $ref: '#/components/messages/TrainingCompletedEvent'
+
+  career/certification-awarded:
+    address: maliev.career.events.certification-awarded
+    messages:
+      CertificationAwardedEvent:
+        $ref: '#/components/messages/CertificationAwardedEvent'
+
+  career/certification-expired:
+    address: maliev.career.events.certification-expired
+    messages:
+      CertificationExpiredEvent:
+        $ref: '#/components/messages/CertificationExpiredEvent'
+
+  # ==================== COMPENSATION SERVICE ====================
+  compensation/salary-changed:
+    address: maliev.compensation.events.salary-changed
+    messages:
+      SalaryChangedEvent:
+        $ref: '#/components/messages/SalaryChangedEvent'
+
+  compensation/bonus-awarded:
+    address: maliev.compensation.events.bonus-awarded
+    messages:
+      BonusAwardedEvent:
+        $ref: '#/components/messages/BonusAwardedEvent'
+
+  compensation/benefit-enrolled:
+    address: maliev.compensation.events.benefit-enrolled
+    messages:
+      BenefitEnrolledEvent:
+        $ref: '#/components/messages/BenefitEnrolledEvent'
+
+  # ==================== COMPLIANCE SERVICE ====================
+  compliance/work-authorization-expired:
+    address: maliev.compliance.events.work-authorization-expired
+    messages:
+      WorkAuthorizationExpiredEvent:
+        $ref: '#/components/messages/WorkAuthorizationExpiredEvent'
+
+  compliance/document-uploaded:
+    address: maliev.compliance.events.compliance-document-uploaded
+    messages:
+      ComplianceDocumentUploadedEvent:
+        $ref: '#/components/messages/ComplianceDocumentUploadedEvent'
+
+  # ==================== CHATBOT SERVICE ====================
   chatbot/session-created:
     address: maliev.chatbot.events.session-created
     messages:
-      chatbotSessionCreatedEvent:
+      ChatbotSessionCreatedEvent:
         $ref: '#/components/messages/ChatbotSessionCreatedEvent'
+
   chatbot/message-received:
     address: maliev.chatbot.events.message-received
     messages:
-      chatbotMessageReceivedEvent:
+      ChatbotMessageReceivedEvent:
         $ref: '#/components/messages/ChatbotMessageReceivedEvent'
+
   chatbot/session-closed:
     address: maliev.chatbot.events.session-closed
     messages:
-      chatbotSessionClosedEvent:
+      ChatbotSessionClosedEvent:
         $ref: '#/components/messages/ChatbotSessionClosedEvent'
+
   chatbot/rate-limit-exceeded:
     address: maliev.chatbot.events.rate-limit-exceeded
     messages:
-      chatbotRateLimitExceededEvent:
+      ChatbotRateLimitExceededEvent:
         $ref: '#/components/messages/ChatbotRateLimitExceededEvent'
+
+  # ==================== IAM SERVICE ====================
+  iam/role-updated:
+    address: maliev.iam.events.role-updated
+    messages:
+      RoleUpdatedEvent:
+        $ref: '#/components/messages/RoleUpdatedEvent'
+
+  iam/principal-role-granted:
+    address: maliev.iam.events.principal-role-granted
+    messages:
+      PrincipalRoleGrantedEvent:
+        $ref: '#/components/messages/PrincipalRoleGrantedEvent'
+
+  iam/principal-role-revoked:
+    address: maliev.iam.events.principal-role-revoked
+    messages:
+      PrincipalRoleRevokedEvent:
+        $ref: '#/components/messages/PrincipalRoleRevokedEvent'
+
+  iam/permission-registered:
+    address: maliev.iam.events.permission-registered
+    messages:
+      PermissionRegisteredEvent:
+        $ref: '#/components/messages/PermissionRegisteredEvent'
 
 components:
   messages:
-    CreateUserCommand:
+    # ==================== ORDER SERVICE MESSAGES ====================
+    OrderCreatedEvent:
       payload:
-        $ref: '../contracts/schemas/commands/create-user-command.json'
-    GetCustomerDetailsRequest:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderCreatedEvent'
+      description: Published when a new order is created in the system
+
+    OrderStatusChangedEvent:
       payload:
-        $ref: '../contracts/schemas/customers/get-customer-details-request.json'
-    CustomerDetailsResponse:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderStatusChangedEvent'
+      description: Published on every order state transition in the 16-state workflow
+
+    OrderQuotedEvent:
       payload:
-        $ref: '../contracts/schemas/customers/customer-details-response.json'
-    CreateOrderCommand:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderQuotedEvent'
+      description: Published when order moves from Reviewed to Quoted status
+
+    OrderAcceptedEvent:
       payload:
-        $ref: '../contracts/schemas/orders/create-order-command.json'
-    PaymentCompletedEvent:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderAcceptedEvent'
+      description: Published when customer accepts the quotation
+
+    OrderPaidEvent:
       payload:
-        $ref: '../contracts/schemas/payments/payment-completed-event.json'
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderPaidEvent'
+      description: Published when payment is received for the order
+
+    OrderInProgressEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderInProgressEvent'
+      description: Published when order work begins
+
+    OrderCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderCompletedEvent'
+      description: Published when order work is finished
+
+    OrderShippedEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderShippedEvent'
+      description: Published when completed order is shipped to customer
+
+    OrderCancelledEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderCancelledEvent'
+      description: Published when order is cancelled
+
+    OrderRejectedEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderRejectedEvent'
+      description: Published when order is rejected during review
+
+    OrderOnHoldEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderOnHoldEvent'
+      description: Published when in-progress order is put on hold
+
+    OrderReopenedEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderReopenedEvent'
+      description: Published when finished/shipped order is reopened
+
+    # ==================== INVOICE SERVICE MESSAGES ====================
+    InvoiceCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/InvoiceCreatedEvent'
+      description: Published when invoice is created from an order
+
+    InvoicePaymentReceivedEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/InvoicePaymentReceivedEvent'
+      description: Published when partial or full payment is received
+
+    InvoiceOverdueEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/InvoiceOverdueEvent'
+      description: Published by background job when invoice becomes overdue
+
+    InvoiceCancelledEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/InvoiceCancelledEvent'
+      description: Published when invoice is cancelled or voided
+
+    InvoiceFullyPaidEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/InvoiceFullyPaidEvent'
+      description: Published when invoice is fully paid
+
+    # ==================== PAYMENT SERVICE MESSAGES ====================
     PaymentCreatedEvent:
       payload:
         $ref: '../contracts/schemas/payments/payment-created-event.json'
+      description: Published when payment record is created
+
+    PaymentCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/payments/payment-completed-event.json'
+      description: Published when payment is successfully processed
+
     PaymentFailedEvent:
       payload:
         $ref: '../contracts/schemas/payments/payment-failed-event.json'
-    RoleUpdatedEvent:
+      description: Published when payment processing fails
+
+    # ==================== CUSTOMER SERVICE MESSAGES ====================
+    CustomerCreatedEvent:
       payload:
-        $ref: '../contracts/schemas/iam/role-updated-event.json'
-    PrincipalRoleGrantedEvent:
+        $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CustomerCreatedEvent'
+      description: Published when new customer is registered
+
+    CustomerUpdatedEvent:
       payload:
-        $ref: '../contracts/schemas/iam/principal-role-granted-event.json'
-    PrincipalRoleRevokedEvent:
+        $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CustomerUpdatedEvent'
+      description: Published when customer information is updated
+
+    CustomerDeletedEvent:
       payload:
-        $ref: '../contracts/schemas/iam/principal-role-revoked-event.json'
-    PermissionRegisteredEvent:
+        $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CustomerDeletedEvent'
+      description: Published when customer is soft-deleted
+
+    # ==================== PURCHASE ORDER SERVICE MESSAGES ====================
+    PurchaseOrderCreatedEvent:
       payload:
-        $ref: '../contracts/schemas/iam/permission-registered-event.json'
+        $ref: '../contracts/schemas/purchase-orders/purchase-order-events.json#/definitions/PurchaseOrderCreatedEvent'
+      description: Published when purchase order is created
+
+    PurchaseOrderApprovedEvent:
+      payload:
+        $ref: '../contracts/schemas/purchase-orders/purchase-order-events.json#/definitions/PurchaseOrderApprovedEvent'
+      description: Published when purchase order is approved by manager
+
+    PurchaseOrderSentToSupplierEvent:
+      payload:
+        $ref: '../contracts/schemas/purchase-orders/purchase-order-events.json#/definitions/PurchaseOrderSentToSupplierEvent'
+      description: Published when approved PO is sent to supplier
+
+    PurchaseOrderReceivedEvent:
+      payload:
+        $ref: '../contracts/schemas/purchase-orders/purchase-order-events.json#/definitions/PurchaseOrderReceivedEvent'
+      description: Published when goods are received
+
+    PurchaseOrderCancelledEvent:
+      payload:
+        $ref: '../contracts/schemas/purchase-orders/purchase-order-events.json#/definitions/PurchaseOrderCancelledEvent'
+      description: Published when purchase order is cancelled
+
+    # ==================== QUOTATION SERVICE MESSAGES ====================
+    QuotationCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/quotations/quotation-events.json#/definitions/QuotationCreatedEvent'
+      description: Published when quotation is created
+
+    QuotationAcceptedEvent:
+      payload:
+        $ref: '../contracts/schemas/quotations/quotation-events.json#/definitions/QuotationAcceptedEvent'
+      description: Published when customer accepts quotation
+
+    QuotationCancelledEvent:
+      payload:
+        $ref: '../contracts/schemas/quotations/quotation-events.json#/definitions/QuotationCancelledEvent'
+      description: Published when quotation is cancelled
+
+    QuotationExpiredEvent:
+      payload:
+        $ref: '../contracts/schemas/quotations/quotation-events.json#/definitions/QuotationExpiredEvent'
+      description: Published when quotation validity period expires
+
+    # ==================== RECEIPT SERVICE MESSAGES ====================
+    ReceiptCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/receipts/receipt-events.json#/definitions/ReceiptCreatedEvent'
+      description: Published when receipt is created for payment
+
+    ReceiptGeneratedEvent:
+      payload:
+        $ref: '../contracts/schemas/receipts/receipt-events.json#/definitions/ReceiptGeneratedEvent'
+      description: Published when receipt PDF is generated
+
+    ReceiptSentEvent:
+      payload:
+        $ref: '../contracts/schemas/receipts/receipt-events.json#/definitions/ReceiptSentEvent'
+      description: Published when receipt is sent to customer via email/SMS/LINE
+
+    ReceiptVoidedEvent:
+      payload:
+        $ref: '../contracts/schemas/receipts/receipt-events.json#/definitions/ReceiptVoidedEvent'
+      description: Published when receipt is voided
+
+    # ==================== MATERIAL SERVICE MESSAGES ====================
+    MaterialCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/materials/material-events.json#/definitions/MaterialCreatedEvent'
+      description: Published when new material/product is added to catalog
+
+    MaterialUpdatedEvent:
+      payload:
+        $ref: '../contracts/schemas/materials/material-events.json#/definitions/MaterialUpdatedEvent'
+      description: Published when material information is updated
+
+    MaterialDiscontinuedEvent:
+      payload:
+        $ref: '../contracts/schemas/materials/material-events.json#/definitions/MaterialDiscontinuedEvent'
+      description: Published when material is discontinued
+
+    # ==================== SUPPLIER SERVICE MESSAGES ====================
+    SupplierCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/suppliers/supplier-events.json#/definitions/SupplierCreatedEvent'
+      description: Published when new supplier is registered
+
+    SupplierUpdatedEvent:
+      payload:
+        $ref: '../contracts/schemas/suppliers/supplier-events.json#/definitions/SupplierUpdatedEvent'
+      description: Published when supplier information is updated
+
+    SupplierStatusChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/suppliers/supplier-events.json#/definitions/SupplierStatusChangedEvent'
+      description: Published when supplier status changes (Active/Suspended/Terminated)
+
+    # ==================== AUTH SERVICE MESSAGES ====================
+    UserLoggedInEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/UserLoggedInEvent'
+      description: Published on successful user or service login
+
+    LoginFailedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/LoginFailedEvent'
+      description: Published on failed login attempt
+
+    UserAccountLockedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/UserAccountLockedEvent'
+      description: Published when account is locked after 5 failed attempts
+
+    UserLoggedOutEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/UserLoggedOutEvent'
+      description: Published on explicit user logout
+
+    RefreshTokenRevokedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/RefreshTokenRevokedEvent'
+      description: Published when refresh token family is revoked
+
+    AccessTokenRevokedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/AccessTokenRevokedEvent'
+      description: Published when an access token is manually revoked
+
+    SuspiciousActivityDetectedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/SuspiciousActivityDetectedEvent'
+      description: Published on security events like token reuse
+
+    # ==================== UPLOAD SERVICE MESSAGES ====================
+    FileUploadedEvent:
+      payload:
+        $ref: '../contracts/schemas/uploads/upload-events.json#/definitions/FileUploadedEvent'
+      description: Published when file upload to GCS completes
+
+    FileDeletedEvent:
+      payload:
+        $ref: '../contracts/schemas/upload/file-deleted-event.json'
+      description: Published when file is deleted from storage
+
+    # ==================== PDF SERVICE MESSAGES ====================
+    PdfGenerationRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/PdfGenerationRequestedEvent'
+      description: Published when async PDF generation request is created
+
+    PdfGenerationCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/PdfGenerationCompletedEvent'
+      description: Published when PDF generation succeeds
+
+    PdfGenerationFailedEvent:
+      payload:
+        $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/PdfGenerationFailedEvent'
+      description: Published when PDF generation fails
+
+    # ==================== EMPLOYEE SERVICE MESSAGES ====================
+    EmployeeCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/EmployeeCreatedEvent'
+      description: Published when new employee is onboarded
+
+    EmployeeTerminatedEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/EmployeeTerminatedEvent'
+      description: Published when employee is terminated
+
+    EmployeeDepartmentTransferredEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/EmployeeDepartmentTransferredEvent'
+      description: Published when employee moves to different department
+
+    # ==================== LEAVE SERVICE MESSAGES ====================
+    LeaveRequestSubmittedEvent:
+      payload:
+        $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveRequestSubmittedEvent'
+      description: Published when employee submits leave request
+
+    LeaveRequestApprovedEvent:
+      payload:
+        $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveRequestApprovedEvent'
+      description: Published when manager approves leave request
+
+    LeaveRequestRejectedEvent:
+      payload:
+        $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveRequestRejectedEvent'
+      description: Published when leave request is rejected
+
+    LeaveRequestCancelledEvent:
+      payload:
+        $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveRequestCancelledEvent'
+      description: Published when employee cancels approved leave
+
+    LeaveBalanceAdjustedEvent:
+      payload:
+        $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveBalanceAdjustedEvent'
+      description: Published when leave balance is manually adjusted
+
+    # ==================== PERFORMANCE SERVICE MESSAGES ====================
+    PerformanceReviewCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/performance/performance-events.json#/definitions/PerformanceReviewCreatedEvent'
+      description: Published when performance review cycle starts
+
+    PerformanceReviewSubmittedEvent:
+      payload:
+        $ref: '../contracts/schemas/performance/performance-events.json#/definitions/PerformanceReviewSubmittedEvent'
+      description: Published when review is submitted
+
+    PerformanceGoalCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/performance/performance-events.json#/definitions/PerformanceGoalCreatedEvent'
+      description: Published when performance goal is set
+
+    PerformanceGoalCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/performance/performance-events.json#/definitions/PerformanceGoalCompletedEvent'
+      description: Published when goal is achieved
+
+    PerformancePIPInitiatedEvent:
+      payload:
+        $ref: '../contracts/schemas/performance/performance-events.json#/definitions/PerformancePIPInitiatedEvent'
+      description: Published when Performance Improvement Plan starts
+
+    # ==================== LIFECYCLE SERVICE MESSAGES ====================
+    OnboardingStartedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/OnboardingStartedEvent'
+      description: Published when employee onboarding begins
+
+    OnboardingCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/OnboardingCompletedEvent'
+      description: Published when all onboarding tasks complete
+
+    OffboardingStartedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/OffboardingStartedEvent'
+      description: Published when employee offboarding begins
+
+    OffboardingCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/OffboardingCompletedEvent'
+      description: Published when all offboarding tasks complete
+
+    LifecycleTaskCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/LifecycleTaskCreatedEvent'
+      description: Published when onboarding/offboarding task is created
+
+    LifecycleTaskCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/LifecycleTaskCompletedEvent'
+      description: Published when lifecycle task is completed
+
+    # ==================== CAREER SERVICE MESSAGES ====================
+    TrainingEnrolledEvent:
+      payload:
+        $ref: '../contracts/schemas/career/career-events.json#/definitions/TrainingEnrolledEvent'
+      description: Published when employee enrolls in training
+
+    TrainingCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/career/career-events.json#/definitions/TrainingCompletedEvent'
+      description: Published when training is completed
+
+    CertificationAwardedEvent:
+      payload:
+        $ref: '../contracts/schemas/career/career-events.json#/definitions/CertificationAwardedEvent'
+      description: Published when certification is awarded
+
+    CertificationExpiredEvent:
+      payload:
+        $ref: '../contracts/schemas/career/career-events.json#/definitions/CertificationExpiredEvent'
+      description: Published when certification expires
+
+    # ==================== COMPENSATION SERVICE MESSAGES ====================
+    SalaryChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/compensation/compensation-events.json#/definitions/SalaryChangedEvent'
+      description: Published on salary adjustments
+
+    BonusAwardedEvent:
+      payload:
+        $ref: '../contracts/schemas/compensation/compensation-events.json#/definitions/BonusAwardedEvent'
+      description: Published when bonus is awarded
+
+    BenefitEnrolledEvent:
+      payload:
+        $ref: '../contracts/schemas/compensation/compensation-events.json#/definitions/BenefitEnrolledEvent'
+      description: Published when employee enrolls in benefit
+
+    # ==================== COMPLIANCE SERVICE MESSAGES ====================
+    WorkAuthorizationExpiredEvent:
+      payload:
+        $ref: '../contracts/schemas/compliance/compliance-events.json#/definitions/WorkAuthorizationExpiredEvent'
+      description: Published when work permit/visa expires
+
+    ComplianceDocumentUploadedEvent:
+      payload:
+        $ref: '../contracts/schemas/compliance/compliance-events.json#/definitions/ComplianceDocumentUploadedEvent'
+      description: Published when compliance document is uploaded
+
+    # ==================== CHATBOT SERVICE MESSAGES ====================
     ChatbotSessionCreatedEvent:
       payload:
         $ref: '../contracts/schemas/chatbot/chatbot-session-created-event.json'
+      description: Published when chatbot session starts
+
     ChatbotMessageReceivedEvent:
       payload:
         $ref: '../contracts/schemas/chatbot/chatbot-message-received-event.json'
+      description: Published when message is received in session
+
     ChatbotSessionClosedEvent:
       payload:
         $ref: '../contracts/schemas/chatbot/chatbot-session-closed-event.json'
+      description: Published when chatbot session ends
+
     ChatbotRateLimitExceededEvent:
       payload:
         $ref: '../contracts/schemas/chatbot/chatbot-rate-limit-exceeded-event.json'
+      description: Published when rate limit is exceeded
+
+    # ==================== IAM SERVICE MESSAGES ====================
+    RoleUpdatedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/role-updated-event.json'
+      description: Published when IAM role is created or updated
+
+    PrincipalRoleGrantedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/principal-role-granted-event.json'
+      description: Published when role is granted to user/service
+
+    PrincipalRoleRevokedEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/principal-role-revoked-event.json'
+      description: Published when role is revoked from principal
+
+    PermissionRegisteredEvent:
+      payload:
+        $ref: '../contracts/schemas/iam/permission-registered-event.json'
+      description: Published when service registers new permissions
+
+operations:
+  # Example operations showing publisher-subscriber relationships
+  OrderService_PublishOrderCreated:
+    action: send
+    channel:
+      $ref: '#/channels/order~1created'
+    messages:
+      - $ref: '#/channels/order~1created/messages/OrderCreatedEvent'
+
+  InvoiceService_ConsumeOrderPaid:
+    action: receive
+    channel:
+      $ref: '#/channels/order~1paid'
+    messages:
+      - $ref: '#/channels/order~1paid/messages/OrderPaidEvent'
+
+  PaymentService_PublishPaymentCompleted:
+    action: send
+    channel:
+      $ref: '#/channels/payment~1completed'
+    messages:
+      - $ref: '#/channels/payment~1completed/messages/PaymentCompletedEvent'
+
+  OrderService_ConsumePaymentCompleted:
+    action: receive
+    channel:
+      $ref: '#/channels/payment~1completed'
+    messages:
+      - $ref: '#/channels/payment~1completed/messages/PaymentCompletedEvent'
