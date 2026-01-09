@@ -125,6 +125,7 @@ namespace Generator
                         var className = definition.Name;
                         Console.WriteLine($"Generating {className}...");
                         await GenerateMessageClassFromDefinition(sb, definition.Value, className);
+                        sb.AppendLine();
                     }
                 }
                 else
@@ -133,6 +134,7 @@ namespace Generator
                     var className = GetClassName(file);
                     Console.WriteLine($"Generating {className}...");
                     await GenerateMessageClass(sb, file, className);
+                    sb.AppendLine();
                 }
             }
 
@@ -165,8 +167,7 @@ namespace Generator
             sb.AppendLine("        [property: JsonPropertyName(\"correlationId\")] System.Guid CorrelationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"causationId\")] System.Guid? CausationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"occurredAtUtc\")] System.DateTimeOffset OccurredAtUtc,");
-            sb.AppendLine("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic");
-            sb.AppendLine("    );");
+            sb.Append("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic);");
             sb.AppendLine();
         }
 
@@ -281,7 +282,6 @@ namespace Generator
             var allParams = baseParams.ToList();
             allParams.Add($"[property: JsonPropertyName(\"payload\")] {className}Payload Payload");
 
-            sb.AppendLine();
             for (int i = 0; i < allParams.Count; i++)
             {
                 sb.Append($"        {allParams[i]}");
@@ -290,9 +290,7 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
-            sb.AppendLine();
+            sb.Append(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
             sb.AppendLine();
         }
 
@@ -368,8 +366,7 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.AppendLine("    );");
+            sb.Append(");");
             sb.AppendLine();
         }
 
@@ -475,7 +472,7 @@ namespace Generator
                     sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
                 }
             }
-            sb.Append($"    public record {className}(");
+            sb.AppendLine($"    public record {className}(");
 
             // Base class parameters first
             var baseParams = new[]
@@ -498,7 +495,6 @@ namespace Generator
                 allParams.Add($"[property: JsonPropertyName(\"{JsonName}\")] {Type} {Name}");
             }
 
-            sb.AppendLine();
             for (int i = 0; i < allParams.Count; i++)
             {
                 sb.Append($"        {allParams[i]}");
@@ -507,8 +503,7 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
+            sb.Append(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
             sb.AppendLine();
         }
 
@@ -581,8 +576,7 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.AppendLine("    );");
+            sb.Append(");");
             sb.AppendLine();
         }
 
@@ -652,8 +646,8 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
+            sb.Append(");");
             sb.AppendLine();
-            sb.AppendLine("    );");
         }
 
         private string GetCSharpType(JsonElement propertySchema, string propertyName = "")
