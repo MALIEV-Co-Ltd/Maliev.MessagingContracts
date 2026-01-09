@@ -18,16 +18,12 @@ namespace Generator
             var outputDir = Path.Combine(workspaceRoot, "generated", "csharp", "Contracts");
             var outputFile = Path.Combine(outputDir, "MessagingContracts.cs");
 
-            Console.WriteLine("Cleaning up existing generated files...");
-            if (Directory.Exists(outputDir))
+            Console.WriteLine("Cleaning up existing generated file...");
+            if (File.Exists(outputFile))
             {
-                var filesToDelete = Directory.EnumerateFiles(outputDir, "*.cs", SearchOption.AllDirectories);
-                foreach (var file in filesToDelete)
-                {
-                    File.Delete(file);
-                }
+                File.Delete(outputFile);
             }
-            else
+            else if (!Directory.Exists(outputDir))
             {
                 Directory.CreateDirectory(outputDir);
             }
@@ -40,15 +36,15 @@ namespace Generator
                 var existingCode = await File.ReadAllTextAsync(outputFile);
                 if (existingCode == code)
                 {
-                    Console.WriteLine("✓ No changes detected. Generation skipped.");
+                    Console.WriteLine("[OK] No changes detected. Generation skipped.");
                     return;
                 }
             }
 
             await File.WriteAllTextAsync(outputFile, code);
 
-            Console.WriteLine($"✓ C# contract generation complete.");
-            Console.WriteLine($"✓ All contracts written to {outputFile}");
+            Console.WriteLine("[OK] C# contract generation complete.");
+            Console.WriteLine($"[OK] All contracts written to {outputFile}");
         }
 
         static string GetWorkspaceRoot(string currentDir)
@@ -129,6 +125,7 @@ namespace Generator
                         var className = definition.Name;
                         Console.WriteLine($"Generating {className}...");
                         await GenerateMessageClassFromDefinition(sb, definition.Value, className);
+                        sb.AppendLine();
                     }
                 }
                 else
@@ -137,6 +134,7 @@ namespace Generator
                     var className = GetClassName(file);
                     Console.WriteLine($"Generating {className}...");
                     await GenerateMessageClass(sb, file, className);
+                    sb.AppendLine();
                 }
             }
 
@@ -169,8 +167,7 @@ namespace Generator
             sb.AppendLine("        [property: JsonPropertyName(\"correlationId\")] System.Guid CorrelationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"causationId\")] System.Guid? CausationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"occurredAtUtc\")] System.DateTimeOffset OccurredAtUtc,");
-            sb.AppendLine("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic");
-            sb.AppendLine("    );");
+            sb.Append("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic);");
             sb.AppendLine();
         }
 
@@ -285,7 +282,6 @@ namespace Generator
             var allParams = baseParams.ToList();
             allParams.Add($"[property: JsonPropertyName(\"payload\")] {className}Payload Payload");
 
-            sb.AppendLine();
             for (int i = 0; i < allParams.Count; i++)
             {
                 sb.Append($"        {allParams[i]}");
@@ -294,9 +290,7 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
-            sb.AppendLine();
+            sb.Append(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
             sb.AppendLine();
         }
 
@@ -363,16 +357,16 @@ namespace Generator
                 }
             }
 
-            sb.Append($"    public record {typeName}(");
+            sb.AppendLine($"    public record {typeName}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                sb.Append($"        [property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
-                    sb.Append(", ");
+                    sb.AppendLine(",");
                 }
             }
-            sb.AppendLine(");");
+            sb.Append(");");
             sb.AppendLine();
         }
 
@@ -421,8 +415,8 @@ namespace Generator
 
                     // Check if this is a payload object and generate nested type
                     string propType;
-                    if (prop.Value.TryGetProperty("type", out var typeEl) &&
-                        typeEl.GetString() == "object" &&
+                    var typeStr = GetTypeString(prop.Value);
+                    if (typeStr == "object" &&
                         prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
                         // Generate nested record
@@ -430,19 +424,35 @@ namespace Generator
                             ? $"{className}Payload"
                             : $"{className}{propName}";
 
-                        GenerateNestedRecord(sb, nestedTypeName, prop.Value, className);
-                        propType = nestedTypeName;
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value);
+
+                        // Handle nullability
+                        if (prop.Value.TryGetProperty("type", out var typesProp) &&
+                            typesProp.ValueKind == JsonValueKind.Array &&
+                            typesProp.EnumerateArray().Any(t => t.ValueKind == JsonValueKind.String && t.GetString() == "null"))
+                        {
+                            propType = $"{nestedTypeName}?";
+                        }
+                        else
+                        {
+                            propType = nestedTypeName;
+                        }
                     }
-                    else if (prop.Value.TryGetProperty("type", out var arrayType) &&
-                             arrayType.GetString() == "array" &&
-                             prop.Value.TryGetProperty("items", out var itemsEl) &&
-                             itemsEl.TryGetProperty("type", out var itemTypeEl) &&
-                             itemTypeEl.GetString() == "object")
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
                     {
-                        // Generate record for array items
-                        var itemTypeName = $"{className}{propName}Item";
-                        GenerateNestedRecord(sb, itemTypeName, itemsEl, className);
-                        propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            // Generate record for array items
+                            var itemTypeName = $"{className}{propName}Item";
+                            GenerateNestedRecord(sb, itemTypeName, itemsEl);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
                     }
                     else
                     {
@@ -462,7 +472,7 @@ namespace Generator
                     sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
                 }
             }
-            sb.Append($"    public record {className}(");
+            sb.AppendLine($"    public record {className}(");
 
             // Base class parameters first
             var baseParams = new[]
@@ -485,7 +495,6 @@ namespace Generator
                 allParams.Add($"[property: JsonPropertyName(\"{JsonName}\")] {Type} {Name}");
             }
 
-            sb.AppendLine();
             for (int i = 0; i < allParams.Count; i++)
             {
                 sb.Append($"        {allParams[i]}");
@@ -494,12 +503,11 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
+            sb.Append(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
             sb.AppendLine();
         }
 
-        private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema, string parentClassName)
+        private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema)
         {
             var properties = new List<(string Name, string JsonName, string Type, string Description)>();
 
@@ -516,26 +524,28 @@ namespace Generator
                         propDescription = pDesc.GetString() ?? "";
                     }
 
-                    if (prop.Value.TryGetProperty("type", out var typeEl) &&
-                        typeEl.ValueKind == JsonValueKind.String &&
-                        typeEl.GetString() == "object" &&
+                    var typeStr = GetTypeString(prop.Value);
+                    if (typeStr == "object" &&
                         prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
                         var nestedTypeName = $"{typeName}{propName}";
-                        GenerateNestedRecord(sb, nestedTypeName, prop.Value, parentClassName);
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value);
                         propType = nestedTypeName;
                     }
-                    else if (prop.Value.TryGetProperty("type", out var arrayType) &&
-                             arrayType.ValueKind == JsonValueKind.String &&
-                             arrayType.GetString() == "array" &&
-                             prop.Value.TryGetProperty("items", out var itemsEl) &&
-                             itemsEl.TryGetProperty("type", out var itemTypeEl) &&
-                             itemTypeEl.ValueKind == JsonValueKind.String &&
-                             itemTypeEl.GetString() == "object")
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
                     {
-                        var itemTypeName = $"{typeName}{propName}Item";
-                        GenerateNestedRecord(sb, itemTypeName, itemsEl, parentClassName);
-                        propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            var itemTypeName = $"{typeName}{propName}Item";
+                            GenerateNestedRecord(sb, itemTypeName, itemsEl);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
                     }
                     else
                     {
@@ -556,16 +566,17 @@ namespace Generator
                     sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
                 }
             }
-            sb.Append($"    public record {typeName}(");
+
+            sb.AppendLine($"    public record {typeName}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                sb.Append($"        [property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
-                    sb.Append(", ");
+                    sb.AppendLine(",");
                 }
             }
-            sb.AppendLine(");");
+            sb.Append(");");
             sb.AppendLine();
         }
 
@@ -584,14 +595,41 @@ namespace Generator
                     {
                         propDescription = pDesc.GetString() ?? "";
                     }
-                    var propType = GetCSharpType(prop.Value, propName);
+
+                    // Check for nested objects or arrays of objects to generate types
+                    string propType;
+                    var typeStr = GetTypeString(prop.Value);
+                    if (typeStr == "object" &&
+                        prop.Value.TryGetProperty("properties", out var nestedProps))
+                    {
+                        var nestedTypeName = $"{className}{propName}";
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value);
+                        propType = nestedTypeName;
+                    }
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
+                    {
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            var itemTypeName = $"{className}{propName}Item";
+                            GenerateNestedRecord(sb, itemTypeName, itemsEl);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
+                    }
+                    else
+                    {
+                        propType = GetCSharpType(prop.Value, propName);
+                    }
+
                     properties.Add((propName, jsonName, propType, propDescription));
                 }
             }
 
-            sb.AppendLine("    /// <summary>");
-            sb.AppendLine($"    /// Standalone message {className}.");
-            sb.AppendLine("    /// </summary>");
             foreach (var prop in properties)
             {
                 if (!string.IsNullOrEmpty(prop.Description))
@@ -599,16 +637,17 @@ namespace Generator
                     sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
                 }
             }
-            sb.Append($"    public record {className}(");
+            sb.AppendLine($"    public record {className}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                sb.Append($"        [property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
-                    sb.Append(", ");
+                    sb.AppendLine(",");
                 }
             }
-            sb.AppendLine(");");
+            sb.Append(");");
+            sb.AppendLine();
         }
 
         private string GetCSharpType(JsonElement propertySchema, string propertyName = "")
@@ -705,7 +744,7 @@ namespace Generator
         private string GetClassName(string filePath)
         {
             var baseName = Path.GetFileNameWithoutExtension(filePath);
-            return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(baseName.Replace('-', ' ')).Replace(" ", "");
+            return string.Join("", baseName.Split('-').Select(w => ToPascalCase(w)));
         }
     }
 }

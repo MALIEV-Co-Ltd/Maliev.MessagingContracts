@@ -2,6 +2,11 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "PrincipalRoleGrantedEvent",
   "description": "Event published when a role is granted to a principal (service account) in the IAM service.",
+  "allOf": [
+    {
+      "$ref": "../shared/base-message.json"
+    }
+  ],
   "type": "object",
   "properties": {
     "bindingId": {

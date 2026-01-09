@@ -2,6 +2,11 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "PermissionRegisteredEvent",
   "description": "Event published when a new permission is registered by a service in the IAM service.",
+  "allOf": [
+    {
+      "$ref": "../shared/base-message.json"
+    }
+  ],
   "type": "object",
   "properties": {
     "permissionId": {

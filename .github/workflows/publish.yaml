@@ -22,7 +22,6 @@ on:
         type: string
 
 env:
-  DOTNET_VERSION: '10.0.x'
   PROJECT_PATH: 'generated/csharp/Maliev.MessagingContracts.csproj'
 
 jobs:
@@ -39,7 +38,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "10.x"
+          dotnet-version: '10.0.x'
 
       - name: Generate Contracts
         run: dotnet run --project tools/Generator/Generator.csproj
