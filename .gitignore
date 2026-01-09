@@ -42,6 +42,7 @@ coverage/
 .gemini/settings.local.json
 
 # Enforced Rules (User Request)
-appsettings.Development.json
-docker-compose*.yml
+appsettings.Local.json
+appsettings.Testing.json
 docker-compose.override.yml
+docker-compose.local.yml
