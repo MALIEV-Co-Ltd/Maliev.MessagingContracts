@@ -80,6 +80,7 @@ namespace Generator
             sb.AppendLine();
             sb.AppendLine("#nullable enable");
             sb.AppendLine();
+            sb.AppendLine("using System;");
             sb.AppendLine("using System.Text.Json.Serialization;");
             sb.AppendLine();
             sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
@@ -167,8 +168,13 @@ namespace Generator
             sb.AppendLine("        [property: JsonPropertyName(\"correlationId\")] System.Guid CorrelationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"causationId\")] System.Guid? CausationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"occurredAtUtc\")] System.DateTimeOffset OccurredAtUtc,");
-            sb.Append("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic);");
-            sb.AppendLine();
+            sb.AppendLine("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic)");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine("        public BaseMessage() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool)) { }");
+            sb.AppendLine("    }");
         }
 
         private void GenerateMessageTypeEnum(StringBuilder sb)
@@ -290,8 +296,13 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.Append(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
-            sb.AppendLine();
+            sb.AppendLine(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine($"        public {className}() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) {{ }}");
+            sb.AppendLine("    }");
         }
 
         private void GeneratePayloadRecord(StringBuilder sb, JsonElement schema, string typeName)
@@ -366,8 +377,16 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.Append(");");
-            sb.AppendLine();
+            sb.AppendLine(")");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {typeName}() : this(");
+            var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
+            sb.Append(string.Join(", ", defaultValues));
+            sb.AppendLine(") { }");
+            sb.AppendLine("    }");
         }
 
         private string GetTypeString(JsonElement element)
@@ -503,8 +522,18 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.Append(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
-            sb.AppendLine();
+            sb.AppendLine(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {className}() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool)");
+            foreach (var (_, _, Type, _, _) in properties)
+            {
+                sb.Append($", {GetDefaultValue(Type)}");
+            }
+            sb.AppendLine(") { }");
+            sb.AppendLine("    }");
         }
 
         private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema)
@@ -576,8 +605,16 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.Append(");");
-            sb.AppendLine();
+            sb.AppendLine(")");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {typeName}() : this(");
+            var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
+            sb.Append(string.Join(", ", defaultValues));
+            sb.AppendLine(") { }");
+            sb.AppendLine("    }");
         }
 
         private async Task GenerateStandaloneMessage(StringBuilder sb, JsonElement root, string className)
@@ -646,8 +683,16 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.Append(");");
-            sb.AppendLine();
+            sb.AppendLine(")");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {className}() : this(");
+            var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
+            sb.Append(string.Join(", ", defaultValues));
+            sb.AppendLine(") { }");
+            sb.AppendLine("    }");
         }
 
         private string GetCSharpType(JsonElement propertySchema, string propertyName = "")
@@ -723,6 +768,39 @@ namespace Generator
             }
 
             return "object";
+        }
+
+        private string GetDefaultValue(string csharpType)
+        {
+            // Handle nullable types
+            if (csharpType.EndsWith("?"))
+            {
+                return "default";
+            }
+
+            // Handle collection types - extract the inner type and create properly typed Array.Empty
+            if (csharpType.StartsWith("System.Collections.Generic.IReadOnlyList<"))
+            {
+                // Extract type between < and >
+                var innerType = csharpType.Substring(
+                    "System.Collections.Generic.IReadOnlyList<".Length,
+                    csharpType.Length - "System.Collections.Generic.IReadOnlyList<".Length - 1);
+                return $"Array.Empty<{innerType}>()";
+            }
+
+            // Handle specific types with explicit typing to avoid ambiguity
+            return csharpType switch
+            {
+                "string" => "string.Empty",
+                "System.Guid" => "default(System.Guid)",
+                "System.DateTimeOffset" => "default(System.DateTimeOffset)",
+                "int" => "default(int)",
+                "double" => "default(double)",
+                "bool" => "default(bool)",
+                "MessageType" => "default(MessageType)",
+                _ when csharpType.EndsWith("Payload") || csharpType.Contains("Item") => "default!",
+                _ => "default!"
+            };
         }
 
         private string ToPascalCase(string input)
