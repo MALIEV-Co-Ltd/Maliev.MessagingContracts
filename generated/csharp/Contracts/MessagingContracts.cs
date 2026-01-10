@@ -6,6 +6,7 @@
 
 #nullable enable
 
+using System;
 using System.Text.Json.Serialization;
 
 namespace Maliev.MessagingContracts.Generated
@@ -33,7 +34,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("correlationId")] System.Guid CorrelationId,
         [property: JsonPropertyName("causationId")] System.Guid? CausationId,
         [property: JsonPropertyName("occurredAtUtc")] System.DateTimeOffset OccurredAtUtc,
-        [property: JsonPropertyName("isPublic")] bool IsPublic);
+        [property: JsonPropertyName("isPublic")] bool IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BaseMessage() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool)) { }
+    }
     /// <summary>
     /// Defines the types of messages supported in the MALIEV messaging system.
     /// </summary>
@@ -64,7 +71,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("userType")] string UserType,
         [property: JsonPropertyName("ipAddress")] string? IpAddress,
         [property: JsonPropertyName("loginMethod")] string LoginMethod,
-        [property: JsonPropertyName("loggedInAt")] System.DateTimeOffset LoggedInAt);
+        [property: JsonPropertyName("loggedInAt")] System.DateTimeOffset LoggedInAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UserLoggedInEventPayload() : this(string.Empty, default, string.Empty, default, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when user successfully logs in
     /// </summary>
@@ -80,7 +93,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] UserLoggedInEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] UserLoggedInEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UserLoggedInEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for UserLoggedOutEvent.
@@ -89,7 +108,13 @@ namespace Maliev.MessagingContracts.Generated
     public record UserLoggedOutEventPayload(
         [property: JsonPropertyName("userId")] string UserId,
         [property: JsonPropertyName("userType")] string UserType,
-        [property: JsonPropertyName("loggedOutAt")] System.DateTimeOffset LoggedOutAt);
+        [property: JsonPropertyName("loggedOutAt")] System.DateTimeOffset LoggedOutAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UserLoggedOutEventPayload() : this(string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when user logs out
     /// </summary>
@@ -105,7 +130,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] UserLoggedOutEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] UserLoggedOutEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UserLoggedOutEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LoginFailedEvent.
@@ -121,7 +152,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("userType")] string UserType,
         [property: JsonPropertyName("ipAddress")] string? IpAddress,
         [property: JsonPropertyName("failureReason")] string FailureReason,
-        [property: JsonPropertyName("attemptedAt")] System.DateTimeOffset AttemptedAt);
+        [property: JsonPropertyName("attemptedAt")] System.DateTimeOffset AttemptedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LoginFailedEventPayload() : this(string.Empty, default, string.Empty, default, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when login attempt fails
     /// </summary>
@@ -137,7 +174,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LoginFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LoginFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LoginFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for UserAccountLockedEvent.
@@ -148,7 +191,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("userType")] string UserType,
         [property: JsonPropertyName("failedAttemptCount")] int FailedAttemptCount,
         [property: JsonPropertyName("lockedUntil")] System.DateTimeOffset LockedUntil,
-        [property: JsonPropertyName("lockedAt")] System.DateTimeOffset LockedAt);
+        [property: JsonPropertyName("lockedAt")] System.DateTimeOffset LockedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UserAccountLockedEventPayload() : this(string.Empty, string.Empty, default(int), default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when user account is locked due to failed login attempts
     /// </summary>
@@ -164,7 +213,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] UserAccountLockedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] UserAccountLockedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UserAccountLockedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for RefreshTokenRevokedEvent.
@@ -176,7 +231,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("userType")] string UserType,
         [property: JsonPropertyName("tokenFamilyId")] string TokenFamilyId,
         [property: JsonPropertyName("revocationReason")] string RevocationReason,
-        [property: JsonPropertyName("revokedAt")] System.DateTimeOffset RevokedAt);
+        [property: JsonPropertyName("revokedAt")] System.DateTimeOffset RevokedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public RefreshTokenRevokedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when refresh token is revoked
     /// </summary>
@@ -192,7 +253,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] RefreshTokenRevokedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] RefreshTokenRevokedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public RefreshTokenRevokedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for SuspiciousActivityDetectedEvent.
@@ -208,7 +275,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("activityType")] string ActivityType,
         [property: JsonPropertyName("ipAddress")] string? IpAddress,
         [property: JsonPropertyName("tokenFamilyId")] string? TokenFamilyId,
-        [property: JsonPropertyName("detectedAt")] System.DateTimeOffset DetectedAt);
+        [property: JsonPropertyName("detectedAt")] System.DateTimeOffset DetectedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SuspiciousActivityDetectedEventPayload() : this(default, default, string.Empty, default, default, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when suspicious authentication activity is detected
     /// </summary>
@@ -224,7 +297,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] SuspiciousActivityDetectedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] SuspiciousActivityDetectedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SuspiciousActivityDetectedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for AccessTokenRevokedEvent.
@@ -234,7 +313,13 @@ namespace Maliev.MessagingContracts.Generated
     public record AccessTokenRevokedEventPayload(
         [property: JsonPropertyName("jti")] string Jti,
         [property: JsonPropertyName("userId")] string UserId,
-        [property: JsonPropertyName("revokedAt")] System.DateTimeOffset RevokedAt);
+        [property: JsonPropertyName("revokedAt")] System.DateTimeOffset RevokedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public AccessTokenRevokedEventPayload() : this(string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when an access token is manually revoked
     /// </summary>
@@ -250,7 +335,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] AccessTokenRevokedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] AccessTokenRevokedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public AccessTokenRevokedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for TrainingEnrolledEvent.
@@ -259,7 +350,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("trainingRecordId")] System.Guid TrainingRecordId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("courseName")] string CourseName,
-        [property: JsonPropertyName("enrollmentDate")] System.DateTimeOffset EnrollmentDate);
+        [property: JsonPropertyName("enrollmentDate")] System.DateTimeOffset EnrollmentDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TrainingEnrolledEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when employee enrolls in training
     /// </summary>
@@ -275,7 +372,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] TrainingEnrolledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] TrainingEnrolledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TrainingEnrolledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for TrainingCompletedEvent.
@@ -285,7 +388,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("courseName")] string CourseName,
         [property: JsonPropertyName("completionDate")] System.DateTimeOffset CompletionDate,
-        [property: JsonPropertyName("certificationExpiration")] System.DateTimeOffset? CertificationExpiration);
+        [property: JsonPropertyName("certificationExpiration")] System.DateTimeOffset? CertificationExpiration)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TrainingCompletedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default) { }
+    }
     /// <summary>
     /// Published when training is completed
     /// </summary>
@@ -301,7 +410,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] TrainingCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] TrainingCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TrainingCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for CertificationAwardedEvent.
@@ -311,7 +426,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("certificationName")] string CertificationName,
         [property: JsonPropertyName("awardedDate")] System.DateTimeOffset AwardedDate,
-        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset? ExpirationDate);
+        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset? ExpirationDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CertificationAwardedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default) { }
+    }
     /// <summary>
     /// Published when certification is awarded
     /// </summary>
@@ -327,7 +448,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CertificationAwardedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CertificationAwardedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CertificationAwardedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for CertificationExpiredEvent.
@@ -336,7 +463,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("certificationId")] System.Guid CertificationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("certificationName")] string CertificationName,
-        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate);
+        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CertificationExpiredEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when certification expires
     /// </summary>
@@ -352,7 +485,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CertificationExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CertificationExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CertificationExpiredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for MandatoryTrainingOverdueEvent.
@@ -362,7 +501,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("trainingProgramId")] System.Guid TrainingProgramId,
         [property: JsonPropertyName("trainingName")] string TrainingName,
         [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate,
-        [property: JsonPropertyName("daysOverdue")] int DaysOverdue);
+        [property: JsonPropertyName("daysOverdue")] int DaysOverdue)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MandatoryTrainingOverdueEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(int)) { }
+    }
     /// <summary>
     /// Published when mandatory training is overdue
     /// </summary>
@@ -378,7 +523,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] MandatoryTrainingOverdueEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] MandatoryTrainingOverdueEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MandatoryTrainingOverdueEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for CertificationExpiringEvent.
@@ -388,7 +539,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("courseName")] string CourseName,
         [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate,
-        [property: JsonPropertyName("daysUntilExpiration")] int DaysUntilExpiration);
+        [property: JsonPropertyName("daysUntilExpiration")] int DaysUntilExpiration)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CertificationExpiringEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(int)) { }
+    }
     /// <summary>
     /// Published when certification is expiring
     /// </summary>
@@ -404,7 +561,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CertificationExpiringEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CertificationExpiringEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CertificationExpiringEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for CandidateAcceptedEvent.
@@ -412,7 +575,13 @@ namespace Maliev.MessagingContracts.Generated
     public record CandidateAcceptedEventPayload(
         [property: JsonPropertyName("applicationId")] System.Guid ApplicationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate);
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CandidateAcceptedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when candidate accepts job offer
     /// </summary>
@@ -428,7 +597,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CandidateAcceptedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CandidateAcceptedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CandidateAcceptedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for JobApplicationSubmittedEvent.
@@ -441,7 +616,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("jobPostingId")] System.Guid JobPostingId,
         [property: JsonPropertyName("applicantEmail")] string ApplicantEmail,
         [property: JsonPropertyName("applicantName")] string ApplicantName,
-        [property: JsonPropertyName("positionTitle")] string PositionTitle);
+        [property: JsonPropertyName("positionTitle")] string PositionTitle)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public JobApplicationSubmittedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty) { }
+    }
     /// <summary>
     /// Published when a new job application is submitted
     /// </summary>
@@ -457,7 +638,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] JobApplicationSubmittedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] JobApplicationSubmittedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public JobApplicationSubmittedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Event published when a chatbot message is received and processed.
@@ -481,7 +668,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("userMessageContent")] string UserMessageContent,
         [property: JsonPropertyName("assistantResponseContent")] string AssistantResponseContent,
         [property: JsonPropertyName("responseLatencyMs")] double ResponseLatencyMs,
-        [property: JsonPropertyName("receivedAt")] System.DateTimeOffset ReceivedAt);
+        [property: JsonPropertyName("receivedAt")] System.DateTimeOffset ReceivedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotMessageReceivedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, string.Empty, default(double), default(System.DateTimeOffset)) { }
+    }
     public record ChatbotMessageReceivedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -493,7 +686,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ChatbotMessageReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ChatbotMessageReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotMessageReceivedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -514,7 +713,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("channel")] string Channel,
         [property: JsonPropertyName("currentMessageCount")] int CurrentMessageCount,
         [property: JsonPropertyName("rateLimitThreshold")] int RateLimitThreshold,
-        [property: JsonPropertyName("resetAt")] System.DateTimeOffset ResetAt);
+        [property: JsonPropertyName("resetAt")] System.DateTimeOffset ResetAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotRateLimitExceededEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(int), default(int), default(System.DateTimeOffset)) { }
+    }
     public record ChatbotRateLimitExceededEvent(
         System.Guid MessageId,
         string MessageName,
@@ -526,7 +731,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ChatbotRateLimitExceededEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ChatbotRateLimitExceededEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotRateLimitExceededEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -549,7 +760,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("startTime")] System.DateTimeOffset StartTime,
         [property: JsonPropertyName("endTime")] System.DateTimeOffset EndTime,
         [property: JsonPropertyName("totalMessageCount")] int TotalMessageCount,
-        [property: JsonPropertyName("closureReason")] string ClosureReason);
+        [property: JsonPropertyName("closureReason")] string ClosureReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotSessionClosedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(int), string.Empty) { }
+    }
     public record ChatbotSessionClosedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -561,7 +778,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ChatbotSessionClosedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ChatbotSessionClosedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotSessionClosedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -582,7 +805,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("channel")] string Channel,
         [property: JsonPropertyName("language")] string Language,
         [property: JsonPropertyName("startTime")] System.DateTimeOffset StartTime,
-        [property: JsonPropertyName("expiresAt")] System.DateTimeOffset ExpiresAt);
+        [property: JsonPropertyName("expiresAt")] System.DateTimeOffset ExpiresAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotSessionCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+    }
     public record ChatbotSessionCreatedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -594,7 +823,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ChatbotSessionCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ChatbotSessionCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ChatbotSessionCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -605,7 +840,13 @@ namespace Maliev.MessagingContracts.Generated
     /// </summary>
     public record CreateUserCommandPayload(
         [property: JsonPropertyName("username")] string Username,
-        [property: JsonPropertyName("email")] string Email);
+        [property: JsonPropertyName("email")] string Email)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CreateUserCommandPayload() : this(string.Empty, string.Empty) { }
+    }
     public record CreateUserCommand(
         System.Guid MessageId,
         string MessageName,
@@ -617,7 +858,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CreateUserCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CreateUserCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CreateUserCommand() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -630,7 +877,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("previousSalary")] double PreviousSalary,
         [property: JsonPropertyName("changePercentage")] double ChangePercentage,
         [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate,
-        [property: JsonPropertyName("changeReason")] string ChangeReason);
+        [property: JsonPropertyName("changeReason")] string ChangeReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SalaryChangedEventPayload() : this(default(System.Guid), default(System.Guid), default(double), default(double), default(double), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when compensation record is created or updated
     /// </summary>
@@ -646,7 +899,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] SalaryChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] SalaryChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SalaryChangedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for BonusAwardedEvent.
@@ -657,7 +916,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("amount")] double Amount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("awardDate")] System.DateTimeOffset AwardDate,
-        [property: JsonPropertyName("reason")] string Reason);
+        [property: JsonPropertyName("reason")] string Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BonusAwardedEventPayload() : this(default(System.Guid), default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when bonus is awarded to an employee
     /// </summary>
@@ -673,7 +938,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] BonusAwardedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] BonusAwardedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BonusAwardedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for BenefitEnrolledEvent.
@@ -682,7 +953,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("benefitId")] System.Guid BenefitId,
         [property: JsonPropertyName("status")] string Status,
-        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate);
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BenefitEnrolledEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when benefits enrollment changes
     /// </summary>
@@ -698,7 +975,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] BenefitEnrolledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] BenefitEnrolledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BenefitEnrolledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for BulkSalaryIncreaseCompletedEvent.
@@ -707,7 +990,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("jobId")] System.Guid JobId,
         [property: JsonPropertyName("successCount")] int SuccessCount,
         [property: JsonPropertyName("failureCount")] int FailureCount,
-        [property: JsonPropertyName("totalBudgetImpact")] double TotalBudgetImpact);
+        [property: JsonPropertyName("totalBudgetImpact")] double TotalBudgetImpact)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BulkSalaryIncreaseCompletedEventPayload() : this(default(System.Guid), default(int), default(int), default(double)) { }
+    }
     /// <summary>
     /// Published when bulk salary increase operation completes
     /// </summary>
@@ -723,7 +1012,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] BulkSalaryIncreaseCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] BulkSalaryIncreaseCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BulkSalaryIncreaseCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for WorkAuthorizationExpiringEvent.
@@ -733,7 +1028,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("authorizationType")] string AuthorizationType,
         [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate,
-        [property: JsonPropertyName("daysUntilExpiration")] int DaysUntilExpiration);
+        [property: JsonPropertyName("daysUntilExpiration")] int DaysUntilExpiration)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public WorkAuthorizationExpiringEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(int)) { }
+    }
     /// <summary>
     /// Published when authorization is expiring (30/60/90 days)
     /// </summary>
@@ -749,7 +1050,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] WorkAuthorizationExpiringEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] WorkAuthorizationExpiringEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public WorkAuthorizationExpiringEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for WorkAuthorizationExpiredEvent.
@@ -758,7 +1065,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("authorizationId")] System.Guid AuthorizationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("authorizationType")] string AuthorizationType,
-        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate);
+        [property: JsonPropertyName("expirationDate")] System.DateTimeOffset ExpirationDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public WorkAuthorizationExpiredEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when authorization has expired
     /// </summary>
@@ -774,7 +1087,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] WorkAuthorizationExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] WorkAuthorizationExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public WorkAuthorizationExpiredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for ComplianceDocumentUploadedEvent.
@@ -783,7 +1102,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("documentId")] System.Guid DocumentId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("documentType")] string DocumentType,
-        [property: JsonPropertyName("uploadDate")] System.DateTimeOffset UploadDate);
+        [property: JsonPropertyName("uploadDate")] System.DateTimeOffset UploadDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ComplianceDocumentUploadedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when compliance document is uploaded
     /// </summary>
@@ -799,7 +1124,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ComplianceDocumentUploadedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ComplianceDocumentUploadedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ComplianceDocumentUploadedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Response containing details for a specific customer.
@@ -810,7 +1141,13 @@ namespace Maliev.MessagingContracts.Generated
     public record CustomerDetailsResponsePayload(
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("fullName")] string FullName,
-        [property: JsonPropertyName("email")] string Email);
+        [property: JsonPropertyName("email")] string Email)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerDetailsResponsePayload() : this(default(System.Guid), string.Empty, string.Empty) { }
+    }
     public record CustomerDetailsResponse(
         System.Guid MessageId,
         string MessageName,
@@ -822,7 +1159,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CustomerDetailsResponsePayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CustomerDetailsResponsePayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerDetailsResponse() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -842,7 +1185,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("segment")] string Segment,
         [property: JsonPropertyName("tier")] string Tier,
         [property: JsonPropertyName("companyId")] System.Guid? CompanyId,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, default, string.Empty, string.Empty, default, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new customer is created
     /// </summary>
@@ -858,7 +1207,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CustomerCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CustomerCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for CustomerUpdatedEvent.
@@ -871,7 +1226,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("updatedFields")] object UpdatedFields,
         [property: JsonPropertyName("updatedBy")] string UpdatedBy,
         [property: JsonPropertyName("actorType")] string ActorType,
-        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt);
+        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerUpdatedEventPayload() : this(default(System.Guid), default!, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when customer information is updated
     /// </summary>
@@ -887,7 +1248,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CustomerUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CustomerUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerUpdatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for CustomerDeletedEvent.
@@ -898,7 +1265,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("deletedBy")] string DeletedBy,
         [property: JsonPropertyName("actorType")] string ActorType,
-        [property: JsonPropertyName("deletedAt")] System.DateTimeOffset DeletedAt);
+        [property: JsonPropertyName("deletedAt")] System.DateTimeOffset DeletedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerDeletedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when customer is soft-deleted
     /// </summary>
@@ -914,7 +1287,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CustomerDeletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CustomerDeletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerDeletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Request to retrieve details for a specific customer.
@@ -923,7 +1302,13 @@ namespace Maliev.MessagingContracts.Generated
     /// Nested data for GetCustomerDetailsRequestPayload.
     /// </summary>
     public record GetCustomerDetailsRequestPayload(
-        [property: JsonPropertyName("customerId")] System.Guid CustomerId);
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public GetCustomerDetailsRequestPayload() : this(default(System.Guid)) { }
+    }
     public record GetCustomerDetailsRequest(
         System.Guid MessageId,
         string MessageName,
@@ -935,7 +1320,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] GetCustomerDetailsRequestPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] GetCustomerDetailsRequestPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public GetCustomerDetailsRequest() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -947,7 +1338,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("departmentId")] System.Guid DepartmentId,
         [property: JsonPropertyName("positionId")] System.Guid? PositionId,
-        [property: JsonPropertyName("managerId")] System.Guid? ManagerId);
+        [property: JsonPropertyName("managerId")] System.Guid? ManagerId)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmployeeCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.Guid), default, default) { }
+    }
     /// <summary>
     /// Published when a new employee record is created
     /// </summary>
@@ -963,7 +1360,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] EmployeeCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] EmployeeCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmployeeCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for EmployeeTerminatedEvent.
@@ -972,7 +1375,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("terminationDate")] System.DateTimeOffset TerminationDate,
         [property: JsonPropertyName("terminationReason")] string? TerminationReason,
-        [property: JsonPropertyName("eligibleForRehire")] bool EligibleForRehire);
+        [property: JsonPropertyName("eligibleForRehire")] bool EligibleForRehire)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmployeeTerminatedEventPayload() : this(default(System.Guid), default(System.DateTimeOffset), default, default(bool)) { }
+    }
     /// <summary>
     /// Published when an employee is terminated
     /// </summary>
@@ -988,7 +1397,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] EmployeeTerminatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] EmployeeTerminatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmployeeTerminatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for DepartmentTransferredEvent.
@@ -997,7 +1412,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("previousDepartmentId")] System.Guid PreviousDepartmentId,
         [property: JsonPropertyName("newDepartmentId")] System.Guid NewDepartmentId,
-        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate);
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public DepartmentTransferredEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when an employee transfers between departments
     /// </summary>
@@ -1013,7 +1434,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] DepartmentTransferredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] DepartmentTransferredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public DepartmentTransferredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for EmployeeDepartmentTransferredEvent.
@@ -1022,7 +1449,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("previousDepartmentId")] System.Guid PreviousDepartmentId,
         [property: JsonPropertyName("newDepartmentId")] System.Guid NewDepartmentId,
-        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate);
+        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmployeeDepartmentTransferredEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when an employee transfers between departments
     /// </summary>
@@ -1038,7 +1471,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] EmployeeDepartmentTransferredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] EmployeeDepartmentTransferredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmployeeDepartmentTransferredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for FileAnalyzedEventMetricsBoundingBox.
@@ -1046,7 +1485,13 @@ namespace Maliev.MessagingContracts.Generated
     public record FileAnalyzedEventPayloadMetricsBoundingBox(
         [property: JsonPropertyName("x")] double X,
         [property: JsonPropertyName("y")] double Y,
-        [property: JsonPropertyName("z")] double Z);
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEventPayloadMetricsBoundingBox() : this(default(double), default(double), default(double)) { }
+    }
     /// <summary>
     /// Payload data for FileAnalyzedEventMetrics.
     /// </summary>
@@ -1057,7 +1502,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("boundingBox")] FileAnalyzedEventPayloadMetricsBoundingBox BoundingBox,
         [property: JsonPropertyName("isManifold")] bool IsManifold,
         [property: JsonPropertyName("triangleCount")] int TriangleCount,
-        [property: JsonPropertyName("eulerNumber")] int EulerNumber);
+        [property: JsonPropertyName("eulerNumber")] int EulerNumber)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
+    }
     /// <summary>
     /// Payload data for FileAnalyzedEvent.
     /// </summary>
@@ -1065,7 +1516,13 @@ namespace Maliev.MessagingContracts.Generated
     public record FileAnalyzedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("metrics")] FileAnalyzedEventPayloadMetrics Metrics,
-        [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt);
+        [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEventPayload() : this(string.Empty, default!, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a 3D file analysis completes successfully
     /// </summary>
@@ -1081,7 +1538,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] FileAnalyzedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] FileAnalyzedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for FileAnalysisFailedEvent.
@@ -1090,7 +1553,13 @@ namespace Maliev.MessagingContracts.Generated
     public record FileAnalysisFailedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("errorCode")] string ErrorCode,
-        [property: JsonPropertyName("details")] string? Details);
+        [property: JsonPropertyName("details")] string? Details)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalysisFailedEventPayload() : this(string.Empty, string.Empty, default) { }
+    }
     /// <summary>
     /// Published when a 3D file analysis fails
     /// </summary>
@@ -1106,7 +1575,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] FileAnalysisFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] FileAnalysisFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalysisFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Event published when a new permission is registered by a service in the IAM service.
@@ -1131,7 +1606,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("serviceName")] string ServiceName,
         [property: JsonPropertyName("resourceType")] string ResourceType,
         [property: JsonPropertyName("action")] string Action,
-        [property: JsonPropertyName("registeredAt")] System.DateTimeOffset RegisteredAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("registeredAt")] System.DateTimeOffset RegisteredAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PermissionRegisteredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
 
 
     /// <summary>
@@ -1155,7 +1636,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("serviceName")] string ServiceName,
         [property: JsonPropertyName("permissionCount")] int PermissionCount,
         [property: JsonPropertyName("roleCount")] int RoleCount,
-        [property: JsonPropertyName("registeredAt")] System.DateTimeOffset RegisteredAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("registeredAt")] System.DateTimeOffset RegisteredAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PermissionRegistrationCompleted() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), string.Empty, default(int), default(int), default(System.DateTimeOffset)) { }
+    }
 
 
     /// <summary>
@@ -1168,7 +1655,13 @@ namespace Maliev.MessagingContracts.Generated
     /// <param name="Description">Human-readable description of the permission.</param>
     public record PermissionRegistrationRequestPermissionsItem(
         [property: JsonPropertyName("permissionId")] string PermissionId,
-        [property: JsonPropertyName("description")] string Description);
+        [property: JsonPropertyName("description")] string Description)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PermissionRegistrationRequestPermissionsItem() : this(string.Empty, string.Empty) { }
+    }
     /// <summary>
     /// Nested data for PermissionRegistrationRequestRolesItem.
     /// </summary>
@@ -1178,7 +1671,13 @@ namespace Maliev.MessagingContracts.Generated
     public record PermissionRegistrationRequestRolesItem(
         [property: JsonPropertyName("roleId")] string RoleId,
         [property: JsonPropertyName("description")] string Description,
-        [property: JsonPropertyName("permissionIds")] System.Collections.Generic.IReadOnlyList<string> PermissionIds);
+        [property: JsonPropertyName("permissionIds")] System.Collections.Generic.IReadOnlyList<string> PermissionIds)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PermissionRegistrationRequestRolesItem() : this(string.Empty, string.Empty, Array.Empty<string>()) { }
+    }
     /// <param name="ServiceName">The name of the service registering permissions (e.g., 'customer', 'order').</param>
     /// <param name="Permissions">List of permissions to register.</param>
     /// <param name="Roles">Optional list of predefined roles to register.</param>
@@ -1195,7 +1694,13 @@ namespace Maliev.MessagingContracts.Generated
         bool IsPublic,
         [property: JsonPropertyName("serviceName")] string ServiceName,
         [property: JsonPropertyName("permissions")] System.Collections.Generic.IReadOnlyList<PermissionRegistrationRequestPermissionsItem> Permissions,
-        [property: JsonPropertyName("roles")] System.Collections.Generic.IReadOnlyList<PermissionRegistrationRequestRolesItem> Roles) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("roles")] System.Collections.Generic.IReadOnlyList<PermissionRegistrationRequestRolesItem> Roles) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PermissionRegistrationRequest() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), string.Empty, Array.Empty<PermissionRegistrationRequestPermissionsItem>(), Array.Empty<PermissionRegistrationRequestRolesItem>()) { }
+    }
 
 
     /// <summary>
@@ -1225,7 +1730,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("resourceType")] string ResourceType,
         [property: JsonPropertyName("resourceId")] string ResourceId,
         [property: JsonPropertyName("grantedAt")] System.DateTimeOffset GrantedAt,
-        [property: JsonPropertyName("expiresAt")] System.DateTimeOffset ExpiresAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("expiresAt")] System.DateTimeOffset ExpiresAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PrincipalRoleGrantedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+    }
 
 
     /// <summary>
@@ -1249,7 +1760,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("bindingId")] System.Guid BindingId,
         [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
         [property: JsonPropertyName("roleId")] string RoleId,
-        [property: JsonPropertyName("revokedAt")] System.DateTimeOffset RevokedAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("revokedAt")] System.DateTimeOffset RevokedAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PrincipalRoleRevokedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
 
 
     /// <summary>
@@ -1271,7 +1788,13 @@ namespace Maliev.MessagingContracts.Generated
         bool IsPublic,
         [property: JsonPropertyName("roleId")] string RoleId,
         [property: JsonPropertyName("serviceName")] string ServiceName,
-        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public RoleUpdatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
 
 
     /// <summary>
@@ -1286,7 +1809,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("totalAmount")] double TotalAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("dueDate")] System.DateTimeOffset? DueDate,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceCreatedEventPayload() : this(default(System.Guid), string.Empty, default, default, default(System.Guid), default(double), string.Empty, default, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new invoice is created
     /// </summary>
@@ -1302,7 +1831,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoiceCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoiceCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for InvoiceGeneratedEvent.
@@ -1311,7 +1846,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
         [property: JsonPropertyName("pdfUrl")] string PdfUrl,
-        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt);
+        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceGeneratedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when invoice PDF is successfully generated
     /// </summary>
@@ -1327,7 +1868,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoiceGeneratedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoiceGeneratedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceGeneratedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for InvoiceSentEvent.
@@ -1338,7 +1885,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("sentTo")] string SentTo,
         [property: JsonPropertyName("sentAt")] System.DateTimeOffset SentAt,
-        [property: JsonPropertyName("sentBy")] System.Guid SentBy);
+        [property: JsonPropertyName("sentBy")] System.Guid SentBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceSentEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.Guid)) { }
+    }
     /// <summary>
     /// Published when invoice is sent to customer
     /// </summary>
@@ -1354,7 +1907,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoiceSentEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoiceSentEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceSentEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for InvoicePaymentReceivedEvent.
@@ -1367,7 +1926,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("remainingBalance")] double RemainingBalance,
         [property: JsonPropertyName("allocatedAt")] System.DateTimeOffset AllocatedAt,
-        [property: JsonPropertyName("allocatedBy")] System.Guid AllocatedBy);
+        [property: JsonPropertyName("allocatedBy")] System.Guid AllocatedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoicePaymentReceivedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(double), default(System.DateTimeOffset), default(System.Guid)) { }
+    }
     /// <summary>
     /// Published when payment is received for invoice
     /// </summary>
@@ -1383,7 +1948,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoicePaymentReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoicePaymentReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoicePaymentReceivedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for InvoiceOverdueEvent.
@@ -1395,7 +1966,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate,
         [property: JsonPropertyName("daysOverdue")] int DaysOverdue,
         [property: JsonPropertyName("outstandingAmount")] double OutstandingAmount,
-        [property: JsonPropertyName("currency")] string Currency);
+        [property: JsonPropertyName("currency")] string Currency)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceOverdueEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default(int), default(double), string.Empty) { }
+    }
     /// <summary>
     /// Published when invoice becomes overdue (background job)
     /// </summary>
@@ -1411,7 +1988,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoiceOverdueEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoiceOverdueEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceOverdueEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for InvoiceCancelledEvent.
@@ -1424,7 +2007,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("cancelledBy")] System.Guid CancelledBy,
         [property: JsonPropertyName("cancelledAt")] System.DateTimeOffset CancelledAt,
         [property: JsonPropertyName("cancellationReason")] string CancellationReason,
-        [property: JsonPropertyName("refundRequired")] bool RefundRequired);
+        [property: JsonPropertyName("refundRequired")] bool RefundRequired)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceCancelledEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.Guid), default(System.DateTimeOffset), string.Empty, default(bool)) { }
+    }
     /// <summary>
     /// Published when invoice is cancelled or voided
     /// </summary>
@@ -1440,7 +2029,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoiceCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoiceCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceCancelledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for InvoiceFullyPaidEvent.
@@ -1453,7 +2048,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("totalAmount")] double TotalAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("lastPaymentId")] System.Guid LastPaymentId,
-        [property: JsonPropertyName("fullyPaidAt")] System.DateTimeOffset FullyPaidAt);
+        [property: JsonPropertyName("fullyPaidAt")] System.DateTimeOffset FullyPaidAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceFullyPaidEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when invoice is fully paid (remainingBalance = 0)
     /// </summary>
@@ -1469,7 +2070,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] InvoiceFullyPaidEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] InvoiceFullyPaidEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceFullyPaidEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LeaveRequestSubmittedEvent.
@@ -1480,7 +2087,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("leaveType")] string LeaveType,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate,
-        [property: JsonPropertyName("totalDays")] double TotalDays);
+        [property: JsonPropertyName("totalDays")] double TotalDays)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestSubmittedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(double)) { }
+    }
     /// <summary>
     /// Published when a leave request is submitted
     /// </summary>
@@ -1496,7 +2109,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LeaveRequestSubmittedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LeaveRequestSubmittedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestSubmittedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LeaveRequestApprovedEvent.
@@ -1507,7 +2126,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("approverId")] System.Guid ApproverId,
         [property: JsonPropertyName("leaveType")] string LeaveType,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
-        [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate);
+        [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestApprovedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a leave request is approved
     /// </summary>
@@ -1523,7 +2148,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LeaveRequestApprovedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LeaveRequestApprovedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestApprovedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LeaveRequestRejectedEvent.
@@ -1532,7 +2163,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("approverId")] System.Guid ApproverId,
-        [property: JsonPropertyName("reason")] string Reason);
+        [property: JsonPropertyName("reason")] string Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestRejectedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), string.Empty) { }
+    }
     /// <summary>
     /// Published when a leave request is rejected
     /// </summary>
@@ -1548,14 +2185,26 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LeaveRequestRejectedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LeaveRequestRejectedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestRejectedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LeaveRequestCancelledEvent.
     /// </summary>
     public record LeaveRequestCancelledEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
-        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId);
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestCancelledEventPayload() : this(default(System.Guid), default(System.Guid)) { }
+    }
     /// <summary>
     /// Published when a leave request is cancelled
     /// </summary>
@@ -1571,7 +2220,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LeaveRequestCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LeaveRequestCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveRequestCancelledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LeaveBalanceUpdatedEvent.
@@ -1579,7 +2234,13 @@ namespace Maliev.MessagingContracts.Generated
     public record LeaveBalanceUpdatedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("leaveType")] string LeaveType,
-        [property: JsonPropertyName("newBalance")] double NewBalance);
+        [property: JsonPropertyName("newBalance")] double NewBalance)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveBalanceUpdatedEventPayload() : this(default(System.Guid), string.Empty, default(double)) { }
+    }
     /// <summary>
     /// Published when leave balance changes
     /// </summary>
@@ -1595,7 +2256,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LeaveBalanceUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LeaveBalanceUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveBalanceUpdatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LeaveBalanceAdjustedEvent.
@@ -1603,7 +2270,13 @@ namespace Maliev.MessagingContracts.Generated
     public record LeaveBalanceAdjustedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("leaveType")] string LeaveType,
-        [property: JsonPropertyName("newBalance")] double NewBalance);
+        [property: JsonPropertyName("newBalance")] double NewBalance)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveBalanceAdjustedEventPayload() : this(default(System.Guid), string.Empty, default(double)) { }
+    }
     /// <summary>
     /// Published when leave balance changes
     /// </summary>
@@ -1619,7 +2292,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LeaveBalanceAdjustedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LeaveBalanceAdjustedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveBalanceAdjustedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OnboardingStartedEvent.
@@ -1628,7 +2307,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
-        [property: JsonPropertyName("totalItems")] int TotalItems);
+        [property: JsonPropertyName("totalItems")] int TotalItems)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OnboardingStartedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset), default(int)) { }
+    }
     /// <summary>
     /// Published when onboarding workflow is started
     /// </summary>
@@ -1644,7 +2329,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OnboardingStartedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OnboardingStartedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OnboardingStartedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OnboardingCompletedEvent.
@@ -1652,7 +2343,13 @@ namespace Maliev.MessagingContracts.Generated
     public record OnboardingCompletedEventPayload(
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate);
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OnboardingCompletedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when onboarding is completed
     /// </summary>
@@ -1668,7 +2365,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OnboardingCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OnboardingCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OnboardingCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OffboardingStartedEvent.
@@ -1677,7 +2380,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("terminationDate")] System.DateTimeOffset TerminationDate,
-        [property: JsonPropertyName("terminationReason")] string TerminationReason);
+        [property: JsonPropertyName("terminationReason")] string TerminationReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OffboardingStartedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when offboarding workflow is started
     /// </summary>
@@ -1693,7 +2402,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OffboardingStartedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OffboardingStartedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OffboardingStartedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OffboardingCompletedEvent.
@@ -1701,7 +2416,13 @@ namespace Maliev.MessagingContracts.Generated
     public record OffboardingCompletedEventPayload(
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate);
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OffboardingCompletedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when offboarding is completed
     /// </summary>
@@ -1717,7 +2438,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OffboardingCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OffboardingCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OffboardingCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LifecycleTaskCreatedEvent.
@@ -1726,7 +2453,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("taskId")] System.Guid TaskId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("taskTitle")] string TaskTitle,
-        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate);
+        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LifecycleTaskCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when onboarding/offboarding task is created
     /// </summary>
@@ -1742,7 +2475,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LifecycleTaskCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LifecycleTaskCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LifecycleTaskCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for LifecycleTaskCompletedEvent.
@@ -1750,7 +2489,13 @@ namespace Maliev.MessagingContracts.Generated
     public record LifecycleTaskCompletedEventPayload(
         [property: JsonPropertyName("taskId")] System.Guid TaskId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate);
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LifecycleTaskCompletedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when lifecycle task is completed
     /// </summary>
@@ -1766,7 +2511,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] LifecycleTaskCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] LifecycleTaskCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LifecycleTaskCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for AccessRevocationRequiredEvent.
@@ -1774,7 +2525,13 @@ namespace Maliev.MessagingContracts.Generated
     public record AccessRevocationRequiredEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate,
-        [property: JsonPropertyName("reason")] string Reason);
+        [property: JsonPropertyName("reason")] string Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public AccessRevocationRequiredEventPayload() : this(default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when access revocation is required
     /// </summary>
@@ -1790,7 +2547,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] AccessRevocationRequiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] AccessRevocationRequiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public AccessRevocationRequiredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OnboardingItemOverdueEvent.
@@ -1799,7 +2562,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("itemId")] System.Guid ItemId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("itemTitle")] string ItemTitle,
-        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate);
+        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OnboardingItemOverdueEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when an onboarding item is overdue
     /// </summary>
@@ -1815,7 +2584,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OnboardingItemOverdueEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OnboardingItemOverdueEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OnboardingItemOverdueEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for MaterialCreatedEvent.
@@ -1831,7 +2606,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("name")] string Name,
         [property: JsonPropertyName("pricePerUnit")] double PricePerUnit,
         [property: JsonPropertyName("stockLevel")] int StockLevel,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MaterialCreatedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(double), default(int), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new material is created
     /// </summary>
@@ -1847,7 +2628,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] MaterialCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] MaterialCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MaterialCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for MaterialUpdatedEvent.
@@ -1861,7 +2648,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("code")] string Code,
         [property: JsonPropertyName("name")] string Name,
         [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt,
-        [property: JsonPropertyName("version")] int Version);
+        [property: JsonPropertyName("version")] int Version)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MaterialUpdatedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset), default(int)) { }
+    }
     /// <summary>
     /// Published when material information is updated
     /// </summary>
@@ -1877,7 +2670,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] MaterialUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] MaterialUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MaterialUpdatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for MaterialDiscontinuedEvent.
@@ -1886,7 +2685,13 @@ namespace Maliev.MessagingContracts.Generated
     /// <param name="DiscontinuedAt">When the material was discontinued</param>
     public record MaterialDiscontinuedEventPayload(
         [property: JsonPropertyName("materialId")] System.Guid MaterialId,
-        [property: JsonPropertyName("discontinuedAt")] System.DateTimeOffset DiscontinuedAt);
+        [property: JsonPropertyName("discontinuedAt")] System.DateTimeOffset DiscontinuedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MaterialDiscontinuedEventPayload() : this(default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when material is soft-deleted (discontinued)
     /// </summary>
@@ -1902,7 +2707,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] MaterialDiscontinuedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] MaterialDiscontinuedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public MaterialDiscontinuedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Command to create a new order.
@@ -1914,7 +2725,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("amount")] double Amount,
-        [property: JsonPropertyName("currency")] string Currency);
+        [property: JsonPropertyName("currency")] string Currency)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CreateOrderCommandPayload() : this(default(System.Guid), default(System.Guid), default(double), string.Empty) { }
+    }
     public record CreateOrderCommand(
         System.Guid MessageId,
         string MessageName,
@@ -1926,7 +2743,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] CreateOrderCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] CreateOrderCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CreateOrderCommand() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -1939,7 +2762,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("totalAmount")] double TotalAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt,
-        [property: JsonPropertyName("assignedEmployeeId")] System.Guid? AssignedEmployeeId);
+        [property: JsonPropertyName("assignedEmployeeId")] System.Guid? AssignedEmployeeId)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), default) { }
+    }
     /// <summary>
     /// Published when a new order is created
     /// </summary>
@@ -1955,7 +2784,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderStatusChangedEvent.
@@ -1967,7 +2802,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("newStatus")] string NewStatus,
         [property: JsonPropertyName("changedBy")] System.Guid ChangedBy,
         [property: JsonPropertyName("changedAt")] System.DateTimeOffset ChangedAt,
-        [property: JsonPropertyName("reason")] string? Reason);
+        [property: JsonPropertyName("reason")] string? Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderStatusChangedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, string.Empty, default(System.Guid), default(System.DateTimeOffset), default) { }
+    }
     /// <summary>
     /// Published when order transitions between states in 16-state workflow
     /// </summary>
@@ -1983,7 +2824,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderStatusChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderStatusChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderStatusChangedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderQuotedEvent.
@@ -1995,7 +2842,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("validUntil")] System.DateTimeOffset ValidUntil,
         [property: JsonPropertyName("quotedBy")] System.Guid QuotedBy,
-        [property: JsonPropertyName("quotedAt")] System.DateTimeOffset QuotedAt);
+        [property: JsonPropertyName("quotedAt")] System.DateTimeOffset QuotedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderQuotedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, default(System.DateTimeOffset), default(System.Guid), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when order receives quotation (Reviewed → Quoted)
     /// </summary>
@@ -2011,7 +2864,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderQuotedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderQuotedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderQuotedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderAcceptedEvent.
@@ -2022,7 +2881,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("acceptedAmount")] double AcceptedAmount,
         [property: JsonPropertyName("currency")] string Currency,
-        [property: JsonPropertyName("acceptedAt")] System.DateTimeOffset AcceptedAt);
+        [property: JsonPropertyName("acceptedAt")] System.DateTimeOffset AcceptedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderAcceptedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when customer accepts quotation (Quoted → Accepted)
     /// </summary>
@@ -2038,7 +2903,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderAcceptedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderAcceptedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderAcceptedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderPaidEvent.
@@ -2049,7 +2920,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
         [property: JsonPropertyName("paidAmount")] double PaidAmount,
         [property: JsonPropertyName("currency")] string Currency,
-        [property: JsonPropertyName("paidAt")] System.DateTimeOffset PaidAt);
+        [property: JsonPropertyName("paidAt")] System.DateTimeOffset PaidAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderPaidEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when payment is completed (Accepted → Paid)
     /// </summary>
@@ -2065,7 +2942,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderPaidEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderPaidEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderPaidEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderInProgressEvent.
@@ -2074,7 +2957,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("startedAt")] System.DateTimeOffset StartedAt,
-        [property: JsonPropertyName("estimatedCompletionDate")] System.DateTimeOffset? EstimatedCompletionDate);
+        [property: JsonPropertyName("estimatedCompletionDate")] System.DateTimeOffset? EstimatedCompletionDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderInProgressEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default) { }
+    }
     /// <summary>
     /// Published when order enters production (Paid/POIssued → InProgress)
     /// </summary>
@@ -2090,7 +2979,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderInProgressEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderInProgressEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderInProgressEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderCompletedEvent.
@@ -2099,7 +2994,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt,
-        [property: JsonPropertyName("completedBy")] System.Guid CompletedBy);
+        [property: JsonPropertyName("completedBy")] System.Guid CompletedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.Guid)) { }
+    }
     /// <summary>
     /// Published when order production is finished (InProgress → Finished)
     /// </summary>
@@ -2115,7 +3016,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderShippedEvent.
@@ -2126,7 +3033,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("shippedAt")] System.DateTimeOffset ShippedAt,
         [property: JsonPropertyName("trackingNumber")] string? TrackingNumber,
         [property: JsonPropertyName("carrier")] string? Carrier,
-        [property: JsonPropertyName("estimatedDeliveryDate")] System.DateTimeOffset? EstimatedDeliveryDate);
+        [property: JsonPropertyName("estimatedDeliveryDate")] System.DateTimeOffset? EstimatedDeliveryDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderShippedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default, default, default) { }
+    }
     /// <summary>
     /// Published when order is shipped to customer (Finished → Shipped)
     /// </summary>
@@ -2142,7 +3055,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderShippedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderShippedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderShippedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderCancelledEvent.
@@ -2153,7 +3072,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("cancelledBy")] System.Guid CancelledBy,
         [property: JsonPropertyName("cancelledAt")] System.DateTimeOffset CancelledAt,
         [property: JsonPropertyName("cancellationReason")] string CancellationReason,
-        [property: JsonPropertyName("refundRequired")] bool RefundRequired);
+        [property: JsonPropertyName("refundRequired")] bool RefundRequired)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCancelledEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), string.Empty, default(bool)) { }
+    }
     /// <summary>
     /// Published when order is cancelled (Any → Cancelled)
     /// </summary>
@@ -2169,7 +3094,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCancelledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderRejectedEvent.
@@ -2179,7 +3110,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("rejectedBy")] System.Guid RejectedBy,
         [property: JsonPropertyName("rejectedAt")] System.DateTimeOffset RejectedAt,
-        [property: JsonPropertyName("rejectionReason")] string RejectionReason);
+        [property: JsonPropertyName("rejectionReason")] string RejectionReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderRejectedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when order is rejected during review (Reviewing → Rejected)
     /// </summary>
@@ -2195,7 +3132,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderRejectedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderRejectedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderRejectedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderOnHoldEvent.
@@ -2205,7 +3148,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("putOnHoldBy")] System.Guid PutOnHoldBy,
         [property: JsonPropertyName("putOnHoldAt")] System.DateTimeOffset PutOnHoldAt,
-        [property: JsonPropertyName("holdReason")] string HoldReason);
+        [property: JsonPropertyName("holdReason")] string HoldReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderOnHoldEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when order production is paused (InProgress → OnHold)
     /// </summary>
@@ -2221,7 +3170,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderOnHoldEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderOnHoldEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderOnHoldEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for OrderReopenedEvent.
@@ -2231,7 +3186,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("reopenedBy")] System.Guid ReopenedBy,
         [property: JsonPropertyName("reopenedAt")] System.DateTimeOffset ReopenedAt,
-        [property: JsonPropertyName("reopenReason")] string ReopenReason);
+        [property: JsonPropertyName("reopenReason")] string ReopenReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderReopenedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when completed/shipped order is reopened (Finished/Shipped → Reopened)
     /// </summary>
@@ -2247,7 +3208,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] OrderReopenedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] OrderReopenedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderReopenedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Event indicating that a payment has been successfully processed.
@@ -2265,7 +3232,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
         [property: JsonPropertyName("amount")] double Amount,
-        [property: JsonPropertyName("currency")] string Currency);
+        [property: JsonPropertyName("currency")] string Currency)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty) { }
+    }
     public record PaymentCompletedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -2277,7 +3250,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PaymentCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PaymentCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -2293,7 +3272,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("customerId")] string CustomerId,
         [property: JsonPropertyName("orderId")] string OrderId,
-        [property: JsonPropertyName("providerName")] string ProviderName);
+        [property: JsonPropertyName("providerName")] string ProviderName)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentCreatedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty) { }
+    }
     public record PaymentCreatedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -2305,7 +3290,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PaymentCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PaymentCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -2324,7 +3315,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("providerName")] string ProviderName,
         [property: JsonPropertyName("errorMessage")] string ErrorMessage,
         [property: JsonPropertyName("providerErrorCode")] string ProviderErrorCode,
-        [property: JsonPropertyName("failedAt")] System.DateTimeOffset FailedAt);
+        [property: JsonPropertyName("failedAt")] System.DateTimeOffset FailedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentFailedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     public record PaymentFailedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -2336,7 +3333,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PaymentFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PaymentFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -2349,7 +3352,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("requestId")] string RequestId,
         [property: JsonPropertyName("referenceId")] string ReferenceId,
         [property: JsonPropertyName("documentType")] string DocumentType,
-        [property: JsonPropertyName("requestedAt")] System.DateTimeOffset RequestedAt);
+        [property: JsonPropertyName("requestedAt")] System.DateTimeOffset RequestedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PdfGenerationRequestedEventPayload() : this(string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when async PDF generation is requested
     /// </summary>
@@ -2365,7 +3374,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PdfGenerationRequestedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PdfGenerationRequestedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PdfGenerationRequestedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PdfGenerationCompletedEvent.
@@ -2379,7 +3394,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("referenceId")] string ReferenceId,
         [property: JsonPropertyName("documentType")] string DocumentType,
         [property: JsonPropertyName("storageUrl")] string StorageUrl,
-        [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt);
+        [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PdfGenerationCompletedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when PDF generation completes successfully
     /// </summary>
@@ -2395,7 +3416,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PdfGenerationCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PdfGenerationCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PdfGenerationCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PdfGenerationFailedEvent.
@@ -2409,7 +3436,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("referenceId")] string ReferenceId,
         [property: JsonPropertyName("documentType")] string DocumentType,
         [property: JsonPropertyName("errorMessage")] string ErrorMessage,
-        [property: JsonPropertyName("failedAt")] System.DateTimeOffset FailedAt);
+        [property: JsonPropertyName("failedAt")] System.DateTimeOffset FailedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PdfGenerationFailedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when PDF generation fails
     /// </summary>
@@ -2425,7 +3458,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PdfGenerationFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PdfGenerationFailedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PdfGenerationFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PerformanceReviewCreatedEvent.
@@ -2436,7 +3475,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("reviewerId")] System.Guid ReviewerId,
         [property: JsonPropertyName("reviewCycle")] string ReviewCycle,
         [property: JsonPropertyName("reviewPeriodStart")] System.DateTimeOffset ReviewPeriodStart,
-        [property: JsonPropertyName("reviewPeriodEnd")] System.DateTimeOffset ReviewPeriodEnd);
+        [property: JsonPropertyName("reviewPeriodEnd")] System.DateTimeOffset ReviewPeriodEnd)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceReviewCreatedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when performance review is created
     /// </summary>
@@ -2452,7 +3497,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PerformanceReviewCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PerformanceReviewCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceReviewCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PerformanceReviewSubmittedEvent.
@@ -2461,7 +3512,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("reviewId")] System.Guid ReviewId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("overallRating")] int OverallRating,
-        [property: JsonPropertyName("submittedDate")] System.DateTimeOffset SubmittedDate);
+        [property: JsonPropertyName("submittedDate")] System.DateTimeOffset SubmittedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceReviewSubmittedEventPayload() : this(default(System.Guid), default(System.Guid), default(int), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when review is submitted
     /// </summary>
@@ -2477,7 +3534,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PerformanceReviewSubmittedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PerformanceReviewSubmittedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceReviewSubmittedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PerformanceGoalCreatedEvent.
@@ -2486,7 +3549,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("goalId")] System.Guid GoalId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("description")] string Description,
-        [property: JsonPropertyName("targetDate")] System.DateTimeOffset TargetDate);
+        [property: JsonPropertyName("targetDate")] System.DateTimeOffset TargetDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceGoalCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when performance goal is created
     /// </summary>
@@ -2502,7 +3571,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PerformanceGoalCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PerformanceGoalCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceGoalCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PerformanceGoalCompletedEvent.
@@ -2511,7 +3586,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("goalId")] System.Guid GoalId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("description")] string Description,
-        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate);
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceGoalCompletedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when goal is completed
     /// </summary>
@@ -2527,7 +3608,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PerformanceGoalCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PerformanceGoalCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformanceGoalCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PerformancePIPInitiatedEvent.
@@ -2537,7 +3624,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate,
-        [property: JsonPropertyName("reason")] string Reason);
+        [property: JsonPropertyName("reason")] string Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformancePIPInitiatedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when PIP is initiated
     /// </summary>
@@ -2553,7 +3646,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PerformancePIPInitiatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PerformancePIPInitiatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PerformancePIPInitiatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for GoalCompletedEvent.
@@ -2562,7 +3661,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("goalId")] System.Guid GoalId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("description")] string Description,
-        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate);
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public GoalCompletedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when goal is completed
     /// </summary>
@@ -2578,7 +3683,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] GoalCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] GoalCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public GoalCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PIPInitiatedEvent.
@@ -2588,7 +3699,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate,
-        [property: JsonPropertyName("reason")] string Reason);
+        [property: JsonPropertyName("reason")] string Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PIPInitiatedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when PIP is initiated
     /// </summary>
@@ -2604,7 +3721,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PIPInitiatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PIPInitiatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PIPInitiatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PIPCompletedEvent.
@@ -2613,7 +3736,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("pipId")] System.Guid PipId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("outcome")] string Outcome,
-        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate);
+        [property: JsonPropertyName("completedDate")] System.DateTimeOffset CompletedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PIPCompletedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when PIP outcome is recorded
     /// </summary>
@@ -2629,7 +3758,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PIPCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PIPCompletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PIPCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PurchaseOrderCreatedEvent.
@@ -2645,7 +3780,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("requestedDeliveryDate")] System.DateTimeOffset? RequestedDeliveryDate,
         [property: JsonPropertyName("createdBy")] string CreatedBy,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderCreatedEventPayload() : this(default(int), string.Empty, default(int), default(double), string.Empty, default, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new purchase order is created
     /// </summary>
@@ -2661,7 +3802,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PurchaseOrderCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PurchaseOrderCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PurchaseOrderApprovedEvent.
@@ -2672,7 +3819,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("purchaseOrderId")] int PurchaseOrderId,
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
         [property: JsonPropertyName("approvedBy")] string ApprovedBy,
-        [property: JsonPropertyName("approvedAt")] System.DateTimeOffset ApprovedAt);
+        [property: JsonPropertyName("approvedAt")] System.DateTimeOffset ApprovedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderApprovedEventPayload() : this(default(int), string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when purchase order is approved
     /// </summary>
@@ -2688,7 +3841,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PurchaseOrderApprovedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PurchaseOrderApprovedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderApprovedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PurchaseOrderSentToSupplierEvent.
@@ -2701,7 +3860,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
         [property: JsonPropertyName("supplierId")] int SupplierId,
         [property: JsonPropertyName("sentAt")] System.DateTimeOffset SentAt,
-        [property: JsonPropertyName("sentBy")] string SentBy);
+        [property: JsonPropertyName("sentBy")] string SentBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderSentToSupplierEventPayload() : this(default(int), string.Empty, default(int), default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when PO is sent to supplier
     /// </summary>
@@ -2717,7 +3882,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PurchaseOrderSentToSupplierEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PurchaseOrderSentToSupplierEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderSentToSupplierEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PurchaseOrderReceivedEvent.
@@ -2729,7 +3900,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
         [property: JsonPropertyName("receivedAt")] System.DateTimeOffset ReceivedAt,
         [property: JsonPropertyName("receivedBy")] string ReceivedBy,
-        [property: JsonPropertyName("isPartialReceipt")] bool IsPartialReceipt);
+        [property: JsonPropertyName("isPartialReceipt")] bool IsPartialReceipt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderReceivedEventPayload() : this(default(int), string.Empty, default(System.DateTimeOffset), string.Empty, default(bool)) { }
+    }
     /// <summary>
     /// Published when goods are received from supplier
     /// </summary>
@@ -2745,7 +3922,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PurchaseOrderReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PurchaseOrderReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderReceivedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for PurchaseOrderCancelledEvent.
@@ -2757,7 +3940,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
         [property: JsonPropertyName("cancelledBy")] string CancelledBy,
         [property: JsonPropertyName("cancelledAt")] System.DateTimeOffset CancelledAt,
-        [property: JsonPropertyName("cancellationReason")] string CancellationReason);
+        [property: JsonPropertyName("cancellationReason")] string CancellationReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderCancelledEventPayload() : this(default(int), string.Empty, string.Empty, default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when purchase order is cancelled
     /// </summary>
@@ -2773,7 +3962,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] PurchaseOrderCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] PurchaseOrderCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PurchaseOrderCancelledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for QuotationCreatedEvent.
@@ -2790,7 +3985,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("validUntil")] System.DateTimeOffset ValidUntil,
         [property: JsonPropertyName("createdBy")] string CreatedBy,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new quotation is created
     /// </summary>
@@ -2806,7 +4007,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] QuotationCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] QuotationCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for QuotationAcceptedEvent.
@@ -2820,7 +4027,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("acceptedAmount")] double AcceptedAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("acceptedAt")] System.DateTimeOffset AcceptedAt,
-        [property: JsonPropertyName("acceptedBy")] string AcceptedBy);
+        [property: JsonPropertyName("acceptedBy")] string AcceptedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationAcceptedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when customer accepts quotation (status changes to Accepted)
     /// </summary>
@@ -2836,7 +4049,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] QuotationAcceptedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] QuotationAcceptedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationAcceptedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for QuotationCancelledEvent.
@@ -2849,7 +4068,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("cancelledAt")] System.DateTimeOffset CancelledAt,
         [property: JsonPropertyName("cancelledBy")] string CancelledBy,
-        [property: JsonPropertyName("cancellationReason")] string? CancellationReason);
+        [property: JsonPropertyName("cancellationReason")] string? CancellationReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationCancelledEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), string.Empty, default) { }
+    }
     /// <summary>
     /// Published when quotation is cancelled
     /// </summary>
@@ -2865,7 +4090,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] QuotationCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] QuotationCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationCancelledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for QuotationExpiredEvent.
@@ -2876,7 +4107,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("quotationNumber")] string QuotationNumber,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("validUntil")] System.DateTimeOffset ValidUntil,
-        [property: JsonPropertyName("expiredAt")] System.DateTimeOffset ExpiredAt);
+        [property: JsonPropertyName("expiredAt")] System.DateTimeOffset ExpiredAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationExpiredEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when quotation validity period expires (background job or manual status change)
     /// </summary>
@@ -2892,7 +4129,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] QuotationExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] QuotationExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public QuotationExpiredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for ReceiptCreatedEvent.
@@ -2908,7 +4151,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("totalAmount")] double TotalAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("paymentMethod")] string? PaymentMethod,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, default(double), string.Empty, default, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new receipt is created
     /// </summary>
@@ -2924,7 +4173,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ReceiptCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ReceiptCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for ReceiptGeneratedEvent.
@@ -2938,7 +4193,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
         [property: JsonPropertyName("storageUrl")] string StorageUrl,
         [property: JsonPropertyName("pdfReferenceId")] string PdfReferenceId,
-        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt);
+        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptGeneratedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when receipt PDF is successfully generated
     /// </summary>
@@ -2954,7 +4215,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ReceiptGeneratedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ReceiptGeneratedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptGeneratedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for ReceiptSentEvent.
@@ -2972,7 +4239,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("sentTo")] string SentTo,
         [property: JsonPropertyName("channel")] string Channel,
         [property: JsonPropertyName("sentBy")] string SentBy,
-        [property: JsonPropertyName("sentAt")] System.DateTimeOffset SentAt);
+        [property: JsonPropertyName("sentAt")] System.DateTimeOffset SentAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptSentEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when receipt is sent to customer
     /// </summary>
@@ -2988,7 +4261,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ReceiptSentEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ReceiptSentEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptSentEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for ReceiptVoidedEvent.
@@ -3000,7 +4279,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
         [property: JsonPropertyName("voidedBy")] string VoidedBy,
         [property: JsonPropertyName("voidedAt")] System.DateTimeOffset VoidedAt,
-        [property: JsonPropertyName("voidReason")] string VoidReason);
+        [property: JsonPropertyName("voidReason")] string VoidReason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptVoidedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset), string.Empty) { }
+    }
     /// <summary>
     /// Published when receipt is voided/cancelled
     /// </summary>
@@ -3016,7 +4301,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] ReceiptVoidedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] ReceiptVoidedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptVoidedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Event published to trigger a notification to one or more users.
@@ -3026,13 +4317,25 @@ namespace Maliev.MessagingContracts.Generated
     /// </summary>
     public record NotificationEventPayloadTargetUsersItem(
         [property: JsonPropertyName("userId")] string UserId,
-        [property: JsonPropertyName("userType")] string UserType);
+        [property: JsonPropertyName("userType")] string UserType)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public NotificationEventPayloadTargetUsersItem() : this(string.Empty, string.Empty) { }
+    }
     /// <summary>
     /// Nested data for NotificationEventPayloadMetadata.
     /// </summary>
     public record NotificationEventPayloadMetadata(
         [property: JsonPropertyName("language")] string Language,
-        [property: JsonPropertyName("source")] string Source);
+        [property: JsonPropertyName("source")] string Source)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public NotificationEventPayloadMetadata() : this(string.Empty, string.Empty) { }
+    }
     /// <summary>
     /// Nested data for NotificationEventPayload.
     /// </summary>
@@ -3042,7 +4345,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("targetUsers")] System.Collections.Generic.IReadOnlyList<NotificationEventPayloadTargetUsersItem> TargetUsers,
         [property: JsonPropertyName("templateId")] string TemplateId,
         [property: JsonPropertyName("parameters")] object Parameters,
-        [property: JsonPropertyName("metadata")] NotificationEventPayloadMetadata Metadata);
+        [property: JsonPropertyName("metadata")] NotificationEventPayloadMetadata Metadata)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public NotificationEventPayload() : this(string.Empty, string.Empty, Array.Empty<NotificationEventPayloadTargetUsersItem>(), string.Empty, default!, default!) { }
+    }
     public record NotificationEvent(
         System.Guid MessageId,
         string MessageName,
@@ -3054,7 +4363,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] NotificationEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] NotificationEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public NotificationEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 
     /// <summary>
@@ -3074,7 +4389,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("country")] string Country,
         [property: JsonPropertyName("status")] string Status,
         [property: JsonPropertyName("createdBy")] string CreatedBy,
-        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt);
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierCreatedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when a new supplier is created
     /// </summary>
@@ -3090,7 +4411,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] SupplierCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] SupplierCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for SupplierUpdatedEvent.
@@ -3105,7 +4432,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("companyName")] string CompanyName,
         [property: JsonPropertyName("changedFields")] System.Collections.Generic.IReadOnlyList<string> ChangedFields,
         [property: JsonPropertyName("updatedBy")] string UpdatedBy,
-        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt);
+        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierUpdatedEventPayload() : this(default(System.Guid), string.Empty, Array.Empty<string>(), string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when supplier information is updated
     /// </summary>
@@ -3121,7 +4454,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] SupplierUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] SupplierUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierUpdatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for SupplierStatusChangedEvent.
@@ -3136,7 +4475,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("oldStatus")] string OldStatus,
         [property: JsonPropertyName("newStatus")] string NewStatus,
         [property: JsonPropertyName("changedBy")] string ChangedBy,
-        [property: JsonPropertyName("changedAt")] System.DateTimeOffset ChangedAt);
+        [property: JsonPropertyName("changedAt")] System.DateTimeOffset ChangedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierStatusChangedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
     /// <summary>
     /// Published when supplier status changes
     /// </summary>
@@ -3152,7 +4497,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] SupplierStatusChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] SupplierStatusChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierStatusChangedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for FileUploadedEvent.
@@ -3178,7 +4529,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("uploadedAt")] System.DateTimeOffset UploadedAt,
         [property: JsonPropertyName("retentionPolicyId")] string? RetentionPolicyId,
         [property: JsonPropertyName("expiresAt")] System.DateTimeOffset? ExpiresAt,
-        [property: JsonPropertyName("metadata")] object Metadata);
+        [property: JsonPropertyName("metadata")] object Metadata)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileUploadedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(int), default, default(System.DateTimeOffset), default, default, default!) { }
+    }
     /// <summary>
     /// Published when a file upload completes successfully
     /// </summary>
@@ -3194,7 +4551,13 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] FileUploadedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] FileUploadedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileUploadedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
     /// <summary>
     /// Payload data for FileDeletedEvent.
@@ -3212,7 +4575,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("deletedAt")] System.DateTimeOffset DeletedAt,
         [property: JsonPropertyName("deletedBy")] string? DeletedBy,
-        [property: JsonPropertyName("reason")] string? Reason);
+        [property: JsonPropertyName("reason")] string? Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileDeletedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset), default, default) { }
+    }
     /// <summary>
     /// Published when a file is deleted from storage
     /// </summary>
@@ -3228,6 +4597,12 @@ namespace Maliev.MessagingContracts.Generated
         System.Guid? CausationId,
         System.DateTimeOffset OccurredAtUtc,
         bool IsPublic,
-        [property: JsonPropertyName("payload")] FileDeletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);
+        [property: JsonPropertyName("payload")] FileDeletedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileDeletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
 
 }
