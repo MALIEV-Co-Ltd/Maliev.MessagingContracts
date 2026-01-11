@@ -39,6 +39,10 @@
                 },
                 "totalDays": {
                     "type": "number"
+                },
+                "submittedAt": {
+                    "type": "string",
+                    "format": "date-time"
                 }
             },
             "required": [
@@ -47,7 +51,8 @@
                 "leaveType",
                 "startDate",
                 "endDate",
-                "totalDays"
+                "totalDays",
+                "submittedAt"
             ]
         },
         "LeaveRequestApprovedEvent": {
@@ -62,18 +67,7 @@
                     "type": "string",
                     "format": "uuid"
                 },
-                "approverId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "leaveType": {
-                    "type": "string"
-                },
-                "startDate": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "endDate": {
+                "approvedAt": {
                     "type": "string",
                     "format": "date-time"
                 }
@@ -81,10 +75,7 @@
             "required": [
                 "requestId",
                 "employeeId",
-                "approverId",
-                "leaveType",
-                "startDate",
-                "endDate"
+                "approvedAt"
             ]
         },
         "LeaveRequestRejectedEvent": {
@@ -99,19 +90,19 @@
                     "type": "string",
                     "format": "uuid"
                 },
-                "approverId": {
-                    "type": "string",
-                    "format": "uuid"
-                },
                 "reason": {
                     "type": "string"
+                },
+                "rejectedAt": {
+                    "type": "string",
+                    "format": "date-time"
                 }
             },
             "required": [
                 "requestId",
                 "employeeId",
-                "approverId",
-                "reason"
+                "reason",
+                "rejectedAt"
             ]
         },
         "LeaveRequestCancelledEvent": {
@@ -125,11 +116,19 @@
                 "employeeId": {
                     "type": "string",
                     "format": "uuid"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "cancelledAt": {
+                    "type": "string",
+                    "format": "date-time"
                 }
             },
             "required": [
                 "requestId",
-                "employeeId"
+                "employeeId",
+                "cancelledAt"
             ]
         },
         "LeaveBalanceUpdatedEvent": {
@@ -164,14 +163,30 @@
                 "leaveType": {
                     "type": "string"
                 },
-                "newBalance": {
+                "year": {
+                    "type": "integer"
+                },
+                "newEntitled": {
+                    "type": "number"
+                },
+                "newUsed": {
+                    "type": "number"
+                },
+                "newPending": {
+                    "type": "number"
+                },
+                "newCarriedForward": {
                     "type": "number"
                 }
             },
             "required": [
                 "employeeId",
                 "leaveType",
-                "newBalance"
+                "year",
+                "newEntitled",
+                "newUsed",
+                "newPending",
+                "newCarriedForward"
             ]
         }
     }

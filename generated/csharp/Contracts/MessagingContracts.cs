@@ -2087,12 +2087,13 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("leaveType")] string LeaveType,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate,
-        [property: JsonPropertyName("totalDays")] double TotalDays)
+        [property: JsonPropertyName("totalDays")] double TotalDays,
+        [property: JsonPropertyName("submittedAt")] System.DateTimeOffset SubmittedAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public LeaveRequestSubmittedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(double)) { }
+        public LeaveRequestSubmittedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(double), default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when a leave request is submitted
@@ -2123,15 +2124,12 @@ namespace Maliev.MessagingContracts.Generated
     public record LeaveRequestApprovedEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("approverId")] System.Guid ApproverId,
-        [property: JsonPropertyName("leaveType")] string LeaveType,
-        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
-        [property: JsonPropertyName("endDate")] System.DateTimeOffset EndDate)
+        [property: JsonPropertyName("approvedAt")] System.DateTimeOffset ApprovedAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public LeaveRequestApprovedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+        public LeaveRequestApprovedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when a leave request is approved
@@ -2162,13 +2160,13 @@ namespace Maliev.MessagingContracts.Generated
     public record LeaveRequestRejectedEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("approverId")] System.Guid ApproverId,
-        [property: JsonPropertyName("reason")] string Reason)
+        [property: JsonPropertyName("reason")] string Reason,
+        [property: JsonPropertyName("rejectedAt")] System.DateTimeOffset RejectedAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public LeaveRequestRejectedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), string.Empty) { }
+        public LeaveRequestRejectedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when a leave request is rejected
@@ -2198,12 +2196,14 @@ namespace Maliev.MessagingContracts.Generated
     /// </summary>
     public record LeaveRequestCancelledEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
-        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId)
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("reason")] string Reason,
+        [property: JsonPropertyName("cancelledAt")] System.DateTimeOffset CancelledAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public LeaveRequestCancelledEventPayload() : this(default(System.Guid), default(System.Guid)) { }
+        public LeaveRequestCancelledEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when a leave request is cancelled
@@ -2270,12 +2270,16 @@ namespace Maliev.MessagingContracts.Generated
     public record LeaveBalanceAdjustedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("leaveType")] string LeaveType,
-        [property: JsonPropertyName("newBalance")] double NewBalance)
+        [property: JsonPropertyName("year")] int Year,
+        [property: JsonPropertyName("newEntitled")] double NewEntitled,
+        [property: JsonPropertyName("newUsed")] double NewUsed,
+        [property: JsonPropertyName("newPending")] double NewPending,
+        [property: JsonPropertyName("newCarriedForward")] double NewCarriedForward)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public LeaveBalanceAdjustedEventPayload() : this(default(System.Guid), string.Empty, default(double)) { }
+        public LeaveBalanceAdjustedEventPayload() : this(default(System.Guid), string.Empty, default(int), default(double), default(double), default(double), default(double)) { }
     }
     /// <summary>
     /// Published when leave balance changes
