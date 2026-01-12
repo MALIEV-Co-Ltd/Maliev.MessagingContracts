@@ -12,6 +12,10 @@ on:
       - 'tools/Generator/**'
       - 'scripts/**'
       - '.github/workflows/publish.yaml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'Maliev.MessagingContracts.sln'
+      - '.config/**'
   release:
     types: [published]
   workflow_dispatch:
