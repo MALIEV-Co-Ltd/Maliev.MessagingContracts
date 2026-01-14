@@ -1335,6 +1335,7 @@ namespace Maliev.MessagingContracts.Generated
     public record EmployeeCreatedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("employeeNumber")] string EmployeeNumber,
+        [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("departmentId")] System.Guid DepartmentId,
         [property: JsonPropertyName("positionId")] System.Guid? PositionId,
@@ -1343,7 +1344,7 @@ namespace Maliev.MessagingContracts.Generated
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public EmployeeCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.Guid), default, default) { }
+        public EmployeeCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default(System.Guid), default, default) { }
     }
     /// <summary>
     /// Published when a new employee record is created

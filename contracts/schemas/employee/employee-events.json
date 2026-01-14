@@ -15,6 +15,10 @@
                 "employeeNumber": {
                     "type": "string"
                 },
+                "principalId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
                 "startDate": {
                     "type": "string",
                     "format": "date-time"
@@ -41,6 +45,7 @@
             "required": [
                 "employeeId",
                 "employeeNumber",
+                "principalId",
                 "startDate",
                 "departmentId"
             ]
