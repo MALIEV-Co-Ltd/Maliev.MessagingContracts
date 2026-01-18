@@ -230,6 +230,48 @@
                 }
             },
             "required": ["invoiceId", "invoiceNumber", "customerId", "totalAmount", "currency", "lastPaymentId", "fullyPaidAt"]
+        },
+        "PaymentAllocatedEvent": {
+            "type": "object",
+            "description": "Published when a payment is allocated to an invoice",
+            "properties": {
+                "invoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "paymentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "allocatedAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceStatus": {
+                    "type": "string"
+                },
+                "outstandingBalance": {
+                    "type": "number"
+                },
+                "allocatedBy": {
+                    "type": "string"
+                },
+                "allocatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["invoiceId", "invoiceNumber", "paymentId", "allocatedAmount", "currency", "customerId", "invoiceStatus", "outstandingBalance", "allocatedBy", "allocatedAt"]
         }
     }
 }

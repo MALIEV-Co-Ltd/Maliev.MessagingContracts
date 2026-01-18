@@ -132,6 +132,143 @@
                 "newDepartmentId",
                 "effectiveDate"
             ]
+        },
+        "TeamCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new team is created",
+            "properties": {
+                "teamId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "teamName": {
+                    "type": "string"
+                },
+                "teamType": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": ["string", "null"]
+                },
+                "teamLeadId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["teamId", "teamName", "teamType", "isActive", "createdAt", "createdBy"]
+        },
+        "TeamUpdatedEvent": {
+            "type": "object",
+            "description": "Published when a team is updated",
+            "properties": {
+                "teamId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "teamName": {
+                    "type": "string"
+                },
+                "teamType": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": ["string", "null"]
+                },
+                "teamLeadId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "updatedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["teamId", "teamName", "teamType", "isActive", "updatedAt", "updatedBy"]
+        },
+        "TeamMemberAddedEvent": {
+            "type": "object",
+            "description": "Published when a member is added to a team",
+            "properties": {
+                "teamId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "teamName": {
+                    "type": "string"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeNumber": {
+                    "type": "string"
+                },
+                "employeeName": {
+                    "type": "string"
+                },
+                "isPrimary": {
+                    "type": "boolean"
+                },
+                "addedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "addedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["teamId", "teamName", "employeeId", "employeeNumber", "employeeName", "isPrimary", "addedAt", "addedBy"]
+        },
+        "TeamMemberRemovedEvent": {
+            "type": "object",
+            "description": "Published when a member is removed from a team",
+            "properties": {
+                "teamId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "teamName": {
+                    "type": "string"
+                },
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "employeeNumber": {
+                    "type": "string"
+                },
+                "employeeName": {
+                    "type": "string"
+                },
+                "removedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "removedBy": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "required": ["teamId", "teamName", "employeeId", "employeeNumber", "employeeName", "removedAt", "removedBy"]
         }
     }
 }

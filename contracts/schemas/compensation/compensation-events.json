@@ -131,6 +131,24 @@
                 "failureCount",
                 "totalBudgetImpact"
             ]
+        },
+        "CompensationArchivedEvent": {
+            "type": "object",
+            "description": "Published when an employee's compensation records have been archived",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "archivedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "employeeId",
+                "archivedAt"
+            ]
         }
     }
 }

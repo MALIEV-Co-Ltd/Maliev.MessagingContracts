@@ -1,0 +1,226 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/accounting-events",
+    "title": "Accounting Domain Events",
+    "description": "Events published and consumed by the Accounting Service for cross-service integration",
+    "definitions": {
+        "TransactionPostedEvent": {
+            "type": "object",
+            "description": "Published when a financial transaction is posted to the ledger",
+            "properties": {
+                "journalEntryId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "entryNumber": {
+                    "type": "string"
+                },
+                "entryDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "sourceSystem": {
+                    "type": "string"
+                },
+                "postedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["journalEntryId", "entryNumber", "entryDate", "description", "totalAmount", "sourceSystem", "postedAt"]
+        },
+        "InventoryMovementEvent": {
+            "type": "object",
+            "description": "Published when stock movement is recorded",
+            "properties": {
+                "movementId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "movementNumber": {
+                    "type": "string"
+                },
+                "movementDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "movementType": {
+                    "type": "string"
+                },
+                "productId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "productName": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "unitCost": {
+                    "type": "number"
+                },
+                "totalCost": {
+                    "type": "number"
+                },
+                "supplierId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "purchaseOrderId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["movementId", "movementNumber", "movementDate", "movementType", "productId", "productName", "quantity", "unitCost", "totalCost", "createdAt"]
+        },
+        "PayrollProcessedEvent": {
+            "type": "object",
+            "description": "Published when payroll is processed",
+            "properties": {
+                "payrollId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "payrollNumber": {
+                    "type": "string"
+                },
+                "payrollPeriod": {
+                    "type": ["string", "null"]
+                },
+                "processedDate": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                },
+                "payPeriodStart": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "payPeriodEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "paymentDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "grossPay": {
+                    "type": "number"
+                },
+                "employeeTax": {
+                    "type": ["number", "null"]
+                },
+                "socialSecurity": {
+                    "type": ["number", "null"]
+                },
+                "totalDeductions": {
+                    "type": "number"
+                },
+                "netPay": {
+                    "type": "number"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["payrollId", "payrollNumber", "payPeriodStart", "payPeriodEnd", "paymentDate", "grossPay", "totalDeductions", "netPay", "createdAt"]
+        },
+        "SupplierInvoiceReceivedEvent": {
+            "type": "object",
+            "description": "Published when a supplier invoice is received",
+            "properties": {
+                "supplierInvoiceId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "invoiceNumber": {
+                    "type": "string"
+                },
+                "supplierId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "supplierName": {
+                    "type": "string"
+                },
+                "invoiceDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "purchaseOrderId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "receivedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["supplierInvoiceId", "invoiceNumber", "supplierId", "supplierName", "invoiceDate", "dueDate", "totalAmount", "currency", "receivedAt"]
+        },
+        "PaymentRecordedEvent": {
+            "type": "object",
+            "description": "Published when a payment is recorded in accounting",
+            "properties": {
+                "paymentRecordId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "paymentId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "paymentNumber": {
+                    "type": "string"
+                },
+                "paymentDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "paymentMethod": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "invoiceId": {
+                    "type": ["string", "null"],
+                    "format": "uuid"
+                },
+                "recordedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["paymentRecordId", "paymentId", "paymentNumber", "paymentDate", "amount", "currency", "paymentMethod", "recordedAt"]
+        }
+    }
+}

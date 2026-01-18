@@ -194,20 +194,62 @@
             "properties": {
                 "applicationId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier for the job application"
                 },
-                "employeeId": {
+                "candidateId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Unique identifier for the candidate"
+                },
+                "applicantName": {
+                    "type": "string",
+                    "description": "Full name of the applicant"
+                },
+                "applicantEmail": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the applicant"
+                },
+                "applicantPhone": {
+                    "type": ["string", "null"],
+                    "description": "Phone number of the applicant"
+                },
+                "jobPositionId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Job position ID from Career Service"
                 },
                 "startDate": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "Expected start date for the new employee"
+                },
+                "linkedInProfile": {
+                    "type": ["string", "null"],
+                    "description": "LinkedIn profile URL (optional)"
+                },
+                "departmentId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Department ID where the employee will be assigned"
+                },
+                "managerId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Manager ID who will supervise the new employee"
+                },
+                "workLocationId": {
+                    "type": ["integer", "null"],
+                    "description": "Work location ID from Career Service"
                 }
             },
             "required": [
                 "applicationId",
-                "employeeId",
+                "candidateId",
+                "applicantName",
+                "applicantEmail",
+                "jobPositionId",
                 "startDate"
             ]
         },
