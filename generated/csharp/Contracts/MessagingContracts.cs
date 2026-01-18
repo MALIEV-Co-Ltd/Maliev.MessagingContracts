@@ -58,6 +58,223 @@ namespace Maliev.MessagingContracts.Generated
     }
 
     /// <summary>
+    /// Payload data for TransactionPostedEvent.
+    /// </summary>
+    public record TransactionPostedEventPayload(
+        [property: JsonPropertyName("journalEntryId")] System.Guid JournalEntryId,
+        [property: JsonPropertyName("entryNumber")] string EntryNumber,
+        [property: JsonPropertyName("entryDate")] System.DateTimeOffset EntryDate,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("totalAmount")] double TotalAmount,
+        [property: JsonPropertyName("sourceSystem")] string SourceSystem,
+        [property: JsonPropertyName("postedAt")] System.DateTimeOffset PostedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TransactionPostedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), string.Empty, default(double), string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a financial transaction is posted to the ledger
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record TransactionPostedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] TransactionPostedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TransactionPostedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for InventoryMovementEvent.
+    /// </summary>
+    public record InventoryMovementEventPayload(
+        [property: JsonPropertyName("movementId")] System.Guid MovementId,
+        [property: JsonPropertyName("movementNumber")] string MovementNumber,
+        [property: JsonPropertyName("movementDate")] System.DateTimeOffset MovementDate,
+        [property: JsonPropertyName("movementType")] string MovementType,
+        [property: JsonPropertyName("productId")] System.Guid ProductId,
+        [property: JsonPropertyName("productName")] string ProductName,
+        [property: JsonPropertyName("quantity")] int Quantity,
+        [property: JsonPropertyName("unitCost")] double UnitCost,
+        [property: JsonPropertyName("totalCost")] double TotalCost,
+        [property: JsonPropertyName("supplierId")] System.Guid? SupplierId,
+        [property: JsonPropertyName("purchaseOrderId")] System.Guid? PurchaseOrderId,
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InventoryMovementEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), string.Empty, default(System.Guid), string.Empty, default(int), default(double), default(double), default, default, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when stock movement is recorded
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record InventoryMovementEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] InventoryMovementEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InventoryMovementEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for PayrollProcessedEvent.
+    /// </summary>
+    public record PayrollProcessedEventPayload(
+        [property: JsonPropertyName("payrollId")] System.Guid PayrollId,
+        [property: JsonPropertyName("payrollNumber")] string PayrollNumber,
+        [property: JsonPropertyName("payrollPeriod")] string? PayrollPeriod,
+        [property: JsonPropertyName("processedDate")] System.DateTimeOffset? ProcessedDate,
+        [property: JsonPropertyName("payPeriodStart")] System.DateTimeOffset PayPeriodStart,
+        [property: JsonPropertyName("payPeriodEnd")] System.DateTimeOffset PayPeriodEnd,
+        [property: JsonPropertyName("paymentDate")] System.DateTimeOffset PaymentDate,
+        [property: JsonPropertyName("grossPay")] double GrossPay,
+        [property: JsonPropertyName("employeeTax")] double? EmployeeTax,
+        [property: JsonPropertyName("socialSecurity")] double? SocialSecurity,
+        [property: JsonPropertyName("totalDeductions")] double TotalDeductions,
+        [property: JsonPropertyName("netPay")] double NetPay,
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PayrollProcessedEventPayload() : this(default(System.Guid), string.Empty, default, default, default(System.DateTimeOffset), default(System.DateTimeOffset), default(System.DateTimeOffset), default(double), default, default, default(double), default(double), default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when payroll is processed
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record PayrollProcessedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PayrollProcessedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PayrollProcessedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for SupplierInvoiceReceivedEvent.
+    /// </summary>
+    public record SupplierInvoiceReceivedEventPayload(
+        [property: JsonPropertyName("supplierInvoiceId")] System.Guid SupplierInvoiceId,
+        [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
+        [property: JsonPropertyName("supplierId")] System.Guid SupplierId,
+        [property: JsonPropertyName("supplierName")] string SupplierName,
+        [property: JsonPropertyName("invoiceDate")] System.DateTimeOffset InvoiceDate,
+        [property: JsonPropertyName("dueDate")] System.DateTimeOffset DueDate,
+        [property: JsonPropertyName("totalAmount")] double TotalAmount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("purchaseOrderId")] System.Guid? PurchaseOrderId,
+        [property: JsonPropertyName("receivedAt")] System.DateTimeOffset ReceivedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierInvoiceReceivedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(double), string.Empty, default, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a supplier invoice is received
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record SupplierInvoiceReceivedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] SupplierInvoiceReceivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SupplierInvoiceReceivedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for PaymentRecordedEvent.
+    /// </summary>
+    public record PaymentRecordedEventPayload(
+        [property: JsonPropertyName("paymentRecordId")] System.Guid PaymentRecordId,
+        [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
+        [property: JsonPropertyName("paymentNumber")] string PaymentNumber,
+        [property: JsonPropertyName("paymentDate")] System.DateTimeOffset PaymentDate,
+        [property: JsonPropertyName("amount")] double Amount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("paymentMethod")] string PaymentMethod,
+        [property: JsonPropertyName("customerId")] System.Guid? CustomerId,
+        [property: JsonPropertyName("invoiceId")] System.Guid? InvoiceId,
+        [property: JsonPropertyName("recordedAt")] System.DateTimeOffset RecordedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentRecordedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(double), string.Empty, string.Empty, default, default, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a payment is recorded in accounting
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record PaymentRecordedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PaymentRecordedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentRecordedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for UserLoggedInEvent.
     /// </summary>
     /// <param name="UserId">The user's ID (UUID for users) or client ID (string for services)</param>
@@ -572,15 +789,34 @@ namespace Maliev.MessagingContracts.Generated
     /// <summary>
     /// Payload data for CandidateAcceptedEvent.
     /// </summary>
+    /// <param name="ApplicationId">Unique identifier for the job application</param>
+    /// <param name="CandidateId">Unique identifier for the candidate</param>
+    /// <param name="ApplicantName">Full name of the applicant</param>
+    /// <param name="ApplicantEmail">Email address of the applicant</param>
+    /// <param name="ApplicantPhone">Phone number of the applicant</param>
+    /// <param name="JobPositionId">Job position ID from Career Service</param>
+    /// <param name="StartDate">Expected start date for the new employee</param>
+    /// <param name="LinkedInProfile">LinkedIn profile URL (optional)</param>
+    /// <param name="DepartmentId">Department ID where the employee will be assigned</param>
+    /// <param name="ManagerId">Manager ID who will supervise the new employee</param>
+    /// <param name="WorkLocationId">Work location ID from Career Service</param>
     public record CandidateAcceptedEventPayload(
         [property: JsonPropertyName("applicationId")] System.Guid ApplicationId,
-        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate)
+        [property: JsonPropertyName("candidateId")] System.Guid CandidateId,
+        [property: JsonPropertyName("applicantName")] string ApplicantName,
+        [property: JsonPropertyName("applicantEmail")] string ApplicantEmail,
+        [property: JsonPropertyName("applicantPhone")] string? ApplicantPhone,
+        [property: JsonPropertyName("jobPositionId")] System.Guid JobPositionId,
+        [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
+        [property: JsonPropertyName("linkedInProfile")] string? LinkedInProfile,
+        [property: JsonPropertyName("departmentId")] System.Guid? DepartmentId,
+        [property: JsonPropertyName("managerId")] System.Guid? ManagerId,
+        [property: JsonPropertyName("workLocationId")] int? WorkLocationId)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public CandidateAcceptedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
+        public CandidateAcceptedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, default, default(System.Guid), default(System.DateTimeOffset), default, default, default, default) { }
     }
     /// <summary>
     /// Published when candidate accepts job offer
@@ -1018,6 +1254,41 @@ namespace Maliev.MessagingContracts.Generated
         /// Parameterless constructor for deserialization.
         /// </summary>
         public BulkSalaryIncreaseCompletedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for CompensationArchivedEvent.
+    /// </summary>
+    public record CompensationArchivedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("archivedAt")] System.DateTimeOffset ArchivedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CompensationArchivedEventPayload() : this(default(System.Guid), default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when an employee's compensation records have been archived
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record CompensationArchivedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CompensationArchivedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CompensationArchivedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
     /// <summary>
@@ -1478,6 +1749,169 @@ namespace Maliev.MessagingContracts.Generated
         /// Parameterless constructor for deserialization.
         /// </summary>
         public EmployeeDepartmentTransferredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for TeamCreatedEvent.
+    /// </summary>
+    public record TeamCreatedEventPayload(
+        [property: JsonPropertyName("teamId")] System.Guid TeamId,
+        [property: JsonPropertyName("teamName")] string TeamName,
+        [property: JsonPropertyName("teamType")] string TeamType,
+        [property: JsonPropertyName("description")] string? Description,
+        [property: JsonPropertyName("teamLeadId")] System.Guid? TeamLeadId,
+        [property: JsonPropertyName("isActive")] bool IsActive,
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt,
+        [property: JsonPropertyName("createdBy")] System.Guid CreatedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamCreatedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default, default, default(bool), default(System.DateTimeOffset), default(System.Guid)) { }
+    }
+    /// <summary>
+    /// Published when a new team is created
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record TeamCreatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] TeamCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for TeamUpdatedEvent.
+    /// </summary>
+    public record TeamUpdatedEventPayload(
+        [property: JsonPropertyName("teamId")] System.Guid TeamId,
+        [property: JsonPropertyName("teamName")] string TeamName,
+        [property: JsonPropertyName("teamType")] string TeamType,
+        [property: JsonPropertyName("description")] string? Description,
+        [property: JsonPropertyName("teamLeadId")] System.Guid? TeamLeadId,
+        [property: JsonPropertyName("isActive")] bool IsActive,
+        [property: JsonPropertyName("updatedAt")] System.DateTimeOffset UpdatedAt,
+        [property: JsonPropertyName("updatedBy")] System.Guid UpdatedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamUpdatedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default, default, default(bool), default(System.DateTimeOffset), default(System.Guid)) { }
+    }
+    /// <summary>
+    /// Published when a team is updated
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record TeamUpdatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] TeamUpdatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamUpdatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for TeamMemberAddedEvent.
+    /// </summary>
+    public record TeamMemberAddedEventPayload(
+        [property: JsonPropertyName("teamId")] System.Guid TeamId,
+        [property: JsonPropertyName("teamName")] string TeamName,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("employeeNumber")] string EmployeeNumber,
+        [property: JsonPropertyName("employeeName")] string EmployeeName,
+        [property: JsonPropertyName("isPrimary")] bool IsPrimary,
+        [property: JsonPropertyName("addedAt")] System.DateTimeOffset AddedAt,
+        [property: JsonPropertyName("addedBy")] System.Guid AddedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamMemberAddedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, string.Empty, default(bool), default(System.DateTimeOffset), default(System.Guid)) { }
+    }
+    /// <summary>
+    /// Published when a member is added to a team
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record TeamMemberAddedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] TeamMemberAddedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamMemberAddedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for TeamMemberRemovedEvent.
+    /// </summary>
+    public record TeamMemberRemovedEventPayload(
+        [property: JsonPropertyName("teamId")] System.Guid TeamId,
+        [property: JsonPropertyName("teamName")] string TeamName,
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("employeeNumber")] string EmployeeNumber,
+        [property: JsonPropertyName("employeeName")] string EmployeeName,
+        [property: JsonPropertyName("removedAt")] System.DateTimeOffset RemovedAt,
+        [property: JsonPropertyName("removedBy")] System.Guid RemovedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamMemberRemovedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset), default(System.Guid)) { }
+    }
+    /// <summary>
+    /// Published when a member is removed from a team
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record TeamMemberRemovedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] TeamMemberRemovedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public TeamMemberRemovedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
     /// <summary>
@@ -2080,6 +2514,49 @@ namespace Maliev.MessagingContracts.Generated
     }
 
     /// <summary>
+    /// Payload data for PaymentAllocatedEvent.
+    /// </summary>
+    public record PaymentAllocatedEventPayload(
+        [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
+        [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
+        [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
+        [property: JsonPropertyName("allocatedAmount")] double AllocatedAmount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
+        [property: JsonPropertyName("invoiceStatus")] string InvoiceStatus,
+        [property: JsonPropertyName("outstandingBalance")] double OutstandingBalance,
+        [property: JsonPropertyName("allocatedBy")] string AllocatedBy,
+        [property: JsonPropertyName("allocatedAt")] System.DateTimeOffset AllocatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentAllocatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.Guid), string.Empty, default(double), string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a payment is allocated to an invoice
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record PaymentAllocatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PaymentAllocatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentAllocatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for LeaveRequestSubmittedEvent.
     /// </summary>
     public record LeaveRequestSubmittedEventPayload(
@@ -2303,6 +2780,41 @@ namespace Maliev.MessagingContracts.Generated
         /// Parameterless constructor for deserialization.
         /// </summary>
         public LeaveBalanceAdjustedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for LeaveBalanceClosedEvent.
+    /// </summary>
+    public record LeaveBalanceClosedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("closedAt")] System.DateTimeOffset ClosedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveBalanceClosedEventPayload() : this(default(System.Guid), default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when an employee's leave balances have been closed
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record LeaveBalanceClosedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] LeaveBalanceClosedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public LeaveBalanceClosedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
     /// <summary>
@@ -2595,6 +3107,41 @@ namespace Maliev.MessagingContracts.Generated
         /// Parameterless constructor for deserialization.
         /// </summary>
         public OnboardingItemOverdueEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for AccessRevokedEvent.
+    /// </summary>
+    public record AccessRevokedEventPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
+        [property: JsonPropertyName("revokedDate")] System.DateTimeOffset RevokedDate)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public AccessRevokedEventPayload() : this(default(System.Guid), default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when employee system access has been successfully revoked
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record AccessRevokedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] AccessRevokedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public AccessRevokedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
     /// <summary>
@@ -4312,6 +4859,106 @@ namespace Maliev.MessagingContracts.Generated
         /// Parameterless constructor for deserialization.
         /// </summary>
         public ReceiptVoidedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for ReceiptPdfRequestedEventCustomerDetails.
+    /// </summary>
+    public record ReceiptPdfRequestedEventPayloadCustomerDetails(
+        [property: JsonPropertyName("name")] string Name,
+        [property: JsonPropertyName("taxId")] string TaxId,
+        [property: JsonPropertyName("address")] string Address)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptPdfRequestedEventPayloadCustomerDetails() : this(string.Empty, string.Empty, string.Empty) { }
+    }
+    /// <summary>
+    /// Payload data for ReceiptPdfRequestedEventFinancialDetails.
+    /// </summary>
+    public record ReceiptPdfRequestedEventPayloadFinancialDetails(
+        [property: JsonPropertyName("issueDate")] System.DateTimeOffset IssueDate,
+        [property: JsonPropertyName("subtotal")] double Subtotal,
+        [property: JsonPropertyName("taxAmount")] double TaxAmount,
+        [property: JsonPropertyName("withholdingTaxAmount")] double WithholdingTaxAmount,
+        [property: JsonPropertyName("totalAmount")] double TotalAmount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("paymentMethod")] string PaymentMethod)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptPdfRequestedEventPayloadFinancialDetails() : this(default(System.DateTimeOffset), default(double), default(double), default(double), default(double), string.Empty, string.Empty) { }
+    }
+    /// <summary>
+    /// Payload data for ReceiptPdfRequestedEventLineItemsItem.
+    /// </summary>
+    public record ReceiptPdfRequestedEventPayloadLineItemsItem(
+        [property: JsonPropertyName("lineNumber")] int LineNumber,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("quantity")] double Quantity,
+        [property: JsonPropertyName("unitPrice")] double UnitPrice,
+        [property: JsonPropertyName("taxRate")] double TaxRate,
+        [property: JsonPropertyName("lineTotal")] double LineTotal)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptPdfRequestedEventPayloadLineItemsItem() : this(default(int), string.Empty, default(double), default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for ReceiptPdfRequestedEventTaxFields.
+    /// </summary>
+    public record ReceiptPdfRequestedEventPayloadTaxFields(
+        [property: JsonPropertyName("taxId")] string TaxId,
+        [property: JsonPropertyName("vatRate")] double VatRate,
+        [property: JsonPropertyName("withholdingTaxType")] string WithholdingTaxType)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptPdfRequestedEventPayloadTaxFields() : this(string.Empty, default(double), string.Empty) { }
+    }
+    /// <summary>
+    /// Payload data for ReceiptPdfRequestedEvent.
+    /// </summary>
+    public record ReceiptPdfRequestedEventPayload(
+        [property: JsonPropertyName("receiptId")] System.Guid ReceiptId,
+        [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
+        [property: JsonPropertyName("customerDetails")] ReceiptPdfRequestedEventPayloadCustomerDetails CustomerDetails,
+        [property: JsonPropertyName("financialDetails")] ReceiptPdfRequestedEventPayloadFinancialDetails FinancialDetails,
+        [property: JsonPropertyName("lineItems")] System.Collections.Generic.IReadOnlyList<ReceiptPdfRequestedEventPayloadLineItemsItem> LineItems,
+        [property: JsonPropertyName("taxFields")] ReceiptPdfRequestedEventPayloadTaxFields TaxFields,
+        [property: JsonPropertyName("templateId")] string TemplateId,
+        [property: JsonPropertyName("requestedAt")] System.DateTimeOffset RequestedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptPdfRequestedEventPayload() : this(default(System.Guid), string.Empty, default!, default!, Array.Empty<ReceiptPdfRequestedEventPayloadLineItemsItem>(), default!, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published to request rich PDF generation for a receipt
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record ReceiptPdfRequestedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] ReceiptPdfRequestedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public ReceiptPdfRequestedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
     /// <summary>

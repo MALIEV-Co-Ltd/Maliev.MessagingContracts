@@ -188,6 +188,24 @@
                 "newPending",
                 "newCarriedForward"
             ]
+        },
+        "LeaveBalanceClosedEvent": {
+            "type": "object",
+            "description": "Published when an employee's leave balances have been closed",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "closedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "employeeId",
+                "closedAt"
+            ]
         }
     }
 }

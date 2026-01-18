@@ -202,6 +202,24 @@
                 "itemTitle",
                 "dueDate"
             ]
+        },
+        "AccessRevokedEvent": {
+            "type": "object",
+            "description": "Published when employee system access has been successfully revoked",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "revokedDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "employeeId",
+                "revokedDate"
+            ]
         }
     }
 }
