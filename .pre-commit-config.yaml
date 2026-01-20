@@ -24,7 +24,8 @@ repos:
 
     -   id: verify-build
         name: verify build
-        entry: dotnet build Maliev.MessagingContracts.sln -c Release
+        entry: dotnet build Maliev.MessagingContracts.slnx -c Release
         language: system
         files: \.(cs|json)$
         pass_filenames: false
+
