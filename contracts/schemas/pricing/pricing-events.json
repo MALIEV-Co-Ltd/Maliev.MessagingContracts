@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/pricing-events",
+    "title": "Pricing Domain Events",
+    "description": "Events published by the Pricing Service",
+    "definitions": {
+        "PriceCalculatedEvent": {
+            "type": "object",
+            "description": "Published when a price calculation for a file analysis completes",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "customerId": {
+                    "type": "string",
+                    "description": "Unique identifier for the customer"
+                },
+                "totalUnitPrice": {
+                    "type": "number",
+                    "description": "Final calculated unit price"
+                },
+                "totalPrice": {
+                    "type": "number",
+                    "description": "Total price including quantity"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "ISO 4217 currency code"
+                },
+                "discountAmount": {
+                    "type": "number"
+                },
+                "source": {
+                    "type": "string",
+                    "enum": ["live", "cache"]
+                },
+                "calculatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": [
+                "fileId",
+                "customerId",
+                "totalUnitPrice",
+                "totalPrice",
+                "currency",
+                "calculatedAt"
+            ]
+        }
+    }
+}

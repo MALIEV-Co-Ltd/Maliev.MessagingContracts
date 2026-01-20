@@ -50,12 +50,13 @@ namespace Generator
         static string GetWorkspaceRoot(string currentDir)
         {
             var dir = new DirectoryInfo(currentDir);
-            while (dir != null && !dir.GetFiles("*.sln").Any())
+            while (dir != null && !dir.GetFiles("*.slnx").Any() && !dir.GetFiles("*.sln").Any())
             {
                 dir = dir.Parent;
             }
-            return dir?.FullName ?? throw new DirectoryNotFoundException("Could not find workspace root containing a .sln file.");
+            return dir?.FullName ?? throw new DirectoryNotFoundException("Could not find workspace root containing a .slnx or .sln file.");
         }
+
     }
 
     public class ManualCSharpGenerator

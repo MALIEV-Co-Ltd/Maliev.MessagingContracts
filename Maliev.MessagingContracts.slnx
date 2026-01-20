@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/generated/">
+    <Folder Name="/csharp/">
+      <Project Path="generated\csharp\Maliev.MessagingContracts.csproj" />
+    </Folder>
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\Maliev.MessagingContracts.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools\Generator\Generator.csproj" />
+  </Folder>
+</Solution>
