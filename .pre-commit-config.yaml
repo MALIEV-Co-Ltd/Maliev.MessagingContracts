@@ -1,31 +1,32 @@
 repos:
--   repo: local
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
     hooks:
-    -   id: validate-schemas
-        name: validate schemas
-        entry: npm test
-        language: system
-        files: \.(json|yaml|yml)$
-        pass_filenames: false
+      - id: check-yaml
+        name: Check YAML Syntax
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 
-    -   id: generate-contracts
-        name: generate contracts
-        entry: dotnet run --project tools/Generator/Generator.csproj
-        language: system
-        files: \.(json)$
-        pass_filenames: false
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        name: Lint YAML Files
+        args: [-c=.yamllint.yml]
 
-    -   id: dotnet-format
+  - repo: local
+    hooks:
+      - id: dotnet-format
         name: dotnet format
-        entry: dotnet format
+        entry: dotnet format Maliev.MessagingContracts.slnx
         language: system
         files: \.(cs|vb)$
         pass_filenames: false
 
-    -   id: verify-build
+      - id: verify-build
         name: verify build
         entry: dotnet build Maliev.MessagingContracts.slnx -c Release
         language: system
-        files: \.(cs|json)$
+        files: \.(cs|json|csproj|slnx)$
         pass_filenames: false
-

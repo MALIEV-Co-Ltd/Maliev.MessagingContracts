@@ -14,7 +14,7 @@ on:
       - '.github/workflows/publish.yaml'
       - 'package.json'
       - 'package-lock.json'
-      - 'Maliev.MessagingContracts.sln'
+      - 'Maliev.MessagingContracts.slnx'
       - '.config/**'
   release:
     types: [published]
