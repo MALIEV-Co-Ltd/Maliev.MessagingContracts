@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts#readme",
   "dependencies": {
-    "@asyncapi/generator": "^3.1.0",
+    "@asyncapi/generator": "^3.1.1",
     "@asyncapi/markdown-template": "^2.0.0"
   },
   "devDependencies": {
