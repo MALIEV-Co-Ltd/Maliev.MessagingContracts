@@ -27,8 +27,17 @@
                     "type": "string",
                     "format": "email"
                 },
-                "phone": {
-                    "type": ["string", "null"]
+                "mobile": {
+                    "type": ["string", "null"],
+                    "description": "Customer's mobile phone number"
+                },
+                "extension": {
+                    "type": ["string", "null"],
+                    "description": "Customer's desk extension for company landline"
+                },
+                "landline": {
+                    "type": ["string", "null"],
+                    "description": "Customer's personal or company landline number"
                 },
                 "segment": {
                     "type": "string",

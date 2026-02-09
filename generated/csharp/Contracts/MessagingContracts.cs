@@ -1443,6 +1443,9 @@ namespace Maliev.MessagingContracts.Generated
     /// Payload data for CustomerCreatedEvent.
     /// </summary>
     /// <param name="PrincipalId">IAM principal ID for the customer</param>
+    /// <param name="Mobile">Customer's mobile phone number</param>
+    /// <param name="Extension">Customer's desk extension for company landline</param>
+    /// <param name="Landline">Customer's personal or company landline number</param>
     /// <param name="Segment">Customer segment: Retail, Wholesale, Enterprise, Government</param>
     /// <param name="Tier">Customer tier: Bronze, Silver, Gold, Platinum, VIP</param>
     /// <param name="CompanyId">Optional link to Company entity</param>
@@ -1452,7 +1455,9 @@ namespace Maliev.MessagingContracts.Generated
         [property: JsonPropertyName("firstName")] string FirstName,
         [property: JsonPropertyName("lastName")] string LastName,
         [property: JsonPropertyName("email")] string Email,
-        [property: JsonPropertyName("phone")] string? Phone,
+        [property: JsonPropertyName("mobile")] string? Mobile,
+        [property: JsonPropertyName("extension")] string? Extension,
+        [property: JsonPropertyName("landline")] string? Landline,
         [property: JsonPropertyName("segment")] string Segment,
         [property: JsonPropertyName("tier")] string Tier,
         [property: JsonPropertyName("companyId")] System.Guid? CompanyId,
@@ -1461,7 +1466,7 @@ namespace Maliev.MessagingContracts.Generated
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public CustomerCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, default, string.Empty, string.Empty, default, default(System.DateTimeOffset)) { }
+        public CustomerCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, default, default, default, string.Empty, string.Empty, default, default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when a new customer is created
@@ -1603,10 +1608,14 @@ namespace Maliev.MessagingContracts.Generated
     /// <summary>
     /// Payload data for EmployeeCreatedEvent.
     /// </summary>
+    /// <param name="Email">Work email address of the employee</param>
+    /// <param name="FullName">Full display name of the employee</param>
     public record EmployeeCreatedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("employeeNumber")] string EmployeeNumber,
         [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
+        [property: JsonPropertyName("email")] string Email,
+        [property: JsonPropertyName("fullName")] string FullName,
         [property: JsonPropertyName("startDate")] System.DateTimeOffset StartDate,
         [property: JsonPropertyName("departmentId")] System.Guid DepartmentId,
         [property: JsonPropertyName("positionId")] System.Guid? PositionId,
@@ -1615,7 +1624,7 @@ namespace Maliev.MessagingContracts.Generated
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public EmployeeCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default(System.Guid), default, default) { }
+        public EmployeeCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset), default(System.Guid), default, default) { }
     }
     /// <summary>
     /// Published when a new employee record is created
