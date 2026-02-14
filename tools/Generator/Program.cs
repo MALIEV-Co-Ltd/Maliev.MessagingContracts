@@ -6,19 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Generator
 {
     class Program
     {
+        private static ILogger<Program>? _logger;
+
         static async Task Main(string[] args)
         {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+            _logger = loggerFactory.CreateLogger<Program>();
+
             var workspaceRoot = GetWorkspaceRoot(Directory.GetCurrentDirectory());
             var schemaRoot = Path.Combine(workspaceRoot, "contracts", "schemas");
             var outputDir = Path.Combine(workspaceRoot, "generated", "csharp", "Contracts");
             var outputFile = Path.Combine(outputDir, "MessagingContracts.cs");
 
-            Console.WriteLine("Cleaning up existing generated file...");
+            _logger.LogInformation("Cleaning up existing generated file...");
             if (File.Exists(outputFile))
             {
                 File.Delete(outputFile);
@@ -28,7 +37,7 @@ namespace Generator
                 Directory.CreateDirectory(outputDir);
             }
 
-            var generator = new ManualCSharpGenerator(schemaRoot);
+            var generator = new ManualCSharpGenerator(schemaRoot, loggerFactory.CreateLogger<ManualCSharpGenerator>());
             var code = await generator.GenerateAsync();
 
             if (File.Exists(outputFile))
@@ -36,15 +45,15 @@ namespace Generator
                 var existingCode = await File.ReadAllTextAsync(outputFile);
                 if (existingCode == code)
                 {
-                    Console.WriteLine("[OK] No changes detected. Generation skipped.");
+                    _logger.LogInformation("[OK] No changes detected. Generation skipped.");
                     return;
                 }
             }
 
             await File.WriteAllTextAsync(outputFile, code);
 
-            Console.WriteLine("[OK] C# contract generation complete.");
-            Console.WriteLine($"[OK] All contracts written to {outputFile}");
+            _logger.LogInformation("[OK] C# contract generation complete.");
+            _logger.LogInformation("[OK] All contracts written to {outputFile}", outputFile);
         }
 
         static string GetWorkspaceRoot(string currentDir)
@@ -62,10 +71,12 @@ namespace Generator
     public class ManualCSharpGenerator
     {
         private readonly string _schemaRoot;
+        private readonly ILogger<ManualCSharpGenerator> _logger;
 
-        public ManualCSharpGenerator(string schemaRoot)
+        public ManualCSharpGenerator(string schemaRoot, ILogger<ManualCSharpGenerator> logger)
         {
             _schemaRoot = schemaRoot;
+            _logger = logger;
         }
 
         public async Task<string> GenerateAsync()
@@ -86,7 +97,7 @@ namespace Generator
             sb.AppendLine();
             sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
             sb.AppendLine("{");            // Generate BaseMessage first
-            Console.WriteLine("Generating BaseMessage...");
+            _logger.LogInformation("Generating BaseMessage...");
             await GenerateBaseMessage(sb);
 
             // Generate enum for MessageType
@@ -125,7 +136,7 @@ namespace Generator
                     foreach (var definition in definitions.EnumerateObject())
                     {
                         var className = definition.Name;
-                        Console.WriteLine($"Generating {className}...");
+                        _logger.LogInformation("Generating {className}...", className);
                         await GenerateMessageClassFromDefinition(sb, definition.Value, className);
                         sb.AppendLine();
                     }
@@ -134,7 +145,7 @@ namespace Generator
                 {
                     // Generate as a single message class (existing behavior)
                     var className = GetClassName(file);
-                    Console.WriteLine($"Generating {className}...");
+                    _logger.LogInformation("Generating {className}...", className);
                     await GenerateMessageClass(sb, file, className);
                     sb.AppendLine();
                 }
