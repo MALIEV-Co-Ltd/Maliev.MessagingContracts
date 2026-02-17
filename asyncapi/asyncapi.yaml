@@ -164,6 +164,12 @@ channels:
       PaymentAllocatedEvent:
         $ref: '#/components/messages/PaymentAllocatedEvent'
 
+  invoice/split:
+    address: maliev.invoices.events.invoice-split
+    messages:
+      InvoiceSplitEvent:
+        $ref: '#/components/messages/InvoiceSplitEvent'
+
   # ==================== PAYMENT SERVICE ====================
   payment/created:
     address: maliev.payments.events.payment-created
@@ -793,6 +799,11 @@ components:
       payload:
         $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/PaymentAllocatedEvent'
       description: Published when a payment is allocated to an invoice
+
+    InvoiceSplitEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-split-event.json'
+      description: Published when an invoice is split into multiple child invoices
 
     # ==================== PAYMENT SERVICE MESSAGES ====================
     PaymentCreatedEvent:

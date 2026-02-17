@@ -2566,6 +2566,69 @@ namespace Maliev.MessagingContracts.Generated
     }
 
     /// <summary>
+    /// Event published when an invoice is split into multiple child invoices.
+    /// </summary>
+    /// <summary>
+    /// Nested data for InvoiceSplitEventPayloadChildInvoicesItem.
+    /// </summary>
+    /// <param name="Id">The unique identifier of the child invoice.</param>
+    /// <param name="InvoiceNumber">The invoice number of the child invoice.</param>
+    /// <param name="GrandTotal">The grand total amount of the child invoice.</param>
+    /// <param name="Percentage">The percentage of the parent invoice this child represents.</param>
+    public record InvoiceSplitEventPayloadChildInvoicesItem(
+        [property: JsonPropertyName("id")] System.Guid Id,
+        [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
+        [property: JsonPropertyName("grandTotal")] double GrandTotal,
+        [property: JsonPropertyName("percentage")] double Percentage)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceSplitEventPayloadChildInvoicesItem() : this(default(System.Guid), string.Empty, default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Nested data for InvoiceSplitEventPayload.
+    /// </summary>
+    /// <param name="ParentInvoiceId">The unique identifier of the parent invoice that was split.</param>
+    /// <param name="ParentInvoiceNumber">The invoice number of the parent invoice.</param>
+    /// <param name="ChildInvoices">List of child invoices created from the split.</param>
+    /// <param name="SplitBy">The user ID of the person who performed the split.</param>
+    /// <param name="SplitAt">The timestamp when the split occurred.</param>
+    /// <param name="Reason">The reason for splitting the invoice.</param>
+    public record InvoiceSplitEventPayload(
+        [property: JsonPropertyName("parentInvoiceId")] System.Guid ParentInvoiceId,
+        [property: JsonPropertyName("parentInvoiceNumber")] string ParentInvoiceNumber,
+        [property: JsonPropertyName("childInvoices")] System.Collections.Generic.IReadOnlyList<InvoiceSplitEventPayloadChildInvoicesItem> ChildInvoices,
+        [property: JsonPropertyName("splitBy")] string SplitBy,
+        [property: JsonPropertyName("splitAt")] System.DateTimeOffset SplitAt,
+        [property: JsonPropertyName("reason")] string Reason)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceSplitEventPayload() : this(default(System.Guid), string.Empty, Array.Empty<InvoiceSplitEventPayloadChildInvoicesItem>(), string.Empty, default(System.DateTimeOffset), string.Empty) { }
+    }
+    public record InvoiceSplitEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] InvoiceSplitEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public InvoiceSplitEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
     /// Payload data for LeaveRequestSubmittedEvent.
     /// </summary>
     public record LeaveRequestSubmittedEventPayload(
