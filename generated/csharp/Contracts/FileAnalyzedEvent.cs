@@ -20,5 +20,8 @@ public record FileAnalyzedEvent
     public bool IsManifold { get; init; }
     public int TriangleCount { get; init; }
 
+    public string? GlbStoragePath { get; init; }
+    public string? ThumbnailStoragePath { get; init; }
+
     public DateTime AnalyzedAt { get; init; } = DateTime.UtcNow;
 }

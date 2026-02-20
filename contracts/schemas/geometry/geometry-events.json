@@ -49,6 +49,14 @@
                         }
                     }
                 },
+                "glbStoragePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS storage path of the generated GLB file"
+                },
+                "thumbnailStoragePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS storage path of the generated thumbnail image"
+                },
                 "processedAt": {
                     "type": "string",
                     "format": "date-time"
