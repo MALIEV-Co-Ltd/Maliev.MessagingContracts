@@ -54,6 +54,7 @@
             "required": [
                 "employeeId",
                 "employeeNumber",
+                "principalId",
                 "startDate",
                 "departmentId"
             ]
