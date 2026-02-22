@@ -60,6 +60,35 @@
                 "processedAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "dfmReport": {
+                    "type": ["object", "null"],
+                    "description": "Optional DFM analysis results. Null if analysis failed or not applicable.",
+                    "properties": {
+                        "thinWallCount": {
+                            "type": "integer",
+                            "description": "Number of detected thin-wall regions"
+                        },
+                        "thinWallRegions": {
+                            "type": "array",
+                            "description": "Centroid coordinates (mm) of each thin-wall region",
+                            "items": {
+                                "type": "array",
+                                "items": { "type": "number" },
+                                "minItems": 3,
+                                "maxItems": 3
+                            }
+                        },
+                        "overhangFaceCount": {
+                            "type": "integer",
+                            "description": "Number of mesh faces with overhang angle > threshold"
+                        },
+                        "overhangAreaCm2": {
+                            "type": "number",
+                            "description": "Total projected area (cm²) of overhanging faces"
+                        }
+                    },
+                    "required": ["thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2"]
                 }
             },
             "required": [
