@@ -706,6 +706,71 @@ channels:
       PermissionRegisteredEvent:
         $ref: '#/components/messages/PermissionRegisteredEvent'
 
+  # ==================== GEOMETRY SERVICE ====================
+  geometry/file-analyzed:
+    address: maliev.geometry.events.file-analyzed
+    messages:
+      FileAnalyzedEvent:
+        $ref: '#/components/messages/FileAnalyzedEvent'
+
+  geometry/file-analysis-failed:
+    address: maliev.geometry.events.file-analysis-failed
+    messages:
+      FileAnalysisFailedEvent:
+        $ref: '#/components/messages/FileAnalysisFailedEvent'
+
+  # ==================== JOBS SERVICE ====================
+  job/started:
+    address: maliev.jobs.events.job-started
+    messages:
+      JobStartedEvent:
+        $ref: '#/components/messages/JobStartedEvent'
+
+  # ==================== INVENTORY SERVICE ====================
+  inventory/material-low-stock:
+    address: maliev.inventory.events.material-low-stock
+    messages:
+      MaterialLowStockEvent:
+        $ref: '#/components/messages/MaterialLowStockEvent'
+
+  # ==================== DELIVERY SERVICE ====================
+  delivery/note-created:
+    address: maliev.delivery.events.delivery-note-created
+    messages:
+      DeliveryNoteCreatedEvent:
+        $ref: '#/components/messages/DeliveryNoteCreatedEvent'
+
+  delivery/status-changed:
+    address: maliev.delivery.events.delivery-status-changed
+    messages:
+      DeliveryStatusChangedEvent:
+        $ref: '#/components/messages/DeliveryStatusChangedEvent'
+
+  delivery/completed:
+    address: maliev.delivery.events.delivery-completed
+    messages:
+      DeliveryCompletedEvent:
+        $ref: '#/components/messages/DeliveryCompletedEvent'
+
+  delivery/note-pdf-requested:
+    address: maliev.delivery.events.delivery-note-pdf-requested
+    messages:
+      DeliveryNotePdfRequestedEvent:
+        $ref: '#/components/messages/DeliveryNotePdfRequestedEvent'
+
+  # ==================== NDA SERVICE ====================
+  nda/expiring:
+    address: maliev.nda.events.nda-expiring
+    messages:
+      NdaExpiringEvent:
+        $ref: '#/components/messages/NdaExpiringEvent'
+
+  nda/expired:
+    address: maliev.nda.events.nda-expired
+    messages:
+      NdaExpiredEvent:
+        $ref: '#/components/messages/NdaExpiredEvent'
+
 components:
   messages:
     # ==================== ORDER SERVICE MESSAGES ====================
@@ -1254,6 +1319,61 @@ components:
       payload:
         $ref: '../contracts/schemas/iam/permission-registered-event.json'
       description: Published when service registers new permissions
+
+    # ==================== GEOMETRY SERVICE MESSAGES ====================
+    FileAnalyzedEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileAnalyzedEvent'
+      description: Published when a 3D file analysis completes successfully
+
+    FileAnalysisFailedEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileAnalysisFailedEvent'
+      description: Published when a 3D file analysis fails
+
+    # ==================== JOBS SERVICE MESSAGES ====================
+    JobStartedEvent:
+      payload:
+        $ref: '../contracts/schemas/jobs/job-events.json#/definitions/JobStartedEvent'
+      description: Published when a production job transitions to InProgress status
+
+    # ==================== INVENTORY SERVICE MESSAGES ====================
+    MaterialLowStockEvent:
+      payload:
+        $ref: '../contracts/schemas/inventory/inventory-events.json#/definitions/MaterialLowStockEvent'
+      description: Published when remaining stock for a batch drops below threshold
+
+    # ==================== DELIVERY SERVICE MESSAGES ====================
+    DeliveryNoteCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryNoteCreatedEvent'
+      description: Published when a delivery note is created
+
+    DeliveryStatusChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryStatusChangedEvent'
+      description: Published when delivery status changes
+
+    DeliveryCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryCompletedEvent'
+      description: Published when delivery is completed
+
+    DeliveryNotePdfRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryNotePdfRequestedEvent'
+      description: Published when a delivery note PDF is requested
+
+    # ==================== NDA SERVICE MESSAGES ====================
+    NdaExpiringEvent:
+      payload:
+        $ref: '../contracts/schemas/nda/nda-events.json#/definitions/NdaExpiringEvent'
+      description: Published when an NDA is approaching expiration
+
+    NdaExpiredEvent:
+      payload:
+        $ref: '../contracts/schemas/nda/nda-events.json#/definitions/NdaExpiredEvent'
+      description: Published when an NDA has expired
 
 operations:
   # Example operations showing publisher-subscriber relationships

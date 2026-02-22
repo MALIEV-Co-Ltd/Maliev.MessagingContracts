@@ -67,6 +67,21 @@
                     "type": "string",
                     "format": "uuid"
                 },
+                "approverId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "leaveType": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date-time"
+                },
                 "approvedAt": {
                     "type": "string",
                     "format": "date-time"
@@ -75,6 +90,10 @@
             "required": [
                 "requestId",
                 "employeeId",
+                "approverId",
+                "leaveType",
+                "startDate",
+                "endDate",
                 "approvedAt"
             ]
         },

@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/delivery-events",
+    "title": "Delivery Domain Events",
+    "description": "Events published by the Delivery Service",
+    "definitions": {
+        "DeliveryNoteCreatedEvent": {
+            "type": "object",
+            "description": "Published when a delivery note is created",
+            "properties": {
+                "deliveryNoteId": { "type": "string" },
+                "orderId": { "type": ["string", "null"] },
+                "purchaseOrderId": { "type": ["integer", "null"] },
+                "customerId": { "type": "string", "format": "uuid" },
+                "deliveryDate": { "type": "string", "format": "date-time" },
+                "itemCount": { "type": "integer" },
+                "createdAt": { "type": "string", "format": "date-time" },
+                "createdBy": { "type": "string" }
+            },
+            "required": ["deliveryNoteId", "customerId", "deliveryDate", "itemCount", "createdAt", "createdBy"]
+        },
+        "DeliveryStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when delivery status changes",
+            "properties": {
+                "deliveryNoteId": { "type": "string" },
+                "orderId": { "type": ["string", "null"] },
+                "previousStatus": { "type": "string" },
+                "newStatus": { "type": "string" },
+                "actualDeliveryTime": { "type": ["string", "null"], "format": "date-time" },
+                "receivedByName": { "type": ["string", "null"] },
+                "changedAt": { "type": "string", "format": "date-time" },
+                "changedBy": { "type": "string" }
+            },
+            "required": ["deliveryNoteId", "previousStatus", "newStatus", "changedAt", "changedBy"]
+        },
+        "DeliveryCompletedEvent": {
+            "type": "object",
+            "description": "Published when delivery is completed",
+            "properties": {
+                "deliveryNoteId": { "type": "string" },
+                "orderId": { "type": ["string", "null"] },
+                "purchaseOrderId": { "type": ["integer", "null"] },
+                "completedAt": { "type": "string", "format": "date-time" },
+                "receivedByName": { "type": "string" }
+            },
+            "required": ["deliveryNoteId", "completedAt", "receivedByName"]
+        },
+        "DeliveryNotePdfRequestedEvent": {
+            "type": "object",
+            "description": "Published when a delivery note PDF is requested",
+            "properties": {
+                "deliveryNoteId": { "type": "string" },
+                "requestedBy": { "type": "string" },
+                "requestedAt": { "type": "string", "format": "date-time" }
+            },
+            "required": ["deliveryNoteId", "requestedBy", "requestedAt"]
+        }
+    }
+}
