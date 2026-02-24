@@ -1,6 +1,6 @@
 {
   "name": "maliev.messagingcontracts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Maintain a central 'Messaging Contract' repository for the MALIEV ecosystem.",
   "main": "index.js",
   "directories": {

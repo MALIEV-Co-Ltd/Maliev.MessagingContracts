@@ -58,6 +58,67 @@
                     ]
                 }
             ]
+        },
+        "JobStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when a production job status changes, for real-time Kanban updates",
+            "allOf": [
+                {
+                    "$ref": "../shared/base-message.json"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "jobId": {
+                            "type": "string",
+                            "format": "uuid",
+                            "description": "Unique job identifier"
+                        },
+                        "orderId": {
+                            "type": "string",
+                            "format": "uuid",
+                            "description": "Parent order identifier"
+                        },
+                        "previousStatus": {
+                            "type": "string",
+                            "enum": ["Pending", "Queued", "InProgress", "Finishing", "Completed", "Cancelled"],
+                            "description": "Previous job status"
+                        },
+                        "newStatus": {
+                            "type": "string",
+                            "enum": ["Pending", "Queued", "InProgress", "Finishing", "Completed", "Cancelled"],
+                            "description": "New job status"
+                        },
+                        "technology": {
+                            "type": "string",
+                            "description": "Manufacturing technology: Fdm, Sla, Cnc, Scanning, or Design"
+                        },
+                        "assignedMachineId": {
+                            "type": ["string", "null"],
+                            "description": "Machine assigned (e.g., PRUSA-01, HAAS-VF2), null if not yet assigned"
+                        },
+                        "changedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "UTC timestamp when status changed"
+                        },
+                        "changedBy": {
+                            "type": "string",
+                            "description": "Employee ID who changed the status"
+                        }
+                    },
+                    "required": [
+                        "jobId",
+                        "orderId",
+                        "previousStatus",
+                        "newStatus",
+                        "technology",
+                        "assignedMachineId",
+                        "changedAt",
+                        "changedBy"
+                    ]
+                }
+            ]
         }
     }
 }

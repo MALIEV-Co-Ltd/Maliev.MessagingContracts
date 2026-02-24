@@ -106,13 +106,13 @@ namespace Generator
             results["MessagingContracts.cs"] = sharedSb.ToString();
 
             // 2. Domain Files
-            var domains = new[] { 
-                "commands", "orders", "payments", "customers", "iam", "shared", 
-                "career", "compensation", "compliance", "employee", "leave", 
-                "lifecycle", "performance", "chatbot", "invoices", "quotations", 
-                "purchase-orders", "receipts", "materials", "suppliers", "auth", 
-                "uploads", "pdf", "geometry", "accounting", "delivery", "nda", 
-                "jobs", "inventory" 
+            var domains = new[] {
+                "commands", "orders", "payments", "customers", "iam", "shared",
+                "career", "compensation", "compliance", "employee", "leave",
+                "lifecycle", "performance", "chatbot", "invoices", "quotations",
+                "purchase-orders", "receipts", "materials", "suppliers", "auth",
+                "uploads", "pdf", "geometry", "accounting", "delivery", "nda",
+                "jobs", "inventory"
             };
 
             foreach (var domainDir in domains)
@@ -144,7 +144,7 @@ namespace Generator
                 domainSb.AppendLine("using System.Text.Json.Serialization;");
                 domainSb.AppendLine("using Maliev.MessagingContracts.Generated;"); // Reference shared types
                 domainSb.AppendLine();
-                
+
                 var pascalDomain = ToPascalCase(domainDir);
                 domainSb.AppendLine($"namespace Maliev.MessagingContracts.Contracts.{pascalDomain}");
                 domainSb.AppendLine("{");
@@ -174,7 +174,7 @@ namespace Generator
                 }
 
                 domainSb.AppendLine("}");
-                
+
                 var targetFileName = Path.Combine(pascalDomain, $"{pascalDomain}Events.cs");
                 results[targetFileName] = domainSb.ToString();
             }

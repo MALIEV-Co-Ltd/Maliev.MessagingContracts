@@ -1,4 +1,4 @@
-# Maliev.MessagingContracts Agent Guidelines
+﻿# Maliev.MessagingContracts Agent Guidelines
 
 This document provides instructions for AI agents working in this repository.
 The repository is the **authoritative, contract-first source of truth** for message types in the MALIEV ecosystem.
