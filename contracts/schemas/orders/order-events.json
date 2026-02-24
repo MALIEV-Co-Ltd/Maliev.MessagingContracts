@@ -33,9 +33,45 @@
                 "assignedEmployeeId": {
                     "type": ["string", "null"],
                     "format": "uuid"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "description": "Information about a single item in an order",
+                        "properties": {
+                            "productId": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "Unique identifier of the product"
+                            },
+                            "productCode": {
+                                "type": "string",
+                                "description": "SKU or human-readable code of the product"
+                            },
+                            "productName": {
+                                "type": "string",
+                                "description": "Name of the product"
+                            },
+                            "quantity": {
+                                "type": "number",
+                                "description": "Quantity ordered"
+                            },
+                            "unitPrice": {
+                                "type": "number",
+                                "description": "Price per unit"
+                            },
+                            "lineTotal": {
+                                "type": "number",
+                                "description": "Total price for this line item"
+                            }
+                        },
+                        "required": ["productId", "productCode", "productName", "quantity", "unitPrice", "lineTotal"]
+                    },
+                    "description": "List of items in the order"
                 }
             },
-            "required": ["orderId", "orderNumber", "customerId", "totalAmount", "currency", "createdAt"]
+            "required": ["orderId", "orderNumber", "customerId", "totalAmount", "currency", "createdAt", "items"]
         },
         "OrderStatusChangedEvent": {
             "type": "object",
@@ -243,9 +279,45 @@
                 "actualTotalCost": {
                     "type": ["number", "null"],
                     "description": "Actual total cost of the job"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "description": "Information about a single item in an order",
+                        "properties": {
+                            "productId": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "Unique identifier of the product"
+                            },
+                            "productCode": {
+                                "type": "string",
+                                "description": "SKU or human-readable code of the product"
+                            },
+                            "productName": {
+                                "type": "string",
+                                "description": "Name of the product"
+                            },
+                            "quantity": {
+                                "type": "number",
+                                "description": "Quantity ordered"
+                            },
+                            "unitPrice": {
+                                "type": "number",
+                                "description": "Price per unit"
+                            },
+                            "lineTotal": {
+                                "type": "number",
+                                "description": "Total price for this line item"
+                            }
+                        },
+                        "required": ["productId", "productCode", "productName", "quantity", "unitPrice", "lineTotal"]
+                    },
+                    "description": "List of items in the order"
                 }
             },
-            "required": ["orderId", "orderNumber", "quotationId", "orderCreatedAt", "completedAt", "completedBy", "jobSucceeded"]
+            "required": ["orderId", "orderNumber", "quotationId", "orderCreatedAt", "completedAt", "completedBy", "jobSucceeded", "items"]
         },
         "OrderShippedEvent": {
             "type": "object",
