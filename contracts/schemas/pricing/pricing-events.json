@@ -8,13 +8,107 @@
             "type": "object",
             "description": "Published when a price calculation for a file analysis completes",
             "properties": {
+                "pricingAuditId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the pricing audit record"
+                },
+                "quotationId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Quotation ID if this price is linked to a quotation"
+                },
                 "fileId": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "Unique identifier for the file"
                 },
                 "customerId": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "Unique identifier for the customer"
+                },
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Material used for pricing calculation"
+                },
+                "processId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Manufacturing process used for pricing"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "description": "Quantity of items priced"
+                },
+                "inputVolumeCm3": {
+                    "type": "number",
+                    "description": "Part volume in cm³ used as input"
+                },
+                "inputSupportVolumeCm3": {
+                    "type": "number",
+                    "description": "Support material volume in cm³"
+                },
+                "inputSurfaceAreaCm2": {
+                    "type": "number",
+                    "description": "Surface area in cm² used as input"
+                },
+                "strategy": {
+                    "type": "string",
+                    "description": "Pricing strategy used (e.g. RuleBased, ML)"
+                },
+                "mlModelVersion": {
+                    "type": ["string", "null"],
+                    "description": "ML model version used, if applicable"
+                },
+                "confidenceLevel": {
+                    "type": "number",
+                    "description": "Confidence level of the price calculation (0-1)"
+                },
+                "pricingConfigurationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Pricing configuration record used"
+                },
+                "breakdown": {
+                    "type": "object",
+                    "description": "Detailed cost breakdown",
+                    "properties": {
+                        "materialCost": {
+                            "type": "number",
+                            "description": "Raw material cost"
+                        },
+                        "supportCost": {
+                            "type": "number",
+                            "description": "Support material cost"
+                        },
+                        "machineTimeCost": {
+                            "type": "number",
+                            "description": "Machine time cost"
+                        },
+                        "setupCost": {
+                            "type": "number",
+                            "description": "Setup cost"
+                        },
+                        "complexitySurcharge": {
+                            "type": "number",
+                            "description": "Complexity surcharge"
+                        },
+                        "subtotalBeforeMargin": {
+                            "type": "number",
+                            "description": "Subtotal before margin"
+                        },
+                        "marginAmount": {
+                            "type": "number",
+                            "description": "Margin amount added"
+                        },
+                        "totalPrice": {
+                            "type": "number",
+                            "description": "Total price after margin"
+                        }
+                    },
+                    "required": ["materialCost", "supportCost", "machineTimeCost", "setupCost", "complexitySurcharge", "subtotalBeforeMargin", "marginAmount", "totalPrice"]
                 },
                 "totalUnitPrice": {
                     "type": "number",
@@ -28,24 +122,35 @@
                     "type": "string",
                     "description": "ISO 4217 currency code"
                 },
-                "discountAmount": {
-                    "type": "number"
-                },
-                "source": {
+                "validUntil": {
                     "type": "string",
-                    "enum": ["live", "cache"]
+                    "format": "date-time",
+                    "description": "Price validity expiry timestamp"
                 },
                 "calculatedAt": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When the price was calculated"
                 }
             },
             "required": [
+                "pricingAuditId",
                 "fileId",
                 "customerId",
+                "materialId",
+                "processId",
+                "quantity",
+                "inputVolumeCm3",
+                "inputSupportVolumeCm3",
+                "inputSurfaceAreaCm2",
+                "strategy",
+                "confidenceLevel",
+                "pricingConfigurationId",
+                "breakdown",
                 "totalUnitPrice",
                 "totalPrice",
                 "currency",
+                "validUntil",
                 "calculatedAt"
             ]
         }

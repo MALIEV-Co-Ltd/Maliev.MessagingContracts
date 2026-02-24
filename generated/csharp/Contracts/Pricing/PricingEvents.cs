@@ -13,27 +13,80 @@ using Maliev.MessagingContracts.Generated;
 namespace Maliev.MessagingContracts.Contracts.Pricing
 {
     /// <summary>
+    /// Payload data for PriceCalculatedEventBreakdown.
+    /// </summary>
+    /// <param name="MaterialCost">Raw material cost</param>
+    /// <param name="SupportCost">Support material cost</param>
+    /// <param name="MachineTimeCost">Machine time cost</param>
+    /// <param name="SetupCost">Setup cost</param>
+    /// <param name="ComplexitySurcharge">Complexity surcharge</param>
+    /// <param name="SubtotalBeforeMargin">Subtotal before margin</param>
+    /// <param name="MarginAmount">Margin amount added</param>
+    /// <param name="TotalPrice">Total price after margin</param>
+    public record PriceCalculatedEventPayloadBreakdown(
+        [property: JsonPropertyName("materialCost")] double MaterialCost,
+        [property: JsonPropertyName("supportCost")] double SupportCost,
+        [property: JsonPropertyName("machineTimeCost")] double MachineTimeCost,
+        [property: JsonPropertyName("setupCost")] double SetupCost,
+        [property: JsonPropertyName("complexitySurcharge")] double ComplexitySurcharge,
+        [property: JsonPropertyName("subtotalBeforeMargin")] double SubtotalBeforeMargin,
+        [property: JsonPropertyName("marginAmount")] double MarginAmount,
+        [property: JsonPropertyName("totalPrice")] double TotalPrice)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PriceCalculatedEventPayloadBreakdown() : this(default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double)) { }
+    }
+    /// <summary>
     /// Payload data for PriceCalculatedEvent.
     /// </summary>
+    /// <param name="PricingAuditId">Unique identifier for the pricing audit record</param>
+    /// <param name="QuotationId">Quotation ID if this price is linked to a quotation</param>
     /// <param name="FileId">Unique identifier for the file</param>
     /// <param name="CustomerId">Unique identifier for the customer</param>
+    /// <param name="MaterialId">Material used for pricing calculation</param>
+    /// <param name="ProcessId">Manufacturing process used for pricing</param>
+    /// <param name="Quantity">Quantity of items priced</param>
+    /// <param name="InputVolumeCm3">Part volume in cm³ used as input</param>
+    /// <param name="InputSupportVolumeCm3">Support material volume in cm³</param>
+    /// <param name="InputSurfaceAreaCm2">Surface area in cm² used as input</param>
+    /// <param name="Strategy">Pricing strategy used (e.g. RuleBased, ML)</param>
+    /// <param name="MlModelVersion">ML model version used, if applicable</param>
+    /// <param name="ConfidenceLevel">Confidence level of the price calculation (0-1)</param>
+    /// <param name="PricingConfigurationId">Pricing configuration record used</param>
+    /// <param name="Breakdown">Detailed cost breakdown</param>
     /// <param name="TotalUnitPrice">Final calculated unit price</param>
     /// <param name="TotalPrice">Total price including quantity</param>
     /// <param name="Currency">ISO 4217 currency code</param>
+    /// <param name="ValidUntil">Price validity expiry timestamp</param>
+    /// <param name="CalculatedAt">When the price was calculated</param>
     public record PriceCalculatedEventPayload(
-        [property: JsonPropertyName("fileId")] string FileId,
-        [property: JsonPropertyName("customerId")] string CustomerId,
+        [property: JsonPropertyName("pricingAuditId")] System.Guid PricingAuditId,
+        [property: JsonPropertyName("quotationId")] System.Guid? QuotationId,
+        [property: JsonPropertyName("fileId")] System.Guid FileId,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
+        [property: JsonPropertyName("materialId")] System.Guid MaterialId,
+        [property: JsonPropertyName("processId")] System.Guid ProcessId,
+        [property: JsonPropertyName("quantity")] int Quantity,
+        [property: JsonPropertyName("inputVolumeCm3")] double InputVolumeCm3,
+        [property: JsonPropertyName("inputSupportVolumeCm3")] double InputSupportVolumeCm3,
+        [property: JsonPropertyName("inputSurfaceAreaCm2")] double InputSurfaceAreaCm2,
+        [property: JsonPropertyName("strategy")] string Strategy,
+        [property: JsonPropertyName("mlModelVersion")] string? MlModelVersion,
+        [property: JsonPropertyName("confidenceLevel")] double ConfidenceLevel,
+        [property: JsonPropertyName("pricingConfigurationId")] System.Guid PricingConfigurationId,
+        [property: JsonPropertyName("breakdown")] PriceCalculatedEventPayloadBreakdown Breakdown,
         [property: JsonPropertyName("totalUnitPrice")] double TotalUnitPrice,
         [property: JsonPropertyName("totalPrice")] double TotalPrice,
         [property: JsonPropertyName("currency")] string Currency,
-        [property: JsonPropertyName("discountAmount")] double DiscountAmount,
-        [property: JsonPropertyName("source")] string Source,
+        [property: JsonPropertyName("validUntil")] System.DateTimeOffset ValidUntil,
         [property: JsonPropertyName("calculatedAt")] System.DateTimeOffset CalculatedAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PriceCalculatedEventPayload() : this(string.Empty, string.Empty, default(double), default(double), string.Empty, default(double), string.Empty, default(System.DateTimeOffset)) { }
+        public PriceCalculatedEventPayload() : this(default(System.Guid), default, default(System.Guid), default(System.Guid), default(System.Guid), default(System.Guid), default(int), default(double), default(double), default(double), string.Empty, default, default(double), default(System.Guid), default!, default(double), default(double), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when a price calculation for a file analysis completes
