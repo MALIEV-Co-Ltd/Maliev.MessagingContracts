@@ -7,45 +7,37 @@
         "MaterialLowStockEvent": {
             "type": "object",
             "description": "Published when remaining stock for a batch drops below threshold",
-            "allOf": [
-                {
-                    "$ref": "../shared/base-message.json"
+            "properties": {
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Material ID (FK to MaterialService)"
                 },
-                {
-                    "type": "object",
-                    "properties": {
-                        "materialId": {
-                            "type": "string",
-                            "format": "uuid",
-                            "description": "Material ID (FK to MaterialService)"
-                        },
-                        "batchId": {
-                            "type": "string",
-                            "format": "uuid",
-                            "description": "The specific batch that triggered the alert"
-                        },
-                        "remainingWeightGrams": {
-                            "type": "number",
-                            "description": "Current remaining weight in grams"
-                        },
-                        "lowStockThresholdGrams": {
-                            "type": "number",
-                            "description": "Configured alert threshold in grams"
-                        },
-                        "occurredAt": {
-                            "type": "string",
-                            "format": "date-time",
-                            "description": "UTC timestamp of the alert"
-                        }
-                    },
-                    "required": [
-                        "materialId",
-                        "batchId",
-                        "remainingWeightGrams",
-                        "lowStockThresholdGrams",
-                        "occurredAt"
-                    ]
+                "batchId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The specific batch that triggered the alert"
+                },
+                "remainingWeightGrams": {
+                    "type": "number",
+                    "description": "Current remaining weight in grams"
+                },
+                "lowStockThresholdGrams": {
+                    "type": "number",
+                    "description": "Configured alert threshold in grams"
+                },
+                "occurredAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "UTC timestamp of the alert"
                 }
+            },
+            "required": [
+                "materialId",
+                "batchId",
+                "remainingWeightGrams",
+                "lowStockThresholdGrams",
+                "occurredAt"
             ]
         }
     }
