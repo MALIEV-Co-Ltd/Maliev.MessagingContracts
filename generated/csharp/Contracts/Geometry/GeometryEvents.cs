@@ -107,15 +107,17 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// Payload data for FileAnalysisFailedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
+    /// <param name="ConsumedBy">Services that should handle this failure event (e.g. QuotationService for cleanup)</param>
     public record FileAnalysisFailedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("errorCode")] string ErrorCode,
-        [property: JsonPropertyName("details")] string? Details)
+        [property: JsonPropertyName("details")] string? Details,
+        [property: JsonPropertyName("consumedBy")] System.Collections.Generic.IReadOnlyList<object> ConsumedBy)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalysisFailedEventPayload() : this(string.Empty, string.Empty, default) { }
+        public FileAnalysisFailedEventPayload() : this(string.Empty, string.Empty, default, Array.Empty<object>()) { }
     }
     /// <summary>
     /// Published when a 3D file analysis fails

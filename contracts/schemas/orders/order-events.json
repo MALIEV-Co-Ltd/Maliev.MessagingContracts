@@ -31,11 +31,55 @@
                     "format": "date-time"
                 },
                 "assignedEmployeeId": {
-                    "type": ["string", "null"],
+                    "type": [
+                        "string",
+                        "null"
+                    ],
                     "format": "uuid"
+                },
+                "items": {
+                    "type": "array",
+                    "description": "Line items included in this order",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "productId": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "Unique identifier of the product/material"
+                            },
+                            "quantity": {
+                                "type": "integer",
+                                "description": "Number of units ordered",
+                                "minimum": 1
+                            },
+                            "unitPrice": {
+                                "type": "number",
+                                "description": "Price per unit in the order currency"
+                            },
+                            "lineTotal": {
+                                "type": "number",
+                                "description": "Total price for this line item (quantity x unitPrice)"
+                            }
+                        },
+                        "required": [
+                            "productId",
+                            "quantity",
+                            "unitPrice",
+                            "lineTotal"
+                        ]
+                    }
                 }
             },
-            "required": ["orderId", "orderNumber", "customerId", "totalAmount", "currency", "createdAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "customerId",
+                "totalAmount",
+                "currency",
+                "createdAt",
+                "items"
+            ]
         },
         "OrderStatusChangedEvent": {
             "type": "object",
@@ -51,17 +95,43 @@
                 "previousStatus": {
                     "type": "string",
                     "enum": [
-                        "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
-                        "Declined", "Accepted", "Expired", "Paid", "POIssued",
-                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                        "New",
+                        "Reviewing",
+                        "Rejected",
+                        "Reviewed",
+                        "Quoted",
+                        "Declined",
+                        "Accepted",
+                        "Expired",
+                        "Paid",
+                        "POIssued",
+                        "InProgress",
+                        "OnHold",
+                        "Finished",
+                        "Shipped",
+                        "Cancelled",
+                        "Reopened"
                     ]
                 },
                 "newStatus": {
                     "type": "string",
                     "enum": [
-                        "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
-                        "Declined", "Accepted", "Expired", "Paid", "POIssued",
-                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                        "New",
+                        "Reviewing",
+                        "Rejected",
+                        "Reviewed",
+                        "Quoted",
+                        "Declined",
+                        "Accepted",
+                        "Expired",
+                        "Paid",
+                        "POIssued",
+                        "InProgress",
+                        "OnHold",
+                        "Finished",
+                        "Shipped",
+                        "Cancelled",
+                        "Reopened"
                     ]
                 },
                 "changedBy": {
@@ -73,14 +143,24 @@
                     "format": "date-time"
                 },
                 "reason": {
-                    "type": ["string", "null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
-            "required": ["orderId", "orderNumber", "previousStatus", "newStatus", "changedBy", "changedAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "previousStatus",
+                "newStatus",
+                "changedBy",
+                "changedAt"
+            ]
         },
         "OrderQuotedEvent": {
             "type": "object",
-            "description": "Published when order receives quotation (Reviewed → Quoted)",
+            "description": "Published when order receives quotation (Reviewed \u2192 Quoted)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -109,11 +189,19 @@
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "quotedAmount", "currency", "validUntil", "quotedBy", "quotedAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "quotedAmount",
+                "currency",
+                "validUntil",
+                "quotedBy",
+                "quotedAt"
+            ]
         },
         "OrderAcceptedEvent": {
             "type": "object",
-            "description": "Published when customer accepts quotation (Quoted → Accepted)",
+            "description": "Published when customer accepts quotation (Quoted \u2192 Accepted)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -138,11 +226,18 @@
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "customerId", "acceptedAmount", "currency", "acceptedAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "customerId",
+                "acceptedAmount",
+                "currency",
+                "acceptedAt"
+            ]
         },
         "OrderPaidEvent": {
             "type": "object",
-            "description": "Published when payment is completed (Accepted → Paid)",
+            "description": "Published when payment is completed (Accepted \u2192 Paid)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -167,11 +262,18 @@
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "paymentId", "paidAmount", "currency", "paidAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "paymentId",
+                "paidAmount",
+                "currency",
+                "paidAt"
+            ]
         },
         "OrderInProgressEvent": {
             "type": "object",
-            "description": "Published when order enters production (Paid/POIssued → InProgress)",
+            "description": "Published when order enters production (Paid/POIssued \u2192 InProgress)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -185,15 +287,22 @@
                     "format": "date-time"
                 },
                 "estimatedCompletionDate": {
-                    "type": ["string", "null"],
+                    "type": [
+                        "string",
+                        "null"
+                    ],
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "startedAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "startedAt"
+            ]
         },
         "OrderCompletedEvent": {
             "type": "object",
-            "description": "Published when order production is finished (InProgress → Finished)",
+            "description": "Published when order production is finished (InProgress \u2192 Finished)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -202,6 +311,16 @@
                 "orderNumber": {
                     "type": "string"
                 },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "customerName": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "completedAt": {
                     "type": "string",
                     "format": "date-time"
@@ -209,13 +328,50 @@
                 "completedBy": {
                     "type": "string",
                     "format": "uuid"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "productCode": {
+                                "type": "string"
+                            },
+                            "productName": {
+                                "type": "string"
+                            },
+                            "quantityOrdered": {
+                                "type": "number"
+                            },
+                            "quantityManufactured": {
+                                "type": "number"
+                            },
+                            "unitOfMeasure": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "productCode",
+                            "productName",
+                            "quantityOrdered",
+                            "quantityManufactured",
+                            "unitOfMeasure"
+                        ]
+                    }
                 }
             },
-            "required": ["orderId", "orderNumber", "completedAt", "completedBy"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "customerId",
+                "completedAt",
+                "completedBy",
+                "items"
+            ]
         },
         "OrderShippedEvent": {
             "type": "object",
-            "description": "Published when order is shipped to customer (Finished → Shipped)",
+            "description": "Published when order is shipped to customer (Finished \u2192 Shipped)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -229,21 +385,34 @@
                     "format": "date-time"
                 },
                 "trackingNumber": {
-                    "type": ["string", "null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "carrier": {
-                    "type": ["string", "null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "estimatedDeliveryDate": {
-                    "type": ["string", "null"],
+                    "type": [
+                        "string",
+                        "null"
+                    ],
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "shippedAt"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "shippedAt"
+            ]
         },
         "OrderCancelledEvent": {
             "type": "object",
-            "description": "Published when order is cancelled (Any → Cancelled)",
+            "description": "Published when order is cancelled (Any \u2192 Cancelled)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -267,11 +436,18 @@
                     "type": "boolean"
                 }
             },
-            "required": ["orderId", "orderNumber", "cancelledBy", "cancelledAt", "cancellationReason", "refundRequired"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "cancelledBy",
+                "cancelledAt",
+                "cancellationReason",
+                "refundRequired"
+            ]
         },
         "OrderRejectedEvent": {
             "type": "object",
-            "description": "Published when order is rejected during review (Reviewing → Rejected)",
+            "description": "Published when order is rejected during review (Reviewing \u2192 Rejected)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -292,11 +468,17 @@
                     "type": "string"
                 }
             },
-            "required": ["orderId", "orderNumber", "rejectedBy", "rejectedAt", "rejectionReason"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "rejectedBy",
+                "rejectedAt",
+                "rejectionReason"
+            ]
         },
         "OrderOnHoldEvent": {
             "type": "object",
-            "description": "Published when order production is paused (InProgress → OnHold)",
+            "description": "Published when order production is paused (InProgress \u2192 OnHold)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -317,11 +499,17 @@
                     "type": "string"
                 }
             },
-            "required": ["orderId", "orderNumber", "putOnHoldBy", "putOnHoldAt", "holdReason"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "putOnHoldBy",
+                "putOnHoldAt",
+                "holdReason"
+            ]
         },
         "OrderReopenedEvent": {
             "type": "object",
-            "description": "Published when completed/shipped order is reopened (Finished/Shipped → Reopened)",
+            "description": "Published when completed/shipped order is reopened (Finished/Shipped \u2192 Reopened)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -342,7 +530,13 @@
                     "type": "string"
                 }
             },
-            "required": ["orderId", "orderNumber", "reopenedBy", "reopenedAt", "reopenReason"]
+            "required": [
+                "orderId",
+                "orderNumber",
+                "reopenedBy",
+                "reopenedAt",
+                "reopenReason"
+            ]
         }
     }
 }

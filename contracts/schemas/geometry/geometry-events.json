@@ -113,6 +113,11 @@
                         "string",
                         "null"
                     ]
+                },
+                "consumedBy": {
+                    "type": "array",
+                    "const": ["QuotationService"],
+                    "description": "Services that should handle this failure event (e.g. QuotationService for cleanup)"
                 }
             },
             "required": [

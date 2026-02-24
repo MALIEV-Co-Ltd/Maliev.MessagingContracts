@@ -453,10 +453,10 @@ channels:
         $ref: '#/components/messages/EmployeeTerminatedEvent'
 
   employee/department-transferred:
-    address: maliev.employees.events.employee-department-transferred
+    address: maliev.employees.events.department-transferred
     messages:
-      EmployeeDepartmentTransferredEvent:
-        $ref: '#/components/messages/EmployeeDepartmentTransferredEvent'
+      DepartmentTransferredEvent:
+        $ref: '#/components/messages/DepartmentTransferredEvent'
 
   employee/team-created:
     address: maliev.employees.events.team-created
@@ -1113,9 +1113,9 @@ components:
         $ref: '../contracts/schemas/employee/employee-events.json#/definitions/EmployeeTerminatedEvent'
       description: Published when employee is terminated
 
-    EmployeeDepartmentTransferredEvent:
+    DepartmentTransferredEvent:
       payload:
-        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/EmployeeDepartmentTransferredEvent'
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/DepartmentTransferredEvent'
       description: Published when employee moves to different department
 
     TeamCreatedEvent:

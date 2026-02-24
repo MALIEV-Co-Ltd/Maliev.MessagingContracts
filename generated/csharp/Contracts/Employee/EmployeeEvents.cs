@@ -131,43 +131,6 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     }
 
     /// <summary>
-    /// Payload data for EmployeeDepartmentTransferredEvent.
-    /// </summary>
-    public record EmployeeDepartmentTransferredEventPayload(
-        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
-        [property: JsonPropertyName("previousDepartmentId")] System.Guid PreviousDepartmentId,
-        [property: JsonPropertyName("newDepartmentId")] System.Guid NewDepartmentId,
-        [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate)
-    {
-        /// <summary>
-        /// Parameterless constructor for deserialization.
-        /// </summary>
-        public EmployeeDepartmentTransferredEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), default(System.DateTimeOffset)) { }
-    }
-    /// <summary>
-    /// Published when an employee transfers between departments
-    /// </summary>
-    /// <param name="Payload">The specific data associated with this message.</param>
-    public record EmployeeDepartmentTransferredEvent(
-        System.Guid MessageId,
-        string MessageName,
-        MessageType MessageType,
-        string MessageVersion,
-        string PublishedBy,
-        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
-        System.Guid CorrelationId,
-        System.Guid? CausationId,
-        System.DateTimeOffset OccurredAtUtc,
-        bool IsPublic,
-        [property: JsonPropertyName("payload")] EmployeeDepartmentTransferredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
-    {
-        /// <summary>
-        /// Parameterless constructor for deserialization.
-        /// </summary>
-        public EmployeeDepartmentTransferredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
-    }
-
-    /// <summary>
     /// Payload data for TeamCreatedEvent.
     /// </summary>
     public record TeamCreatedEventPayload(

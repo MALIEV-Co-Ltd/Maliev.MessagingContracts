@@ -50,8 +50,27 @@ namespace Maliev.MessagingContracts.Contracts.Orders
 
 
     /// <summary>
+    /// Payload data for OrderCreatedEventItemsItem.
+    /// </summary>
+    /// <param name="ProductId">Unique identifier of the product/material</param>
+    /// <param name="Quantity">Number of units ordered</param>
+    /// <param name="UnitPrice">Price per unit in the order currency</param>
+    /// <param name="LineTotal">Total price for this line item (quantity x unitPrice)</param>
+    public record OrderCreatedEventPayloadItemsItem(
+        [property: JsonPropertyName("productId")] System.Guid ProductId,
+        [property: JsonPropertyName("quantity")] int Quantity,
+        [property: JsonPropertyName("unitPrice")] double UnitPrice,
+        [property: JsonPropertyName("lineTotal")] double LineTotal)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCreatedEventPayloadItemsItem() : this(default(System.Guid), default(int), default(double), default(double)) { }
+    }
+    /// <summary>
     /// Payload data for OrderCreatedEvent.
     /// </summary>
+    /// <param name="Items">Line items included in this order</param>
     public record OrderCreatedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
@@ -59,12 +78,13 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         [property: JsonPropertyName("totalAmount")] double TotalAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt,
-        [property: JsonPropertyName("assignedEmployeeId")] System.Guid? AssignedEmployeeId)
+        [property: JsonPropertyName("assignedEmployeeId")] System.Guid? AssignedEmployeeId,
+        [property: JsonPropertyName("items")] System.Collections.Generic.IReadOnlyList<OrderCreatedEventPayloadItemsItem> Items)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), default) { }
+        public OrderCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), default, Array.Empty<OrderCreatedEventPayloadItemsItem>()) { }
     }
     /// <summary>
     /// Published when a new order is created
@@ -285,18 +305,36 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     }
 
     /// <summary>
+    /// Payload data for OrderCompletedEventItemsItem.
+    /// </summary>
+    public record OrderCompletedEventPayloadItemsItem(
+        [property: JsonPropertyName("productCode")] string ProductCode,
+        [property: JsonPropertyName("productName")] string ProductName,
+        [property: JsonPropertyName("quantityOrdered")] double QuantityOrdered,
+        [property: JsonPropertyName("quantityManufactured")] double QuantityManufactured,
+        [property: JsonPropertyName("unitOfMeasure")] string UnitOfMeasure)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderCompletedEventPayloadItemsItem() : this(string.Empty, string.Empty, default(double), default(double), string.Empty) { }
+    }
+    /// <summary>
     /// Payload data for OrderCompletedEvent.
     /// </summary>
     public record OrderCompletedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
+        [property: JsonPropertyName("customerName")] string? CustomerName,
         [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt,
-        [property: JsonPropertyName("completedBy")] System.Guid CompletedBy)
+        [property: JsonPropertyName("completedBy")] System.Guid CompletedBy,
+        [property: JsonPropertyName("items")] System.Collections.Generic.IReadOnlyList<OrderCompletedEventPayloadItemsItem> Items)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.Guid)) { }
+        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default, default(System.DateTimeOffset), default(System.Guid), Array.Empty<OrderCompletedEventPayloadItemsItem>()) { }
     }
     /// <summary>
     /// Published when order production is finished (InProgress → Finished)

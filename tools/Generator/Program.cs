@@ -112,7 +112,7 @@ namespace Generator
                 "lifecycle", "performance", "chatbot", "invoices", "quotations",
                 "purchase-orders", "receipts", "materials", "suppliers", "auth",
                 "uploads", "pdf", "geometry", "accounting", "delivery", "nda",
-                "jobs", "inventory"
+                "jobs", "inventory", "pricing"
             };
 
             foreach (var domainDir in domains)

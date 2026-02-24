@@ -1,3 +1,511 @@
-exchanges: []
-queues: []
-bindings: []
+# RabbitMQ Topology Declaration for MALIEV Microservices
+# This file declares the explicit exchange/queue/binding topology.
+# MassTransit can use this for declarative topology setup.
+#
+# Topology pattern:
+#   - Exchanges: Topic exchanges per domain (maliev.{domain})
+#   - Queues: Service-specific queues (maliev.{service}.{queuename})
+#   - Bindings: Routing key patterns from exchanges to queues
+#
+# Generated from asyncapi/asyncapi.yaml channel definitions
+# Format: YAML 1.1
+
+exchanges:
+  # === Business Services ===
+  - name: maliev.orders
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Order domain events
+
+  - name: maliev.invoices
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Invoice domain events
+
+  - name: maliev.payments
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Payment domain events
+
+  - name: maliev.customers
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Customer domain events
+
+  - name: maliev.quotations
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Quotation domain events
+
+  - name: maliev.receipts
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Receipt domain events
+
+  - name: maliev.materials
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Material/inventory domain events
+
+  - name: maliev.suppliers
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Supplier domain events
+
+  - name: maliev.purchase-orders
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Purchase order domain events
+
+  - name: maliev.geometry
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Geometry service analysis events
+
+  - name: maliev.uploads
+    type: topic
+    durable: true
+    auto_delete: false
+    description: File upload events
+
+  - name: maliev.jobs
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Production job events
+
+  - name: maliev.inventory
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Inventory management events
+
+  - name: maliev.delivery
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Delivery/shipping events
+
+  - name: maliev.pricing
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Pricing calculation events
+
+  # === HR Services ===
+  - name: maliev.employee
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Employee domain events
+
+  - name: maliev.leave
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Leave management events
+
+  - name: maliev.performance
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Performance review events
+
+  - name: maliev.lifecycle
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Employee lifecycle events
+
+  - name: maliev.career
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Training/development events
+
+  - name: maliev.compensation
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Compensation events
+
+  - name: maliev.compliance
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Compliance events
+
+  # === Infrastructure ===
+  - name: maliev.chatbot
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Chatbot session events
+
+  - name: maliev.iam
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Identity & access management events
+
+  - name: maliev.pdf
+    type: topic
+    durable: true
+    auto_delete: false
+    description: PDF generation events
+
+  - name: maliev.auth
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Authentication events
+
+  - name: maliev.accounting
+    type: topic
+    durable: true
+    auto_delete: false
+    description: Accounting events
+
+queues:
+  # === Business Service Queues ===
+  - name: maliev.order-service
+    durable: true
+    auto_delete: false
+    description: OrderService main queue
+
+  - name: maliev.invoice-service
+    durable: true
+    auto_delete: false
+    description: InvoiceService main queue
+
+  - name: maliev.payment-service
+    durable: true
+    auto_delete: false
+    description: PaymentService main queue
+
+  - name: maliev.customer-service
+    durable: true
+    auto_delete: false
+    description: CustomerService main queue
+
+  - name: maliev.quotation-service
+    durable: true
+    auto_delete: false
+    description: QuotationService main queue
+
+  - name: maliev.receipt-service
+    durable: true
+    auto_delete: false
+    description: ReceiptService main queue
+
+  - name: maliev.material-service
+    durable: true
+    auto_delete: false
+    description: MaterialService main queue
+
+  - name: maliev.supplier-service
+    durable: true
+    auto_delete: false
+    description: SupplierService main queue
+
+  - name: maliev.purchase-order-service
+    durable: true
+    auto_delete: false
+    description: PurchaseOrderService main queue
+
+  - name: maliev.geometry-service
+    durable: true
+    auto_delete: false
+    description: GeometryService main queue
+
+  - name: maliev.upload-service
+    durable: true
+    auto_delete: false
+    description: UploadService main queue
+
+  - name: maliev.job-service
+    durable: true
+    auto_delete: false
+    description: JobService main queue
+
+  - name: maliev.inventory-service
+    durable: true
+    auto_delete: false
+    description: InventoryService main queue
+
+  - name: maliev.delivery-service
+    durable: true
+    auto_delete: false
+    description: DeliveryService main queue
+
+  - name: maliev.pricing-service
+    durable: true
+    auto_delete: false
+    description: PricingService main queue
+
+  - name: maliev.notification-service
+    durable: true
+    auto_delete: false
+    description: NotificationService main queue
+
+  # === HR Service Queues ===
+  - name: maliev.employee-service
+    durable: true
+    auto_delete: false
+    description: EmployeeService main queue
+
+  - name: maliev.leave-service
+    durable: true
+    auto_delete: false
+    description: LeaveService main queue
+
+  - name: maliev.performance-service
+    durable: true
+    auto_delete: false
+    description: PerformanceService main queue
+
+  - name: maliev.lifecycle-service
+    durable: true
+    auto_delete: false
+    description: LifecycleService main queue
+
+  - name: maliev.career-service
+    durable: true
+    auto_delete: false
+    description: CareerService main queue
+
+  - name: maliev.compensation-service
+    durable: true
+    auto_delete: false
+    description: CompensationService main queue
+
+  - name: maliev.compliance-service
+    durable: true
+    auto_delete: false
+    description: ComplianceService main queue
+
+  # === Infrastructure Queues ===
+  - name: maliev.chatbot-service
+    durable: true
+    auto_delete: false
+    description: ChatbotService main queue
+
+  - name: maliev.iam-service
+    durable: true
+    auto_delete: false
+    description: IAMService main queue
+
+  - name: maliev.pdf-service
+    durable: true
+    auto_delete: false
+    description: PdfService main queue
+
+  - name: maliev.auth-service
+    durable: true
+    auto_delete: false
+    description: AuthService main queue
+
+  - name: maliev.accounting-service
+    durable: true
+    auto_delete: false
+    description: AccountingService main queue
+
+  - name: maliev.prediction-service
+    durable: true
+    auto_delete: false
+    description: PredictionService main queue
+
+  # === Notification Queues ===
+  - name: maliev.notification-standard
+    durable: true
+    auto_delete: false
+    description: Standard priority notifications
+
+  - name: maliev.notification-critical
+    durable: true
+    auto_delete: false
+    description: Critical priority notifications
+
+bindings:
+  # === Order Events → OrderService ===
+  - exchange: maliev.orders
+    queue: maliev.order-service
+    routing_key: "events.*"
+
+  # === Invoice Events ===
+  - exchange: maliev.invoices
+    queue: maliev.invoice-service
+    routing_key: "events.*"
+
+  # === Payment Events → PaymentService + Notification ===
+  - exchange: maliev.payments
+    queue: maliev.payment-service
+    routing_key: "events.*"
+  - exchange: maliev.payments
+    queue: maliev.notification-critical
+    routing_key: "events.payment-completed"
+
+  # === Customer Events → CustomerService + Notification ===
+  - exchange: maliev.customers
+    queue: maliev.customer-service
+    routing_key: "events.*"
+  - exchange: maliev.customers
+    queue: maliev.notification-standard
+    routing_key: "events.customer-created"
+
+  # === Quotation Events ===
+  - exchange: maliev.quotations
+    queue: maliev.quotation-service
+    routing_key: "events.*"
+
+  # === Receipt Events ===
+  - exchange: maliev.receipts
+    queue: maliev.receipt-service
+    routing_key: "events.*"
+
+  # === Material Events ===
+  - exchange: maliev.materials
+    queue: maliev.material-service
+    routing_key: "events.*"
+
+  # === Supplier Events ===
+  - exchange: maliev.suppliers
+    queue: maliev.supplier-service
+    routing_key: "events.*"
+
+  # === Purchase Order Events ===
+  - exchange: maliev.purchase-orders
+    queue: maliev.purchase-order-service
+    routing_key: "events.*"
+
+  # === Geometry Events → PricingService + QuotationService ===
+  - exchange: maliev.geometry
+    queue: maliev.geometry-service
+    routing_key: "events.*"
+  - exchange: maliev.geometry
+    queue: maliev.pricing-service
+    routing_key: "events.file-analyzed"
+  - exchange: maliev.geometry
+    queue: maliev.quotation-service
+    routing_key: "events.file-analyzed"
+
+  # === Upload Events ===
+  - exchange: maliev.uploads
+    queue: maliev.upload-service
+    routing_key: "events.*"
+
+  # === Job Events → InventoryService ===
+  - exchange: maliev.jobs
+    queue: maliev.job-service
+    routing_key: "events.*"
+  - exchange: maliev.jobs
+    queue: maliev.inventory-service
+    routing_key: "events.job-started"
+
+  # === Inventory Events ===
+  - exchange: maliev.inventory
+    queue: maliev.inventory-service
+    routing_key: "events.*"
+
+  # === Delivery Events → Notification ===
+  - exchange: maliev.delivery
+    queue: maliev.delivery-service
+    routing_key: "events.*"
+  - exchange: maliev.delivery
+    queue: maliev.notification-critical
+    routing_key: "events.delivery-completed"
+
+  # === Pricing Events ===
+  - exchange: maliev.pricing
+    queue: maliev.pricing-service
+    routing_key: "events.*"
+
+  # === Employee Events → HR Services ===
+  - exchange: maliev.employee
+    queue: maliev.employee-service
+    routing_key: "events.*"
+  - exchange: maliev.employee
+    queue: maliev.career-service
+    routing_key: "events.employee-created"
+  - exchange: maliev.employee
+    queue: maliev.compensation-service
+    routing_key: "events.employee-created"
+  - exchange: maliev.employee
+    queue: maliev.compliance-service
+    routing_key: "events.employee-created"
+  - exchange: maliev.employee
+    queue: maliev.performance-service
+    routing_key: "events.employee-created"
+  - exchange: maliev.employee
+    queue: maliev.lifecycle-service
+    routing_key: "events.employee-terminated"
+
+  # === Leave Events ===
+  - exchange: maliev.leave
+    queue: maliev.leave-service
+    routing_key: "events.*"
+
+  # === Performance Events ===
+  - exchange: maliev.performance
+    queue: maliev.performance-service
+    routing_key: "events.*"
+
+  # === Lifecycle Events ===
+  - exchange: maliev.lifecycle
+    queue: maliev.lifecycle-service
+    routing_key: "events.*"
+
+  # === Career Events ===
+  - exchange: maliev.career
+    queue: maliev.career-service
+    routing_key: "events.*"
+
+  # === Compensation Events ===
+  - exchange: maliev.compensation
+    queue: maliev.compensation-service
+    routing_key: "events.*"
+
+  # === Compliance Events ===
+  - exchange: maliev.compliance
+    queue: maliev.compliance-service
+    routing_key: "events.*"
+
+  # === Chatbot Events ===
+  - exchange: maliev.chatbot
+    queue: maliev.chatbot-service
+    routing_key: "events.*"
+
+  # === IAM Events ===
+  - exchange: maliev.iam
+    queue: maliev.iam-service
+    routing_key: "events.*"
+
+  # === PDF Events ===
+  - exchange: maliev.pdf
+    queue: maliev.pdf-service
+    routing_key: "events.*"
+
+  # === Auth Events ===
+  - exchange: maliev.auth
+    queue: maliev.auth-service
+    routing_key: "events.*"
+
+  # === Accounting Events ===
+  - exchange: maliev.accounting
+    queue: maliev.accounting-service
+    routing_key: "events.*"
+
+  # === OrderCreated → PredictionService ===
+  - exchange: maliev.orders
+    queue: maliev.prediction-service
+    routing_key: "events.order-created"
