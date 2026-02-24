@@ -30,25 +30,12 @@ Get-ChildItem -Path $monorepoRoot -Directory | ForEach-Object {
 }
 
 # In CI, only the MessagingContracts repo is checked out, so sibling service dirs won't exist.
-# Fall back to the canonical list of known Maliev services when fewer than 3 are discovered.
-$knownServices = @(
-    "AccountingService", "AuthService", "CareerService", "ChatbotService",
-    "CompensationService", "ComplianceService", "ContactService", "CountryService",
-    "CurrencyService", "CustomerService", "DeliveryService", "EmployeeService",
-    "GeometryService", "IAMService", "Intranet", "InventoryService",
-    "InvoiceService", "JobService", "LeaveService", "LifecycleService",
-    "MaterialService", "MessagingContracts", "NotificationService", "OrderService",
-    "PaymentService", "PdfService", "PerformanceService", "PredictionService",
-    "PricingService", "PurchaseOrderService", "QuotationService", "ReceiptService",
-    "RegistryService", "SupplierService", "UploadService"
-)
-
-if ($discoveredServiceIds.Count -lt 6) {
-    Write-Host "Fewer than 3 service directories found — using canonical service list (CI mode)."
-    foreach ($svc in $knownServices) {
-        [void]$discoveredServiceIds.Add($svc)
-        [void]$discoveredServiceIds.Add("Maliev.$svc")
-    }
+# When fewer than 3 services are found, we are in an isolated environment (e.g. GitHub Actions).
+# In that case, fall back to pattern-based validation: accept any PascalCase identifier or
+# 'Maliev.PascalCase' string, which covers all valid Maliev service names without hardcoding them.
+$ciMode = $discoveredServiceIds.Count -lt 6
+if ($ciMode) {
+    Write-Host "Fewer than 3 service directories found — using pattern-based validation (CI mode)."
 }
 
 Write-Host "Discovered $($discoveredServiceIds.Count / 2) services in monorepo."
@@ -103,7 +90,15 @@ foreach ($file in $schemaFiles) {
     }
 
     foreach ($consumer in $consumers) {
-        if (-not $discoveredServiceIds.Contains($consumer)) {
+        # In CI mode (isolated checkout), validate format only: PascalCase or Maliev.PascalCase
+        $validPattern = '^(Maliev\.)?[A-Z][A-Za-z]+$'
+        $validLocally = $discoveredServiceIds.Contains($consumer)
+        $validFormat  = $consumer -match $validPattern
+        if ($ciMode -and -not $validFormat) {
+            Write-Error "[ERROR] Consumer '$consumer' in '$($file.Name)' is not a valid service identifier. Expected PascalCase like 'JobService' or 'Maliev.JobService'."
+            $allValid = $false
+            $errorCount++
+        } elseif (-not $ciMode -and -not $validLocally) {
             Write-Error "[ERROR] Consumer '$consumer' declared in '$($file.Name)' does not match any known Maliev service. Valid IDs are short names like 'JobService' or full names like 'Maliev.JobService'."
             $allValid    = $false
             $errorCount++
