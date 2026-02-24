@@ -29,6 +29,28 @@ Get-ChildItem -Path $monorepoRoot -Directory | ForEach-Object {
     }
 }
 
+# In CI, only the MessagingContracts repo is checked out, so sibling service dirs won't exist.
+# Fall back to the canonical list of known Maliev services when fewer than 3 are discovered.
+$knownServices = @(
+    "AccountingService", "AuthService", "CareerService", "ChatbotService",
+    "CompensationService", "ComplianceService", "ContactService", "CountryService",
+    "CurrencyService", "CustomerService", "DeliveryService", "EmployeeService",
+    "GeometryService", "IAMService", "Intranet", "InventoryService",
+    "InvoiceService", "JobService", "LeaveService", "LifecycleService",
+    "MaterialService", "MessagingContracts", "NotificationService", "OrderService",
+    "PaymentService", "PdfService", "PerformanceService", "PredictionService",
+    "PricingService", "PurchaseOrderService", "QuotationService", "ReceiptService",
+    "RegistryService", "SupplierService", "UploadService"
+)
+
+if ($discoveredServiceIds.Count -lt 6) {
+    Write-Host "Fewer than 3 service directories found — using canonical service list (CI mode)."
+    foreach ($svc in $knownServices) {
+        [void]$discoveredServiceIds.Add($svc)
+        [void]$discoveredServiceIds.Add("Maliev.$svc")
+    }
+}
+
 Write-Host "Discovered $($discoveredServiceIds.Count / 2) services in monorepo."
 
 # ── 3. Schemas exempt from consumedBy validation ─────────────────────────────
