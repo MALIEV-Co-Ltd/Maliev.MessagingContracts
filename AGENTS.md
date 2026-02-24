@@ -1,7 +1,28 @@
-﻿# Maliev.MessagingContracts Agent Guidelines
+---
+name: maliev-messaging-contracts
+description: Contract-first source of truth for all MALIEV message types
+license: MIT
+compatibility: opencode
+metadata:
+  audience: developers
+  workflow: messaging-contracts
+---
 
-This document provides instructions for AI agents working in this repository.
-The repository is the **authoritative, contract-first source of truth** for message types in the MALIEV ecosystem.
+## What I do
+
+- Maintain JSON Schemas (Draft-07) for all cross-service messages
+- Define RabbitMQ topology and channel addresses (AsyncAPI 3.0)
+- Generate C# record types and nested payloads
+- Enforce semantic versioning and consumer declarations
+
+## When to use me
+
+- Adding a new cross-service event, command, or request/response
+- Modifying fields in an existing contract
+- Updating publisher/consumer mappings
+- Troubleshooting messaging serialization or topology issues
+
+---
 
 ## 1. Core Principles & "Constitution" Rules
 
@@ -26,7 +47,7 @@ The repository is the **authoritative, contract-first source of truth** for mess
 *   **Framework**: .NET 10.0
 *   **Schemas**: JSON Schema (Draft-07), AsyncAPI 3.0
 *   **Serialization**: `System.Text.Json` (Source Generated)
-*   **OS**: Windows (`win32`)
+*   **OS**: Linux / Windows
 
 ## 3. Workflow: Adding/Modifying Contracts
 
@@ -39,15 +60,18 @@ To add or modify a message contract, follow this exact sequence:
     *   Add the message definition.
     *   Define the channel and RabbitMQ address.
 3.  **Validate Schemas**: Run `npm test` to validate JSON and AsyncAPI syntax.
-4.  **Generate Code**: Run `./scripts/build.ps1` to generate C# models.
+4.  **Generate Code**: Run the generator.
+    ```bash
+    dotnet run --project tools/Generator/Generator.csproj
+    ```
 5.  **Verify C#**: Run `dotnet test` to ensure serialization works.
 
 ## 4. Commands
 
 ### Build & Generate
 *   **Generate C# Models**:
-    ```powershell
-    ./scripts/build.ps1
+    ```bash
+    dotnet run --project tools/Generator/Generator.csproj
     ```
     *This script validates schemas and runs the custom C# generator.*
 
@@ -68,20 +92,6 @@ To add or modify a message contract, follow this exact sequence:
     dotnet test
     ```
 
-*   **Run a Single Test Class**:
-    ```bash
-    dotnet test --filter "FullyQualifiedName~Maliev.MessagingContracts.Tests.SerializationTests"
-    ```
-
-*   **Run a Single Test Method**:
-    ```bash
-    dotnet test --filter "FullyQualifiedName~TestNamespace.TestClass.TestMethod"
-    ```
-    *Example:*
-    ```bash
-    dotnet test --filter "FullyQualifiedName~Maliev.MessagingContracts.Tests.ValidationTests.Schema_ShouldBeValid"
-    ```
-
 ## 5. Directory Structure
 
 *   `contracts/schemas/`: **Source of Truth**. JSON Schemas grouped by domain (e.g., `employee/`, `orders/`).
@@ -89,6 +99,7 @@ To add or modify a message contract, follow this exact sequence:
 *   `tools/Generator/`: Custom C# source generator code.
 *   `generated/csharp/`: **Read-Only**. Output directory for generated C# code.
 *   `tests/`: Unit tests for serialization and validation.
+*   `topology/`: RabbitMQ exchange, queue, and binding declarations (`rabbitmq.yaml`).
 
 ## 6. Code Style Guidelines
 
@@ -100,20 +111,14 @@ To add or modify a message contract, follow this exact sequence:
 
 ### C# (Tests & Generator)
 *   **Naming**: `PascalCase` for classes, methods, properties. `camelCase` for local variables.
-*   **Formatting**: Standard K&R / Visual Studio defaults.
-*   **Imports**: Place `using` directives at the top of the file.
+*   **Formatting**: Standard Allman style.
 *   **Tests**: Use `xUnit`. Naming convention: `MethodName_StateUnderTesting_ExpectedBehavior`.
 
-## 7. Troubleshooting
-
-*   **Build fails on warnings**: Fix the warning; do not disable `TreatWarningsAsErrors`.
-*   **Serialization fails**: Check if `System.Text.Json` attributes are correctly generated. Ensure the schema types map correctly to C# types.
-*   **Generator issues**: If the generator fails, check `tools/Generator` logic. It is a custom proprietary tool.
-
-## 8. Development Checklist
+## 7. Development Checklist
 
 Before asking the user to commit:
 1.  [ ] Are schemas valid? (`npm test`)
-2.  [ ] Is C# code generated? (`./scripts/build.ps1`)
+2.  [ ] Is C# code generated? (`dotnet run --project tools/Generator`)
 3.  [ ] Do all tests pass? (`dotnet test`)
 4.  [ ] Are there any warnings? (Must be zero)
+
