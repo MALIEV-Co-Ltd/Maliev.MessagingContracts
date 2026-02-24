@@ -11,7 +11,7 @@
     <Description>Shared messaging contracts for the MALIEV ecosystem.</Description>
     <RepositoryUrl>https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>
