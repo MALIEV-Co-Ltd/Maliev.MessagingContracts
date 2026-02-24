@@ -12,6 +12,11 @@
                     "type": "string",
                     "description": "Unique identifier for the file"
                 },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the customer who uploaded the file"
+                },
                 "metrics": {
                     "type": "object",
                     "properties": {
@@ -93,6 +98,7 @@
             },
             "required": [
                 "fileId",
+                "customerId",
                 "metrics",
                 "processedAt"
             ]

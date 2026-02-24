@@ -64,11 +64,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// Payload data for FileAnalyzedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
+    /// <param name="CustomerId">Unique identifier for the customer who uploaded the file</param>
     /// <param name="GlbStoragePath">GCS storage path of the generated GLB file</param>
     /// <param name="ThumbnailStoragePath">GCS storage path of the generated thumbnail image</param>
     /// <param name="DfmReport">Optional DFM analysis results. Null if analysis failed or not applicable.</param>
     public record FileAnalyzedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("metrics")] FileAnalyzedEventPayloadMetrics Metrics,
         [property: JsonPropertyName("glbStoragePath")] string? GlbStoragePath,
         [property: JsonPropertyName("thumbnailStoragePath")] string? ThumbnailStoragePath,
@@ -78,7 +80,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalyzedEventPayload() : this(string.Empty, default!, default, default, default(System.DateTimeOffset), default!) { }
+        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, default(System.DateTimeOffset), default!) { }
     }
     /// <summary>
     /// Published when a 3D file analysis completes successfully

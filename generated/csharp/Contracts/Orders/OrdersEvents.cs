@@ -287,16 +287,34 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     /// <summary>
     /// Payload data for OrderCompletedEvent.
     /// </summary>
+    /// <param name="OrderId">Order ID that was completed</param>
+    /// <param name="OrderNumber">Human-readable order number</param>
+    /// <param name="QuotationId">Quotation ID the order was created from</param>
+    /// <param name="OrderCreatedAt">When the order was created</param>
+    /// <param name="CompletedAt">When the order was completed</param>
+    /// <param name="CompletedBy">User who completed the order</param>
+    /// <param name="JobSucceeded">Whether the manufacturing job succeeded</param>
+    /// <param name="ActualMaterialUsedCm3">Actual material used in cubic centimeters</param>
+    /// <param name="ActualPrintTimeHours">Actual print time in hours</param>
+    /// <param name="ActualLaborHours">Actual labor hours spent</param>
+    /// <param name="ActualTotalCost">Actual total cost of the job</param>
     public record OrderCompletedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
+        [property: JsonPropertyName("quotationId")] System.Guid QuotationId,
+        [property: JsonPropertyName("orderCreatedAt")] System.DateTimeOffset OrderCreatedAt,
         [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt,
-        [property: JsonPropertyName("completedBy")] System.Guid CompletedBy)
+        [property: JsonPropertyName("completedBy")] System.Guid CompletedBy,
+        [property: JsonPropertyName("jobSucceeded")] bool JobSucceeded,
+        [property: JsonPropertyName("actualMaterialUsedCm3")] double? ActualMaterialUsedCm3,
+        [property: JsonPropertyName("actualPrintTimeHours")] double? ActualPrintTimeHours,
+        [property: JsonPropertyName("actualLaborHours")] double? ActualLaborHours,
+        [property: JsonPropertyName("actualTotalCost")] double? ActualTotalCost)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.Guid)) { }
+        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset), default(System.Guid), default(bool), default, default, default, default) { }
     }
     /// <summary>
     /// Published when order production is finished (InProgress → Finished)

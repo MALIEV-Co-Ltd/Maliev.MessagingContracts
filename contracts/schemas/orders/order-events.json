@@ -197,21 +197,55 @@
             "properties": {
                 "orderId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Order ID that was completed"
                 },
                 "orderNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Human-readable order number"
+                },
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Quotation ID the order was created from"
+                },
+                "orderCreatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the order was created"
                 },
                 "completedAt": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When the order was completed"
                 },
                 "completedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "User who completed the order"
+                },
+                "jobSucceeded": {
+                    "type": "boolean",
+                    "description": "Whether the manufacturing job succeeded"
+                },
+                "actualMaterialUsedCm3": {
+                    "type": ["number", "null"],
+                    "description": "Actual material used in cubic centimeters"
+                },
+                "actualPrintTimeHours": {
+                    "type": ["number", "null"],
+                    "description": "Actual print time in hours"
+                },
+                "actualLaborHours": {
+                    "type": ["number", "null"],
+                    "description": "Actual labor hours spent"
+                },
+                "actualTotalCost": {
+                    "type": ["number", "null"],
+                    "description": "Actual total cost of the job"
                 }
             },
-            "required": ["orderId", "orderNumber", "completedAt", "completedBy"]
+            "required": ["orderId", "orderNumber", "quotationId", "orderCreatedAt", "completedAt", "completedBy", "jobSucceeded"]
         },
         "OrderShippedEvent": {
             "type": "object",
