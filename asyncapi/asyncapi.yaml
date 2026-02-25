@@ -208,6 +208,12 @@ channels:
       CustomerDeletedEvent:
         $ref: '#/components/messages/CustomerDeletedEvent'
 
+  customer/company-tier-changed:
+    address: maliev.customers.events.company-tier-changed
+    messages:
+      CompanyTierChangedEvent:
+        $ref: '#/components/messages/CompanyTierChangedEvent'
+
   # ==================== PURCHASE ORDER SERVICE ====================
   purchase-order/created:
     address: maliev.purchase-orders.events.purchase-order-created
@@ -907,6 +913,11 @@ components:
       payload:
         $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CustomerDeletedEvent'
       description: Published when customer is soft-deleted
+
+    CompanyTierChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CompanyTierChangedEvent'
+      description: Published when a company's tier is promoted or demoted
 
     # ==================== PURCHASE ORDER SERVICE MESSAGES ====================
     PurchaseOrderCreatedEvent:

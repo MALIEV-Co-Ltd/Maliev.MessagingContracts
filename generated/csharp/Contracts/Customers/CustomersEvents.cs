@@ -181,6 +181,51 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     }
 
     /// <summary>
+    /// Payload data for CompanyTierChangedEvent.
+    /// </summary>
+    /// <param name="CompanyId">Unique identifier of the company whose tier changed</param>
+    /// <param name="PreviousTier">Tier before the change (Classic, Silver, Gold)</param>
+    /// <param name="NewTier">Tier after the change (Classic, Silver, Gold)</param>
+    /// <param name="CurrentYearPurchaseValue">Year-to-date purchase value in THB at the time of the tier change</param>
+    /// <param name="CurrentYearOrderCount">Year-to-date order count at the time of the tier change</param>
+    /// <param name="OccurredAt">UTC timestamp when the tier change occurred</param>
+    public record CompanyTierChangedEventPayload(
+        [property: JsonPropertyName("companyId")] System.Guid CompanyId,
+        [property: JsonPropertyName("previousTier")] string PreviousTier,
+        [property: JsonPropertyName("newTier")] string NewTier,
+        [property: JsonPropertyName("currentYearPurchaseValue")] double CurrentYearPurchaseValue,
+        [property: JsonPropertyName("currentYearOrderCount")] int CurrentYearOrderCount,
+        [property: JsonPropertyName("occurredAt")] System.DateTimeOffset OccurredAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CompanyTierChangedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(double), default(int), default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published by CustomerService when a company's tier is promoted or demoted
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record CompanyTierChangedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CompanyTierChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CompanyTierChangedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Request to retrieve details for a specific customer.
     /// </summary>
     /// <summary>

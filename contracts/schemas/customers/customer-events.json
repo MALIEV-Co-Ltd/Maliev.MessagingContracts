@@ -109,6 +109,39 @@
                 }
             },
             "required": ["customerId", "deletedBy", "actorType", "deletedAt"]
+        },
+        "CompanyTierChangedEvent": {
+            "type": "object",
+            "description": "Published by CustomerService when a company's tier is promoted or demoted",
+            "properties": {
+                "companyId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the company whose tier changed"
+                },
+                "previousTier": {
+                    "type": "string",
+                    "description": "Tier before the change (Classic, Silver, Gold)"
+                },
+                "newTier": {
+                    "type": "string",
+                    "description": "Tier after the change (Classic, Silver, Gold)"
+                },
+                "currentYearPurchaseValue": {
+                    "type": "number",
+                    "description": "Year-to-date purchase value in THB at the time of the tier change"
+                },
+                "currentYearOrderCount": {
+                    "type": "integer",
+                    "description": "Year-to-date order count at the time of the tier change"
+                },
+                "occurredAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "UTC timestamp when the tier change occurred"
+                }
+            },
+            "required": ["companyId", "previousTier", "newTier", "currentYearPurchaseValue", "currentYearOrderCount", "occurredAt"]
         }
     }
 }
