@@ -726,6 +726,12 @@ channels:
       JobStartedEvent:
         $ref: '#/components/messages/JobStartedEvent'
 
+  job/status-changed:
+    address: maliev.jobs.events.job-status-changed
+    messages:
+      JobStatusChangedEvent:
+        $ref: '#/components/messages/JobStatusChangedEvent'
+
   # ==================== INVENTORY SERVICE ====================
   inventory/material-low-stock:
     address: maliev.inventory.events.material-low-stock
@@ -1336,6 +1342,11 @@ components:
       payload:
         $ref: '../contracts/schemas/jobs/job-events.json#/definitions/JobStartedEvent'
       description: Published when a production job transitions to InProgress status
+
+    JobStatusChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/jobs/job-events.json#/definitions/JobStatusChangedEvent'
+      description: Published when a job status changes (e.g., Pending → InProgress → Completed)
 
     # ==================== INVENTORY SERVICE MESSAGES ====================
     MaterialLowStockEvent:

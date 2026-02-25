@@ -50,6 +50,56 @@
                 "assignedMachineId",
                 "startedAt"
             ]
+        },
+        "JobStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when a job status changes (e.g., Pending → InProgress → Completed)",
+            "properties": {
+                "jobId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique job identifier"
+                },
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Parent order identifier"
+                },
+                "previousStatus": {
+                    "type": "string",
+                    "description": "Job status before this transition"
+                },
+                "newStatus": {
+                    "type": "string",
+                    "description": "Job status after this transition"
+                },
+                "technology": {
+                    "type": "string",
+                    "description": "Manufacturing technology: Fdm, Sla, Cnc, Scanning, or Design"
+                },
+                "assignedMachineId": {
+                    "type": ["string", "null"],
+                    "description": "Machine assigned to this job, if any (e.g., PRUSA-01, HAAS-VF2)"
+                },
+                "changedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "UTC timestamp when the status changed"
+                },
+                "changedBy": {
+                    "type": "string",
+                    "description": "User ID or system identity that triggered the status change"
+                }
+            },
+            "required": [
+                "jobId",
+                "orderId",
+                "previousStatus",
+                "newStatus",
+                "technology",
+                "changedAt",
+                "changedBy"
+            ]
         }
     }
 }

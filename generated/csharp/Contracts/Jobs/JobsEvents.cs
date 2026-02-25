@@ -59,4 +59,53 @@ namespace Maliev.MessagingContracts.Contracts.Jobs
         public JobStartedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
+    /// <summary>
+    /// Payload data for JobStatusChangedEvent.
+    /// </summary>
+    /// <param name="JobId">Unique job identifier</param>
+    /// <param name="OrderId">Parent order identifier</param>
+    /// <param name="PreviousStatus">Job status before this transition</param>
+    /// <param name="NewStatus">Job status after this transition</param>
+    /// <param name="Technology">Manufacturing technology: Fdm, Sla, Cnc, Scanning, or Design</param>
+    /// <param name="AssignedMachineId">Machine assigned to this job, if any (e.g., PRUSA-01, HAAS-VF2)</param>
+    /// <param name="ChangedAt">UTC timestamp when the status changed</param>
+    /// <param name="ChangedBy">User ID or system identity that triggered the status change</param>
+    public record JobStatusChangedEventPayload(
+        [property: JsonPropertyName("jobId")] System.Guid JobId,
+        [property: JsonPropertyName("orderId")] System.Guid OrderId,
+        [property: JsonPropertyName("previousStatus")] string PreviousStatus,
+        [property: JsonPropertyName("newStatus")] string NewStatus,
+        [property: JsonPropertyName("technology")] string Technology,
+        [property: JsonPropertyName("assignedMachineId")] string? AssignedMachineId,
+        [property: JsonPropertyName("changedAt")] System.DateTimeOffset ChangedAt,
+        [property: JsonPropertyName("changedBy")] string ChangedBy)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public JobStatusChangedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, default, default(System.DateTimeOffset), string.Empty) { }
+    }
+    /// <summary>
+    /// Published when a job status changes (e.g., Pending → InProgress → Completed)
+    /// </summary>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record JobStatusChangedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] JobStatusChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public JobStatusChangedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
 }
