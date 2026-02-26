@@ -40,15 +40,15 @@ namespace Generator
                 var existingCode = await File.ReadAllTextAsync(outputFile);
                 if (existingCode == code)
                 {
-                    Console.WriteLine("✓ No changes detected. Generation skipped.");
+                    Console.WriteLine("\u2713 No changes detected. Generation skipped.");
                     return;
                 }
             }
 
             await File.WriteAllTextAsync(outputFile, code);
 
-            Console.WriteLine($"✓ C# contract generation complete.");
-            Console.WriteLine($"✓ All contracts written to {outputFile}");
+            Console.WriteLine($"\u2713 C# contract generation complete.");
+            Console.WriteLine($"\u2713 All contracts written to {outputFile}");
         }
 
         static string GetWorkspaceRoot(string currentDir)
@@ -96,7 +96,7 @@ namespace Generator
 
             // Collect and generate message contracts
             var messageSchemaFiles = new List<string>();
-            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "iam", "shared", "career", "compensation", "compliance", "employee", "leave", "lifecycle", "performance", "chatbot", "invoices", "quotations", "purchase-orders", "receipts", "materials", "suppliers", "auth", "uploads", "pdf", "geometry" })
+            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "iam", "shared", "career", "compensation", "compliance", "employee", "leave", "lifecycle", "performance", "chatbot", "invoices", "quotations", "purchase-orders", "receipts", "materials", "suppliers", "auth", "uploads", "pdf", "geometry", "facility" })
             {
                 var domainPath = Path.Combine(_schemaRoot, domainDir);
                 if (Directory.Exists(domainPath))
