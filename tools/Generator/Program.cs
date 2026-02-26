@@ -112,7 +112,7 @@ namespace Generator
                 "lifecycle", "performance", "chatbot", "invoices", "quotations",
                 "purchase-orders", "receipts", "materials", "suppliers", "auth",
                 "uploads", "pdf", "geometry", "accounting", "delivery", "nda",
-                "jobs", "inventory", "pricing"
+                "jobs", "inventory", "pricing", "facility"
             };
 
             foreach (var domainDir in domains)
@@ -145,10 +145,10 @@ namespace Generator
                 domainSb.AppendLine("using Maliev.MessagingContracts.Generated;"); // Reference shared types
                 domainSb.AppendLine();
 
-                var pascalDomain = ToPascalCase(domainDir);
-                domainSb.AppendLine($"namespace Maliev.MessagingContracts.Contracts.{pascalDomain}");
+                domainSb.AppendLine("namespace Maliev.MessagingContracts.Generated");
                 domainSb.AppendLine("{");
 
+                var pascalDomain = ToPascalCase(domainDir);
                 foreach (var file in filtered.OrderBy(f => f))
                 {
                     var schemaJson = await File.ReadAllTextAsync(file);

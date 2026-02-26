@@ -10,7 +10,7 @@ using System;
 using System.Text.Json.Serialization;
 using Maliev.MessagingContracts.Generated;
 
-namespace Maliev.MessagingContracts.Contracts.Suppliers
+namespace Maliev.MessagingContracts.Generated
 {
     /// <summary>
     /// Payload data for SupplierCreatedEvent.

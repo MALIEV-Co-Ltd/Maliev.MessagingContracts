@@ -10,7 +10,7 @@ using System;
 using System.Text.Json.Serialization;
 using Maliev.MessagingContracts.Generated;
 
-namespace Maliev.MessagingContracts.Contracts.Chatbot
+namespace Maliev.MessagingContracts.Generated
 {
     /// <summary>
     /// Event published when a chatbot message is received and processed.

@@ -10,7 +10,7 @@ using System;
 using System.Text.Json.Serialization;
 using Maliev.MessagingContracts.Generated;
 
-namespace Maliev.MessagingContracts.Contracts.Iam
+namespace Maliev.MessagingContracts.Generated
 {
     /// <summary>
     /// Event published when a new permission is registered by a service in the IAM service.

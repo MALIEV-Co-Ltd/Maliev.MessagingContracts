@@ -10,7 +10,7 @@ using System;
 using System.Text.Json.Serialization;
 using Maliev.MessagingContracts.Generated;
 
-namespace Maliev.MessagingContracts.Contracts.Orders
+namespace Maliev.MessagingContracts.Generated
 {
     /// <summary>
     /// Command to create a new order.

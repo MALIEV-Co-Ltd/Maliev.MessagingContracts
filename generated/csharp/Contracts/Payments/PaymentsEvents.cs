@@ -10,7 +10,7 @@ using System;
 using System.Text.Json.Serialization;
 using Maliev.MessagingContracts.Generated;
 
-namespace Maliev.MessagingContracts.Contracts.Payments
+namespace Maliev.MessagingContracts.Generated
 {
     /// <summary>
     /// Event indicating that a payment has been successfully processed.

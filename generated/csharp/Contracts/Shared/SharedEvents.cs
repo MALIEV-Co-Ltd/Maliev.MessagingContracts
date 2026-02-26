@@ -10,7 +10,7 @@ using System;
 using System.Text.Json.Serialization;
 using Maliev.MessagingContracts.Generated;
 
-namespace Maliev.MessagingContracts.Contracts.Shared
+namespace Maliev.MessagingContracts.Generated
 {
     /// <summary>
     /// Event published to trigger a notification to one or more users.
