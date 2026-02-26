@@ -97,7 +97,7 @@ namespace Generator
             sharedSb.AppendLine("using System;");
             sharedSb.AppendLine("using System.Text.Json.Serialization;");
             sharedSb.AppendLine();
-            sharedSb.AppendLine("namespace Maliev.MessagingContracts.Generated");
+            sharedSb.AppendLine("namespace Maliev.MessagingContracts.Contracts.Shared");
             sharedSb.AppendLine("{");
             _logger.LogInformation("Generating BaseMessage...");
             await GenerateBaseMessage(sharedSb);
@@ -112,7 +112,7 @@ namespace Generator
                 "lifecycle", "performance", "chatbot", "invoices", "quotations",
                 "purchase-orders", "receipts", "materials", "suppliers", "auth",
                 "uploads", "pdf", "geometry", "accounting", "delivery", "nda",
-                "jobs", "inventory", "pricing"
+                "jobs", "inventory", "pricing", "facility"
             };
 
             foreach (var domainDir in domains)
@@ -142,7 +142,7 @@ namespace Generator
                 domainSb.AppendLine();
                 domainSb.AppendLine("using System;");
                 domainSb.AppendLine("using System.Text.Json.Serialization;");
-                domainSb.AppendLine("using Maliev.MessagingContracts.Generated;"); // Reference shared types
+                domainSb.AppendLine("using Maliev.MessagingContracts.Contracts.Shared;"); // Reference shared types
                 domainSb.AppendLine();
 
                 var pascalDomain = ToPascalCase(domainDir);

@@ -8,7 +8,7 @@
 
 using System;
 using System.Text.Json.Serialization;
-using Maliev.MessagingContracts.Generated;
+using Maliev.MessagingContracts.Contracts.Shared;
 
 namespace Maliev.MessagingContracts.Contracts.Career
 {
