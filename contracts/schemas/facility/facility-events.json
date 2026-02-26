@@ -1,0 +1,138 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/facility-events",
+    "title": "Facility Domain Events",
+    "description": "Events published by the Facility Service",
+    "definitions": {
+        "EquipmentStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when a piece of equipment changes its operational status",
+            "properties": {
+                "equipmentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique equipment identifier"
+                },
+                "assetCode": {
+                    "type": "string",
+                    "description": "Auto-generated asset code (e.g., MAL-CNC-0001)"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Equipment display name"
+                },
+                "category": {
+                    "type": "string",
+                    "enum": ["FdmPrinter", "SlaPrinter", "CncMachine", "Scanner3D", "InjectionMolding", "OfficeEquipment", "MeasuringEquipment", "ITEquipment", "HandTool", "Other"],
+                    "description": "Equipment category"
+                },
+                "previousStatus": {
+                    "type": "string",
+                    "enum": ["Active", "UnderMaintenance", "OnLoan", "Lost", "Decommissioned"],
+                    "description": "Equipment status before this transition"
+                },
+                "newStatus": {
+                    "type": "string",
+                    "enum": ["Active", "UnderMaintenance", "OnLoan", "Lost", "Decommissioned"],
+                    "description": "Equipment status after this transition"
+                }
+            },
+            "required": [
+                "equipmentId",
+                "assetCode",
+                "name",
+                "category",
+                "previousStatus",
+                "newStatus"
+            ]
+        },
+        "LoanDocumentRequestedEvent": {
+            "type": "object",
+            "description": "Published when a customer loan is approved and a loan document PDF is needed",
+            "properties": {
+                "loanId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique loan identifier"
+                },
+                "equipmentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Equipment being loaned"
+                },
+                "assetCode": {
+                    "type": "string",
+                    "description": "Auto-generated asset code"
+                },
+                "equipmentName": {
+                    "type": "string",
+                    "description": "Equipment display name"
+                },
+                "brand": {
+                    "type": "string",
+                    "description": "Equipment brand"
+                },
+                "modelName": {
+                    "type": "string",
+                    "description": "Equipment model name"
+                },
+                "manufacturerSerial": {
+                    "type": "string",
+                    "description": "Manufacturer serial number"
+                },
+                "borrowerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Borrower identifier (employee or customer ID)"
+                },
+                "borrowerName": {
+                    "type": "string",
+                    "description": "Borrower display name"
+                },
+                "borrowerType": {
+                    "type": "string",
+                    "enum": ["Employee", "Customer"],
+                    "description": "Type of borrower"
+                },
+                "approvedByEmployeeId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Employee who approved the loan"
+                },
+                "loanStartDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Loan start date"
+                },
+                "expectedReturnDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Expected return date"
+                },
+                "purpose": {
+                    "type": "string",
+                    "description": "Purpose of the loan"
+                },
+                "documentLanguage": {
+                    "type": "string",
+                    "const": "th-TH",
+                    "description": "Language for the loan document"
+                }
+            },
+            "required": [
+                "loanId",
+                "equipmentId",
+                "assetCode",
+                "equipmentName",
+                "borrowerId",
+                "borrowerName",
+                "borrowerType",
+                "approvedByEmployeeId",
+                "loanStartDate",
+                "expectedReturnDate",
+                "purpose",
+                "documentLanguage"
+            ]
+        }
+    }
+}
