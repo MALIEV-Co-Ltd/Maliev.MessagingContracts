@@ -9,7 +9,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace Maliev.MessagingContracts.Generated
+namespace Maliev.MessagingContracts
 {
     /// <summary>
     /// The base structure that all Maliev messaging contracts MUST adhere to.

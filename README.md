@@ -63,7 +63,7 @@ To use these contracts in your .NET service:
    ```
 3. **Implementation**:
    ```csharp
-   using Maliev.MessagingContracts.Generated;
+   using Maliev.MessagingContracts.Contracts.Employee;
 
    // Example: Consuming an event
    public class EmployeeCreatedConsumer : IConsumer<EmployeeCreatedEvent>

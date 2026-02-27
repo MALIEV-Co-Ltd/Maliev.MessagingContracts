@@ -97,7 +97,7 @@ namespace Generator
             sharedSb.AppendLine("using System;");
             sharedSb.AppendLine("using System.Text.Json.Serialization;");
             sharedSb.AppendLine();
-            sharedSb.AppendLine("namespace Maliev.MessagingContracts.Generated");
+            sharedSb.AppendLine("namespace Maliev.MessagingContracts");
             sharedSb.AppendLine("{");
             _logger.LogInformation("Generating BaseMessage...");
             await GenerateBaseMessage(sharedSb);
@@ -142,13 +142,12 @@ namespace Generator
                 domainSb.AppendLine();
                 domainSb.AppendLine("using System;");
                 domainSb.AppendLine("using System.Text.Json.Serialization;");
-                domainSb.AppendLine("using Maliev.MessagingContracts.Generated;"); // Reference shared types
+                domainSb.AppendLine("using Maliev.MessagingContracts;"); // Reference shared types
                 domainSb.AppendLine();
 
-                domainSb.AppendLine("namespace Maliev.MessagingContracts.Generated");
-                domainSb.AppendLine("{");
-
                 var pascalDomain = ToPascalCase(domainDir);
+                domainSb.AppendLine($"namespace Maliev.MessagingContracts.Contracts.{pascalDomain}");
+                domainSb.AppendLine("{");
                 foreach (var file in filtered.OrderBy(f => f))
                 {
                     var schemaJson = await File.ReadAllTextAsync(file);
