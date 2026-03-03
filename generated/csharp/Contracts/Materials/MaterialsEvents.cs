@@ -20,6 +20,7 @@ namespace Maliev.MessagingContracts.Contracts.Materials
     /// <param name="Name">Material name</param>
     /// <param name="PricePerUnit">Price per unit</param>
     /// <param name="StockLevel">Initial stock level</param>
+    /// <param name="CreatedAt">The created At</param>
     public record MaterialCreatedEventPayload(
         [property: JsonPropertyName("materialId")] System.Guid MaterialId,
         [property: JsonPropertyName("code")] string Code,
@@ -36,6 +37,16 @@ namespace Maliev.MessagingContracts.Contracts.Materials
     /// <summary>
     /// Published when a new material is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record MaterialCreatedEvent(
         System.Guid MessageId,
@@ -62,6 +73,7 @@ namespace Maliev.MessagingContracts.Contracts.Materials
     /// <param name="MaterialId">Unique identifier of the material</param>
     /// <param name="Code">Material code</param>
     /// <param name="Name">Material name</param>
+    /// <param name="UpdatedAt">The updated At</param>
     /// <param name="Version">Optimistic concurrency version</param>
     public record MaterialUpdatedEventPayload(
         [property: JsonPropertyName("materialId")] System.Guid MaterialId,
@@ -78,6 +90,16 @@ namespace Maliev.MessagingContracts.Contracts.Materials
     /// <summary>
     /// Published when material information is updated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record MaterialUpdatedEvent(
         System.Guid MessageId,
@@ -115,6 +137,16 @@ namespace Maliev.MessagingContracts.Contracts.Materials
     /// <summary>
     /// Published when material is soft-deleted (discontinued)
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record MaterialDiscontinuedEvent(
         System.Guid MessageId,

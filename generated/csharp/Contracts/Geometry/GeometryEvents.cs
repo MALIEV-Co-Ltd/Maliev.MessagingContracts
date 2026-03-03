@@ -15,6 +15,9 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Payload data for FileAnalyzedEventMetricsBoundingBox.
     /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
     public record FileAnalyzedEventPayloadMetricsBoundingBox(
         [property: JsonPropertyName("x")] double X,
         [property: JsonPropertyName("y")] double Y,
@@ -28,6 +31,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Payload data for FileAnalyzedEventMetrics.
     /// </summary>
+    /// <param name="VolumeCm3">The volume Cm3</param>
+    /// <param name="SupportVolumeCm3">The support Volume Cm3</param>
+    /// <param name="SurfaceAreaCm2">The surface Area Cm2</param>
+    /// <param name="BoundingBox">The bounding Box</param>
+    /// <param name="IsManifold">The is Manifold</param>
+    /// <param name="TriangleCount">The triangle Count</param>
+    /// <param name="EulerNumber">The euler Number</param>
     public record FileAnalyzedEventPayloadMetrics(
         [property: JsonPropertyName("volumeCm3")] double VolumeCm3,
         [property: JsonPropertyName("supportVolumeCm3")] double SupportVolumeCm3,
@@ -65,8 +75,10 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
     /// <param name="CustomerId">Unique identifier for the customer who uploaded the file</param>
+    /// <param name="Metrics">The metric</param>
     /// <param name="GlbStoragePath">GCS storage path of the generated GLB file</param>
     /// <param name="ThumbnailStoragePath">GCS storage path of the generated thumbnail image</param>
+    /// <param name="ProcessedAt">The processed At</param>
     /// <param name="DfmReport">Optional DFM analysis results. Null if analysis failed or not applicable.</param>
     public record FileAnalyzedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
@@ -85,6 +97,16 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Published when a 3D file analysis completes successfully
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record FileAnalyzedEvent(
         System.Guid MessageId,
@@ -109,6 +131,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// Payload data for FileAnalysisFailedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
+    /// <param name="ErrorCode">The error Code</param>
+    /// <param name="Details">The detail</param>
     public record FileAnalysisFailedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("errorCode")] string ErrorCode,
@@ -122,6 +146,16 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Published when a 3D file analysis fails
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record FileAnalysisFailedEvent(
         System.Guid MessageId,

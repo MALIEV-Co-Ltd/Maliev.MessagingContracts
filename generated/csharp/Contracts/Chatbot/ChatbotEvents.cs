@@ -41,6 +41,17 @@ namespace Maliev.MessagingContracts.Contracts.Chatbot
         /// </summary>
         public ChatbotMessageReceivedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, string.Empty, default(double), default(System.DateTimeOffset)) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record ChatbotMessageReceivedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -86,6 +97,17 @@ namespace Maliev.MessagingContracts.Contracts.Chatbot
         /// </summary>
         public ChatbotRateLimitExceededEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(int), default(int), default(System.DateTimeOffset)) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record ChatbotRateLimitExceededEvent(
         System.Guid MessageId,
         string MessageName,
@@ -133,6 +155,17 @@ namespace Maliev.MessagingContracts.Contracts.Chatbot
         /// </summary>
         public ChatbotSessionClosedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(int), string.Empty) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record ChatbotSessionClosedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -178,6 +211,17 @@ namespace Maliev.MessagingContracts.Contracts.Chatbot
         /// </summary>
         public ChatbotSessionCreatedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record ChatbotSessionCreatedEvent(
         System.Guid MessageId,
         string MessageName,

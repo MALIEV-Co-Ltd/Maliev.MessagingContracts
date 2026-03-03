@@ -15,9 +15,14 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptCreatedEvent.
     /// </summary>
+    /// <param name="ReceiptId">The receipt Id</param>
+    /// <param name="ReceiptNumber">The receipt Number</param>
     /// <param name="InvoiceId">Invoice ID for this receipt</param>
     /// <param name="CustomerName">Customer name from invoice</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="Currency">The currency</param>
     /// <param name="PaymentMethod">Payment method used</param>
+    /// <param name="CreatedAt">The created At</param>
     public record ReceiptCreatedEventPayload(
         [property: JsonPropertyName("receiptId")] System.Guid ReceiptId,
         [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
@@ -36,6 +41,16 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Published when a new receipt is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record ReceiptCreatedEvent(
         System.Guid MessageId,
@@ -63,6 +78,7 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <param name="ReceiptNumber">Receipt number</param>
     /// <param name="StorageUrl">URL where the PDF is stored</param>
     /// <param name="PdfReferenceId">Reference ID in UploadService/PdfService</param>
+    /// <param name="GeneratedAt">The generated At</param>
     public record ReceiptGeneratedEventPayload(
         [property: JsonPropertyName("receiptId")] string ReceiptId,
         [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
@@ -78,6 +94,16 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Published when receipt PDF is successfully generated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record ReceiptGeneratedEvent(
         System.Guid MessageId,
@@ -107,6 +133,7 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <param name="SentTo">Destination (email, phone number, etc.)</param>
     /// <param name="Channel">Delivery channel used</param>
     /// <param name="SentBy">Staff member ID who initiated the send</param>
+    /// <param name="SentAt">The sent At</param>
     public record ReceiptSentEventPayload(
         [property: JsonPropertyName("receiptId")] string ReceiptId,
         [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
@@ -124,6 +151,16 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Published when receipt is sent to customer
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record ReceiptSentEvent(
         System.Guid MessageId,
@@ -147,7 +184,10 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptVoidedEvent.
     /// </summary>
+    /// <param name="ReceiptId">The receipt Id</param>
+    /// <param name="ReceiptNumber">The receipt Number</param>
     /// <param name="VoidedBy">Staff member ID who voided the receipt</param>
+    /// <param name="VoidedAt">The voided At</param>
     /// <param name="VoidReason">Reason for voiding the receipt</param>
     public record ReceiptVoidedEventPayload(
         [property: JsonPropertyName("receiptId")] System.Guid ReceiptId,
@@ -164,6 +204,16 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Published when receipt is voided/cancelled
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record ReceiptVoidedEvent(
         System.Guid MessageId,
@@ -187,6 +237,9 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptPdfRequestedEventCustomerDetails.
     /// </summary>
+    /// <param name="Name">The name</param>
+    /// <param name="TaxId">The tax Id</param>
+    /// <param name="Address">The addre</param>
     public record ReceiptPdfRequestedEventPayloadCustomerDetails(
         [property: JsonPropertyName("name")] string Name,
         [property: JsonPropertyName("taxId")] string TaxId,
@@ -200,6 +253,13 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptPdfRequestedEventFinancialDetails.
     /// </summary>
+    /// <param name="IssueDate">The issue Date</param>
+    /// <param name="Subtotal">The subtotal</param>
+    /// <param name="TaxAmount">The tax Amount</param>
+    /// <param name="WithholdingTaxAmount">The withholding Tax Amount</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="PaymentMethod">The payment Method</param>
     public record ReceiptPdfRequestedEventPayloadFinancialDetails(
         [property: JsonPropertyName("issueDate")] System.DateTimeOffset IssueDate,
         [property: JsonPropertyName("subtotal")] double Subtotal,
@@ -217,6 +277,12 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptPdfRequestedEventLineItemsItem.
     /// </summary>
+    /// <param name="LineNumber">The line Number</param>
+    /// <param name="Description">The description</param>
+    /// <param name="Quantity">The quantity</param>
+    /// <param name="UnitPrice">The unit Price</param>
+    /// <param name="TaxRate">The tax Rate</param>
+    /// <param name="LineTotal">The line Total</param>
     public record ReceiptPdfRequestedEventPayloadLineItemsItem(
         [property: JsonPropertyName("lineNumber")] int LineNumber,
         [property: JsonPropertyName("description")] string Description,
@@ -233,6 +299,9 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptPdfRequestedEventTaxFields.
     /// </summary>
+    /// <param name="TaxId">The tax Id</param>
+    /// <param name="VatRate">The vat Rate</param>
+    /// <param name="WithholdingTaxType">The withholding Tax Type</param>
     public record ReceiptPdfRequestedEventPayloadTaxFields(
         [property: JsonPropertyName("taxId")] string TaxId,
         [property: JsonPropertyName("vatRate")] double VatRate,
@@ -246,6 +315,14 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Payload data for ReceiptPdfRequestedEvent.
     /// </summary>
+    /// <param name="ReceiptId">The receipt Id</param>
+    /// <param name="ReceiptNumber">The receipt Number</param>
+    /// <param name="CustomerDetails">The customer Detail</param>
+    /// <param name="FinancialDetails">The financial Detail</param>
+    /// <param name="LineItems">The line Item</param>
+    /// <param name="TaxFields">The tax Field</param>
+    /// <param name="TemplateId">The template Id</param>
+    /// <param name="RequestedAt">The requested At</param>
     public record ReceiptPdfRequestedEventPayload(
         [property: JsonPropertyName("receiptId")] System.Guid ReceiptId,
         [property: JsonPropertyName("receiptNumber")] string ReceiptNumber,
@@ -264,6 +341,16 @@ namespace Maliev.MessagingContracts.Contracts.Receipts
     /// <summary>
     /// Published to request rich PDF generation for a receipt
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record ReceiptPdfRequestedEvent(
         System.Guid MessageId,

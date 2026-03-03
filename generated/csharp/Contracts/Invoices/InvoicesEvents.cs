@@ -15,6 +15,15 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoiceCreatedEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="OrderNumber">The order Number</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="DueDate">The due Date</param>
+    /// <param name="CreatedAt">The created At</param>
     public record InvoiceCreatedEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -34,6 +43,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when a new invoice is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoiceCreatedEvent(
         System.Guid MessageId,
@@ -57,6 +76,10 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoiceGeneratedEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="PdfUrl">The pdf Url</param>
+    /// <param name="GeneratedAt">The generated At</param>
     public record InvoiceGeneratedEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -71,6 +94,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when invoice PDF is successfully generated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoiceGeneratedEvent(
         System.Guid MessageId,
@@ -94,6 +127,12 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoiceSentEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="SentTo">The sent To</param>
+    /// <param name="SentAt">The sent At</param>
+    /// <param name="SentBy">The sent By</param>
     public record InvoiceSentEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -110,6 +149,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when invoice is sent to customer
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoiceSentEvent(
         System.Guid MessageId,
@@ -133,6 +182,14 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoicePaymentReceivedEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="PaymentId">The payment Id</param>
+    /// <param name="AllocatedAmount">The allocated Amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="RemainingBalance">The remaining Balance</param>
+    /// <param name="AllocatedAt">The allocated At</param>
+    /// <param name="AllocatedBy">The allocated By</param>
     public record InvoicePaymentReceivedEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -151,6 +208,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when payment is received for invoice
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoicePaymentReceivedEvent(
         System.Guid MessageId,
@@ -174,6 +241,13 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoiceOverdueEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="DueDate">The due Date</param>
+    /// <param name="DaysOverdue">The days Overdue</param>
+    /// <param name="OutstandingAmount">The outstanding Amount</param>
+    /// <param name="Currency">The currency</param>
     public record InvoiceOverdueEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -191,6 +265,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when invoice becomes overdue (background job)
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoiceOverdueEvent(
         System.Guid MessageId,
@@ -214,6 +298,12 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoiceCancelledEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="CancelledBy">The cancelled By</param>
+    /// <param name="CancelledAt">The cancelled At</param>
+    /// <param name="CancellationReason">The cancellation Reason</param>
     /// <param name="RefundRequired">Whether a refund is required (had previous payments)</param>
     public record InvoiceCancelledEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
@@ -232,6 +322,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when invoice is cancelled or voided
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoiceCancelledEvent(
         System.Guid MessageId,
@@ -255,7 +355,13 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for InvoiceFullyPaidEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="Currency">The currency</param>
     /// <param name="LastPaymentId">Payment ID that brought the balance to zero</param>
+    /// <param name="FullyPaidAt">The fully Paid At</param>
     public record InvoiceFullyPaidEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -273,6 +379,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when invoice is fully paid (remainingBalance = 0)
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InvoiceFullyPaidEvent(
         System.Guid MessageId,
@@ -296,6 +412,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Payload data for PaymentAllocatedEvent.
     /// </summary>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="PaymentId">The payment Id</param>
+    /// <param name="AllocatedAmount">The allocated Amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="InvoiceStatus">The invoice Statu</param>
+    /// <param name="OutstandingBalance">The outstanding Balance</param>
+    /// <param name="AllocatedBy">The allocated By</param>
+    /// <param name="AllocatedAt">The allocated At</param>
     public record PaymentAllocatedEventPayload(
         [property: JsonPropertyName("invoiceId")] System.Guid InvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -316,6 +442,16 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
     /// <summary>
     /// Published when a payment is allocated to an invoice
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PaymentAllocatedEvent(
         System.Guid MessageId,
@@ -379,6 +515,17 @@ namespace Maliev.MessagingContracts.Contracts.Invoices
         /// </summary>
         public InvoiceSplitEventPayload() : this(default(System.Guid), string.Empty, Array.Empty<InvoiceSplitEventPayloadChildInvoicesItem>(), string.Empty, default(System.DateTimeOffset), string.Empty) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record InvoiceSplitEvent(
         System.Guid MessageId,
         string MessageName,

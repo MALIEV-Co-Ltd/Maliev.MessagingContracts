@@ -15,6 +15,14 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Payload data for DeliveryNoteCreatedEvent.
     /// </summary>
+    /// <param name="DeliveryNoteId">The delivery Note Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="PurchaseOrderId">The purchase Order Id</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="DeliveryDate">The delivery Date</param>
+    /// <param name="ItemCount">The item Count</param>
+    /// <param name="CreatedAt">The created At</param>
+    /// <param name="CreatedBy">The created By</param>
     public record DeliveryNoteCreatedEventPayload(
         [property: JsonPropertyName("deliveryNoteId")] string DeliveryNoteId,
         [property: JsonPropertyName("orderId")] string? OrderId,
@@ -33,6 +41,16 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Published when a delivery note is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record DeliveryNoteCreatedEvent(
         System.Guid MessageId,
@@ -56,6 +74,14 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Payload data for DeliveryStatusChangedEvent.
     /// </summary>
+    /// <param name="DeliveryNoteId">The delivery Note Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="PreviousStatus">The previous Statu</param>
+    /// <param name="NewStatus">The new Statu</param>
+    /// <param name="ActualDeliveryTime">The actual Delivery Time</param>
+    /// <param name="ReceivedByName">The received By Name</param>
+    /// <param name="ChangedAt">The changed At</param>
+    /// <param name="ChangedBy">The changed By</param>
     public record DeliveryStatusChangedEventPayload(
         [property: JsonPropertyName("deliveryNoteId")] string DeliveryNoteId,
         [property: JsonPropertyName("orderId")] string? OrderId,
@@ -74,6 +100,16 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Published when delivery status changes
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record DeliveryStatusChangedEvent(
         System.Guid MessageId,
@@ -97,6 +133,11 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Payload data for DeliveryCompletedEvent.
     /// </summary>
+    /// <param name="DeliveryNoteId">The delivery Note Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="PurchaseOrderId">The purchase Order Id</param>
+    /// <param name="CompletedAt">The completed At</param>
+    /// <param name="ReceivedByName">The received By Name</param>
     public record DeliveryCompletedEventPayload(
         [property: JsonPropertyName("deliveryNoteId")] string DeliveryNoteId,
         [property: JsonPropertyName("orderId")] string? OrderId,
@@ -112,6 +153,16 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Published when delivery is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record DeliveryCompletedEvent(
         System.Guid MessageId,
@@ -135,6 +186,9 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Payload data for DeliveryNotePdfRequestedEvent.
     /// </summary>
+    /// <param name="DeliveryNoteId">The delivery Note Id</param>
+    /// <param name="RequestedBy">The requested By</param>
+    /// <param name="RequestedAt">The requested At</param>
     public record DeliveryNotePdfRequestedEventPayload(
         [property: JsonPropertyName("deliveryNoteId")] string DeliveryNoteId,
         [property: JsonPropertyName("requestedBy")] string RequestedBy,
@@ -148,6 +202,16 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <summary>
     /// Published when a delivery note PDF is requested
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record DeliveryNotePdfRequestedEvent(
         System.Guid MessageId,

@@ -15,6 +15,10 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for TrainingEnrolledEvent.
     /// </summary>
+    /// <param name="TrainingRecordId">The training Record Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CourseName">The course Name</param>
+    /// <param name="EnrollmentDate">The enrollment Date</param>
     public record TrainingEnrolledEventPayload(
         [property: JsonPropertyName("trainingRecordId")] System.Guid TrainingRecordId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -29,6 +33,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when employee enrolls in training
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TrainingEnrolledEvent(
         System.Guid MessageId,
@@ -52,6 +66,11 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for TrainingCompletedEvent.
     /// </summary>
+    /// <param name="TrainingRecordId">The training Record Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CourseName">The course Name</param>
+    /// <param name="CompletionDate">The completion Date</param>
+    /// <param name="CertificationExpiration">The certification Expiration</param>
     public record TrainingCompletedEventPayload(
         [property: JsonPropertyName("trainingRecordId")] System.Guid TrainingRecordId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -67,6 +86,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when training is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TrainingCompletedEvent(
         System.Guid MessageId,
@@ -90,6 +119,11 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for CertificationAwardedEvent.
     /// </summary>
+    /// <param name="CertificationId">The certification Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CertificationName">The certification Name</param>
+    /// <param name="AwardedDate">The awarded Date</param>
+    /// <param name="ExpirationDate">The expiration Date</param>
     public record CertificationAwardedEventPayload(
         [property: JsonPropertyName("certificationId")] System.Guid CertificationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -105,6 +139,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when certification is awarded
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CertificationAwardedEvent(
         System.Guid MessageId,
@@ -128,6 +172,10 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for CertificationExpiredEvent.
     /// </summary>
+    /// <param name="CertificationId">The certification Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CertificationName">The certification Name</param>
+    /// <param name="ExpirationDate">The expiration Date</param>
     public record CertificationExpiredEventPayload(
         [property: JsonPropertyName("certificationId")] System.Guid CertificationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -142,6 +190,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when certification expires
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CertificationExpiredEvent(
         System.Guid MessageId,
@@ -165,6 +223,11 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for MandatoryTrainingOverdueEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="TrainingProgramId">The training Program Id</param>
+    /// <param name="TrainingName">The training Name</param>
+    /// <param name="DueDate">The due Date</param>
+    /// <param name="DaysOverdue">The days Overdue</param>
     public record MandatoryTrainingOverdueEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("trainingProgramId")] System.Guid TrainingProgramId,
@@ -180,6 +243,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when mandatory training is overdue
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record MandatoryTrainingOverdueEvent(
         System.Guid MessageId,
@@ -203,6 +276,11 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for CertificationExpiringEvent.
     /// </summary>
+    /// <param name="TrainingRecordId">The training Record Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CourseName">The course Name</param>
+    /// <param name="ExpirationDate">The expiration Date</param>
+    /// <param name="DaysUntilExpiration">The days Until Expiration</param>
     public record CertificationExpiringEventPayload(
         [property: JsonPropertyName("trainingRecordId")] System.Guid TrainingRecordId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -218,6 +296,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when certification is expiring
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CertificationExpiringEvent(
         System.Guid MessageId,
@@ -273,6 +361,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when candidate accepts job offer
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CandidateAcceptedEvent(
         System.Guid MessageId,
@@ -296,6 +394,8 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Payload data for JobApplicationSubmittedEvent.
     /// </summary>
+    /// <param name="ApplicationId">The application Id</param>
+    /// <param name="JobPostingId">The job Posting Id</param>
     /// <param name="ApplicantEmail">The email address of the applicant.</param>
     /// <param name="ApplicantName">The full name of the applicant.</param>
     /// <param name="PositionTitle">The title of the position applied for.</param>
@@ -314,6 +414,16 @@ namespace Maliev.MessagingContracts.Contracts.Career
     /// <summary>
     /// Published when a new job application is submitted
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record JobApplicationSubmittedEvent(
         System.Guid MessageId,

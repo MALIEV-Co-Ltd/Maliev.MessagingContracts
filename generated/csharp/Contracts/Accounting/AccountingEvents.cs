@@ -15,6 +15,13 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Payload data for TransactionPostedEvent.
     /// </summary>
+    /// <param name="JournalEntryId">The journal Entry Id</param>
+    /// <param name="EntryNumber">The entry Number</param>
+    /// <param name="EntryDate">The entry Date</param>
+    /// <param name="Description">The description</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="SourceSystem">The source System</param>
+    /// <param name="PostedAt">The posted At</param>
     public record TransactionPostedEventPayload(
         [property: JsonPropertyName("journalEntryId")] System.Guid JournalEntryId,
         [property: JsonPropertyName("entryNumber")] string EntryNumber,
@@ -32,6 +39,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Published when a financial transaction is posted to the ledger
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TransactionPostedEvent(
         System.Guid MessageId,
@@ -55,6 +72,18 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Payload data for InventoryMovementEvent.
     /// </summary>
+    /// <param name="MovementId">The movement Id</param>
+    /// <param name="MovementNumber">The movement Number</param>
+    /// <param name="MovementDate">The movement Date</param>
+    /// <param name="MovementType">The movement Type</param>
+    /// <param name="ProductId">The product Id</param>
+    /// <param name="ProductName">The product Name</param>
+    /// <param name="Quantity">The quantity</param>
+    /// <param name="UnitCost">The unit Cost</param>
+    /// <param name="TotalCost">The total Cost</param>
+    /// <param name="SupplierId">The supplier Id</param>
+    /// <param name="PurchaseOrderId">The purchase Order Id</param>
+    /// <param name="CreatedAt">The created At</param>
     public record InventoryMovementEventPayload(
         [property: JsonPropertyName("movementId")] System.Guid MovementId,
         [property: JsonPropertyName("movementNumber")] string MovementNumber,
@@ -77,6 +106,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Published when stock movement is recorded
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record InventoryMovementEvent(
         System.Guid MessageId,
@@ -100,6 +139,19 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Payload data for PayrollProcessedEvent.
     /// </summary>
+    /// <param name="PayrollId">The payroll Id</param>
+    /// <param name="PayrollNumber">The payroll Number</param>
+    /// <param name="PayrollPeriod">The payroll Period</param>
+    /// <param name="ProcessedDate">The processed Date</param>
+    /// <param name="PayPeriodStart">The pay Period Start</param>
+    /// <param name="PayPeriodEnd">The pay Period End</param>
+    /// <param name="PaymentDate">The payment Date</param>
+    /// <param name="GrossPay">The gross Pay</param>
+    /// <param name="EmployeeTax">The employee Tax</param>
+    /// <param name="SocialSecurity">The social Security</param>
+    /// <param name="TotalDeductions">The total Deduction</param>
+    /// <param name="NetPay">The net Pay</param>
+    /// <param name="CreatedAt">The created At</param>
     public record PayrollProcessedEventPayload(
         [property: JsonPropertyName("payrollId")] System.Guid PayrollId,
         [property: JsonPropertyName("payrollNumber")] string PayrollNumber,
@@ -123,6 +175,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Published when payroll is processed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PayrollProcessedEvent(
         System.Guid MessageId,
@@ -146,6 +208,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Payload data for SupplierInvoiceReceivedEvent.
     /// </summary>
+    /// <param name="SupplierInvoiceId">The supplier Invoice Id</param>
+    /// <param name="InvoiceNumber">The invoice Number</param>
+    /// <param name="SupplierId">The supplier Id</param>
+    /// <param name="SupplierName">The supplier Name</param>
+    /// <param name="InvoiceDate">The invoice Date</param>
+    /// <param name="DueDate">The due Date</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="PurchaseOrderId">The purchase Order Id</param>
+    /// <param name="ReceivedAt">The received At</param>
     public record SupplierInvoiceReceivedEventPayload(
         [property: JsonPropertyName("supplierInvoiceId")] System.Guid SupplierInvoiceId,
         [property: JsonPropertyName("invoiceNumber")] string InvoiceNumber,
@@ -166,6 +238,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Published when a supplier invoice is received
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record SupplierInvoiceReceivedEvent(
         System.Guid MessageId,
@@ -189,6 +271,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Payload data for PaymentRecordedEvent.
     /// </summary>
+    /// <param name="PaymentRecordId">The payment Record Id</param>
+    /// <param name="PaymentId">The payment Id</param>
+    /// <param name="PaymentNumber">The payment Number</param>
+    /// <param name="PaymentDate">The payment Date</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="PaymentMethod">The payment Method</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="InvoiceId">The invoice Id</param>
+    /// <param name="RecordedAt">The recorded At</param>
     public record PaymentRecordedEventPayload(
         [property: JsonPropertyName("paymentRecordId")] System.Guid PaymentRecordId,
         [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
@@ -209,6 +301,16 @@ namespace Maliev.MessagingContracts.Contracts.Accounting
     /// <summary>
     /// Published when a payment is recorded in accounting
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PaymentRecordedEvent(
         System.Guid MessageId,

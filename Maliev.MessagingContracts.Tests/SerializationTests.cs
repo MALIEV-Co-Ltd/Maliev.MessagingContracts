@@ -5,6 +5,9 @@ using Maliev.MessagingContracts.Contracts.Orders;
 
 namespace Maliev.MessagingContracts.Tests;
 
+/// <summary>
+/// Tests for serialization roundtrip of message contracts.
+/// </summary>
 public class SerializationTests
 {
     private readonly JsonSerializerOptions _options = new()
@@ -13,6 +16,9 @@ public class SerializationTests
         WriteIndented = true
     };
 
+    /// <summary>
+    /// Tests that CreateOrderCommand can be serialized and deserialized correctly.
+    /// </summary>
     [Fact]
     public void CanRoundTrip_CreateOrderCommand()
     {

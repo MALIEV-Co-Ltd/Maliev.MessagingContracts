@@ -16,8 +16,13 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// Payload data for PurchaseOrderCreatedEvent.
     /// </summary>
     /// <param name="PurchaseOrderId">Internal purchase order ID</param>
+    /// <param name="PurchaseOrderNumber">The purchase Order Number</param>
     /// <param name="SupplierId">Supplier ID from SupplierService</param>
+    /// <param name="TotalAmount">The total Amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="RequestedDeliveryDate">The requested Delivery Date</param>
     /// <param name="CreatedBy">User ID who created the purchase order</param>
+    /// <param name="CreatedAt">The created At</param>
     public record PurchaseOrderCreatedEventPayload(
         [property: JsonPropertyName("purchaseOrderId")] int PurchaseOrderId,
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
@@ -36,6 +41,16 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// <summary>
     /// Published when a new purchase order is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PurchaseOrderCreatedEvent(
         System.Guid MessageId,
@@ -60,7 +75,9 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// Payload data for PurchaseOrderApprovedEvent.
     /// </summary>
     /// <param name="PurchaseOrderId">Internal purchase order ID</param>
+    /// <param name="PurchaseOrderNumber">The purchase Order Number</param>
     /// <param name="ApprovedBy">User ID who approved the purchase order</param>
+    /// <param name="ApprovedAt">The approved At</param>
     public record PurchaseOrderApprovedEventPayload(
         [property: JsonPropertyName("purchaseOrderId")] int PurchaseOrderId,
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
@@ -75,6 +92,16 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// <summary>
     /// Published when purchase order is approved
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PurchaseOrderApprovedEvent(
         System.Guid MessageId,
@@ -99,7 +126,9 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// Payload data for PurchaseOrderSentToSupplierEvent.
     /// </summary>
     /// <param name="PurchaseOrderId">Internal purchase order ID</param>
+    /// <param name="PurchaseOrderNumber">The purchase Order Number</param>
     /// <param name="SupplierId">Supplier ID from SupplierService</param>
+    /// <param name="SentAt">The sent At</param>
     /// <param name="SentBy">User ID who sent the purchase order</param>
     public record PurchaseOrderSentToSupplierEventPayload(
         [property: JsonPropertyName("purchaseOrderId")] int PurchaseOrderId,
@@ -116,6 +145,16 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// <summary>
     /// Published when PO is sent to supplier
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PurchaseOrderSentToSupplierEvent(
         System.Guid MessageId,
@@ -140,7 +179,10 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// Payload data for PurchaseOrderReceivedEvent.
     /// </summary>
     /// <param name="PurchaseOrderId">Internal purchase order ID</param>
+    /// <param name="PurchaseOrderNumber">The purchase Order Number</param>
+    /// <param name="ReceivedAt">The received At</param>
     /// <param name="ReceivedBy">User ID who received the goods</param>
+    /// <param name="IsPartialReceipt">The is Partial Receipt</param>
     public record PurchaseOrderReceivedEventPayload(
         [property: JsonPropertyName("purchaseOrderId")] int PurchaseOrderId,
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
@@ -156,6 +198,16 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// <summary>
     /// Published when goods are received from supplier
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PurchaseOrderReceivedEvent(
         System.Guid MessageId,
@@ -180,7 +232,10 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// Payload data for PurchaseOrderCancelledEvent.
     /// </summary>
     /// <param name="PurchaseOrderId">Internal purchase order ID</param>
+    /// <param name="PurchaseOrderNumber">The purchase Order Number</param>
     /// <param name="CancelledBy">User ID who cancelled the purchase order</param>
+    /// <param name="CancelledAt">The cancelled At</param>
+    /// <param name="CancellationReason">The cancellation Reason</param>
     public record PurchaseOrderCancelledEventPayload(
         [property: JsonPropertyName("purchaseOrderId")] int PurchaseOrderId,
         [property: JsonPropertyName("purchaseOrderNumber")] string PurchaseOrderNumber,
@@ -196,6 +251,16 @@ namespace Maliev.MessagingContracts.Contracts.PurchaseOrders
     /// <summary>
     /// Published when purchase order is cancelled
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PurchaseOrderCancelledEvent(
         System.Guid MessageId,

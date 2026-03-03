@@ -15,6 +15,12 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PerformanceReviewCreatedEvent.
     /// </summary>
+    /// <param name="ReviewId">The review Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="ReviewerId">The reviewer Id</param>
+    /// <param name="ReviewCycle">The review Cycle</param>
+    /// <param name="ReviewPeriodStart">The review Period Start</param>
+    /// <param name="ReviewPeriodEnd">The review Period End</param>
     public record PerformanceReviewCreatedEventPayload(
         [property: JsonPropertyName("reviewId")] System.Guid ReviewId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -31,6 +37,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when performance review is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PerformanceReviewCreatedEvent(
         System.Guid MessageId,
@@ -54,6 +70,10 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PerformanceReviewSubmittedEvent.
     /// </summary>
+    /// <param name="ReviewId">The review Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="OverallRating">The overall Rating</param>
+    /// <param name="SubmittedDate">The submitted Date</param>
     public record PerformanceReviewSubmittedEventPayload(
         [property: JsonPropertyName("reviewId")] System.Guid ReviewId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -68,6 +88,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when review is submitted
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PerformanceReviewSubmittedEvent(
         System.Guid MessageId,
@@ -91,6 +121,10 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PerformanceGoalCreatedEvent.
     /// </summary>
+    /// <param name="GoalId">The goal Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="Description">The description</param>
+    /// <param name="TargetDate">The target Date</param>
     public record PerformanceGoalCreatedEventPayload(
         [property: JsonPropertyName("goalId")] System.Guid GoalId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -105,6 +139,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when performance goal is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PerformanceGoalCreatedEvent(
         System.Guid MessageId,
@@ -128,6 +172,10 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PerformanceGoalCompletedEvent.
     /// </summary>
+    /// <param name="GoalId">The goal Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="Description">The description</param>
+    /// <param name="CompletedDate">The completed Date</param>
     public record PerformanceGoalCompletedEventPayload(
         [property: JsonPropertyName("goalId")] System.Guid GoalId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -142,6 +190,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when goal is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PerformanceGoalCompletedEvent(
         System.Guid MessageId,
@@ -165,6 +223,11 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PerformancePIPInitiatedEvent.
     /// </summary>
+    /// <param name="PipId">The pip Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="StartDate">The start Date</param>
+    /// <param name="EndDate">The end Date</param>
+    /// <param name="Reason">The reason</param>
     public record PerformancePIPInitiatedEventPayload(
         [property: JsonPropertyName("pipId")] System.Guid PipId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -180,6 +243,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when PIP is initiated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PerformancePIPInitiatedEvent(
         System.Guid MessageId,
@@ -203,6 +276,10 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for GoalCompletedEvent.
     /// </summary>
+    /// <param name="GoalId">The goal Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="Description">The description</param>
+    /// <param name="CompletedDate">The completed Date</param>
     public record GoalCompletedEventPayload(
         [property: JsonPropertyName("goalId")] System.Guid GoalId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -217,6 +294,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when goal is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record GoalCompletedEvent(
         System.Guid MessageId,
@@ -240,6 +327,11 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PIPInitiatedEvent.
     /// </summary>
+    /// <param name="PipId">The pip Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="StartDate">The start Date</param>
+    /// <param name="EndDate">The end Date</param>
+    /// <param name="Reason">The reason</param>
     public record PIPInitiatedEventPayload(
         [property: JsonPropertyName("pipId")] System.Guid PipId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -255,6 +347,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when PIP is initiated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PIPInitiatedEvent(
         System.Guid MessageId,
@@ -278,6 +380,10 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Payload data for PIPCompletedEvent.
     /// </summary>
+    /// <param name="PipId">The pip Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="Outcome">The outcome</param>
+    /// <param name="CompletedDate">The completed Date</param>
     public record PIPCompletedEventPayload(
         [property: JsonPropertyName("pipId")] System.Guid PipId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -292,6 +398,16 @@ namespace Maliev.MessagingContracts.Contracts.Performance
     /// <summary>
     /// Published when PIP outcome is recorded
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record PIPCompletedEvent(
         System.Guid MessageId,

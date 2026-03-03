@@ -18,6 +18,9 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Nested data for CustomerDetailsResponsePayload.
     /// </summary>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="FullName">The full Name</param>
+    /// <param name="Email">The email</param>
     public record CustomerDetailsResponsePayload(
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("fullName")] string FullName,
@@ -28,6 +31,17 @@ namespace Maliev.MessagingContracts.Contracts.Customers
         /// </summary>
         public CustomerDetailsResponsePayload() : this(default(System.Guid), string.Empty, string.Empty) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record CustomerDetailsResponse(
         System.Guid MessageId,
         string MessageName,
@@ -51,13 +65,18 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Payload data for CustomerCreatedEvent.
     /// </summary>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="PrincipalId">IAM principal ID for the customer</param>
+    /// <param name="FirstName">The first Name</param>
+    /// <param name="LastName">The last Name</param>
+    /// <param name="Email">The email</param>
     /// <param name="Mobile">Customer's mobile phone number</param>
     /// <param name="Extension">Customer's desk extension for company landline</param>
     /// <param name="Landline">Customer's personal or company landline number</param>
     /// <param name="Segment">Customer segment: Retail, Wholesale, Enterprise, Government</param>
     /// <param name="Tier">Customer tier: Bronze, Silver, Gold, Platinum, VIP</param>
     /// <param name="CompanyId">Optional link to Company entity</param>
+    /// <param name="CreatedAt">The created At</param>
     public record CustomerCreatedEventPayload(
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
@@ -80,6 +99,16 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Published when a new customer is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CustomerCreatedEvent(
         System.Guid MessageId,
@@ -103,9 +132,11 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Payload data for CustomerUpdatedEvent.
     /// </summary>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="UpdatedFields">Dictionary of changed fields with their new values</param>
     /// <param name="UpdatedBy">Actor ID who performed the update</param>
     /// <param name="ActorType">Type of actor: Customer, Employee, System</param>
+    /// <param name="UpdatedAt">The updated At</param>
     public record CustomerUpdatedEventPayload(
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("updatedFields")] object UpdatedFields,
@@ -121,6 +152,16 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Published when customer information is updated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CustomerUpdatedEvent(
         System.Guid MessageId,
@@ -144,8 +185,10 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Payload data for CustomerDeletedEvent.
     /// </summary>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="DeletedBy">Actor ID who performed the deletion</param>
     /// <param name="ActorType">Type of actor: Customer, Employee, System</param>
+    /// <param name="DeletedAt">The deleted At</param>
     public record CustomerDeletedEventPayload(
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("deletedBy")] string DeletedBy,
@@ -160,6 +203,16 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Published when customer is soft-deleted
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CustomerDeletedEvent(
         System.Guid MessageId,
@@ -205,6 +258,16 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Published by CustomerService when a company's tier is promoted or demoted
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CompanyTierChangedEvent(
         System.Guid MessageId,
@@ -231,6 +294,7 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     /// <summary>
     /// Nested data for GetCustomerDetailsRequestPayload.
     /// </summary>
+    /// <param name="CustomerId">The customer Id</param>
     public record GetCustomerDetailsRequestPayload(
         [property: JsonPropertyName("customerId")] System.Guid CustomerId)
     {
@@ -239,6 +303,17 @@ namespace Maliev.MessagingContracts.Contracts.Customers
         /// </summary>
         public GetCustomerDetailsRequestPayload() : this(default(System.Guid)) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record GetCustomerDetailsRequest(
         System.Guid MessageId,
         string MessageName,

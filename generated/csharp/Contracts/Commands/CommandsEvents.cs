@@ -18,6 +18,8 @@ namespace Maliev.MessagingContracts.Contracts.Commands
     /// <summary>
     /// Nested data for CreateUserCommandPayload.
     /// </summary>
+    /// <param name="Username">The username</param>
+    /// <param name="Email">The email</param>
     public record CreateUserCommandPayload(
         [property: JsonPropertyName("username")] string Username,
         [property: JsonPropertyName("email")] string Email)
@@ -27,6 +29,17 @@ namespace Maliev.MessagingContracts.Contracts.Commands
         /// </summary>
         public CreateUserCommandPayload() : this(string.Empty, string.Empty) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record CreateUserCommand(
         System.Guid MessageId,
         string MessageName,

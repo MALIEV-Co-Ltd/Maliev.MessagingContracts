@@ -15,6 +15,10 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for OnboardingStartedEvent.
     /// </summary>
+    /// <param name="ChecklistId">The checklist Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="StartDate">The start Date</param>
+    /// <param name="TotalItems">The total Item</param>
     public record OnboardingStartedEventPayload(
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -29,6 +33,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when onboarding workflow is started
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record OnboardingStartedEvent(
         System.Guid MessageId,
@@ -52,6 +66,9 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for OnboardingCompletedEvent.
     /// </summary>
+    /// <param name="ChecklistId">The checklist Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CompletedDate">The completed Date</param>
     public record OnboardingCompletedEventPayload(
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -65,6 +82,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when onboarding is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record OnboardingCompletedEvent(
         System.Guid MessageId,
@@ -88,6 +115,10 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for OffboardingStartedEvent.
     /// </summary>
+    /// <param name="ChecklistId">The checklist Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="TerminationDate">The termination Date</param>
+    /// <param name="TerminationReason">The termination Reason</param>
     public record OffboardingStartedEventPayload(
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -102,6 +133,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when offboarding workflow is started
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record OffboardingStartedEvent(
         System.Guid MessageId,
@@ -125,6 +166,9 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for OffboardingCompletedEvent.
     /// </summary>
+    /// <param name="ChecklistId">The checklist Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CompletedDate">The completed Date</param>
     public record OffboardingCompletedEventPayload(
         [property: JsonPropertyName("checklistId")] System.Guid ChecklistId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -138,6 +182,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when offboarding is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record OffboardingCompletedEvent(
         System.Guid MessageId,
@@ -161,6 +215,10 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for LifecycleTaskCreatedEvent.
     /// </summary>
+    /// <param name="TaskId">The task Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="TaskTitle">The task Title</param>
+    /// <param name="DueDate">The due Date</param>
     public record LifecycleTaskCreatedEventPayload(
         [property: JsonPropertyName("taskId")] System.Guid TaskId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -175,6 +233,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when onboarding/offboarding task is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LifecycleTaskCreatedEvent(
         System.Guid MessageId,
@@ -198,6 +266,9 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for LifecycleTaskCompletedEvent.
     /// </summary>
+    /// <param name="TaskId">The task Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CompletedDate">The completed Date</param>
     public record LifecycleTaskCompletedEventPayload(
         [property: JsonPropertyName("taskId")] System.Guid TaskId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -211,6 +282,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when lifecycle task is completed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LifecycleTaskCompletedEvent(
         System.Guid MessageId,
@@ -234,6 +315,9 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for AccessRevocationRequiredEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="EffectiveDate">The effective Date</param>
+    /// <param name="Reason">The reason</param>
     public record AccessRevocationRequiredEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("effectiveDate")] System.DateTimeOffset EffectiveDate,
@@ -247,6 +331,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when access revocation is required
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record AccessRevocationRequiredEvent(
         System.Guid MessageId,
@@ -270,6 +364,10 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for OnboardingItemOverdueEvent.
     /// </summary>
+    /// <param name="ItemId">The item Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="ItemTitle">The item Title</param>
+    /// <param name="DueDate">The due Date</param>
     public record OnboardingItemOverdueEventPayload(
         [property: JsonPropertyName("itemId")] System.Guid ItemId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -284,6 +382,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when an onboarding item is overdue
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record OnboardingItemOverdueEvent(
         System.Guid MessageId,
@@ -307,6 +415,8 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Payload data for AccessRevokedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="RevokedDate">The revoked Date</param>
     public record AccessRevokedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("revokedDate")] System.DateTimeOffset RevokedDate)
@@ -319,6 +429,16 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
     /// <summary>
     /// Published when employee system access has been successfully revoked
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record AccessRevokedEvent(
         System.Guid MessageId,

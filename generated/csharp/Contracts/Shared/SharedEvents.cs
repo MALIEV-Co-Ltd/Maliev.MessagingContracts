@@ -18,6 +18,8 @@ namespace Maliev.MessagingContracts.Contracts.Shared
     /// <summary>
     /// Nested data for NotificationEventPayloadTargetUsersItem.
     /// </summary>
+    /// <param name="UserId">The user Id</param>
+    /// <param name="UserType">The user Type</param>
     public record NotificationEventPayloadTargetUsersItem(
         [property: JsonPropertyName("userId")] string UserId,
         [property: JsonPropertyName("userType")] string UserType)
@@ -30,6 +32,8 @@ namespace Maliev.MessagingContracts.Contracts.Shared
     /// <summary>
     /// Nested data for NotificationEventPayloadMetadata.
     /// </summary>
+    /// <param name="Language">The language</param>
+    /// <param name="Source">The source</param>
     public record NotificationEventPayloadMetadata(
         [property: JsonPropertyName("language")] string Language,
         [property: JsonPropertyName("source")] string Source)
@@ -42,6 +46,12 @@ namespace Maliev.MessagingContracts.Contracts.Shared
     /// <summary>
     /// Nested data for NotificationEventPayload.
     /// </summary>
+    /// <param name="NotificationType">The notification Type</param>
+    /// <param name="Priority">The priority</param>
+    /// <param name="TargetUsers">The target User</param>
+    /// <param name="TemplateId">The template Id</param>
+    /// <param name="Parameters">The parameter</param>
+    /// <param name="Metadata">The metadata</param>
     public record NotificationEventPayload(
         [property: JsonPropertyName("notificationType")] string NotificationType,
         [property: JsonPropertyName("priority")] string Priority,
@@ -55,6 +65,17 @@ namespace Maliev.MessagingContracts.Contracts.Shared
         /// </summary>
         public NotificationEventPayload() : this(string.Empty, string.Empty, Array.Empty<NotificationEventPayloadTargetUsersItem>(), string.Empty, default!, default!) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record NotificationEvent(
         System.Guid MessageId,
         string MessageName,

@@ -20,6 +20,7 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <param name="UserType">Type of user (Customer/Employee) or Service for service-to-service auth</param>
     /// <param name="IpAddress">IP address of the login attempt</param>
     /// <param name="LoginMethod">Authentication method used</param>
+    /// <param name="LoggedInAt">The logged In At</param>
     public record UserLoggedInEventPayload(
         [property: JsonPropertyName("userId")] string UserId,
         [property: JsonPropertyName("principalId")] string? PrincipalId,
@@ -36,6 +37,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when user successfully logs in
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record UserLoggedInEvent(
         System.Guid MessageId,
@@ -60,6 +71,8 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// Payload data for UserLoggedOutEvent.
     /// </summary>
     /// <param name="UserId">User ID (UUID)</param>
+    /// <param name="UserType">The user Type</param>
+    /// <param name="LoggedOutAt">The logged Out At</param>
     public record UserLoggedOutEventPayload(
         [property: JsonPropertyName("userId")] string UserId,
         [property: JsonPropertyName("userType")] string UserType,
@@ -73,6 +86,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when user logs out
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record UserLoggedOutEvent(
         System.Guid MessageId,
@@ -101,6 +124,7 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <param name="UserType">Type of user attempting to log in</param>
     /// <param name="IpAddress">IP address of the failed attempt</param>
     /// <param name="FailureReason">Reason for login failure</param>
+    /// <param name="AttemptedAt">The attempted At</param>
     public record LoginFailedEventPayload(
         [property: JsonPropertyName("userIdentifier")] string UserIdentifier,
         [property: JsonPropertyName("userId")] string? UserId,
@@ -117,6 +141,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when login attempt fails
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LoginFailedEvent(
         System.Guid MessageId,
@@ -141,6 +175,10 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// Payload data for UserAccountLockedEvent.
     /// </summary>
     /// <param name="UserId">User ID (UUID)</param>
+    /// <param name="UserType">The user Type</param>
+    /// <param name="FailedAttemptCount">The failed Attempt Count</param>
+    /// <param name="LockedUntil">The locked Until</param>
+    /// <param name="LockedAt">The locked At</param>
     public record UserAccountLockedEventPayload(
         [property: JsonPropertyName("userId")] string UserId,
         [property: JsonPropertyName("userType")] string UserType,
@@ -156,6 +194,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when user account is locked due to failed login attempts
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record UserAccountLockedEvent(
         System.Guid MessageId,
@@ -180,7 +228,10 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// Payload data for RefreshTokenRevokedEvent.
     /// </summary>
     /// <param name="UserId">User ID (UUID)</param>
+    /// <param name="UserType">The user Type</param>
     /// <param name="TokenFamilyId">Token family ID (UUID)</param>
+    /// <param name="RevocationReason">The revocation Reason</param>
+    /// <param name="RevokedAt">The revoked At</param>
     public record RefreshTokenRevokedEventPayload(
         [property: JsonPropertyName("userId")] string UserId,
         [property: JsonPropertyName("userType")] string UserType,
@@ -196,6 +247,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when refresh token is revoked
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record RefreshTokenRevokedEvent(
         System.Guid MessageId,
@@ -224,6 +285,7 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <param name="ActivityType">Type of suspicious activity detected</param>
     /// <param name="IpAddress">IP address where activity originated</param>
     /// <param name="TokenFamilyId">Token family ID (UUID) for token reuse events</param>
+    /// <param name="DetectedAt">The detected At</param>
     public record SuspiciousActivityDetectedEventPayload(
         [property: JsonPropertyName("userId")] string? UserId,
         [property: JsonPropertyName("userType")] string? UserType,
@@ -240,6 +302,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when suspicious authentication activity is detected
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record SuspiciousActivityDetectedEvent(
         System.Guid MessageId,
@@ -265,6 +337,7 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// </summary>
     /// <param name="Jti">JWT ID (JTI) of the revoked token</param>
     /// <param name="UserId">User ID (UUID)</param>
+    /// <param name="RevokedAt">The revoked At</param>
     public record AccessTokenRevokedEventPayload(
         [property: JsonPropertyName("jti")] string Jti,
         [property: JsonPropertyName("userId")] string UserId,
@@ -278,6 +351,16 @@ namespace Maliev.MessagingContracts.Contracts.Auth
     /// <summary>
     /// Published when an access token is manually revoked
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record AccessTokenRevokedEvent(
         System.Guid MessageId,

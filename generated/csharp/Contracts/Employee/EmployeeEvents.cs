@@ -15,8 +15,15 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for EmployeeCreatedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="EmployeeNumber">The employee Number</param>
+    /// <param name="PrincipalId">The principal Id</param>
     /// <param name="Email">Work email address of the employee</param>
     /// <param name="FullName">Full display name of the employee</param>
+    /// <param name="StartDate">The start Date</param>
+    /// <param name="DepartmentId">The department Id</param>
+    /// <param name="PositionId">The position Id</param>
+    /// <param name="ManagerId">The manager Id</param>
     public record EmployeeCreatedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("employeeNumber")] string EmployeeNumber,
@@ -36,6 +43,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when a new employee record is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record EmployeeCreatedEvent(
         System.Guid MessageId,
@@ -59,6 +76,10 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for EmployeeTerminatedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="TerminationDate">The termination Date</param>
+    /// <param name="TerminationReason">The termination Reason</param>
+    /// <param name="EligibleForRehire">The eligible For Rehire</param>
     public record EmployeeTerminatedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("terminationDate")] System.DateTimeOffset TerminationDate,
@@ -73,6 +94,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when an employee is terminated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record EmployeeTerminatedEvent(
         System.Guid MessageId,
@@ -96,6 +127,10 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for DepartmentTransferredEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="PreviousDepartmentId">The previous Department Id</param>
+    /// <param name="NewDepartmentId">The new Department Id</param>
+    /// <param name="EffectiveDate">The effective Date</param>
     public record DepartmentTransferredEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("previousDepartmentId")] System.Guid PreviousDepartmentId,
@@ -110,6 +145,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when an employee transfers between departments
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record DepartmentTransferredEvent(
         System.Guid MessageId,
@@ -133,6 +178,10 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for EmployeeDepartmentTransferredEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="PreviousDepartmentId">The previous Department Id</param>
+    /// <param name="NewDepartmentId">The new Department Id</param>
+    /// <param name="EffectiveDate">The effective Date</param>
     public record EmployeeDepartmentTransferredEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("previousDepartmentId")] System.Guid PreviousDepartmentId,
@@ -147,6 +196,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when an employee transfers between departments
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record EmployeeDepartmentTransferredEvent(
         System.Guid MessageId,
@@ -170,6 +229,14 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for TeamCreatedEvent.
     /// </summary>
+    /// <param name="TeamId">The team Id</param>
+    /// <param name="TeamName">The team Name</param>
+    /// <param name="TeamType">The team Type</param>
+    /// <param name="Description">The description</param>
+    /// <param name="TeamLeadId">The team Lead Id</param>
+    /// <param name="IsActive">The is Active</param>
+    /// <param name="CreatedAt">The created At</param>
+    /// <param name="CreatedBy">The created By</param>
     public record TeamCreatedEventPayload(
         [property: JsonPropertyName("teamId")] System.Guid TeamId,
         [property: JsonPropertyName("teamName")] string TeamName,
@@ -188,6 +255,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when a new team is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TeamCreatedEvent(
         System.Guid MessageId,
@@ -211,6 +288,14 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for TeamUpdatedEvent.
     /// </summary>
+    /// <param name="TeamId">The team Id</param>
+    /// <param name="TeamName">The team Name</param>
+    /// <param name="TeamType">The team Type</param>
+    /// <param name="Description">The description</param>
+    /// <param name="TeamLeadId">The team Lead Id</param>
+    /// <param name="IsActive">The is Active</param>
+    /// <param name="UpdatedAt">The updated At</param>
+    /// <param name="UpdatedBy">The updated By</param>
     public record TeamUpdatedEventPayload(
         [property: JsonPropertyName("teamId")] System.Guid TeamId,
         [property: JsonPropertyName("teamName")] string TeamName,
@@ -229,6 +314,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when a team is updated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TeamUpdatedEvent(
         System.Guid MessageId,
@@ -252,6 +347,14 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for TeamMemberAddedEvent.
     /// </summary>
+    /// <param name="TeamId">The team Id</param>
+    /// <param name="TeamName">The team Name</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="EmployeeNumber">The employee Number</param>
+    /// <param name="EmployeeName">The employee Name</param>
+    /// <param name="IsPrimary">The is Primary</param>
+    /// <param name="AddedAt">The added At</param>
+    /// <param name="AddedBy">The added By</param>
     public record TeamMemberAddedEventPayload(
         [property: JsonPropertyName("teamId")] System.Guid TeamId,
         [property: JsonPropertyName("teamName")] string TeamName,
@@ -270,6 +373,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when a member is added to a team
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TeamMemberAddedEvent(
         System.Guid MessageId,
@@ -293,6 +406,13 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Payload data for TeamMemberRemovedEvent.
     /// </summary>
+    /// <param name="TeamId">The team Id</param>
+    /// <param name="TeamName">The team Name</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="EmployeeNumber">The employee Number</param>
+    /// <param name="EmployeeName">The employee Name</param>
+    /// <param name="RemovedAt">The removed At</param>
+    /// <param name="RemovedBy">The removed By</param>
     public record TeamMemberRemovedEventPayload(
         [property: JsonPropertyName("teamId")] System.Guid TeamId,
         [property: JsonPropertyName("teamName")] string TeamName,
@@ -310,6 +430,16 @@ namespace Maliev.MessagingContracts.Contracts.Employee
     /// <summary>
     /// Published when a member is removed from a team
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record TeamMemberRemovedEvent(
         System.Guid MessageId,

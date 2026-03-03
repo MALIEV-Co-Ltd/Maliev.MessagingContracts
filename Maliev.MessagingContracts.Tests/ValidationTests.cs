@@ -7,6 +7,9 @@ using Xunit;
 
 namespace Maliev.MessagingContracts.Tests
 {
+    /// <summary>
+    /// Tests for validating JSON schema contracts.
+    /// </summary>
     public class ValidationTests
     {
         private static string FindSchemaRoot()
@@ -21,6 +24,9 @@ namespace Maliev.MessagingContracts.Tests
 
         private static readonly string SchemaRoot = FindSchemaRoot();
 
+        /// <summary>
+        /// Gets all JSON schema files for testing.
+        /// </summary>
         public static IEnumerable<object[]> GetSchemaFiles()
         {
             if (string.IsNullOrEmpty(SchemaRoot)) return Enumerable.Empty<object[]>();
@@ -31,6 +37,9 @@ namespace Maliev.MessagingContracts.Tests
             return schemaFiles.Select(file => new object[] { file });
         }
 
+        /// <summary>
+        /// Tests that all contracts have valid consumers if specified.
+        /// </summary>
         [Theory]
         [MemberData(nameof(GetSchemaFiles))]
         public void All_Contracts_Must_Have_Consumers_If_Specified(string schemaPath)

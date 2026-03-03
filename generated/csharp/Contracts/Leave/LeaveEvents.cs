@@ -15,6 +15,13 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveRequestSubmittedEvent.
     /// </summary>
+    /// <param name="RequestId">The request Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="LeaveType">The leave Type</param>
+    /// <param name="StartDate">The start Date</param>
+    /// <param name="EndDate">The end Date</param>
+    /// <param name="TotalDays">The total Day</param>
+    /// <param name="SubmittedAt">The submitted At</param>
     public record LeaveRequestSubmittedEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -32,6 +39,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when a leave request is submitted
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveRequestSubmittedEvent(
         System.Guid MessageId,
@@ -55,6 +72,13 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveRequestApprovedEvent.
     /// </summary>
+    /// <param name="RequestId">The request Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="ApproverId">The approver Id</param>
+    /// <param name="LeaveType">The leave Type</param>
+    /// <param name="StartDate">The start Date</param>
+    /// <param name="EndDate">The end Date</param>
+    /// <param name="ApprovedAt">The approved At</param>
     public record LeaveRequestApprovedEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -72,6 +96,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when a leave request is approved
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveRequestApprovedEvent(
         System.Guid MessageId,
@@ -95,6 +129,10 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveRequestRejectedEvent.
     /// </summary>
+    /// <param name="RequestId">The request Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="Reason">The reason</param>
+    /// <param name="RejectedAt">The rejected At</param>
     public record LeaveRequestRejectedEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -109,6 +147,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when a leave request is rejected
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveRequestRejectedEvent(
         System.Guid MessageId,
@@ -132,6 +180,10 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveRequestCancelledEvent.
     /// </summary>
+    /// <param name="RequestId">The request Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="Reason">The reason</param>
+    /// <param name="CancelledAt">The cancelled At</param>
     public record LeaveRequestCancelledEventPayload(
         [property: JsonPropertyName("requestId")] System.Guid RequestId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -146,6 +198,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when a leave request is cancelled
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveRequestCancelledEvent(
         System.Guid MessageId,
@@ -169,6 +231,9 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveBalanceUpdatedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="LeaveType">The leave Type</param>
+    /// <param name="NewBalance">The new Balance</param>
     public record LeaveBalanceUpdatedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("leaveType")] string LeaveType,
@@ -182,6 +247,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when leave balance changes
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveBalanceUpdatedEvent(
         System.Guid MessageId,
@@ -205,6 +280,13 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveBalanceAdjustedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="LeaveType">The leave Type</param>
+    /// <param name="Year">The year</param>
+    /// <param name="NewEntitled">The new Entitled</param>
+    /// <param name="NewUsed">The new Used</param>
+    /// <param name="NewPending">The new Pending</param>
+    /// <param name="NewCarriedForward">The new Carried Forward</param>
     public record LeaveBalanceAdjustedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("leaveType")] string LeaveType,
@@ -222,6 +304,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when leave balance changes
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveBalanceAdjustedEvent(
         System.Guid MessageId,
@@ -245,6 +337,8 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Payload data for LeaveBalanceClosedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="ClosedAt">The closed At</param>
     public record LeaveBalanceClosedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("closedAt")] System.DateTimeOffset ClosedAt)
@@ -257,6 +351,16 @@ namespace Maliev.MessagingContracts.Contracts.Leave
     /// <summary>
     /// Published when an employee's leave balances have been closed
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record LeaveBalanceClosedEvent(
         System.Guid MessageId,

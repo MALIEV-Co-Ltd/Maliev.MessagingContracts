@@ -15,6 +15,11 @@ namespace Maliev.MessagingContracts.Contracts.Compliance
     /// <summary>
     /// Payload data for WorkAuthorizationExpiringEvent.
     /// </summary>
+    /// <param name="AuthorizationId">The authorization Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="AuthorizationType">The authorization Type</param>
+    /// <param name="ExpirationDate">The expiration Date</param>
+    /// <param name="DaysUntilExpiration">The days Until Expiration</param>
     public record WorkAuthorizationExpiringEventPayload(
         [property: JsonPropertyName("authorizationId")] System.Guid AuthorizationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -30,6 +35,16 @@ namespace Maliev.MessagingContracts.Contracts.Compliance
     /// <summary>
     /// Published when authorization is expiring (30/60/90 days)
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record WorkAuthorizationExpiringEvent(
         System.Guid MessageId,
@@ -53,6 +68,10 @@ namespace Maliev.MessagingContracts.Contracts.Compliance
     /// <summary>
     /// Payload data for WorkAuthorizationExpiredEvent.
     /// </summary>
+    /// <param name="AuthorizationId">The authorization Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="AuthorizationType">The authorization Type</param>
+    /// <param name="ExpirationDate">The expiration Date</param>
     public record WorkAuthorizationExpiredEventPayload(
         [property: JsonPropertyName("authorizationId")] System.Guid AuthorizationId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -67,6 +86,16 @@ namespace Maliev.MessagingContracts.Contracts.Compliance
     /// <summary>
     /// Published when authorization has expired
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record WorkAuthorizationExpiredEvent(
         System.Guid MessageId,
@@ -90,6 +119,10 @@ namespace Maliev.MessagingContracts.Contracts.Compliance
     /// <summary>
     /// Payload data for ComplianceDocumentUploadedEvent.
     /// </summary>
+    /// <param name="DocumentId">The document Id</param>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="DocumentType">The document Type</param>
+    /// <param name="UploadDate">The upload Date</param>
     public record ComplianceDocumentUploadedEventPayload(
         [property: JsonPropertyName("documentId")] System.Guid DocumentId,
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
@@ -104,6 +137,16 @@ namespace Maliev.MessagingContracts.Contracts.Compliance
     /// <summary>
     /// Published when compliance document is uploaded
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record ComplianceDocumentUploadedEvent(
         System.Guid MessageId,

@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Generator
 {
+    /// <summary>
+    /// Generator program for C# messaging contracts.
+    /// </summary>
     class Program
     {
         private static ILogger<Program>? _logger;
@@ -28,6 +31,13 @@ namespace Generator
 
             var generator = new ManualCSharpGenerator(schemaRoot, loggerFactory.CreateLogger<ManualCSharpGenerator>());
             var results = await generator.GenerateAsync();
+
+            _logger.LogInformation("Cleaning up output directory...");
+            if (Directory.Exists(outputDir))
+            {
+                Directory.Delete(outputDir, recursive: true);
+            }
+            Directory.CreateDirectory(outputDir);
 
             _logger.LogInformation("Writing generated files...");
             foreach (var result in results)
@@ -69,17 +79,29 @@ namespace Generator
 
     }
 
+    /// <summary>
+    /// Generates C# contract classes from JSON schemas.
+    /// </summary>
     public class ManualCSharpGenerator
     {
         private readonly string _schemaRoot;
         private readonly ILogger<ManualCSharpGenerator> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the ManualCSharpGenerator.
+        /// </summary>
+        /// <param name="schemaRoot">Path to the JSON schema root directory.</param>
+        /// <param name="logger">Logger instance.</param>
         public ManualCSharpGenerator(string schemaRoot, ILogger<ManualCSharpGenerator> logger)
         {
             _schemaRoot = schemaRoot;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Generates C# contract files from JSON schemas.
+        /// </summary>
+        /// <returns>Dictionary of generated filename to content.</returns>
         public async Task<IDictionary<string, string>> GenerateAsync()
         {
             var results = new Dictionary<string, string>();
@@ -306,6 +328,16 @@ namespace Generator
                 sb.AppendLine($"    /// {description}");
                 sb.AppendLine("    /// </summary>");
             }
+            sb.AppendLine("    /// <param name=\"MessageId\">Unique identifier for the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageName\">Descriptive name of the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageType\">The type of message (Command, Event, etc.).</param>");
+            sb.AppendLine("    /// <param name=\"MessageVersion\">Semantic version of the message contract.</param>");
+            sb.AppendLine("    /// <param name=\"PublishedBy\">The service that published the message.</param>");
+            sb.AppendLine("    /// <param name=\"ConsumedBy\">List of services intended to consume the message.</param>");
+            sb.AppendLine("    /// <param name=\"CorrelationId\">Id used to correlate related messages across a flow.</param>");
+            sb.AppendLine("    /// <param name=\"CausationId\">Id of the message that caused this one.</param>");
+            sb.AppendLine("    /// <param name=\"OccurredAtUtc\">Timestamp of when the message occurred.</param>");
+            sb.AppendLine("    /// <param name=\"IsPublic\">True if the message is intended for external systems.</param>");
             sb.AppendLine("    /// <param name=\"Payload\">The specific data associated with this message.</param>");
             sb.AppendLine($"    public record {className}(");
 
@@ -401,10 +433,10 @@ namespace Generator
             sb.AppendLine("    /// </summary>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
 
             sb.AppendLine($"    public record {typeName}(");
@@ -523,12 +555,22 @@ namespace Generator
             }
 
             // Generate the message record that extends BaseMessage
+            sb.AppendLine("    /// <param name=\"MessageId\">Unique identifier for the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageName\">Descriptive name of the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageType\">The type of message (Command, Event, etc.).</param>");
+            sb.AppendLine("    /// <param name=\"MessageVersion\">Semantic version of the message contract.</param>");
+            sb.AppendLine("    /// <param name=\"PublishedBy\">The service that published the message.</param>");
+            sb.AppendLine("    /// <param name=\"ConsumedBy\">List of services intended to consume the message.</param>");
+            sb.AppendLine("    /// <param name=\"CorrelationId\">Id used to correlate related messages across a flow.</param>");
+            sb.AppendLine("    /// <param name=\"CausationId\">Id of the message that caused this one.</param>");
+            sb.AppendLine("    /// <param name=\"OccurredAtUtc\">Timestamp of when the message occurred.</param>");
+            sb.AppendLine("    /// <param name=\"IsPublic\">True if the message is intended for external systems.</param>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
             sb.AppendLine($"    public record {className}(");
 
@@ -629,10 +671,10 @@ namespace Generator
             sb.AppendLine("    /// </summary>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
 
             sb.AppendLine($"    public record {typeName}(");
@@ -708,10 +750,10 @@ namespace Generator
 
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
             sb.AppendLine($"    public record {className}(");
             for (int i = 0; i < properties.Count; i++)
@@ -862,6 +904,34 @@ namespace Generator
         {
             var baseName = Path.GetFileNameWithoutExtension(filePath);
             return string.Join("", baseName.Split('-').Select(w => ToPascalCase(w)));
+        }
+
+        private string GenerateDescriptionFromPropertyName(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                return "The property value";
+
+            var words = new List<string>();
+            var currentWord = new System.Text.StringBuilder();
+
+            foreach (var c in propertyName)
+            {
+                if (char.IsUpper(c) && currentWord.Length > 0)
+                {
+                    words.Add(currentWord.ToString());
+                    currentWord.Clear();
+                }
+                currentWord.Append(c);
+            }
+            if (currentWord.Length > 0)
+                words.Add(currentWord.ToString());
+
+            if (words.Count == 0)
+                return "The property value";
+
+            var description = string.Join(" ", words);
+            description = description.TrimEnd('s');
+            return $"The {char.ToLower(description[0])}{description.Substring(1)}";
         }
     }
 }

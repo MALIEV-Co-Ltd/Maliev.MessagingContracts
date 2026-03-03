@@ -15,6 +15,16 @@ namespace Maliev.MessagingContracts.Contracts.Iam
     /// <summary>
     /// Event published when a new permission is registered by a service in the IAM service.
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="PermissionId">The unique identifier of the permission (e.g., 'service.resource.action').</param>
     /// <param name="ServiceName">The name of the service that registered the permission.</param>
     /// <param name="ResourceType">The type of resource this permission applies to.</param>
@@ -47,6 +57,16 @@ namespace Maliev.MessagingContracts.Contracts.Iam
     /// <summary>
     /// Event published by the IAM service when a service's permission registration is complete.
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="ServiceName">The name of the service whose permissions were registered.</param>
     /// <param name="PermissionCount">Number of permissions registered.</param>
     /// <param name="RoleCount">Number of roles registered.</param>
@@ -107,6 +127,16 @@ namespace Maliev.MessagingContracts.Contracts.Iam
         /// </summary>
         public PermissionRegistrationRequestRolesItem() : this(string.Empty, string.Empty, Array.Empty<string>()) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="ServiceName">The name of the service registering permissions (e.g., 'customer', 'order').</param>
     /// <param name="Permissions">List of permissions to register.</param>
     /// <param name="Roles">Optional list of predefined roles to register.</param>
@@ -135,6 +165,16 @@ namespace Maliev.MessagingContracts.Contracts.Iam
     /// <summary>
     /// Event published when a role is granted to a principal (service account) in the IAM service.
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="BindingId">The unique identifier of the role binding.</param>
     /// <param name="PrincipalId">The unique identifier of the principal (user or service).</param>
     /// <param name="RoleId">The unique identifier of the role.</param>
@@ -171,6 +211,16 @@ namespace Maliev.MessagingContracts.Contracts.Iam
     /// <summary>
     /// Event published when a role is revoked from a principal (service account) in the IAM service.
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="BindingId">The unique identifier of the role binding that was revoked.</param>
     /// <param name="PrincipalId">The unique identifier of the principal.</param>
     /// <param name="RoleId">The unique identifier of the role.</param>
@@ -201,6 +251,16 @@ namespace Maliev.MessagingContracts.Contracts.Iam
     /// <summary>
     /// Event published when a role's permissions are modified in the IAM service.
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="RoleId">The unique identifier of the role.</param>
     /// <param name="ServiceName">The name of the service that owns the role.</param>
     /// <param name="UpdatedAt">The timestamp when the role was updated.</param>

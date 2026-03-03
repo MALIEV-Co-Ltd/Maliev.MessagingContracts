@@ -22,6 +22,7 @@ namespace Maliev.MessagingContracts.Contracts.Uploads
     /// <param name="ContentType">MIME type of the file</param>
     /// <param name="FileSize">File size in bytes</param>
     /// <param name="DownloadUrl">Signed URL for downloading the file (valid for 1 hour)</param>
+    /// <param name="UploadedAt">The uploaded At</param>
     /// <param name="RetentionPolicyId">ID of applied retention policy</param>
     /// <param name="ExpiresAt">When the file will expire based on retention policy</param>
     /// <param name="Metadata">Custom metadata associated with the file</param>
@@ -46,6 +47,16 @@ namespace Maliev.MessagingContracts.Contracts.Uploads
     /// <summary>
     /// Published when a file upload completes successfully
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record FileUploadedEvent(
         System.Guid MessageId,
@@ -73,6 +84,7 @@ namespace Maliev.MessagingContracts.Contracts.Uploads
     /// <param name="UploadId">Associated upload identifier</param>
     /// <param name="ServiceId">Service that owns the file</param>
     /// <param name="StoragePath">Path in GCS bucket where file was stored</param>
+    /// <param name="DeletedAt">The deleted At</param>
     /// <param name="DeletedBy">Service or user that initiated deletion</param>
     /// <param name="Reason">Reason for deletion</param>
     public record FileDeletedEventPayload(
@@ -92,6 +104,16 @@ namespace Maliev.MessagingContracts.Contracts.Uploads
     /// <summary>
     /// Published when a file is deleted from storage
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record FileDeletedEvent(
         System.Guid MessageId,

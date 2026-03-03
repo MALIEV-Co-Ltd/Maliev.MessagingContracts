@@ -35,6 +35,17 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// </summary>
         public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record PaymentCompletedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -61,6 +72,13 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <summary>
     /// Nested data for PaymentCreatedEventPayload.
     /// </summary>
+    /// <param name="TransactionId">The transaction Id</param>
+    /// <param name="IdempotencyKey">The idempotency Key</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="ProviderName">The provider Name</param>
     public record PaymentCreatedEventPayload(
         [property: JsonPropertyName("transactionId")] System.Guid TransactionId,
         [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
@@ -75,6 +93,17 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// </summary>
         public PaymentCreatedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record PaymentCreatedEvent(
         System.Guid MessageId,
         string MessageName,
@@ -101,6 +130,16 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <summary>
     /// Nested data for PaymentFailedEventPayload.
     /// </summary>
+    /// <param name="TransactionId">The transaction Id</param>
+    /// <param name="IdempotencyKey">The idempotency Key</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ErrorMessage">The error Message</param>
+    /// <param name="ProviderErrorCode">The provider Error Code</param>
+    /// <param name="FailedAt">The failed At</param>
     public record PaymentFailedEventPayload(
         [property: JsonPropertyName("transactionId")] System.Guid TransactionId,
         [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
@@ -118,6 +157,17 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// </summary>
         public PaymentFailedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
     }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
     public record PaymentFailedEvent(
         System.Guid MessageId,
         string MessageName,

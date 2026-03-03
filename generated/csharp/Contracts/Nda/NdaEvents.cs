@@ -15,6 +15,11 @@ namespace Maliev.MessagingContracts.Contracts.Nda
     /// <summary>
     /// Payload data for NdaExpiringEvent.
     /// </summary>
+    /// <param name="NdaId">The nda Id</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="ExpiresAt">The expires At</param>
+    /// <param name="DaysUntilExpiration">The days Until Expiration</param>
+    /// <param name="WarningGeneratedAt">The warning Generated At</param>
     public record NdaExpiringEventPayload(
         [property: JsonPropertyName("ndaId")] System.Guid NdaId,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
@@ -30,6 +35,16 @@ namespace Maliev.MessagingContracts.Contracts.Nda
     /// <summary>
     /// Published when an NDA is approaching expiration
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record NdaExpiringEvent(
         System.Guid MessageId,
@@ -53,6 +68,10 @@ namespace Maliev.MessagingContracts.Contracts.Nda
     /// <summary>
     /// Payload data for NdaExpiredEvent.
     /// </summary>
+    /// <param name="NdaId">The nda Id</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="ExpiredAt">The expired At</param>
+    /// <param name="ProcessedAt">The processed At</param>
     public record NdaExpiredEventPayload(
         [property: JsonPropertyName("ndaId")] System.Guid NdaId,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
@@ -67,6 +86,16 @@ namespace Maliev.MessagingContracts.Contracts.Nda
     /// <summary>
     /// Published when an NDA has expired
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record NdaExpiredEvent(
         System.Guid MessageId,

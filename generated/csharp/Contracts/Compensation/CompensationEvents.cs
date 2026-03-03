@@ -15,6 +15,13 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Payload data for SalaryChangedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="CompensationRecordId">The compensation Record Id</param>
+    /// <param name="NewSalary">The new Salary</param>
+    /// <param name="PreviousSalary">The previous Salary</param>
+    /// <param name="ChangePercentage">The change Percentage</param>
+    /// <param name="EffectiveDate">The effective Date</param>
+    /// <param name="ChangeReason">The change Reason</param>
     public record SalaryChangedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("compensationRecordId")] System.Guid CompensationRecordId,
@@ -32,6 +39,16 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Published when compensation record is created or updated
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record SalaryChangedEvent(
         System.Guid MessageId,
@@ -55,6 +72,12 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Payload data for BonusAwardedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="BonusId">The bonus Id</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="AwardDate">The award Date</param>
+    /// <param name="Reason">The reason</param>
     public record BonusAwardedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("bonusId")] System.Guid BonusId,
@@ -71,6 +94,16 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Published when bonus is awarded to an employee
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record BonusAwardedEvent(
         System.Guid MessageId,
@@ -94,6 +127,10 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Payload data for BenefitEnrolledEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="BenefitId">The benefit Id</param>
+    /// <param name="Status">The statu</param>
+    /// <param name="EffectiveDate">The effective Date</param>
     public record BenefitEnrolledEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("benefitId")] System.Guid BenefitId,
@@ -108,6 +145,16 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Published when benefits enrollment changes
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record BenefitEnrolledEvent(
         System.Guid MessageId,
@@ -131,6 +178,10 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Payload data for BulkSalaryIncreaseCompletedEvent.
     /// </summary>
+    /// <param name="JobId">The job Id</param>
+    /// <param name="SuccessCount">The success Count</param>
+    /// <param name="FailureCount">The failure Count</param>
+    /// <param name="TotalBudgetImpact">The total Budget Impact</param>
     public record BulkSalaryIncreaseCompletedEventPayload(
         [property: JsonPropertyName("jobId")] System.Guid JobId,
         [property: JsonPropertyName("successCount")] int SuccessCount,
@@ -145,6 +196,16 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Published when bulk salary increase operation completes
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record BulkSalaryIncreaseCompletedEvent(
         System.Guid MessageId,
@@ -168,6 +229,8 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Payload data for CompensationArchivedEvent.
     /// </summary>
+    /// <param name="EmployeeId">The employee Id</param>
+    /// <param name="ArchivedAt">The archived At</param>
     public record CompensationArchivedEventPayload(
         [property: JsonPropertyName("employeeId")] System.Guid EmployeeId,
         [property: JsonPropertyName("archivedAt")] System.DateTimeOffset ArchivedAt)
@@ -180,6 +243,16 @@ namespace Maliev.MessagingContracts.Contracts.Compensation
     /// <summary>
     /// Published when an employee's compensation records have been archived
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record CompensationArchivedEvent(
         System.Guid MessageId,

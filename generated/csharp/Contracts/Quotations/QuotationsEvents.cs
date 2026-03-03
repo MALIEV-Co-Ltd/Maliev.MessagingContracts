@@ -15,10 +15,14 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Payload data for QuotationCreatedEvent.
     /// </summary>
+    /// <param name="QuotationId">The quotation Id</param>
     /// <param name="QuotationNumber">Derived from quotation ID</param>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="TotalAmount">Total amount from current version</param>
+    /// <param name="Currency">The currency</param>
     /// <param name="ValidUntil">Validity period end date</param>
     /// <param name="CreatedBy">User ID who created the quotation</param>
+    /// <param name="CreatedAt">The created At</param>
     public record QuotationCreatedEventPayload(
         [property: JsonPropertyName("quotationId")] System.Guid QuotationId,
         [property: JsonPropertyName("quotationNumber")] string QuotationNumber,
@@ -37,6 +41,16 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Published when a new quotation is created
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record QuotationCreatedEvent(
         System.Guid MessageId,
@@ -60,7 +74,12 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Payload data for QuotationAcceptedEvent.
     /// </summary>
+    /// <param name="QuotationId">The quotation Id</param>
+    /// <param name="QuotationNumber">The quotation Number</param>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="AcceptedAmount">Total amount from current version</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="AcceptedAt">The accepted At</param>
     /// <param name="AcceptedBy">User ID who accepted the quotation</param>
     public record QuotationAcceptedEventPayload(
         [property: JsonPropertyName("quotationId")] System.Guid QuotationId,
@@ -79,6 +98,16 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Published when customer accepts quotation (status changes to Accepted)
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record QuotationAcceptedEvent(
         System.Guid MessageId,
@@ -102,6 +131,10 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Payload data for QuotationCancelledEvent.
     /// </summary>
+    /// <param name="QuotationId">The quotation Id</param>
+    /// <param name="QuotationNumber">The quotation Number</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="CancelledAt">The cancelled At</param>
     /// <param name="CancelledBy">User ID who cancelled the quotation</param>
     /// <param name="CancellationReason">Optional reason for cancellation</param>
     public record QuotationCancelledEventPayload(
@@ -120,6 +153,16 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Published when quotation is cancelled
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record QuotationCancelledEvent(
         System.Guid MessageId,
@@ -143,7 +186,11 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Payload data for QuotationExpiredEvent.
     /// </summary>
+    /// <param name="QuotationId">The quotation Id</param>
+    /// <param name="QuotationNumber">The quotation Number</param>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="ValidUntil">Original validity period end date</param>
+    /// <param name="ExpiredAt">The expired At</param>
     public record QuotationExpiredEventPayload(
         [property: JsonPropertyName("quotationId")] System.Guid QuotationId,
         [property: JsonPropertyName("quotationNumber")] string QuotationNumber,
@@ -159,6 +206,16 @@ namespace Maliev.MessagingContracts.Contracts.Quotations
     /// <summary>
     /// Published when quotation validity period expires (background job or manual status change)
     /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
     /// <param name="Payload">The specific data associated with this message.</param>
     public record QuotationExpiredEvent(
         System.Guid MessageId,
