@@ -459,4 +459,50 @@ namespace Maliev.MessagingContracts.Contracts.Lifecycle
         public AccessRevokedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
+    /// <summary>
+    /// Command to undo access revocation for an employee.
+    /// </summary>
+    /// <summary>
+    /// Nested data for UndoRevokeAccessCommandPayload.
+    /// </summary>
+    /// <param name="EmployeeId">The unique identifier of the employee.</param>
+    public record UndoRevokeAccessCommandPayload(
+        [property: JsonPropertyName("employeeId")] System.Guid EmployeeId)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UndoRevokeAccessCommandPayload() : this(default(System.Guid)) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload for undoing access revocation.</param>
+    public record UndoRevokeAccessCommand(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] UndoRevokeAccessCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UndoRevokeAccessCommand() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
 }

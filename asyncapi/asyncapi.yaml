@@ -599,6 +599,12 @@ channels:
       AccessRevokedEvent:
         $ref: '#/components/messages/AccessRevokedEvent'
 
+  lifecycle/undo-revoke-access:
+    address: maliev.lifecycle.commands.undo-revoke-access
+    messages:
+      UndoRevokeAccessCommand:
+        $ref: '#/components/messages/UndoRevokeAccessCommand'
+
   # ==================== CAREER SERVICE ====================
   career/training-enrolled:
     address: maliev.career.events.training-enrolled
@@ -1241,6 +1247,11 @@ components:
       payload:
         $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/AccessRevokedEvent'
       description: Published when employee system access has been successfully revoked
+
+    UndoRevokeAccessCommand:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/undo-revoke-access-command.json'
+      description: Command to undo access revocation for an employee
 
     # ==================== CAREER SERVICE MESSAGES ====================
     TrainingEnrolledEvent:
