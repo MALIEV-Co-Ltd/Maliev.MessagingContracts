@@ -83,6 +83,104 @@
                 }
             },
             "required": ["requestId", "referenceId", "documentType", "errorMessage", "failedAt"]
+        },
+        "FinancialReportPdfRequestedEvent": {
+            "type": "object",
+            "description": "Published when a financial report PDF is requested",
+            "properties": {
+                "reportId": {
+                    "type": "string",
+                    "description": "Unique report identifier"
+                },
+                "reportType": {
+                    "type": "string",
+                    "description": "Type of financial report"
+                },
+                "requestedBy": {
+                    "type": "string",
+                    "description": "User requesting the report"
+                },
+                "requestedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the report was requested"
+                },
+                "periodStart": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Start of reporting period"
+                },
+                "periodEnd": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "End of reporting period"
+                },
+                "companyName": {
+                    "type": "string",
+                    "description": "Company name"
+                },
+                "companyAddress": {
+                    "type": "string",
+                    "description": "Company address"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "Currency code (e.g., THB)"
+                },
+                "totalRevenue": {
+                    "type": "number",
+                    "description": "Total revenue amount"
+                },
+                "totalExpenses": {
+                    "type": "number",
+                    "description": "Total expenses amount"
+                },
+                "netProfit": {
+                    "type": "number",
+                    "description": "Net profit amount"
+                },
+                "sections": {
+                    "type": "array",
+                    "description": "Report sections with line items",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "sectionTitle": {
+                                "type": "string",
+                                "description": "Section title"
+                            },
+                            "sectionTotal": {
+                                "type": "number",
+                                "description": "Section total amount"
+                            },
+                            "lineItems": {
+                                "type": "array",
+                                "description": "Line items in this section",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "description": {
+                                            "type": "string",
+                                            "description": "Line item description"
+                                        },
+                                        "amount": {
+                                            "type": "number",
+                                            "description": "Line item amount"
+                                        },
+                                        "isHighlight": {
+                                            "type": "boolean",
+                                            "description": "Whether this item should be highlighted"
+                                        }
+                                    },
+                                    "required": ["description", "amount"]
+                                }
+                            }
+                        },
+                        "required": ["sectionTitle", "sectionTotal"]
+                    }
+                }
+            },
+            "required": ["reportId", "requestedBy", "requestedAt"]
         }
     }
 }

@@ -94,13 +94,35 @@
                         }
                     },
                     "required": ["thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2"]
+                },
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the material"
+                },
+                "materialCode": {
+                    "type": "string",
+                    "description": "Material code (e.g., 'PLA', 'ABS', 'PETG')"
+                },
+                "manufacturingProcessId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the manufacturing process"
+                },
+                "manufacturingProcessName": {
+                    "type": "string",
+                    "description": "Manufacturing process name (e.g., 'FDM', 'SLA', 'DLP', 'CNC')"
                 }
             },
             "required": [
                 "fileId",
                 "customerId",
                 "metrics",
-                "processedAt"
+                "processedAt",
+                "materialId",
+                "materialCode",
+                "manufacturingProcessId",
+                "manufacturingProcessName"
             ]
         },
         "FileAnalysisFailedEvent": {

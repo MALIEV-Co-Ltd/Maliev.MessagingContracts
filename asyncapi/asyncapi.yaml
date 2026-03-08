@@ -445,6 +445,12 @@ channels:
       PdfGenerationFailedEvent:
         $ref: '#/components/messages/PdfGenerationFailedEvent'
 
+  pdf/report-pdf-requested:
+    address: maliev.pdf.events.report-pdf-requested
+    messages:
+      FinancialReportPdfRequestedEvent:
+        $ref: '#/components/messages/FinancialReportPdfRequestedEvent'
+
   # ==================== EMPLOYEE SERVICE ====================
   employee/created:
     address: maliev.employees.events.employee-created
@@ -1118,6 +1124,11 @@ components:
       payload:
         $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/PdfGenerationFailedEvent'
       description: Published when PDF generation fails
+
+    FinancialReportPdfRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/FinancialReportPdfRequestedEvent'
+      description: Published when a financial report PDF is requested
 
     # ==================== EMPLOYEE SERVICE MESSAGES ====================
     EmployeeCreatedEvent:

@@ -80,6 +80,10 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="ThumbnailStoragePath">GCS storage path of the generated thumbnail image</param>
     /// <param name="ProcessedAt">The processed At</param>
     /// <param name="DfmReport">Optional DFM analysis results. Null if analysis failed or not applicable.</param>
+    /// <param name="MaterialId">Unique identifier for the material</param>
+    /// <param name="MaterialCode">Material code (e.g., 'PLA', 'ABS', 'PETG')</param>
+    /// <param name="ManufacturingProcessId">Unique identifier for the manufacturing process</param>
+    /// <param name="ManufacturingProcessName">Manufacturing process name (e.g., 'FDM', 'SLA', 'DLP', 'CNC')</param>
     public record FileAnalyzedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
@@ -87,12 +91,16 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("glbStoragePath")] string? GlbStoragePath,
         [property: JsonPropertyName("thumbnailStoragePath")] string? ThumbnailStoragePath,
         [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt,
-        [property: JsonPropertyName("dfmReport")] FileAnalyzedEventPayloadDfmReport DfmReport)
+        [property: JsonPropertyName("dfmReport")] FileAnalyzedEventPayloadDfmReport DfmReport,
+        [property: JsonPropertyName("materialId")] System.Guid MaterialId,
+        [property: JsonPropertyName("materialCode")] string MaterialCode,
+        [property: JsonPropertyName("manufacturingProcessId")] System.Guid ManufacturingProcessId,
+        [property: JsonPropertyName("manufacturingProcessName")] string ManufacturingProcessName)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, default(System.DateTimeOffset), default!) { }
+        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty) { }
     }
     /// <summary>
     /// Published when a 3D file analysis completes successfully

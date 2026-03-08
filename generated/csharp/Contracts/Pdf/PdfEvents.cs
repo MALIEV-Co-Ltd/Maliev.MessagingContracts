@@ -169,4 +169,105 @@ namespace Maliev.MessagingContracts.Contracts.Pdf
         public PdfGenerationFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
+    /// <summary>
+    /// Payload data for FinancialReportPdfRequestedEventSectionsItemLineItemsItem.
+    /// </summary>
+    /// <param name="Description">Line item description</param>
+    /// <param name="Amount">Line item amount</param>
+    /// <param name="IsHighlight">Whether this item should be highlighted</param>
+    public record FinancialReportPdfRequestedEventPayloadSectionsItemLineItemsItem(
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("amount")] double Amount,
+        [property: JsonPropertyName("isHighlight")] bool IsHighlight)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FinancialReportPdfRequestedEventPayloadSectionsItemLineItemsItem() : this(string.Empty, default(double), default(bool)) { }
+    }
+    /// <summary>
+    /// Payload data for FinancialReportPdfRequestedEventSectionsItem.
+    /// </summary>
+    /// <param name="SectionTitle">Section title</param>
+    /// <param name="SectionTotal">Section total amount</param>
+    /// <param name="LineItems">Line items in this section</param>
+    public record FinancialReportPdfRequestedEventPayloadSectionsItem(
+        [property: JsonPropertyName("sectionTitle")] string SectionTitle,
+        [property: JsonPropertyName("sectionTotal")] double SectionTotal,
+        [property: JsonPropertyName("lineItems")] System.Collections.Generic.IReadOnlyList<FinancialReportPdfRequestedEventPayloadSectionsItemLineItemsItem> LineItems)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FinancialReportPdfRequestedEventPayloadSectionsItem() : this(string.Empty, default(double), Array.Empty<FinancialReportPdfRequestedEventPayloadSectionsItemLineItemsItem>()) { }
+    }
+    /// <summary>
+    /// Payload data for FinancialReportPdfRequestedEvent.
+    /// </summary>
+    /// <param name="ReportId">Unique report identifier</param>
+    /// <param name="ReportType">Type of financial report</param>
+    /// <param name="RequestedBy">User requesting the report</param>
+    /// <param name="RequestedAt">When the report was requested</param>
+    /// <param name="PeriodStart">Start of reporting period</param>
+    /// <param name="PeriodEnd">End of reporting period</param>
+    /// <param name="CompanyName">Company name</param>
+    /// <param name="CompanyAddress">Company address</param>
+    /// <param name="Currency">Currency code (e.g., THB)</param>
+    /// <param name="TotalRevenue">Total revenue amount</param>
+    /// <param name="TotalExpenses">Total expenses amount</param>
+    /// <param name="NetProfit">Net profit amount</param>
+    /// <param name="Sections">Report sections with line items</param>
+    public record FinancialReportPdfRequestedEventPayload(
+        [property: JsonPropertyName("reportId")] string ReportId,
+        [property: JsonPropertyName("reportType")] string ReportType,
+        [property: JsonPropertyName("requestedBy")] string RequestedBy,
+        [property: JsonPropertyName("requestedAt")] System.DateTimeOffset RequestedAt,
+        [property: JsonPropertyName("periodStart")] System.DateTimeOffset PeriodStart,
+        [property: JsonPropertyName("periodEnd")] System.DateTimeOffset PeriodEnd,
+        [property: JsonPropertyName("companyName")] string CompanyName,
+        [property: JsonPropertyName("companyAddress")] string CompanyAddress,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("totalRevenue")] double TotalRevenue,
+        [property: JsonPropertyName("totalExpenses")] double TotalExpenses,
+        [property: JsonPropertyName("netProfit")] double NetProfit,
+        [property: JsonPropertyName("sections")] System.Collections.Generic.IReadOnlyList<FinancialReportPdfRequestedEventPayloadSectionsItem> Sections)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FinancialReportPdfRequestedEventPayload() : this(string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default(System.DateTimeOffset), string.Empty, string.Empty, string.Empty, default(double), default(double), default(double), Array.Empty<FinancialReportPdfRequestedEventPayloadSectionsItem>()) { }
+    }
+    /// <summary>
+    /// Published when a financial report PDF is requested
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record FinancialReportPdfRequestedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] FinancialReportPdfRequestedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FinancialReportPdfRequestedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
 }
