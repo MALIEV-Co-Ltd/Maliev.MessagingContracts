@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/geometry-preview-images",
+    "title": "Geometry Preview Images Events",
+    "description": "Events published by the Geometry Service for 6-side preview images",
+    "definitions": {
+        "PreviewImagesGeneratedEvent": {
+            "type": "object",
+            "description": "Published when 6-side preview images are generated for a 3D file",
+            "properties": {
+                "storagePath": {
+                    "type": "string",
+                    "description": "Original 3D file storage path (used as join key with OrderFile)"
+                },
+                "previewImages": {
+                    "type": "object",
+                    "description": "Preview images for 6 sides of the 3D model",
+                    "properties": {
+                        "front": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to front preview PNG"
+                        },
+                        "left": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to left preview PNG"
+                        },
+                        "right": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to right preview PNG"
+                        },
+                        "back": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to back preview PNG"
+                        },
+                        "top": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to top preview PNG"
+                        },
+                        "bottom": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to bottom preview PNG"
+                        }
+                    }
+                },
+                "generatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when preview images were generated"
+                }
+            },
+            "required": [
+                "storagePath",
+                "previewImages",
+                "generatedAt"
+            ]
+        }
+    }
+}

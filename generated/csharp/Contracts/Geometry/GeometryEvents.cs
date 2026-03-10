@@ -184,4 +184,75 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         public FileAnalysisFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
+    /// <summary>
+    /// Payload data for PreviewImagesGeneratedEventPreviewImages.
+    /// </summary>
+    /// <param name="Front">GCS storage path to front preview PNG</param>
+    /// <param name="Left">GCS storage path to left preview PNG</param>
+    /// <param name="Right">GCS storage path to right preview PNG</param>
+    /// <param name="Back">GCS storage path to back preview PNG</param>
+    /// <param name="Top">GCS storage path to top preview PNG</param>
+    /// <param name="Bottom">GCS storage path to bottom preview PNG</param>
+    public record PreviewImagesGeneratedEventPayloadPreviewImages(
+        [property: JsonPropertyName("front")] string? Front,
+        [property: JsonPropertyName("left")] string? Left,
+        [property: JsonPropertyName("right")] string? Right,
+        [property: JsonPropertyName("back")] string? Back,
+        [property: JsonPropertyName("top")] string? Top,
+        [property: JsonPropertyName("bottom")] string? Bottom)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PreviewImagesGeneratedEventPayloadPreviewImages() : this(default, default, default, default, default, default) { }
+    }
+    /// <summary>
+    /// Payload data for PreviewImagesGeneratedEvent.
+    /// </summary>
+    /// <param name="StoragePath">Original 3D file storage path (used as join key with OrderFile)</param>
+    /// <param name="PreviewImages">Preview images for 6 sides of the 3D model</param>
+    /// <param name="GeneratedAt">Timestamp when preview images were generated</param>
+    public record PreviewImagesGeneratedEventPayload(
+        [property: JsonPropertyName("storagePath")] string StoragePath,
+        [property: JsonPropertyName("previewImages")] PreviewImagesGeneratedEventPayloadPreviewImages PreviewImages,
+        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PreviewImagesGeneratedEventPayload() : this(string.Empty, default!, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when 6-side preview images are generated for a 3D file
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record PreviewImagesGeneratedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PreviewImagesGeneratedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PreviewImagesGeneratedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
 }
