@@ -134,7 +134,7 @@ namespace Generator
                 "lifecycle", "performance", "chatbot", "invoices", "quotations",
                 "purchase-orders", "receipts", "materials", "suppliers", "auth",
                 "uploads", "pdf", "geometry", "accounting", "delivery", "nda",
-                "jobs", "inventory", "pricing", "facility"
+                "jobs", "inventory", "pricing", "facility", "projects"
             };
 
             foreach (var domainDir in domains)

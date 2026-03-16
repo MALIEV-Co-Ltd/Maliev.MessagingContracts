@@ -12,8 +12,6 @@ using Maliev.MessagingContracts.Contracts.Shared;
 
 namespace Maliev.MessagingContracts.Contracts.Projects
 {
-    // ─── Project Events ──────────────────────────────────────────────────────────────
-
     /// <summary>
     /// Payload data for ProjectCreatedEvent.
     /// </summary>
@@ -37,7 +35,7 @@ namespace Maliev.MessagingContracts.Contracts.Projects
         public ProjectCreatedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset)) { }
     }
     /// <summary>
-    /// Published when a new project is created.
+    /// Published when a new project is created
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -92,7 +90,7 @@ namespace Maliev.MessagingContracts.Contracts.Projects
         public ProjectPartAddedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, default(int), default(System.DateTimeOffset)) { }
     }
     /// <summary>
-    /// Published when a project part is added.
+    /// Published when a project part is added
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -141,17 +139,17 @@ namespace Maliev.MessagingContracts.Contracts.Projects
         [property: JsonPropertyName("quotationId")] System.Guid QuotationId,
         [property: JsonPropertyName("quotationNumber")] string QuotationNumber,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
-        [property: JsonPropertyName("totalAmount")] decimal TotalAmount,
+        [property: JsonPropertyName("totalAmount")] double TotalAmount,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public ProjectQuotationGeneratedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, default(System.Guid), default(decimal), string.Empty, default(System.DateTimeOffset)) { }
+        public ProjectQuotationGeneratedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset)) { }
     }
     /// <summary>
-    /// Published when a project quotation is generated from confirmed parts.
+    /// Published when a project quotation is generated from confirmed parts
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -184,7 +182,7 @@ namespace Maliev.MessagingContracts.Contracts.Projects
     }
 
     /// <summary>
-    /// Represents a project part to be converted to an order line item.
+    /// Payload data for ProjectQuotationAcceptedEventPartsItem.
     /// </summary>
     /// <param name="PartId">Identifier of the part</param>
     /// <param name="Description">Description of the part</param>
@@ -193,11 +191,11 @@ namespace Maliev.MessagingContracts.Contracts.Projects
     /// <param name="ProcessType">Manufacturing process type</param>
     /// <param name="MaterialId">Optional material identifier</param>
     /// <param name="FileId">Optional file identifier</param>
-    public record ProjectPartForOrderItem(
+    public record ProjectQuotationAcceptedEventPayloadPartsItem(
         [property: JsonPropertyName("partId")] System.Guid PartId,
         [property: JsonPropertyName("description")] string Description,
         [property: JsonPropertyName("quantity")] int Quantity,
-        [property: JsonPropertyName("unitPrice")] decimal UnitPrice,
+        [property: JsonPropertyName("unitPrice")] double UnitPrice,
         [property: JsonPropertyName("processType")] string ProcessType,
         [property: JsonPropertyName("materialId")] System.Guid? MaterialId,
         [property: JsonPropertyName("fileId")] System.Guid? FileId)
@@ -205,9 +203,8 @@ namespace Maliev.MessagingContracts.Contracts.Projects
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public ProjectPartForOrderItem() : this(default(System.Guid), string.Empty, default(int), default(decimal), string.Empty, default, default) { }
+        public ProjectQuotationAcceptedEventPayloadPartsItem() : this(default(System.Guid), string.Empty, default(int), default(double), string.Empty, default, default) { }
     }
-
     /// <summary>
     /// Payload data for ProjectQuotationAcceptedEvent.
     /// </summary>
@@ -225,18 +222,17 @@ namespace Maliev.MessagingContracts.Contracts.Projects
         [property: JsonPropertyName("quotationId")] System.Guid? QuotationId,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("currency")] string Currency,
-        [property: JsonPropertyName("parts")] System.Collections.Generic.IReadOnlyList<ProjectPartForOrderItem> Parts,
+        [property: JsonPropertyName("parts")] System.Collections.Generic.IReadOnlyList<ProjectQuotationAcceptedEventPayloadPartsItem> Parts,
         [property: JsonPropertyName("acceptedAt")] System.DateTimeOffset AcceptedAt,
         [property: JsonPropertyName("acceptedBy")] string AcceptedBy)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public ProjectQuotationAcceptedEventPayload() : this(default(System.Guid), string.Empty, default, default(System.Guid), string.Empty, Array.Empty<ProjectPartForOrderItem>(), default(System.DateTimeOffset), string.Empty) { }
+        public ProjectQuotationAcceptedEventPayload() : this(default(System.Guid), string.Empty, default, default(System.Guid), string.Empty, Array.Empty<ProjectQuotationAcceptedEventPayloadPartsItem>(), default(System.DateTimeOffset), string.Empty) { }
     }
     /// <summary>
-    /// Published when a project quotation is accepted — either by customer on quote.maliev.com
-    /// or manually by an employee. OrderService consumes this to create orders.
+    /// Published when a project quotation is accepted
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -289,7 +285,7 @@ namespace Maliev.MessagingContracts.Contracts.Projects
         public ProjectStatusChangedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
     }
     /// <summary>
-    /// Published when a project's lifecycle status changes.
+    /// Published when a project's lifecycle status changes
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>

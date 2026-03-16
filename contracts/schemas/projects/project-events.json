@@ -1,0 +1,228 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/project-events",
+    "title": "Project Domain Events",
+    "description": "Events published by the Project Service",
+    "definitions": {
+        "ProjectCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new project is created",
+            "properties": {
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the project"
+                },
+                "projectNumber": {
+                    "type": "string",
+                    "description": "Human-readable project number"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the customer"
+                },
+                "customerName": {
+                    "type": "string",
+                    "description": "Name of the customer"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "description": "User who created the project"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the project was created"
+                }
+            },
+            "required": ["projectId", "projectNumber", "customerId", "customerName", "createdBy", "createdAt"]
+        },
+        "ProjectPartAddedEvent": {
+            "type": "object",
+            "description": "Published when a project part is added",
+            "properties": {
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the project"
+                },
+                "partId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the part"
+                },
+                "fileName": {
+                    "type": "string",
+                    "description": "Name of the uploaded file"
+                },
+                "processType": {
+                    "type": "string",
+                    "description": "Manufacturing process type"
+                },
+                "partNumber": {
+                    "type": "integer",
+                    "description": "Sequential number of the part within the project"
+                },
+                "addedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the part was added"
+                }
+            },
+            "required": ["projectId", "partId", "fileName", "processType", "partNumber", "addedAt"]
+        },
+        "ProjectQuotationGeneratedEvent": {
+            "type": "object",
+            "description": "Published when a project quotation is generated from confirmed parts",
+            "properties": {
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the project"
+                },
+                "projectNumber": {
+                    "type": "string",
+                    "description": "Human-readable project number"
+                },
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the generated quotation"
+                },
+                "quotationNumber": {
+                    "type": "string",
+                    "description": "Human-readable quotation number"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the customer"
+                },
+                "totalAmount": {
+                    "type": "number",
+                    "description": "Total amount of the quotation"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "Currency code (ISO 4217)"
+                },
+                "generatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the quotation was generated"
+                }
+            },
+            "required": ["projectId", "projectNumber", "quotationId", "quotationNumber", "customerId", "totalAmount", "currency", "generatedAt"]
+        },
+        "ProjectQuotationAcceptedEvent": {
+            "type": "object",
+            "description": "Published when a project quotation is accepted",
+            "properties": {
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the project"
+                },
+                "projectNumber": {
+                    "type": "string",
+                    "description": "Human-readable project number"
+                },
+                "quotationId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Optional identifier of the quotation"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the customer"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "Currency code (ISO 4217)"
+                },
+                "parts": {
+                    "type": "array",
+                    "description": "List of project parts to be converted to order line items",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "partId": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "Identifier of the part"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Description of the part"
+                            },
+                            "quantity": {
+                                "type": "integer",
+                                "description": "Quantity of the part"
+                            },
+                            "unitPrice": {
+                                "type": "number",
+                                "description": "Price per unit"
+                            },
+                            "processType": {
+                                "type": "string",
+                                "description": "Manufacturing process type"
+                            },
+                            "materialId": {
+                                "type": ["string", "null"],
+                                "format": "uuid",
+                                "description": "Optional material identifier"
+                            },
+                            "fileId": {
+                                "type": ["string", "null"],
+                                "format": "uuid",
+                                "description": "Optional file identifier"
+                            }
+                        },
+                        "required": ["partId", "description", "quantity", "unitPrice", "processType"]
+                    }
+                },
+                "acceptedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the quotation was accepted"
+                },
+                "acceptedBy": {
+                    "type": "string",
+                    "description": "User who accepted the quotation"
+                }
+            },
+            "required": ["projectId", "projectNumber", "customerId", "currency", "parts", "acceptedAt", "acceptedBy"]
+        },
+        "ProjectStatusChangedEvent": {
+            "type": "object",
+            "description": "Published when a project's lifecycle status changes",
+            "properties": {
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Identifier of the project"
+                },
+                "projectNumber": {
+                    "type": "string",
+                    "description": "Human-readable project number"
+                },
+                "oldStatus": {
+                    "type": "string",
+                    "description": "Previous lifecycle status"
+                },
+                "newStatus": {
+                    "type": "string",
+                    "description": "New lifecycle status"
+                },
+                "changedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the status changed"
+                }
+            },
+            "required": ["projectId", "projectNumber", "oldStatus", "newStatus", "changedAt"]
+        }
+    }
+}
