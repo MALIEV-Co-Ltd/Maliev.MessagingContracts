@@ -70,6 +70,61 @@ namespace Maliev.MessagingContracts.Contracts.Jobs
     }
 
     /// <summary>
+    /// Payload data for JobCreatedEvent.
+    /// </summary>
+    /// <param name="JobId">Unique job identifier</param>
+    /// <param name="OrderId">Parent order identifier</param>
+    /// <param name="OrderItemId">Specific order item this job covers</param>
+    /// <param name="ProcessType">Manufacturing process: FDM, SLA, CNC, etc.</param>
+    /// <param name="JobNumber">Human-readable job number (e.g. JOB-2026-0001)</param>
+    /// <param name="CreatedAt">UTC timestamp when the job was created</param>
+    public record JobCreatedEventPayload(
+        [property: JsonPropertyName("jobId")] System.Guid JobId,
+        [property: JsonPropertyName("orderId")] System.Guid OrderId,
+        [property: JsonPropertyName("orderItemId")] System.Guid OrderItemId,
+        [property: JsonPropertyName("processType")] string ProcessType,
+        [property: JsonPropertyName("jobNumber")] string JobNumber,
+        [property: JsonPropertyName("createdAt")] System.DateTimeOffset CreatedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public JobCreatedEventPayload() : this(default(System.Guid), default(System.Guid), default(System.Guid), string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a new production job is created in JobService
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record JobCreatedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] JobCreatedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public JobCreatedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for JobStatusChangedEvent.
     /// </summary>
     /// <param name="JobId">Unique job identifier</param>

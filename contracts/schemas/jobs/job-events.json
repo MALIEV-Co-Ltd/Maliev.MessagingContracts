@@ -51,6 +51,41 @@
                 "startedAt"
             ]
         },
+        "JobCreatedEvent": {
+            "type": "object",
+            "description": "Published when a new production job is created in JobService",
+            "properties": {
+                "jobId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique job identifier"
+                },
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Parent order identifier"
+                },
+                "orderItemId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Specific order item this job covers"
+                },
+                "processType": {
+                    "type": "string",
+                    "description": "Manufacturing process: FDM, SLA, CNC, etc."
+                },
+                "jobNumber": {
+                    "type": "string",
+                    "description": "Human-readable job number (e.g. JOB-2026-0001)"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "UTC timestamp when the job was created"
+                }
+            },
+            "required": ["jobId", "orderId", "orderItemId", "processType", "jobNumber", "createdAt"]
+        },
         "JobStatusChangedEvent": {
             "type": "object",
             "description": "Published when a job status changes (e.g., Pending → InProgress → Completed)",
