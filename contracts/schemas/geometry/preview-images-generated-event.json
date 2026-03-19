@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "maliev/geometry-preview-images",
     "title": "Geometry Preview Images Events",
-    "description": "Events published by the Geometry Service for 6-side preview images",
+    "description": "Events published by the Geometry Service for 6-side + isometric preview images",
     "definitions": {
         "PreviewImagesGeneratedEvent": {
             "type": "object",
@@ -39,6 +39,10 @@
                         "bottom": {
                             "type": ["string", "null"],
                             "description": "GCS storage path to bottom preview PNG"
+                        },
+                        "iso": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to isometric preview PNG"
                         }
                     }
                 },
@@ -46,6 +50,10 @@
                     "type": "string",
                     "format": "date-time",
                     "description": "Timestamp when preview images were generated"
+                },
+                "failed": {
+                    "type": ["boolean"],
+                    "description": "True when preview image generation failed; consumers should transition to Failed state"
                 }
             },
             "required": [

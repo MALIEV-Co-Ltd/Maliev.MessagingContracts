@@ -13,6 +13,60 @@ using Maliev.MessagingContracts.Contracts.Shared;
 namespace Maliev.MessagingContracts.Contracts.Uploads
 {
     /// <summary>
+    /// UploadArtifactCommand
+    /// </summary>
+    /// <summary>
+    /// Nested data for UploadArtifactCommandPayload.
+    /// </summary>
+    /// <param name="ArtifactId">Unique identifier for this artifact</param>
+    /// <param name="ParentUploadId">The original upload ID this artifact belongs to</param>
+    /// <param name="StoragePath">The target path in GCS (e.g., projects/{projectId}/{filename}_viewer.glb)</param>
+    /// <param name="ContentType">MIME type of the artifact (e.g., model/gltf-binary, image/png)</param>
+    /// <param name="ArtifactData">Base64-encoded binary data of the artifact</param>
+    public record UploadArtifactCommandPayload(
+        [property: JsonPropertyName("artifactId")] System.Guid ArtifactId,
+        [property: JsonPropertyName("parentUploadId")] System.Guid ParentUploadId,
+        [property: JsonPropertyName("storagePath")] string StoragePath,
+        [property: JsonPropertyName("contentType")] string ContentType,
+        [property: JsonPropertyName("artifactData")] string ArtifactData)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UploadArtifactCommandPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
+    public record UploadArtifactCommand(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] UploadArtifactCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public UploadArtifactCommand() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
     /// Payload data for FileUploadedEvent.
     /// </summary>
     /// <param name="UploadId">Unique identifier for the upload</param>

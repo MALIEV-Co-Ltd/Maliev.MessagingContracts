@@ -426,6 +426,12 @@ channels:
       FileDeletedEvent:
         $ref: '#/components/messages/FileDeletedEvent'
 
+  upload/artifact:
+    address: maliev.uploads.commands.upload-artifact
+    messages:
+      UploadArtifactCommand:
+        $ref: '#/components/messages/UploadArtifactCommand'
+
   # ==================== PDF SERVICE ====================
   pdf/generation-requested:
     address: maliev.pdf.events.pdf-generation-requested
@@ -1106,8 +1112,13 @@ components:
 
     FileDeletedEvent:
       payload:
-        $ref: '../contracts/schemas/upload/file-deleted-event.json'
+        $ref: '../contracts/schemas/uploads/upload-events.json#/definitions/FileDeletedEvent'
       description: Published when file is deleted from storage
+
+    UploadArtifactCommand:
+      payload:
+        $ref: '../contracts/schemas/uploads/upload-artifact-command.json'
+      description: Command to upload processed artifact (GLB, thumbnails) to GCS
 
     # ==================== PDF SERVICE MESSAGES ====================
     PdfGenerationRequestedEvent:

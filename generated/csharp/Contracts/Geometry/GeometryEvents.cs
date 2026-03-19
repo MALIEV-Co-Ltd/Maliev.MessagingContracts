@@ -193,18 +193,20 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="Back">GCS storage path to back preview PNG</param>
     /// <param name="Top">GCS storage path to top preview PNG</param>
     /// <param name="Bottom">GCS storage path to bottom preview PNG</param>
+    /// <param name="Iso">GCS storage path to isometric preview PNG</param>
     public record PreviewImagesGeneratedEventPayloadPreviewImages(
         [property: JsonPropertyName("front")] string? Front,
         [property: JsonPropertyName("left")] string? Left,
         [property: JsonPropertyName("right")] string? Right,
         [property: JsonPropertyName("back")] string? Back,
         [property: JsonPropertyName("top")] string? Top,
-        [property: JsonPropertyName("bottom")] string? Bottom)
+        [property: JsonPropertyName("bottom")] string? Bottom,
+        [property: JsonPropertyName("iso")] string? Iso)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PreviewImagesGeneratedEventPayloadPreviewImages() : this(default, default, default, default, default, default) { }
+        public PreviewImagesGeneratedEventPayloadPreviewImages() : this(default, default, default, default, default, default, default) { }
     }
     /// <summary>
     /// Payload data for PreviewImagesGeneratedEvent.
@@ -212,15 +214,17 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="StoragePath">Original 3D file storage path (used as join key with OrderFile)</param>
     /// <param name="PreviewImages">Preview images for 6 sides of the 3D model</param>
     /// <param name="GeneratedAt">Timestamp when preview images were generated</param>
+    /// <param name="Failed">True when preview image generation failed; consumers should transition to Failed state.</param>
     public record PreviewImagesGeneratedEventPayload(
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("previewImages")] PreviewImagesGeneratedEventPayloadPreviewImages PreviewImages,
-        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt)
+        [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt,
+        [property: JsonPropertyName("failed")] bool Failed)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PreviewImagesGeneratedEventPayload() : this(string.Empty, default!, default(System.DateTimeOffset)) { }
+        public PreviewImagesGeneratedEventPayload() : this(string.Empty, default!, default(System.DateTimeOffset), default(bool)) { }
     }
     /// <summary>
     /// Published when 6-side preview images are generated for a 3D file
