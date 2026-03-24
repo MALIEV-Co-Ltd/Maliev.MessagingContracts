@@ -444,7 +444,7 @@
             "properties": {
                 "fileId": {
                     "type": "string",
-                    "description": "The file being analyzed"
+                    "description": "Unique identifier for the file"
                 },
                 "storagePath": {
                     "type": "string",

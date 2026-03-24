@@ -16,33 +16,37 @@
                     "type": "object",
                     "description": "Preview images for 6 sides of the 3D model",
                     "properties": {
-                        "front": {
+                        "frontSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to front preview PNG"
+                            "description": "GCS storage path to front preview WebP (small)"
                         },
-                        "left": {
+                        "leftSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to left preview PNG"
+                            "description": "GCS storage path to left preview WebP (small)"
                         },
-                        "right": {
+                        "rightSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to right preview PNG"
+                            "description": "GCS storage path to right preview WebP (small)"
                         },
-                        "back": {
+                        "backSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to back preview PNG"
+                            "description": "GCS storage path to back preview WebP (small)"
                         },
-                        "top": {
+                        "topSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to top preview PNG"
+                            "description": "GCS storage path to top preview WebP (small)"
                         },
-                        "bottom": {
+                        "bottomSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to bottom preview PNG"
+                            "description": "GCS storage path to bottom preview WebP (small)"
                         },
-                        "iso": {
+                        "thumbnailSmall": {
                             "type": ["string", "null"],
-                            "description": "GCS storage path to isometric preview PNG"
+                            "description": "GCS storage path to isometric thumbnail WebP (small, ~256px)"
+                        },
+                        "thumbnailLarge": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to isometric thumbnail WebP (large, 1200px, hi-res fallback)"
                         }
                     }
                 },

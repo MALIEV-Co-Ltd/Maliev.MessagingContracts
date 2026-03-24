@@ -573,7 +573,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Payload data for DfmAnalysisReadyEvent.
     /// </summary>
-    /// <param name="FileId">The file being analyzed</param>
+    /// <param name="FileId">Unique identifier for the file</param>
     /// <param name="StoragePath">GCS path, used as join key by frontend</param>
     /// <param name="FdmReport">FDM-specific DFM data, or null if not applicable</param>
     /// <param name="SlaReport">SLA-specific DFM data, or null if not applicable</param>
