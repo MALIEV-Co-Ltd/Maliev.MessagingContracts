@@ -61,6 +61,8 @@ namespace Maliev.MessagingContracts.Contracts.Pricing
     /// <param name="Currency">ISO 4217 currency code</param>
     /// <param name="ValidUntil">Price validity expiry timestamp</param>
     /// <param name="CalculatedAt">When the price was calculated</param>
+    /// <param name="StoragePath">GCS path for frontend join key</param>
+    /// <param name="EstimatedLeadTimeDays">Days estimated for production and shipping</param>
     public record PriceCalculatedEventPayload(
         [property: JsonPropertyName("pricingAuditId")] System.Guid PricingAuditId,
         [property: JsonPropertyName("quotationId")] System.Guid? QuotationId,
@@ -81,12 +83,14 @@ namespace Maliev.MessagingContracts.Contracts.Pricing
         [property: JsonPropertyName("totalPrice")] double TotalPrice,
         [property: JsonPropertyName("currency")] string Currency,
         [property: JsonPropertyName("validUntil")] System.DateTimeOffset ValidUntil,
-        [property: JsonPropertyName("calculatedAt")] System.DateTimeOffset CalculatedAt)
+        [property: JsonPropertyName("calculatedAt")] System.DateTimeOffset CalculatedAt,
+        [property: JsonPropertyName("storagePath")] string? StoragePath,
+        [property: JsonPropertyName("estimatedLeadTimeDays")] int? EstimatedLeadTimeDays)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PriceCalculatedEventPayload() : this(default(System.Guid), default, default(System.Guid), default(System.Guid), default(System.Guid), default(System.Guid), default(int), default(double), default(double), default(double), string.Empty, default, default(double), default(System.Guid), default!, default(double), default(double), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset)) { }
+        public PriceCalculatedEventPayload() : this(default(System.Guid), default, default(System.Guid), default(System.Guid), default(System.Guid), default(System.Guid), default(int), default(double), default(double), default(double), string.Empty, default, default(double), default(System.Guid), default!, default(double), default(double), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default, default) { }
     }
     /// <summary>
     /// Published when a price calculation for a file analysis completes

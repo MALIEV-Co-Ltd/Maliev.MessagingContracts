@@ -13,6 +13,128 @@ using Maliev.MessagingContracts.Contracts.Shared;
 namespace Maliev.MessagingContracts.Contracts.Geometry
 {
     /// <summary>
+    /// Payload data for BoundingBox.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record BoundingBoxPayload(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BoundingBoxPayload() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Bounding box dimensions
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record BoundingBox(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] BoundingBoxPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BoundingBox() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for FileMetricsBoundingBox.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record FileMetricsPayloadBoundingBox(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsPayloadBoundingBox() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for FileMetrics.
+    /// </summary>
+    /// <param name="VolumeCm3">The volume Cm3</param>
+    /// <param name="SupportVolumeCm3">The support Volume Cm3</param>
+    /// <param name="SurfaceAreaCm2">The surface Area Cm2</param>
+    /// <param name="BoundingBox">The bounding Box</param>
+    /// <param name="IsManifold">The is Manifold</param>
+    /// <param name="TriangleCount">The triangle Count</param>
+    /// <param name="EulerNumber">The euler Number</param>
+    public record FileMetricsPayload(
+        [property: JsonPropertyName("volumeCm3")] double VolumeCm3,
+        [property: JsonPropertyName("supportVolumeCm3")] double SupportVolumeCm3,
+        [property: JsonPropertyName("surfaceAreaCm2")] double SurfaceAreaCm2,
+        [property: JsonPropertyName("boundingBox")] FileMetricsPayloadBoundingBox BoundingBox,
+        [property: JsonPropertyName("isManifold")] bool IsManifold,
+        [property: JsonPropertyName("triangleCount")] int TriangleCount,
+        [property: JsonPropertyName("eulerNumber")] int EulerNumber)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsPayload() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
+    }
+    /// <summary>
+    /// Geometry metrics for a 3D file
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record FileMetrics(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] FileMetricsPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetrics() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for FileAnalyzedEventMetricsBoundingBox.
     /// </summary>
     /// <param name="X">The x</param>
@@ -53,33 +175,16 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         public FileAnalyzedEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
     }
     /// <summary>
-    /// Payload data for FileAnalyzedEventDfmReport.
-    /// </summary>
-    /// <param name="ThinWallCount">Number of detected thin-wall regions</param>
-    /// <param name="ThinWallRegions">Centroid coordinates (mm) of each thin-wall region</param>
-    /// <param name="OverhangFaceCount">Number of mesh faces with overhang angle > threshold</param>
-    /// <param name="OverhangAreaCm2">Total projected area (cm²) of overhanging faces</param>
-    public record FileAnalyzedEventPayloadDfmReport(
-        [property: JsonPropertyName("thinWallCount")] int ThinWallCount,
-        [property: JsonPropertyName("thinWallRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> ThinWallRegions,
-        [property: JsonPropertyName("overhangFaceCount")] int OverhangFaceCount,
-        [property: JsonPropertyName("overhangAreaCm2")] double OverhangAreaCm2)
-    {
-        /// <summary>
-        /// Parameterless constructor for deserialization.
-        /// </summary>
-        public FileAnalyzedEventPayloadDfmReport() : this(default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double)) { }
-    }
-    /// <summary>
     /// Payload data for FileAnalyzedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
     /// <param name="CustomerId">Unique identifier for the customer who uploaded the file</param>
-    /// <param name="Metrics">The metric</param>
+    /// <param name="Metrics">Geometry metrics for the analyzed file</param>
     /// <param name="GlbStoragePath">GCS storage path of the generated GLB file</param>
     /// <param name="ThumbnailStoragePath">GCS storage path of the generated thumbnail image</param>
+    /// <param name="StoragePath">GCS storage path of the original 3D file</param>
     /// <param name="ProcessedAt">The processed At</param>
-    /// <param name="DfmReport">Optional DFM analysis results. Null if analysis failed or not applicable.</param>
+    /// <param name="DfmReport">Optional DFM analysis results. Null if analysis failed or not applicable. Process-specific report type is determined by manufacturingProcessName.</param>
     /// <param name="MaterialId">Unique identifier for the material</param>
     /// <param name="MaterialCode">Material code (e.g., 'PLA', 'ABS', 'PETG')</param>
     /// <param name="ManufacturingProcessId">Unique identifier for the manufacturing process</param>
@@ -90,8 +195,9 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("metrics")] FileAnalyzedEventPayloadMetrics Metrics,
         [property: JsonPropertyName("glbStoragePath")] string? GlbStoragePath,
         [property: JsonPropertyName("thumbnailStoragePath")] string? ThumbnailStoragePath,
+        [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt,
-        [property: JsonPropertyName("dfmReport")] FileAnalyzedEventPayloadDfmReport DfmReport,
+        [property: JsonPropertyName("dfmReport")] object DfmReport,
         [property: JsonPropertyName("materialId")] System.Guid MaterialId,
         [property: JsonPropertyName("materialCode")] string MaterialCode,
         [property: JsonPropertyName("manufacturingProcessId")] System.Guid ManufacturingProcessId,
@@ -100,7 +206,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty) { }
+        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, string.Empty, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty) { }
     }
     /// <summary>
     /// Published when a 3D file analysis completes successfully
@@ -133,6 +239,97 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         /// Parameterless constructor for deserialization.
         /// </summary>
         public FileAnalyzedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for FileMetricsReadyEventMetricsBoundingBox.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record FileMetricsReadyEventPayloadMetricsBoundingBox(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEventPayloadMetricsBoundingBox() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for FileMetricsReadyEventMetrics.
+    /// </summary>
+    /// <param name="VolumeCm3">The volume Cm3</param>
+    /// <param name="SupportVolumeCm3">The support Volume Cm3</param>
+    /// <param name="SurfaceAreaCm2">The surface Area Cm2</param>
+    /// <param name="BoundingBox">The bounding Box</param>
+    /// <param name="IsManifold">The is Manifold</param>
+    /// <param name="TriangleCount">The triangle Count</param>
+    /// <param name="EulerNumber">The euler Number</param>
+    public record FileMetricsReadyEventPayloadMetrics(
+        [property: JsonPropertyName("volumeCm3")] double VolumeCm3,
+        [property: JsonPropertyName("supportVolumeCm3")] double SupportVolumeCm3,
+        [property: JsonPropertyName("surfaceAreaCm2")] double SurfaceAreaCm2,
+        [property: JsonPropertyName("boundingBox")] FileMetricsReadyEventPayloadMetricsBoundingBox BoundingBox,
+        [property: JsonPropertyName("isManifold")] bool IsManifold,
+        [property: JsonPropertyName("triangleCount")] int TriangleCount,
+        [property: JsonPropertyName("eulerNumber")] int EulerNumber)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
+    }
+    /// <summary>
+    /// Payload data for FileMetricsReadyEvent.
+    /// </summary>
+    /// <param name="FileId">Unique identifier for the file</param>
+    /// <param name="StoragePath">GCS storage path of the original 3D file</param>
+    /// <param name="Metrics">Geometry metrics for the analyzed file</param>
+    /// <param name="ProcessedAt">The processed At</param>
+    public record FileMetricsReadyEventPayload(
+        [property: JsonPropertyName("fileId")] string FileId,
+        [property: JsonPropertyName("storagePath")] string StoragePath,
+        [property: JsonPropertyName("metrics")] FileMetricsReadyEventPayloadMetrics Metrics,
+        [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEventPayload() : this(string.Empty, string.Empty, default!, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published immediately after mesh metrics are computed, before preview generation
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record FileMetricsReadyEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] FileMetricsReadyEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
     /// <summary>
@@ -185,28 +382,274 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     }
 
     /// <summary>
-    /// Payload data for PreviewImagesGeneratedEventPreviewImages.
+    /// Payload data for FdmDfmReport.
     /// </summary>
-    /// <param name="Front">GCS storage path to front preview PNG</param>
-    /// <param name="Left">GCS storage path to left preview PNG</param>
-    /// <param name="Right">GCS storage path to right preview PNG</param>
-    /// <param name="Back">GCS storage path to back preview PNG</param>
-    /// <param name="Top">GCS storage path to top preview PNG</param>
-    /// <param name="Bottom">GCS storage path to bottom preview PNG</param>
-    /// <param name="Iso">GCS storage path to isometric preview PNG</param>
-    public record PreviewImagesGeneratedEventPayloadPreviewImages(
-        [property: JsonPropertyName("front")] string? Front,
-        [property: JsonPropertyName("left")] string? Left,
-        [property: JsonPropertyName("right")] string? Right,
-        [property: JsonPropertyName("back")] string? Back,
-        [property: JsonPropertyName("top")] string? Top,
-        [property: JsonPropertyName("bottom")] string? Bottom,
-        [property: JsonPropertyName("iso")] string? Iso)
+    /// <param name="ReportType">The report Type</param>
+    /// <param name="ThinWallCount">Number of detected thin-wall regions (wall thickness < 0.8mm)</param>
+    /// <param name="ThinWallRegions">Centroid coordinates (mm) of each thin-wall region</param>
+    /// <param name="OverhangFaceCount">Number of mesh faces with overhang angle > 45 degrees from vertical</param>
+    /// <param name="OverhangAreaCm2">Total projected area (cm²) of overhanging faces</param>
+    /// <param name="OverhangRegions">Centroid coordinates (mm) of each overhang region</param>
+    /// <param name="SupportRequired">True if the model requires support structures</param>
+    /// <param name="EstimatedSupportVolumeCm3">Estimated volume of support structures needed</param>
+    /// <param name="SmallDetailCount">Number of small details that may be lost during printing</param>
+    public record FdmDfmReportPayload(
+        [property: JsonPropertyName("reportType")] string ReportType,
+        [property: JsonPropertyName("thinWallCount")] int ThinWallCount,
+        [property: JsonPropertyName("thinWallRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> ThinWallRegions,
+        [property: JsonPropertyName("overhangFaceCount")] int OverhangFaceCount,
+        [property: JsonPropertyName("overhangAreaCm2")] double OverhangAreaCm2,
+        [property: JsonPropertyName("overhangRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> OverhangRegions,
+        [property: JsonPropertyName("supportRequired")] bool SupportRequired,
+        [property: JsonPropertyName("estimatedSupportVolumeCm3")] double EstimatedSupportVolumeCm3,
+        [property: JsonPropertyName("smallDetailCount")] int SmallDetailCount)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PreviewImagesGeneratedEventPayloadPreviewImages() : this(default, default, default, default, default, default, default) { }
+        public FdmDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(double), default(int)) { }
+    }
+    /// <summary>
+    /// DFM analysis results specific to FDM 3D printing
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record FdmDfmReport(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] FdmDfmReportPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FdmDfmReport() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for SlaDfmReport.
+    /// </summary>
+    /// <param name="ReportType">The report Type</param>
+    /// <param name="ThinWallCount">Number of detected thin-wall regions</param>
+    /// <param name="ThinWallRegions">Centroid coordinates (mm) of each thin-wall region</param>
+    /// <param name="OverhangFaceCount">Number of mesh faces with overhang</param>
+    /// <param name="OverhangAreaCm2">Total projected area (cm²) of overhanging faces</param>
+    /// <param name="OverhangRegions">Centroid coordinates (mm) of each overhang region</param>
+    /// <param name="ResinTrappingRisk">True if there are closed cavities where resin could be trapped</param>
+    /// <param name="ResinTrappingRegions">Centroid coordinates (mm) of each resin trapping region</param>
+    /// <param name="SuctionRisk">True if there are regions that could create vacuum suction during peeling</param>
+    /// <param name="SuctionRegions">Centroid coordinates (mm) of each suction risk region</param>
+    /// <param name="HollowRegions">Centroid coordinates (mm) of hollow regions that may need drainage holes</param>
+    public record SlaDfmReportPayload(
+        [property: JsonPropertyName("reportType")] string ReportType,
+        [property: JsonPropertyName("thinWallCount")] int ThinWallCount,
+        [property: JsonPropertyName("thinWallRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> ThinWallRegions,
+        [property: JsonPropertyName("overhangFaceCount")] int OverhangFaceCount,
+        [property: JsonPropertyName("overhangAreaCm2")] double OverhangAreaCm2,
+        [property: JsonPropertyName("overhangRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> OverhangRegions,
+        [property: JsonPropertyName("resinTrappingRisk")] bool ResinTrappingRisk,
+        [property: JsonPropertyName("resinTrappingRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> ResinTrappingRegions,
+        [property: JsonPropertyName("suctionRisk")] bool SuctionRisk,
+        [property: JsonPropertyName("suctionRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> SuctionRegions,
+        [property: JsonPropertyName("hollowRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> HollowRegions)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SlaDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>()) { }
+    }
+    /// <summary>
+    /// DFM analysis results specific to SLA/DLP resin printing
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record SlaDfmReport(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] SlaDfmReportPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SlaDfmReport() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for CncDfmReport.
+    /// </summary>
+    /// <param name="ReportType">The report Type</param>
+    /// <param name="SharpCornerCount">Number of sharp corners that could cause tool breakage (radius < 2mm)</param>
+    /// <param name="SharpCornerRegions">Coordinates (mm) of each sharp corner region</param>
+    /// <param name="HasUndercuts">True if the part has undercut features that require special tooling</param>
+    /// <param name="UndercutRegions">Coordinates (mm) of each undercut region</param>
+    /// <param name="HasDrillHoles">True if the part has tap or cross-drilled holes</param>
+    /// <param name="DrillHoleCount">Number of drill holes detected</param>
+    /// <param name="RequiresEdm">True if EDM/wirecut is required for complex features</param>
+    /// <param name="RequiresGrinding">True if grinding is required for flat surfaces</param>
+    /// <param name="MinimumFeatureSizeMm">Smallest detectable feature size in mm</param>
+    public record CncDfmReportPayload(
+        [property: JsonPropertyName("reportType")] string ReportType,
+        [property: JsonPropertyName("sharpCornerCount")] int SharpCornerCount,
+        [property: JsonPropertyName("sharpCornerRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> SharpCornerRegions,
+        [property: JsonPropertyName("hasUndercuts")] bool HasUndercuts,
+        [property: JsonPropertyName("undercutRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> UndercutRegions,
+        [property: JsonPropertyName("hasDrillHoles")] bool HasDrillHoles,
+        [property: JsonPropertyName("drillHoleCount")] int DrillHoleCount,
+        [property: JsonPropertyName("requiresEdm")] bool RequiresEdm,
+        [property: JsonPropertyName("requiresGrinding")] bool RequiresGrinding,
+        [property: JsonPropertyName("minimumFeatureSizeMm")] double MinimumFeatureSizeMm)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CncDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(int), default(bool), default(bool), default(double)) { }
+    }
+    /// <summary>
+    /// DFM analysis results specific to CNC machining
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record CncDfmReport(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CncDfmReportPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CncDfmReport() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for DfmAnalysisReadyEvent.
+    /// </summary>
+    /// <param name="FileId">The file being analyzed</param>
+    /// <param name="StoragePath">GCS path, used as join key by frontend</param>
+    /// <param name="FdmReport">FDM-specific DFM data, or null if not applicable</param>
+    /// <param name="SlaReport">SLA-specific DFM data, or null if not applicable</param>
+    /// <param name="CncReport">CNC-specific DFM data, or null if not applicable</param>
+    /// <param name="AnalyzedAt">When analysis completed</param>
+    public record DfmAnalysisReadyEventPayload(
+        [property: JsonPropertyName("fileId")] string FileId,
+        [property: JsonPropertyName("storagePath")] string StoragePath,
+        [property: JsonPropertyName("fdmReport")] FdmDfmReportPayload? FdmReport,
+        [property: JsonPropertyName("slaReport")] SlaDfmReportPayload? SlaReport,
+        [property: JsonPropertyName("cncReport")] CncDfmReportPayload? CncReport,
+        [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default, default, default, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when DFM analysis is complete with all three process-specific reports
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record DfmAnalysisReadyEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] DfmAnalysisReadyEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public DfmAnalysisReadyEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for PreviewImagesGeneratedEventPreviewImages.
+    /// </summary>
+    /// <param name="FrontSmall">GCS storage path to front preview WebP (small)</param>
+    /// <param name="LeftSmall">GCS storage path to left preview WebP (small)</param>
+    /// <param name="RightSmall">GCS storage path to right preview WebP (small)</param>
+    /// <param name="BackSmall">GCS storage path to back preview WebP (small)</param>
+    /// <param name="TopSmall">GCS storage path to top preview WebP (small)</param>
+    /// <param name="BottomSmall">GCS storage path to bottom preview WebP (small)</param>
+    /// <param name="ThumbnailSmall">GCS storage path to isometric thumbnail WebP (small, ~256px)</param>
+    /// <param name="ThumbnailLarge">GCS storage path to isometric thumbnail WebP (large, 1200px, hi-res fallback)</param>
+    public record PreviewImagesGeneratedEventPayloadPreviewImages(
+        [property: JsonPropertyName("frontSmall")] string? FrontSmall,
+        [property: JsonPropertyName("leftSmall")] string? LeftSmall,
+        [property: JsonPropertyName("rightSmall")] string? RightSmall,
+        [property: JsonPropertyName("backSmall")] string? BackSmall,
+        [property: JsonPropertyName("topSmall")] string? TopSmall,
+        [property: JsonPropertyName("bottomSmall")] string? BottomSmall,
+        [property: JsonPropertyName("thumbnailSmall")] string? ThumbnailSmall,
+        [property: JsonPropertyName("thumbnailLarge")] string? ThumbnailLarge)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PreviewImagesGeneratedEventPayloadPreviewImages() : this(default, default, default, default, default, default, default, default) { }
     }
     /// <summary>
     /// Payload data for PreviewImagesGeneratedEvent.
@@ -214,7 +657,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="StoragePath">Original 3D file storage path (used as join key with OrderFile)</param>
     /// <param name="PreviewImages">Preview images for 6 sides of the 3D model</param>
     /// <param name="GeneratedAt">Timestamp when preview images were generated</param>
-    /// <param name="Failed">True when preview image generation failed; consumers should transition to Failed state.</param>
+    /// <param name="Failed">True when preview image generation failed; consumers should transition to Failed state</param>
     public record PreviewImagesGeneratedEventPayload(
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("previewImages")] PreviewImagesGeneratedEventPayloadPreviewImages PreviewImages,

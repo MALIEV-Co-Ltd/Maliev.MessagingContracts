@@ -4,6 +4,59 @@
     "title": "Geometry Domain Events",
     "description": "Events published by the Geometry Service after 3D file analysis",
     "definitions": {
+        "BoundingBox": {
+            "type": "object",
+            "description": "Bounding box dimensions",
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "z": {
+                    "type": "number"
+                }
+            }
+        },
+        "FileMetrics": {
+            "type": "object",
+            "description": "Geometry metrics for a 3D file",
+            "properties": {
+                "volumeCm3": {
+                    "type": "number"
+                },
+                "supportVolumeCm3": {
+                    "type": "number"
+                },
+                "surfaceAreaCm2": {
+                    "type": "number"
+                },
+                "boundingBox": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "number"
+                        },
+                        "y": {
+                            "type": "number"
+                        },
+                        "z": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "isManifold": {
+                    "type": "boolean"
+                },
+                "triangleCount": {
+                    "type": "integer"
+                },
+                "eulerNumber": {
+                    "type": "integer"
+                }
+            }
+        },
         "FileAnalyzedEvent": {
             "type": "object",
             "description": "Published when a 3D file analysis completes successfully",
@@ -19,6 +72,7 @@
                 },
                 "metrics": {
                     "type": "object",
+                    "description": "Geometry metrics for the analyzed file",
                     "properties": {
                         "volumeCm3": {
                             "type": "number"
@@ -62,38 +116,22 @@
                     "type": ["string", "null"],
                     "description": "GCS storage path of the generated thumbnail image"
                 },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the original 3D file"
+                },
                 "processedAt": {
                     "type": "string",
                     "format": "date-time"
                 },
                 "dfmReport": {
                     "type": ["object", "null"],
-                    "description": "Optional DFM analysis results. Null if analysis failed or not applicable.",
-                    "properties": {
-                        "thinWallCount": {
-                            "type": "integer",
-                            "description": "Number of detected thin-wall regions"
-                        },
-                        "thinWallRegions": {
-                            "type": "array",
-                            "description": "Centroid coordinates (mm) of each thin-wall region",
-                            "items": {
-                                "type": "array",
-                                "items": { "type": "number" },
-                                "minItems": 3,
-                                "maxItems": 3
-                            }
-                        },
-                        "overhangFaceCount": {
-                            "type": "integer",
-                            "description": "Number of mesh faces with overhang angle > threshold"
-                        },
-                        "overhangAreaCm2": {
-                            "type": "number",
-                            "description": "Total projected area (cm²) of overhanging faces"
-                        }
-                    },
-                    "required": ["thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2"]
+                    "description": "Optional DFM analysis results. Null if analysis failed or not applicable. Process-specific report type is determined by manufacturingProcessName.",
+                    "oneOf": [
+                        { "$ref": "#/definitions/FdmDfmReport" },
+                        { "$ref": "#/definitions/SlaDfmReport" },
+                        { "$ref": "#/definitions/CncDfmReport" }
+                    ]
                 },
                 "materialId": {
                     "type": "string",
@@ -125,6 +163,63 @@
                 "manufacturingProcessName"
             ]
         },
+        "FileMetricsReadyEvent": {
+            "type": "object",
+            "description": "Published immediately after mesh metrics are computed, before preview generation",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the original 3D file"
+                },
+                "metrics": {
+                    "type": "object",
+                    "description": "Geometry metrics for the analyzed file",
+                    "properties": {
+                        "volumeCm3": {
+                            "type": "number"
+                        },
+                        "supportVolumeCm3": {
+                            "type": "number"
+                        },
+                        "surfaceAreaCm2": {
+                            "type": "number"
+                        },
+                        "boundingBox": {
+                            "type": "object",
+                            "properties": {
+                                "x": {
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "type": "number"
+                                },
+                                "z": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "isManifold": {
+                            "type": "boolean"
+                        },
+                        "triangleCount": {
+                            "type": "integer"
+                        },
+                        "eulerNumber": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "processedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "required": ["fileId", "storagePath", "metrics", "processedAt"]
+        },
         "FileAnalysisFailedEvent": {
             "type": "object",
             "description": "Published when a 3D file analysis fails",
@@ -147,6 +242,242 @@
                 "fileId",
                 "errorCode"
             ]
+        },
+        "FdmDfmReport": {
+            "type": "object",
+            "description": "DFM analysis results specific to FDM 3D printing",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "const": "FDM"
+                },
+                "thinWallCount": {
+                    "type": "integer",
+                    "description": "Number of detected thin-wall regions (wall thickness < 0.8mm)"
+                },
+                "thinWallRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each thin-wall region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "overhangFaceCount": {
+                    "type": "integer",
+                    "description": "Number of mesh faces with overhang angle > 45 degrees from vertical"
+                },
+                "overhangAreaCm2": {
+                    "type": "number",
+                    "description": "Total projected area (cm²) of overhanging faces"
+                },
+                "overhangRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each overhang region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "supportRequired": {
+                    "type": "boolean",
+                    "description": "True if the model requires support structures"
+                },
+                "estimatedSupportVolumeCm3": {
+                    "type": "number",
+                    "description": "Estimated volume of support structures needed"
+                },
+                "smallDetailCount": {
+                    "type": "integer",
+                    "description": "Number of small details that may be lost during printing"
+                }
+            },
+            "required": ["reportType", "thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2", "overhangRegions", "supportRequired"]
+        },
+        "SlaDfmReport": {
+            "type": "object",
+            "description": "DFM analysis results specific to SLA/DLP resin printing",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "const": "SLA"
+                },
+                "thinWallCount": {
+                    "type": "integer",
+                    "description": "Number of detected thin-wall regions"
+                },
+                "thinWallRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each thin-wall region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "overhangFaceCount": {
+                    "type": "integer",
+                    "description": "Number of mesh faces with overhang"
+                },
+                "overhangAreaCm2": {
+                    "type": "number",
+                    "description": "Total projected area (cm²) of overhanging faces"
+                },
+                "overhangRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each overhang region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "resinTrappingRisk": {
+                    "type": "boolean",
+                    "description": "True if there are closed cavities where resin could be trapped"
+                },
+                "resinTrappingRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each resin trapping region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "suctionRisk": {
+                    "type": "boolean",
+                    "description": "True if there are regions that could create vacuum suction during peeling"
+                },
+                "suctionRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each suction risk region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "hollowRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of hollow regions that may need drainage holes",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                }
+            },
+            "required": ["reportType", "thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2", "overhangRegions", "resinTrappingRisk", "suctionRisk"]
+        },
+        "CncDfmReport": {
+            "type": "object",
+            "description": "DFM analysis results specific to CNC machining",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "const": "CNC"
+                },
+                "sharpCornerCount": {
+                    "type": "integer",
+                    "description": "Number of sharp corners that could cause tool breakage (radius < 2mm)"
+                },
+                "sharpCornerRegions": {
+                    "type": "array",
+                    "description": "Coordinates (mm) of each sharp corner region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "hasUndercuts": {
+                    "type": "boolean",
+                    "description": "True if the part has undercut features that require special tooling"
+                },
+                "undercutRegions": {
+                    "type": "array",
+                    "description": "Coordinates (mm) of each undercut region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "hasDrillHoles": {
+                    "type": "boolean",
+                    "description": "True if the part has tap or cross-drilled holes"
+                },
+                "drillHoleCount": {
+                    "type": "integer",
+                    "description": "Number of drill holes detected"
+                },
+                "requiresEdm": {
+                    "type": "boolean",
+                    "description": "True if EDM/wirecut is required for complex features"
+                },
+                "requiresGrinding": {
+                    "type": "boolean",
+                    "description": "True if grinding is required for flat surfaces"
+                },
+                "minimumFeatureSizeMm": {
+                    "type": "number",
+                    "description": "Smallest detectable feature size in mm"
+                }
+            },
+            "required": ["reportType", "sharpCornerCount", "sharpCornerRegions", "hasUndercuts", "requiresEdm", "requiresGrinding"]
+        },
+        "DfmAnalysisReadyEvent": {
+            "type": "object",
+            "description": "Published when DFM analysis is complete with all three process-specific reports",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "The file being analyzed"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS path, used as join key by frontend"
+                },
+                "fdmReport": {
+                    "oneOf": [
+                        { "$ref": "#/definitions/FdmDfmReport" },
+                        { "type": "null" }
+                    ],
+                    "description": "FDM-specific DFM data, or null if not applicable"
+                },
+                "slaReport": {
+                    "oneOf": [
+                        { "$ref": "#/definitions/SlaDfmReport" },
+                        { "type": "null" }
+                    ],
+                    "description": "SLA-specific DFM data, or null if not applicable"
+                },
+                "cncReport": {
+                    "oneOf": [
+                        { "$ref": "#/definitions/CncDfmReport" },
+                        { "type": "null" }
+                    ],
+                    "description": "CNC-specific DFM data, or null if not applicable"
+                },
+                "analyzedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When analysis completed"
+                }
+            },
+            "required": ["fileId", "storagePath", "analyzedAt"]
         }
     }
 }

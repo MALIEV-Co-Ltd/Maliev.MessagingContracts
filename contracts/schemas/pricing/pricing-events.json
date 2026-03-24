@@ -131,6 +131,14 @@
                     "type": "string",
                     "format": "date-time",
                     "description": "When the price was calculated"
+                },
+                "storagePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS path for frontend join key"
+                },
+                "estimatedLeadTimeDays": {
+                    "type": ["integer", "null"],
+                    "description": "Days estimated for production and shipping"
                 }
             },
             "required": [
