@@ -220,6 +220,25 @@
             },
             "required": ["fileId", "storagePath", "metrics", "processedAt"]
         },
+        "SmallThumbnailReadyEvent": {
+            "type": "object",
+            "description": "Published when the 256px isometric thumbnail is ready for fast frontend delivery",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the original 3D file"
+                },
+                "thumbnailStoragePath": {
+                    "type": "string",
+                    "description": "GCS path of the generated 256px isometric WebP thumbnail"
+                }
+            },
+            "required": ["fileId", "storagePath", "thumbnailStoragePath"]
+        },
         "FileAnalysisFailedEvent": {
             "type": "object",
             "description": "Published when a 3D file analysis fails",

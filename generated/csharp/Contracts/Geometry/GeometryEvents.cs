@@ -333,6 +333,55 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     }
 
     /// <summary>
+    /// Payload data for SmallThumbnailReadyEvent.
+    /// </summary>
+    /// <param name="FileId">Unique identifier for the file.</param>
+    /// <param name="StoragePath">GCS storage path of the original 3D file.</param>
+    /// <param name="ThumbnailStoragePath">GCS path of the generated 256px isometric WebP thumbnail.</param>
+    public record SmallThumbnailReadyEventPayload(
+        [property: JsonPropertyName("fileId")] string FileId,
+        [property: JsonPropertyName("storagePath")] string StoragePath,
+        [property: JsonPropertyName("thumbnailStoragePath")] string ThumbnailStoragePath)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SmallThumbnailReadyEventPayload() : this(string.Empty, string.Empty, string.Empty) { }
+    }
+    /// <summary>
+    /// Published when the 256px isometric thumbnail is ready for fast frontend delivery.
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record SmallThumbnailReadyEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] SmallThumbnailReadyEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SmallThumbnailReadyEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for FileAnalysisFailedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
