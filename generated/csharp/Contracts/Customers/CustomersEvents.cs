@@ -234,6 +234,63 @@ namespace Maliev.MessagingContracts.Contracts.Customers
     }
 
     /// <summary>
+    /// Payload data for CustomerRegisteredEvent.
+    /// </summary>
+    /// <param name="CustomerId">The newly created customer ID</param>
+    /// <param name="PrincipalId">The IAM principal ID</param>
+    /// <param name="Email">The customer's email</param>
+    /// <param name="FirstName">First name</param>
+    /// <param name="LastName">Last name</param>
+    /// <param name="RegistrationMethod">Registration method: Google or Email</param>
+    /// <param name="RegisteredAtUtc">When registration occurred</param>
+    public record CustomerRegisteredEventPayload(
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
+        [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
+        [property: JsonPropertyName("email")] string Email,
+        [property: JsonPropertyName("firstName")] string FirstName,
+        [property: JsonPropertyName("lastName")] string LastName,
+        [property: JsonPropertyName("registrationMethod")] string RegistrationMethod,
+        [property: JsonPropertyName("registeredAtUtc")] System.DateTimeOffset RegisteredAtUtc)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerRegisteredEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a customer self-registers (not employee-created)
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record CustomerRegisteredEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] CustomerRegisteredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CustomerRegisteredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for CompanyTierChangedEvent.
     /// </summary>
     /// <param name="CompanyId">Unique identifier of the company whose tier changed</param>

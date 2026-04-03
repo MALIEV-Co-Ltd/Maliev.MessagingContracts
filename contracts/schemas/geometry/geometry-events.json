@@ -247,18 +247,25 @@
                     "type": "string",
                     "description": "Unique identifier for the file"
                 },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the file that failed analysis"
+                },
                 "errorCode": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The error Code"
                 },
                 "details": {
                     "type": [
                         "string",
                         "null"
-                    ]
+                    ],
+                    "description": "The detail"
                 }
             },
             "required": [
                 "fileId",
+                "storagePath",
                 "errorCode"
             ]
         },

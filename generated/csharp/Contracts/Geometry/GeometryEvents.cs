@@ -335,9 +335,9 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Payload data for SmallThumbnailReadyEvent.
     /// </summary>
-    /// <param name="FileId">Unique identifier for the file.</param>
-    /// <param name="StoragePath">GCS storage path of the original 3D file.</param>
-    /// <param name="ThumbnailStoragePath">GCS path of the generated 256px isometric WebP thumbnail.</param>
+    /// <param name="FileId">Unique identifier for the file</param>
+    /// <param name="StoragePath">GCS storage path of the original 3D file</param>
+    /// <param name="ThumbnailStoragePath">GCS path of the generated 256px isometric WebP thumbnail</param>
     public record SmallThumbnailReadyEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
@@ -349,7 +349,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         public SmallThumbnailReadyEventPayload() : this(string.Empty, string.Empty, string.Empty) { }
     }
     /// <summary>
-    /// Published when the 256px isometric thumbnail is ready for fast frontend delivery.
+    /// Published when the 256px isometric thumbnail is ready for fast frontend delivery
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -385,17 +385,19 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// Payload data for FileAnalysisFailedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
+    /// <param name="StoragePath">GCS storage path of the file that failed analysis</param>
     /// <param name="ErrorCode">The error Code</param>
     /// <param name="Details">The detail</param>
     public record FileAnalysisFailedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
+        [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("errorCode")] string ErrorCode,
         [property: JsonPropertyName("details")] string? Details)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalysisFailedEventPayload() : this(string.Empty, string.Empty, default) { }
+        public FileAnalysisFailedEventPayload() : this(string.Empty, string.Empty, string.Empty, default) { }
     }
     /// <summary>
     /// Published when a 3D file analysis fails
@@ -631,15 +633,15 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     public record DfmAnalysisReadyEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
-        [property: JsonPropertyName("fdmReport")] FdmDfmReportPayload? FdmReport,
-        [property: JsonPropertyName("slaReport")] SlaDfmReportPayload? SlaReport,
-        [property: JsonPropertyName("cncReport")] CncDfmReportPayload? CncReport,
+        [property: JsonPropertyName("fdmReport")] object FdmReport,
+        [property: JsonPropertyName("slaReport")] object SlaReport,
+        [property: JsonPropertyName("cncReport")] object CncReport,
         [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default, default, default, default(System.DateTimeOffset)) { }
+        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset)) { }
     }
     /// <summary>
     /// Published when DFM analysis is complete with all three process-specific reports
