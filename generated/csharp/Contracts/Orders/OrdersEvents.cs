@@ -778,4 +778,59 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         public OrderReopenedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
+    /// <summary>
+    /// Payload data for OrderOutsourcingChangedEvent.
+    /// </summary>
+    /// <param name="OrderId">The order that was changed</param>
+    /// <param name="IsOutsourced">The new outsourcing state</param>
+    /// <param name="SupplierName">Supplier name when outsourced</param>
+    /// <param name="SupplierCostTHB">Supplier cost in THB</param>
+    /// <param name="ChangedBy">The employee who made the change</param>
+    /// <param name="ChangedAtUtc">When the change occurred</param>
+    public record OrderOutsourcingChangedEventPayload(
+        [property: JsonPropertyName("orderId")] System.Guid OrderId,
+        [property: JsonPropertyName("isOutsourced")] bool IsOutsourced,
+        [property: JsonPropertyName("supplierName")] string? SupplierName,
+        [property: JsonPropertyName("supplierCostTHB")] double? SupplierCostTHB,
+        [property: JsonPropertyName("changedBy")] System.Guid ChangedBy,
+        [property: JsonPropertyName("changedAtUtc")] System.DateTimeOffset ChangedAtUtc)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderOutsourcingChangedEventPayload() : this(default(System.Guid), default(bool), default, default, default(System.Guid), default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when the outsourcing state of an order is changed by an employee
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record OrderOutsourcingChangedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] OrderOutsourcingChangedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public OrderOutsourcingChangedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
 }

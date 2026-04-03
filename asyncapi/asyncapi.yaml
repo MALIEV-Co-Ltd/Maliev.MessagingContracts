@@ -5,7 +5,7 @@ info:
   description: |
     Comprehensive event-driven architecture for Maliev microservices ecosystem.
 
-    **Total Events**: 111 (46 HR services + 65 business services)
+    **Total Events**: 112 (46 HR services + 66 business services)
     **Services**: 23 microservices with async messaging
     **Message Bus**: RabbitMQ via MassTransit
     **Event Format**: CloudEvents-compatible with base metadata
@@ -13,7 +13,7 @@ info:
     ## Service Categories
 
     ### Business Services (13)
-    - OrderService: 16-state order workflow (12 events)
+    - OrderService: 16-state order workflow (13 events)
     - InvoiceService: Invoice lifecycle (8 events)
     - PaymentService: Payment processing (3 events)
     - CustomerService: Customer management (3 events)
@@ -126,6 +126,12 @@ channels:
     messages:
       OrderReopenedEvent:
         $ref: '#/components/messages/OrderReopenedEvent'
+
+  order/outsourcing-changed:
+    address: maliev.orders.events.order-outsourcing-changed
+    messages:
+      OrderOutsourcingChangedEvent:
+        $ref: '#/components/messages/OrderOutsourcingChangedEvent'
 
   # ==================== INVOICE SERVICE ====================
   invoice/created:
@@ -863,6 +869,11 @@ components:
       payload:
         $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderReopenedEvent'
       description: Published when finished/shipped order is reopened
+
+    OrderOutsourcingChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderOutsourcingChangedEvent'
+      description: Published when the outsourcing state of an order is changed
 
     # ==================== INVOICE SERVICE MESSAGES ====================
     InvoiceCreatedEvent:

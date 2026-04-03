@@ -449,6 +449,40 @@
                 }
             },
             "required": ["orderId", "orderNumber", "reopenedBy", "reopenedAt", "reopenReason"]
+        },
+        "OrderOutsourcingChangedEvent": {
+            "type": "object",
+            "description": "Published when the outsourcing state of an order is changed by an employee",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The order that was changed"
+                },
+                "isOutsourced": {
+                    "type": "boolean",
+                    "description": "The new outsourcing state"
+                },
+                "supplierName": {
+                    "type": ["string", "null"],
+                    "description": "Supplier name when outsourced"
+                },
+                "supplierCostTHB": {
+                    "type": ["number", "null"],
+                    "description": "Supplier cost in THB"
+                },
+                "changedBy": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The employee who made the change"
+                },
+                "changedAtUtc": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the change occurred"
+                }
+            },
+            "required": ["orderId", "isOutsourced", "changedBy", "changedAtUtc"]
         }
     }
 }
