@@ -433,6 +433,83 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     }
 
     /// <summary>
+    /// Payload data for DfmIssueItem.
+    /// </summary>
+    /// <param name="Category">Short machine-readable key, e.g. 'thin_wall', 'overhang', 'internal_radius'</param>
+    /// <param name="Severity">Issue severity: 'info', 'warning', or 'error'</param>
+    /// <param name="Title">Short human-readable title shown in the overlay panel, e.g. 'Thin Walls (3 regions)'</param>
+    /// <param name="Description">Detailed message including measured vs. required values, e.g. '3 wall region(s) below the FDM minimum of 0.8mm'</param>
+    /// <param name="Value">Measured value for this issue (mm, deg, ratio, etc.)</param>
+    /// <param name="Threshold">Rule threshold that was violated</param>
+    public record DfmIssueItemPayload(
+        [property: JsonPropertyName("category")] string Category,
+        [property: JsonPropertyName("severity")] string Severity,
+        [property: JsonPropertyName("title")] string Title,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("value")] double? Value,
+        [property: JsonPropertyName("threshold")] double? Threshold)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public DfmIssueItemPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, default, default) { }
+    }
+    /// <summary>
+    /// A single DFM issue with human-readable description and threshold context. Included in each report payload so the frontend displays backend-generated descriptions without duplicating threshold values.
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record DfmIssueItem(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] DfmIssueItemPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public DfmIssueItem() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for FdmDfmReportIssuesItem.
+    /// </summary>
+    /// <param name="Category">Short machine-readable key, e.g. 'thin_wall', 'overhang'</param>
+    /// <param name="Severity">Issue severity: info, warning, or error</param>
+    /// <param name="Title">Short human-readable title, e.g. 'Thin Walls (3 regions)'</param>
+    /// <param name="Description">Detailed message with measured vs. required values</param>
+    /// <param name="Value">Measured value for this issue (mm, deg, ratio, etc.)</param>
+    /// <param name="Threshold">Rule threshold that was violated</param>
+    public record FdmDfmReportPayloadIssuesItem(
+        [property: JsonPropertyName("category")] string Category,
+        [property: JsonPropertyName("severity")] string Severity,
+        [property: JsonPropertyName("title")] string Title,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("value")] double Value,
+        [property: JsonPropertyName("threshold")] double Threshold)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FdmDfmReportPayloadIssuesItem() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(double), default(double)) { }
+    }
+    /// <summary>
     /// Payload data for FdmDfmReport.
     /// </summary>
     /// <param name="ReportType">The report Type</param>
@@ -444,6 +521,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="SupportRequired">True if the model requires support structures</param>
     /// <param name="EstimatedSupportVolumeCm3">Estimated volume of support structures needed</param>
     /// <param name="SmallDetailCount">Number of small details that may be lost during printing</param>
+    /// <param name="Issues">Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.</param>
     public record FdmDfmReportPayload(
         [property: JsonPropertyName("reportType")] string ReportType,
         [property: JsonPropertyName("thinWallCount")] int ThinWallCount,
@@ -453,12 +531,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("overhangRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> OverhangRegions,
         [property: JsonPropertyName("supportRequired")] bool SupportRequired,
         [property: JsonPropertyName("estimatedSupportVolumeCm3")] double EstimatedSupportVolumeCm3,
-        [property: JsonPropertyName("smallDetailCount")] int SmallDetailCount)
+        [property: JsonPropertyName("smallDetailCount")] int SmallDetailCount,
+        [property: JsonPropertyName("issues")] System.Collections.Generic.IReadOnlyList<FdmDfmReportPayloadIssuesItem> Issues)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FdmDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(double), default(int)) { }
+        public FdmDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(double), default(int), Array.Empty<FdmDfmReportPayloadIssuesItem>()) { }
     }
     /// <summary>
     /// DFM analysis results specific to FDM 3D printing
@@ -494,6 +573,28 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     }
 
     /// <summary>
+    /// Payload data for SlaDfmReportIssuesItem.
+    /// </summary>
+    /// <param name="Category">Short machine-readable key, e.g. 'thin_wall', 'overhang'</param>
+    /// <param name="Severity">Issue severity: info, warning, or error</param>
+    /// <param name="Title">Short human-readable title, e.g. 'Thin Walls (3 regions)'</param>
+    /// <param name="Description">Detailed message with measured vs. required values</param>
+    /// <param name="Value">Measured value for this issue (mm, deg, ratio, etc.)</param>
+    /// <param name="Threshold">Rule threshold that was violated</param>
+    public record SlaDfmReportPayloadIssuesItem(
+        [property: JsonPropertyName("category")] string Category,
+        [property: JsonPropertyName("severity")] string Severity,
+        [property: JsonPropertyName("title")] string Title,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("value")] double Value,
+        [property: JsonPropertyName("threshold")] double Threshold)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public SlaDfmReportPayloadIssuesItem() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(double), default(double)) { }
+    }
+    /// <summary>
     /// Payload data for SlaDfmReport.
     /// </summary>
     /// <param name="ReportType">The report Type</param>
@@ -507,6 +608,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="SuctionRisk">True if there are regions that could create vacuum suction during peeling</param>
     /// <param name="SuctionRegions">Centroid coordinates (mm) of each suction risk region</param>
     /// <param name="HollowRegions">Centroid coordinates (mm) of hollow regions that may need drainage holes</param>
+    /// <param name="Issues">Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.</param>
     public record SlaDfmReportPayload(
         [property: JsonPropertyName("reportType")] string ReportType,
         [property: JsonPropertyName("thinWallCount")] int ThinWallCount,
@@ -518,12 +620,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("resinTrappingRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> ResinTrappingRegions,
         [property: JsonPropertyName("suctionRisk")] bool SuctionRisk,
         [property: JsonPropertyName("suctionRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> SuctionRegions,
-        [property: JsonPropertyName("hollowRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> HollowRegions)
+        [property: JsonPropertyName("hollowRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> HollowRegions,
+        [property: JsonPropertyName("issues")] System.Collections.Generic.IReadOnlyList<SlaDfmReportPayloadIssuesItem> Issues)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public SlaDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>()) { }
+        public SlaDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), Array.Empty<SlaDfmReportPayloadIssuesItem>()) { }
     }
     /// <summary>
     /// DFM analysis results specific to SLA/DLP resin printing
@@ -559,6 +662,28 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     }
 
     /// <summary>
+    /// Payload data for CncDfmReportIssuesItem.
+    /// </summary>
+    /// <param name="Category">Short machine-readable key, e.g. 'internal_radius', 'overhang'</param>
+    /// <param name="Severity">Issue severity: info, warning, or error</param>
+    /// <param name="Title">Short human-readable title</param>
+    /// <param name="Description">Detailed message with measured vs. required values</param>
+    /// <param name="Value">Measured value for this issue (mm, deg, ratio, etc.)</param>
+    /// <param name="Threshold">Rule threshold that was violated</param>
+    public record CncDfmReportPayloadIssuesItem(
+        [property: JsonPropertyName("category")] string Category,
+        [property: JsonPropertyName("severity")] string Severity,
+        [property: JsonPropertyName("title")] string Title,
+        [property: JsonPropertyName("description")] string Description,
+        [property: JsonPropertyName("value")] double Value,
+        [property: JsonPropertyName("threshold")] double Threshold)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public CncDfmReportPayloadIssuesItem() : this(string.Empty, string.Empty, string.Empty, string.Empty, default(double), default(double)) { }
+    }
+    /// <summary>
     /// Payload data for CncDfmReport.
     /// </summary>
     /// <param name="ReportType">The report Type</param>
@@ -571,6 +696,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="RequiresEdm">True if EDM/wirecut is required for complex features</param>
     /// <param name="RequiresGrinding">True if grinding is required for flat surfaces</param>
     /// <param name="MinimumFeatureSizeMm">Smallest detectable feature size in mm</param>
+    /// <param name="Issues">Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.</param>
     public record CncDfmReportPayload(
         [property: JsonPropertyName("reportType")] string ReportType,
         [property: JsonPropertyName("sharpCornerCount")] int SharpCornerCount,
@@ -581,12 +707,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("drillHoleCount")] int DrillHoleCount,
         [property: JsonPropertyName("requiresEdm")] bool RequiresEdm,
         [property: JsonPropertyName("requiresGrinding")] bool RequiresGrinding,
-        [property: JsonPropertyName("minimumFeatureSizeMm")] double MinimumFeatureSizeMm)
+        [property: JsonPropertyName("minimumFeatureSizeMm")] double MinimumFeatureSizeMm,
+        [property: JsonPropertyName("issues")] System.Collections.Generic.IReadOnlyList<CncDfmReportPayloadIssuesItem> Issues)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public CncDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(int), default(bool), default(bool), default(double)) { }
+        public CncDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(int), default(bool), default(bool), default(double), Array.Empty<CncDfmReportPayloadIssuesItem>()) { }
     }
     /// <summary>
     /// DFM analysis results specific to CNC machining

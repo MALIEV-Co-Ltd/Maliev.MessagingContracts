@@ -269,6 +269,38 @@
                 "errorCode"
             ]
         },
+        "DfmIssueItem": {
+            "type": "object",
+            "description": "A single DFM issue with human-readable description and threshold context. Included in each report payload so the frontend displays backend-generated descriptions without duplicating threshold values.",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "description": "Short machine-readable key, e.g. 'thin_wall', 'overhang', 'internal_radius'"
+                },
+                "severity": {
+                    "type": "string",
+                    "description": "Issue severity: 'info', 'warning', or 'error'",
+                    "enum": ["info", "warning", "error"]
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Short human-readable title shown in the overlay panel, e.g. 'Thin Walls (3 regions)'"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Detailed message including measured vs. required values, e.g. '3 wall region(s) below the FDM minimum of 0.8mm'"
+                },
+                "value": {
+                    "type": ["number", "null"],
+                    "description": "Measured value for this issue (mm, deg, ratio, etc.)"
+                },
+                "threshold": {
+                    "type": ["number", "null"],
+                    "description": "Rule threshold that was violated"
+                }
+            },
+            "required": ["category", "severity", "title", "description"]
+        },
         "FdmDfmReport": {
             "type": "object",
             "description": "DFM analysis results specific to FDM 3D printing",
@@ -320,6 +352,21 @@
                 "smallDetailCount": {
                     "type": "integer",
                     "description": "Number of small details that may be lost during printing"
+                },
+                "issues": {
+                    "type": "array",
+                    "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": { "type": "string", "description": "Short machine-readable key, e.g. 'thin_wall', 'overhang'" },
+                            "severity": { "type": "string", "description": "Issue severity: info, warning, or error" },
+                            "title": { "type": "string", "description": "Short human-readable title, e.g. 'Thin Walls (3 regions)'" },
+                            "description": { "type": "string", "description": "Detailed message with measured vs. required values" },
+                            "value": { "type": "number", "description": "Measured value for this issue (mm, deg, ratio, etc.)" },
+                            "threshold": { "type": "number", "description": "Rule threshold that was violated" }
+                        }
+                    }
                 }
             },
             "required": ["reportType", "thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2", "overhangRegions", "supportRequired"]
@@ -401,6 +448,21 @@
                         "minItems": 3,
                         "maxItems": 3
                     }
+                },
+                "issues": {
+                    "type": "array",
+                    "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": { "type": "string", "description": "Short machine-readable key, e.g. 'thin_wall', 'overhang'" },
+                            "severity": { "type": "string", "description": "Issue severity: info, warning, or error" },
+                            "title": { "type": "string", "description": "Short human-readable title, e.g. 'Thin Walls (3 regions)'" },
+                            "description": { "type": "string", "description": "Detailed message with measured vs. required values" },
+                            "value": { "type": "number", "description": "Measured value for this issue (mm, deg, ratio, etc.)" },
+                            "threshold": { "type": "number", "description": "Rule threshold that was violated" }
+                        }
+                    }
                 }
             },
             "required": ["reportType", "thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2", "overhangRegions", "resinTrappingRisk", "suctionRisk"]
@@ -460,6 +522,21 @@
                 "minimumFeatureSizeMm": {
                     "type": "number",
                     "description": "Smallest detectable feature size in mm"
+                },
+                "issues": {
+                    "type": "array",
+                    "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": { "type": "string", "description": "Short machine-readable key, e.g. 'internal_radius', 'overhang'" },
+                            "severity": { "type": "string", "description": "Issue severity: info, warning, or error" },
+                            "title": { "type": "string", "description": "Short human-readable title" },
+                            "description": { "type": "string", "description": "Detailed message with measured vs. required values" },
+                            "value": { "type": "number", "description": "Measured value for this issue (mm, deg, ratio, etc.)" },
+                            "threshold": { "type": "number", "description": "Rule threshold that was violated" }
+                        }
+                    }
                 }
             },
             "required": ["reportType", "sharpCornerCount", "sharpCornerRegions", "hasUndercuts", "requiresEdm", "requiresGrinding"]
