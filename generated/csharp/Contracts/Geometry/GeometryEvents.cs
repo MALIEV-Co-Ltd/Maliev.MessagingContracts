@@ -757,18 +757,20 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="SlaReport">SLA-specific DFM data, or null if not applicable</param>
     /// <param name="CncReport">CNC-specific DFM data, or null if not applicable</param>
     /// <param name="AnalyzedAt">When analysis completed</param>
+    /// <param name="OverlayPaths">Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall)</param>
     public record DfmAnalysisReadyEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("fdmReport")] object FdmReport,
         [property: JsonPropertyName("slaReport")] object SlaReport,
         [property: JsonPropertyName("cncReport")] object CncReport,
-        [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt)
+        [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt,
+        [property: JsonPropertyName("overlayPaths")] object OverlayPaths)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset)) { }
+        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset), default!) { }
     }
     /// <summary>
     /// Published when DFM analysis is complete with all three process-specific reports

@@ -578,6 +578,13 @@
                     "type": "string",
                     "format": "date-time",
                     "description": "When analysis completed"
+                },
+                "overlayPaths": {
+                    "type": "object",
+                    "description": "Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall)",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 }
             },
             "required": ["fileId", "storagePath", "analyzedAt"]
