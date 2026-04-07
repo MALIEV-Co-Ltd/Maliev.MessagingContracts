@@ -757,7 +757,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="SlaReport">SLA-specific DFM data, or null if not applicable</param>
     /// <param name="CncReport">CNC-specific DFM data, or null if not applicable</param>
     /// <param name="AnalyzedAt">When analysis completed</param>
-    /// <param name="OverlayPaths">Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall)</param>
+    /// <param name="OverlayPaths">Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall) or GENERAL__category</param>
+    /// <param name="BodyCount">Number of distinct bodies/shells detected in the mesh; &gt;1 means multi-body</param>
     public record DfmAnalysisReadyEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
@@ -765,7 +766,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("slaReport")] object SlaReport,
         [property: JsonPropertyName("cncReport")] object CncReport,
         [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt,
-        [property: JsonPropertyName("overlayPaths")] object OverlayPaths)
+        [property: JsonPropertyName("overlayPaths")] object OverlayPaths,
+        [property: JsonPropertyName("bodyCount")] int? BodyCount = null)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
