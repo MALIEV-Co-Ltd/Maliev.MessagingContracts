@@ -62,6 +62,59 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     }
 
     /// <summary>
+    /// Payload data for BodyInfo.
+    /// </summary>
+    /// <param name="Index">Zero-based body index</param>
+    /// <param name="Name">Stable body name from glTF node or generated Body_NN format</param>
+    /// <param name="VolumeCm3">Volume of this body in cm³</param>
+    /// <param name="BboxMin">Minimum XYZ coordinates in mm</param>
+    /// <param name="BboxMax">Maximum XYZ coordinates in mm</param>
+    public record BodyInfoPayload(
+        [property: JsonPropertyName("index")] int Index,
+        [property: JsonPropertyName("name")] string Name,
+        [property: JsonPropertyName("volumeCm3")] double VolumeCm3,
+        [property: JsonPropertyName("bboxMin")] object BboxMin,
+        [property: JsonPropertyName("bboxMax")] object BboxMax)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BodyInfoPayload() : this(default(int), string.Empty, default(double), default!, default!) { }
+    }
+    /// <summary>
+    /// Per-body metadata for multi-body CAD files
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record BodyInfo(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] BodyInfoPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BodyInfo() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
     /// Payload data for FileMetricsBoundingBox.
     /// </summary>
     /// <param name="X">The x</param>
@@ -175,6 +228,58 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         public FileAnalyzedEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
     }
     /// <summary>
+    /// Payload data for FileAnalyzedEventBodiesItemBboxMin.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record FileAnalyzedEventPayloadBodiesItemBboxMin(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEventPayloadBodiesItemBboxMin() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for FileAnalyzedEventBodiesItemBboxMax.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record FileAnalyzedEventPayloadBodiesItemBboxMax(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEventPayloadBodiesItemBboxMax() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for FileAnalyzedEventBodiesItem.
+    /// </summary>
+    /// <param name="Index">Zero-based body index</param>
+    /// <param name="Name">Stable body name from glTF node or generated Body_NN format</param>
+    /// <param name="VolumeCm3">Volume of this body in cm³</param>
+    /// <param name="BboxMin">Minimum XYZ coordinates in mm</param>
+    /// <param name="BboxMax">Maximum XYZ coordinates in mm</param>
+    public record FileAnalyzedEventPayloadBodiesItem(
+        [property: JsonPropertyName("index")] int Index,
+        [property: JsonPropertyName("name")] string Name,
+        [property: JsonPropertyName("volumeCm3")] double? VolumeCm3,
+        [property: JsonPropertyName("bboxMin")] FileAnalyzedEventPayloadBodiesItemBboxMin BboxMin,
+        [property: JsonPropertyName("bboxMax")] FileAnalyzedEventPayloadBodiesItemBboxMax BboxMax)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileAnalyzedEventPayloadBodiesItem() : this(default(int), string.Empty, default, default!, default!) { }
+    }
+    /// <summary>
     /// Payload data for FileAnalyzedEvent.
     /// </summary>
     /// <param name="FileId">Unique identifier for the file</param>
@@ -189,6 +294,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="MaterialCode">Material code (e.g., 'PLA', 'ABS', 'PETG')</param>
     /// <param name="ManufacturingProcessId">Unique identifier for the manufacturing process</param>
     /// <param name="ManufacturingProcessName">Manufacturing process name (e.g., 'FDM', 'SLA', 'DLP', 'CNC')</param>
+    /// <param name="BodyCount">Number of bodies in the CAD file (1 for single-body, >1 for assemblies)</param>
+    /// <param name="Bodies">Per-body metadata for multi-body files</param>
     public record FileAnalyzedEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
@@ -201,12 +308,14 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("materialId")] System.Guid MaterialId,
         [property: JsonPropertyName("materialCode")] string MaterialCode,
         [property: JsonPropertyName("manufacturingProcessId")] System.Guid ManufacturingProcessId,
-        [property: JsonPropertyName("manufacturingProcessName")] string ManufacturingProcessName)
+        [property: JsonPropertyName("manufacturingProcessName")] string ManufacturingProcessName,
+        [property: JsonPropertyName("bodyCount")] int? BodyCount,
+        [property: JsonPropertyName("bodies")] System.Collections.Generic.IReadOnlyList<FileAnalyzedEventPayloadBodiesItem> Bodies)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, string.Empty, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty) { }
+        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, string.Empty, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty, default, Array.Empty<FileAnalyzedEventPayloadBodiesItem>()) { }
     }
     /// <summary>
     /// Published when a 3D file analysis completes successfully
@@ -267,6 +376,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="IsManifold">The is Manifold</param>
     /// <param name="TriangleCount">The triangle Count</param>
     /// <param name="EulerNumber">The euler Number</param>
+    /// <param name="NonManifoldReason">Human-readable reason why the mesh is non-manifold; null when manifold.</param>
+    /// <param name="NonManifoldFaceCount">Approximate count of broken/non-manifold faces; null when manifold.</param>
     public record FileMetricsReadyEventPayloadMetrics(
         [property: JsonPropertyName("volumeCm3")] double VolumeCm3,
         [property: JsonPropertyName("supportVolumeCm3")] double SupportVolumeCm3,
@@ -274,12 +385,66 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("boundingBox")] FileMetricsReadyEventPayloadMetricsBoundingBox BoundingBox,
         [property: JsonPropertyName("isManifold")] bool IsManifold,
         [property: JsonPropertyName("triangleCount")] int TriangleCount,
-        [property: JsonPropertyName("eulerNumber")] int EulerNumber)
+        [property: JsonPropertyName("eulerNumber")] int EulerNumber,
+        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason = null,
+        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount = null)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
         public FileMetricsReadyEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
+    }
+    /// <summary>
+    /// Payload data for FileMetricsReadyEventBodiesItemBboxMin.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record FileMetricsReadyEventPayloadBodiesItemBboxMin(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEventPayloadBodiesItemBboxMin() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for FileMetricsReadyEventBodiesItemBboxMax.
+    /// </summary>
+    /// <param name="X">The x</param>
+    /// <param name="Y">The y</param>
+    /// <param name="Z">The z</param>
+    public record FileMetricsReadyEventPayloadBodiesItemBboxMax(
+        [property: JsonPropertyName("x")] double X,
+        [property: JsonPropertyName("y")] double Y,
+        [property: JsonPropertyName("z")] double Z)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEventPayloadBodiesItemBboxMax() : this(default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Payload data for FileMetricsReadyEventBodiesItem.
+    /// </summary>
+    /// <param name="Index">Zero-based body index</param>
+    /// <param name="Name">Stable body name from glTF node or generated Body_NN format</param>
+    /// <param name="VolumeCm3">Volume of this body in cm³</param>
+    /// <param name="BboxMin">Minimum XYZ coordinates in mm</param>
+    /// <param name="BboxMax">Maximum XYZ coordinates in mm</param>
+    public record FileMetricsReadyEventPayloadBodiesItem(
+        [property: JsonPropertyName("index")] int Index,
+        [property: JsonPropertyName("name")] string Name,
+        [property: JsonPropertyName("volumeCm3")] double? VolumeCm3,
+        [property: JsonPropertyName("bboxMin")] FileMetricsReadyEventPayloadBodiesItemBboxMin BboxMin,
+        [property: JsonPropertyName("bboxMax")] FileMetricsReadyEventPayloadBodiesItemBboxMax BboxMax)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public FileMetricsReadyEventPayloadBodiesItem() : this(default(int), string.Empty, default, default!, default!) { }
     }
     /// <summary>
     /// Payload data for FileMetricsReadyEvent.
@@ -288,16 +453,20 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="StoragePath">GCS storage path of the original 3D file</param>
     /// <param name="Metrics">Geometry metrics for the analyzed file</param>
     /// <param name="ProcessedAt">The processed At</param>
+    /// <param name="BodyCount">Number of bodies in the CAD file (1 for single-body, >1 for assemblies)</param>
+    /// <param name="Bodies">Per-body metadata for multi-body files</param>
     public record FileMetricsReadyEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("metrics")] FileMetricsReadyEventPayloadMetrics Metrics,
-        [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt)
+        [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt,
+        [property: JsonPropertyName("bodyCount")] int? BodyCount,
+        [property: JsonPropertyName("bodies")] System.Collections.Generic.IReadOnlyList<FileMetricsReadyEventPayloadBodiesItem> Bodies)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileMetricsReadyEventPayload() : this(string.Empty, string.Empty, default!, default(System.DateTimeOffset)) { }
+        public FileMetricsReadyEventPayload() : this(string.Empty, string.Empty, default!, default(System.DateTimeOffset), default, Array.Empty<FileMetricsReadyEventPayloadBodiesItem>()) { }
     }
     /// <summary>
     /// Published immediately after mesh metrics are computed, before preview generation
@@ -519,7 +688,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="OverhangAreaCm2">Total projected area (cm²) of overhanging faces</param>
     /// <param name="OverhangRegions">Centroid coordinates (mm) of each overhang region</param>
     /// <param name="SupportRequired">True if the model requires support structures</param>
-    /// <param name="EstimatedSupportVolumeCm3">Estimated volume of support structures needed</param>
+    /// <param name="EstimatedSupportVolumeCm3">Estimated volume of support structures needed (null when no support is required)</param>
     /// <param name="SmallDetailCount">Number of small details that may be lost during printing</param>
     /// <param name="Issues">Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.</param>
     public record FdmDfmReportPayload(
@@ -530,14 +699,14 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("overhangAreaCm2")] double OverhangAreaCm2,
         [property: JsonPropertyName("overhangRegions")] System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IReadOnlyList<double>> OverhangRegions,
         [property: JsonPropertyName("supportRequired")] bool SupportRequired,
-        [property: JsonPropertyName("estimatedSupportVolumeCm3")] double EstimatedSupportVolumeCm3,
+        [property: JsonPropertyName("estimatedSupportVolumeCm3")] double? EstimatedSupportVolumeCm3,
         [property: JsonPropertyName("smallDetailCount")] int SmallDetailCount,
         [property: JsonPropertyName("issues")] System.Collections.Generic.IReadOnlyList<FdmDfmReportPayloadIssuesItem> Issues)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FdmDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(double), default(int), Array.Empty<FdmDfmReportPayloadIssuesItem>()) { }
+        public FdmDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(int), default(double), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default, default(int), Array.Empty<FdmDfmReportPayloadIssuesItem>()) { }
     }
     /// <summary>
     /// DFM analysis results specific to FDM 3D printing
@@ -757,8 +926,10 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="SlaReport">SLA-specific DFM data, or null if not applicable</param>
     /// <param name="CncReport">CNC-specific DFM data, or null if not applicable</param>
     /// <param name="AnalyzedAt">When analysis completed</param>
-    /// <param name="OverlayPaths">Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall) or GENERAL__category</param>
-    /// <param name="BodyCount">Number of distinct bodies/shells detected in the mesh; &gt;1 means multi-body</param>
+    /// <param name="OverlayPaths">Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall)</param>
+    /// <param name="BodyCount">Number of distinct bodies in the file (null if not computed)</param>
+    /// <param name="NonManifoldReason">Human-readable mesh-integrity description forwarded from tessellation; null when manifold.</param>
+    /// <param name="NonManifoldFaceCount">Approximate count of broken/non-manifold faces; null when manifold.</param>
     public record DfmAnalysisReadyEventPayload(
         [property: JsonPropertyName("fileId")] string FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
@@ -767,12 +938,14 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("cncReport")] object CncReport,
         [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt,
         [property: JsonPropertyName("overlayPaths")] object OverlayPaths,
-        [property: JsonPropertyName("bodyCount")] int? BodyCount = null)
+        [property: JsonPropertyName("bodyCount")] int? BodyCount,
+        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason = null,
+        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount = null)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset), default!) { }
+        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset), default!, default) { }
     }
     /// <summary>
     /// Published when DFM analysis is complete with all three process-specific reports

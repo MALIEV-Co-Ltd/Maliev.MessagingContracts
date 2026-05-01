@@ -19,6 +19,33 @@
                 }
             }
         },
+        "BodyInfo": {
+            "type": "object",
+            "description": "Per-body metadata for multi-body CAD files",
+            "properties": {
+                "index": {
+                    "type": "integer",
+                    "description": "Zero-based body index"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Stable body name from glTF node or generated Body_NN format"
+                },
+                "volumeCm3": {
+                    "type": "number",
+                    "description": "Volume of this body in cm³"
+                },
+                "bboxMin": {
+                    "$ref": "#/definitions/BoundingBox",
+                    "description": "Minimum XYZ coordinates in mm"
+                },
+                "bboxMax": {
+                    "$ref": "#/definitions/BoundingBox",
+                    "description": "Maximum XYZ coordinates in mm"
+                }
+            },
+            "required": ["index", "name"]
+        },
         "FileMetrics": {
             "type": "object",
             "description": "Geometry metrics for a 3D file",
@@ -150,6 +177,49 @@
                 "manufacturingProcessName": {
                     "type": "string",
                     "description": "Manufacturing process name (e.g., 'FDM', 'SLA', 'DLP', 'CNC')"
+                },
+                "bodyCount": {
+                    "type": ["integer", "null"],
+                    "description": "Number of bodies in the CAD file (1 for single-body, >1 for assemblies)"
+                },
+                "bodies": {
+                    "type": ["array", "null"],
+                    "description": "Per-body metadata for multi-body files",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "index": {
+                                "type": "integer",
+                                "description": "Zero-based body index"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Stable body name from glTF node or generated Body_NN format"
+                            },
+                            "volumeCm3": {
+                                "type": ["number", "null"],
+                                "description": "Volume of this body in cm³"
+                            },
+                            "bboxMin": {
+                                "type": ["object", "null"],
+                                "description": "Minimum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            },
+                            "bboxMax": {
+                                "type": ["object", "null"],
+                                "description": "Maximum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            }
+                        }
+                    }
                 }
             },
             "required": [
@@ -216,6 +286,49 @@
                 "processedAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "bodyCount": {
+                    "type": ["integer", "null"],
+                    "description": "Number of bodies in the CAD file (1 for single-body, >1 for assemblies)"
+                },
+                "bodies": {
+                    "type": ["array", "null"],
+                    "description": "Per-body metadata for multi-body files",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "index": {
+                                "type": "integer",
+                                "description": "Zero-based body index"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Stable body name from glTF node or generated Body_NN format"
+                            },
+                            "volumeCm3": {
+                                "type": ["number", "null"],
+                                "description": "Volume of this body in cm³"
+                            },
+                            "bboxMin": {
+                                "type": ["object", "null"],
+                                "description": "Minimum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            },
+                            "bboxMax": {
+                                "type": ["object", "null"],
+                                "description": "Maximum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            }
+                        }
+                    }
                 }
             },
             "required": ["fileId", "storagePath", "metrics", "processedAt"]
@@ -346,8 +459,8 @@
                     "description": "True if the model requires support structures"
                 },
                 "estimatedSupportVolumeCm3": {
-                    "type": "number",
-                    "description": "Estimated volume of support structures needed"
+                    "type": ["number", "null"],
+                    "description": "Estimated volume of support structures needed (null when no support is required)"
                 },
                 "smallDetailCount": {
                     "type": "integer",
@@ -585,6 +698,10 @@
                     "additionalProperties": {
                         "type": "string"
                     }
+                },
+                "bodyCount": {
+                    "type": ["integer", "null"],
+                    "description": "Number of distinct bodies in the file (null if not computed)"
                 }
             },
             "required": ["fileId", "storagePath", "analyzedAt"]
