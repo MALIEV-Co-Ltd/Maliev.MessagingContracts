@@ -213,6 +213,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="IsManifold">The is Manifold</param>
     /// <param name="TriangleCount">The triangle Count</param>
     /// <param name="EulerNumber">The euler Number</param>
+    /// <param name="NonManifoldReason">Human-readable reason why the mesh is non-manifold; null when manifold.</param>
+    /// <param name="NonManifoldFaceCount">Approximate count of broken/non-manifold faces; null when manifold.</param>
     public record FileAnalyzedEventPayloadMetrics(
         [property: JsonPropertyName("volumeCm3")] double VolumeCm3,
         [property: JsonPropertyName("supportVolumeCm3")] double SupportVolumeCm3,
@@ -220,12 +222,14 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("boundingBox")] FileAnalyzedEventPayloadMetricsBoundingBox BoundingBox,
         [property: JsonPropertyName("isManifold")] bool IsManifold,
         [property: JsonPropertyName("triangleCount")] int TriangleCount,
-        [property: JsonPropertyName("eulerNumber")] int EulerNumber)
+        [property: JsonPropertyName("eulerNumber")] int EulerNumber,
+        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason,
+        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalyzedEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
+        public FileAnalyzedEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int), default, default) { }
     }
     /// <summary>
     /// Payload data for FileAnalyzedEventBodiesItemBboxMin.
@@ -386,13 +390,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("isManifold")] bool IsManifold,
         [property: JsonPropertyName("triangleCount")] int TriangleCount,
         [property: JsonPropertyName("eulerNumber")] int EulerNumber,
-        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason = null,
-        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount = null)
+        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason,
+        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileMetricsReadyEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int)) { }
+        public FileMetricsReadyEventPayloadMetrics() : this(default(double), default(double), default(double), default!, default(bool), default(int), default(int), default, default) { }
     }
     /// <summary>
     /// Payload data for FileMetricsReadyEventBodiesItemBboxMin.
@@ -939,13 +943,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("analyzedAt")] System.DateTimeOffset AnalyzedAt,
         [property: JsonPropertyName("overlayPaths")] object OverlayPaths,
         [property: JsonPropertyName("bodyCount")] int? BodyCount,
-        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason = null,
-        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount = null)
+        [property: JsonPropertyName("nonManifoldReason")] string? NonManifoldReason,
+        [property: JsonPropertyName("nonManifoldFaceCount")] int? NonManifoldFaceCount)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset), default!, default) { }
+        public DfmAnalysisReadyEventPayload() : this(string.Empty, string.Empty, default!, default!, default!, default(System.DateTimeOffset), default!, default, default, default) { }
     }
     /// <summary>
     /// Published when DFM analysis is complete with all three process-specific reports

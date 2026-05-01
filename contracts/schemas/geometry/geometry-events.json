@@ -132,6 +132,14 @@
                         },
                         "eulerNumber": {
                             "type": "integer"
+                        },
+                        "nonManifoldReason": {
+                            "type": ["string", "null"],
+                            "description": "Human-readable reason why the mesh is non-manifold; null when manifold."
+                        },
+                        "nonManifoldFaceCount": {
+                            "type": ["integer", "null"],
+                            "description": "Approximate count of broken/non-manifold faces; null when manifold."
                         }
                     }
                 },
@@ -280,6 +288,14 @@
                         },
                         "eulerNumber": {
                             "type": "integer"
+                        },
+                        "nonManifoldReason": {
+                            "type": ["string", "null"],
+                            "description": "Human-readable reason why the mesh is non-manifold; null when manifold."
+                        },
+                        "nonManifoldFaceCount": {
+                            "type": ["integer", "null"],
+                            "description": "Approximate count of broken/non-manifold faces; null when manifold."
                         }
                     }
                 },
@@ -702,6 +718,14 @@
                 "bodyCount": {
                     "type": ["integer", "null"],
                     "description": "Number of distinct bodies in the file (null if not computed)"
+                },
+                "nonManifoldReason": {
+                    "type": ["string", "null"],
+                    "description": "Human-readable mesh-integrity description forwarded from tessellation; null when manifold."
+                },
+                "nonManifoldFaceCount": {
+                    "type": ["integer", "null"],
+                    "description": "Approximate count of broken/non-manifold faces; null when manifold."
                 }
             },
             "required": ["fileId", "storagePath", "analyzedAt"]
