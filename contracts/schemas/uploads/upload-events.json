@@ -30,6 +30,7 @@
                 },
                 "fileSize": {
                     "type": "integer",
+                    "format": "int64",
                     "description": "File size in bytes"
                 },
                 "downloadUrl": {

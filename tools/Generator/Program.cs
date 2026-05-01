@@ -831,6 +831,12 @@ namespace Generator
                 }
                 else if (typeStr == "integer")
                 {
+                    if (propertySchema.TryGetProperty("format", out var format) &&
+                        string.Equals(format.GetString(), "int64", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return isNullable ? "long?" : "long";
+                    }
+
                     return isNullable ? "int?" : "int";
                 }
                 else if (typeStr == "boolean")
@@ -876,6 +882,7 @@ namespace Generator
                 "System.Guid" => "default(System.Guid)",
                 "System.DateTimeOffset" => "default(System.DateTimeOffset)",
                 "int" => "default(int)",
+                "long" => "default(long)",
                 "double" => "default(double)",
                 "bool" => "default(bool)",
                 "MessageType" => "default(MessageType)",

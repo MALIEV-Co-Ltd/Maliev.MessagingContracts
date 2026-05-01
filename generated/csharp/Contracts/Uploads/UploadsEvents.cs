@@ -86,7 +86,7 @@ namespace Maliev.MessagingContracts.Contracts.Uploads
         [property: JsonPropertyName("fileName")] string FileName,
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("contentType")] string ContentType,
-        [property: JsonPropertyName("fileSize")] int FileSize,
+        [property: JsonPropertyName("fileSize")] long FileSize,
         [property: JsonPropertyName("downloadUrl")] string? DownloadUrl,
         [property: JsonPropertyName("uploadedAt")] System.DateTimeOffset UploadedAt,
         [property: JsonPropertyName("retentionPolicyId")] string? RetentionPolicyId,
@@ -96,7 +96,7 @@ namespace Maliev.MessagingContracts.Contracts.Uploads
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileUploadedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(int), default, default(System.DateTimeOffset), default, default, default!) { }
+        public FileUploadedEventPayload() : this(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(long), default, default(System.DateTimeOffset), default, default, default!) { }
     }
     /// <summary>
     /// Published when a file upload completes successfully
