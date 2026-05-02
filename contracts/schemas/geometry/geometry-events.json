@@ -652,6 +652,29 @@
                     "type": "number",
                     "description": "Smallest detectable feature size in mm"
                 },
+                "isTurnable": {
+                    "type": "boolean",
+                    "description": "True when the part is suitable for CNC turning based on detected axial symmetry"
+                },
+                "primaryAxis": {
+                    "type": ["string", "null"],
+                    "description": "Detected axis of turning direction: X, Y, Z, or null when no turnable axis was found"
+                },
+                "axisVector": {
+                    "type": "array",
+                    "description": "Unit vector for the detected turning axis in model coordinates",
+                    "items": { "type": "number" },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
+                "lengthDiameterRatio": {
+                    "type": "number",
+                    "description": "Length-to-diameter ratio measured along the detected turning axis"
+                },
+                "symmetryDeviation": {
+                    "type": "number",
+                    "description": "Mean cross-section circularity deviation for the detected turning axis"
+                },
                 "issues": {
                     "type": "array",
                     "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
