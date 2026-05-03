@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Xunit;
 using Maliev.MessagingContracts.Contracts.Shared;
+using Maliev.MessagingContracts.Contracts.Geometry;
 using Maliev.MessagingContracts.Contracts.Orders;
 using Maliev.MessagingContracts.Contracts.Jobs;
 
@@ -91,5 +92,37 @@ public class SerializationTests
         Assert.Equal(orderItemId, deserialized.Payload.OrderItemId);
         Assert.Equal("FDM", deserialized.Payload.ProcessType);
         Assert.Equal("JOB-2026-0001", deserialized.Payload.JobNumber);
+    }
+
+    /// <summary>
+    /// Tests that CNC turning reports preserve the model-space axis point.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_CncDfmReportPayload_AxisPoint()
+    {
+        var payload = new CncDfmReportPayload(
+            ReportType: "CNC_TURN",
+            SharpCornerCount: 0,
+            SharpCornerRegions: [],
+            HasUndercuts: false,
+            UndercutRegions: [],
+            HasDrillHoles: false,
+            DrillHoleCount: 0,
+            RequiresEdm: false,
+            RequiresGrinding: false,
+            MinimumFeatureSizeMm: 0,
+            IsTurnable: true,
+            PrimaryAxis: "Z",
+            AxisVector: [0, 0, 1],
+            AxisPoint: [12.5, -4.25, 0],
+            LengthDiameterRatio: 2.4,
+            SymmetryDeviation: 0.01,
+            Issues: []);
+
+        var json = JsonSerializer.Serialize(payload, _options);
+        var deserialized = JsonSerializer.Deserialize<CncDfmReportPayload>(json, _options);
+
+        Assert.NotNull(deserialized);
+        Assert.Equal([12.5, -4.25, 0], deserialized.AxisPoint);
     }
 }

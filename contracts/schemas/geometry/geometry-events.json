@@ -667,6 +667,13 @@
                     "minItems": 3,
                     "maxItems": 3
                 },
+                "axisPoint": {
+                    "type": "array",
+                    "description": "Point on the detected turning axis in model coordinates, centered from round or bore feature geometry instead of the part bounding box",
+                    "items": { "type": "number" },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
                 "lengthDiameterRatio": {
                     "type": "number",
                     "description": "Length-to-diameter ratio measured along the detected turning axis"

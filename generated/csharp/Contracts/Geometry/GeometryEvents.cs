@@ -872,6 +872,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="IsTurnable">True when the part is suitable for CNC turning based on detected axial symmetry</param>
     /// <param name="PrimaryAxis">Detected axis of turning direction: X, Y, Z, or null when no turnable axis was found</param>
     /// <param name="AxisVector">Unit vector for the detected turning axis in model coordinates</param>
+    /// <param name="AxisPoint">Point on the detected turning axis in model coordinates, centered from round or bore feature geometry instead of the part bounding box</param>
     /// <param name="LengthDiameterRatio">Length-to-diameter ratio measured along the detected turning axis</param>
     /// <param name="SymmetryDeviation">Mean cross-section circularity deviation for the detected turning axis</param>
     /// <param name="Issues">Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.</param>
@@ -889,6 +890,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("isTurnable")] bool IsTurnable,
         [property: JsonPropertyName("primaryAxis")] string? PrimaryAxis,
         [property: JsonPropertyName("axisVector")] System.Collections.Generic.IReadOnlyList<double> AxisVector,
+        [property: JsonPropertyName("axisPoint")] System.Collections.Generic.IReadOnlyList<double> AxisPoint,
         [property: JsonPropertyName("lengthDiameterRatio")] double LengthDiameterRatio,
         [property: JsonPropertyName("symmetryDeviation")] double SymmetryDeviation,
         [property: JsonPropertyName("issues")] System.Collections.Generic.IReadOnlyList<CncDfmReportPayloadIssuesItem> Issues)
@@ -896,7 +898,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public CncDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(int), default(bool), default(bool), default(double), default(bool), default, Array.Empty<double>(), default(double), default(double), Array.Empty<CncDfmReportPayloadIssuesItem>()) { }
+        public CncDfmReportPayload() : this(string.Empty, default(int), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), Array.Empty<System.Collections.Generic.IReadOnlyList<double>>(), default(bool), default(int), default(bool), default(bool), default(double), default(bool), default, Array.Empty<double>(), Array.Empty<double>(), default(double), default(double), Array.Empty<CncDfmReportPayloadIssuesItem>()) { }
     }
     /// <summary>
     /// DFM analysis results specific to CNC machining
