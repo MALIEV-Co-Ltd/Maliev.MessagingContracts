@@ -4,6 +4,7 @@ using Maliev.MessagingContracts.Contracts.Shared;
 using Maliev.MessagingContracts.Contracts.Geometry;
 using Maliev.MessagingContracts.Contracts.Orders;
 using Maliev.MessagingContracts.Contracts.Jobs;
+using Maliev.MessagingContracts.Contracts.Search;
 
 namespace Maliev.MessagingContracts.Tests;
 
@@ -124,5 +125,78 @@ public class SerializationTests
 
         Assert.NotNull(deserialized);
         Assert.Equal([12.5, -4.25, 0], deserialized.AxisPoint);
+    }
+
+    /// <summary>
+    /// Tests that search document upsert events preserve the indexable fields.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_SearchDocumentUpsertedEvent()
+    {
+        var resourceId = System.Guid.NewGuid().ToString();
+        var evt = new SearchDocumentUpsertedEvent(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: "SearchDocumentUpsertedEvent",
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0.0",
+            PublishedBy: "ProjectService",
+            ConsumedBy: new[] { "SearchService" },
+            CorrelationId: System.Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: System.DateTimeOffset.UtcNow,
+            IsPublic: false,
+            Payload: new SearchDocumentUpsertedEventPayload(
+                SourceService: "ProjectService",
+                ResourceType: "project",
+                ResourceId: resourceId,
+                Title: "PRJ-2026-0001",
+                Subtitle: "Acme prototype",
+                Summary: "Prototype quote for Acme",
+                Keywords: ["PRJ-2026-0001", "Acme", "prototype"],
+                Status: "Draft",
+                RequiredPermission: "project.projects.read",
+                OccurredAtUtc: System.DateTimeOffset.UtcNow
+            )
+        );
+
+        var json = JsonSerializer.Serialize(evt, _options);
+        var deserialized = JsonSerializer.Deserialize<SearchDocumentUpsertedEvent>(json, _options);
+
+        Assert.NotNull(deserialized);
+        Assert.Equal(resourceId, deserialized.Payload.ResourceId);
+        Assert.Equal("project.projects.read", deserialized.Payload.RequiredPermission);
+        Assert.Contains("Acme", deserialized.Payload.Keywords);
+    }
+
+    /// <summary>
+    /// Tests that search reindex commands preserve the requested source scope.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_SearchReindexRequestedCommand()
+    {
+        var command = new SearchReindexRequestedCommand(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: "SearchReindexRequestedCommand",
+            MessageType: MessageType.Command,
+            MessageVersion: "1.0.0",
+            PublishedBy: "SearchService",
+            ConsumedBy: new[] { "CustomerService", "ProjectService" },
+            CorrelationId: System.Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: System.DateTimeOffset.UtcNow,
+            IsPublic: false,
+            Payload: new SearchReindexRequestedCommandPayload(
+                SourceService: null,
+                RequestedBy: "system",
+                RequestedAtUtc: System.DateTimeOffset.UtcNow
+            )
+        );
+
+        var json = JsonSerializer.Serialize(command, _options);
+        var deserialized = JsonSerializer.Deserialize<SearchReindexRequestedCommand>(json, _options);
+
+        Assert.NotNull(deserialized);
+        Assert.Null(deserialized.Payload.SourceService);
+        Assert.Equal("system", deserialized.Payload.RequestedBy);
     }
 }

@@ -54,6 +54,25 @@ servers:
     description: Production RabbitMQ cluster
 
 channels:
+  # ==================== SEARCH SERVICE ====================
+  search/document-upserted:
+    address: maliev.search.events.search-document-upserted
+    messages:
+      SearchDocumentUpsertedEvent:
+        $ref: '#/components/messages/SearchDocumentUpsertedEvent'
+
+  search/document-deleted:
+    address: maliev.search.events.search-document-deleted
+    messages:
+      SearchDocumentDeletedEvent:
+        $ref: '#/components/messages/SearchDocumentDeletedEvent'
+
+  search/reindex-requested:
+    address: maliev.search.commands.search-reindex-requested
+    messages:
+      SearchReindexRequestedCommand:
+        $ref: '#/components/messages/SearchReindexRequestedCommand'
+
   # ==================== ORDER SERVICE ====================
   order/created:
     address: maliev.orders.events.order-created
@@ -1440,6 +1459,22 @@ components:
       payload:
         $ref: '../contracts/schemas/nda/nda-events.json#/definitions/NdaExpiredEvent'
       description: Published when an NDA has expired
+
+    # ==================== SEARCH SERVICE MESSAGES ====================
+    SearchDocumentUpsertedEvent:
+      payload:
+        $ref: '../contracts/schemas/search/search-events.json#/definitions/SearchDocumentUpsertedEvent'
+      description: Published when a service creates or updates a resource that should be indexed for global search
+
+    SearchDocumentDeletedEvent:
+      payload:
+        $ref: '../contracts/schemas/search/search-events.json#/definitions/SearchDocumentDeletedEvent'
+      description: Published when a service removes a resource from the global search index
+
+    SearchReindexRequestedCommand:
+      payload:
+        $ref: '../contracts/schemas/search/search-events.json#/definitions/SearchReindexRequestedCommand'
+      description: Published by SearchService to request services republish searchable documents
 
 operations:
   # Example operations showing publisher-subscriber relationships
