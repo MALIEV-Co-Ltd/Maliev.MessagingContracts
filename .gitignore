@@ -36,6 +36,7 @@ NUL
 # Test Artifacts
 TestResults/
 coverage/
+generated/csharp/artifacts/
 
 # Repository Specific
 .claude/settings.local.json
