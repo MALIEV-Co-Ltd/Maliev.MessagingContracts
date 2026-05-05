@@ -8,6 +8,10 @@
             "type": "object",
             "description": "Published when 6-side preview images are generated for a 3D file",
             "properties": {
+                "fileId": {
+                    "type": ["string", "null"],
+                    "description": "Authoritative UploadService file identifier for resolving the current storage path after file migration"
+                },
                 "storagePath": {
                     "type": "string",
                     "description": "Original 3D file storage path (used as join key with OrderFile)"

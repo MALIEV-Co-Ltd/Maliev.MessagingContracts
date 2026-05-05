@@ -13,6 +13,52 @@ using Maliev.MessagingContracts.Contracts.Shared;
 namespace Maliev.MessagingContracts.Contracts.Uploads
 {
     /// <summary>
+    /// Command to process a bulk file-delete job.
+    /// </summary>
+    /// <summary>
+    /// Nested data for BulkDeleteJobCommandPayload.
+    /// </summary>
+    /// <param name="JobId">The unique identifier of the bulk delete job.</param>
+    public record BulkDeleteJobCommandPayload(
+        [property: JsonPropertyName("jobId")] string JobId)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BulkDeleteJobCommandPayload() : this(string.Empty) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload for processing a bulk delete job.</param>
+    public record BulkDeleteJobCommand(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] BulkDeleteJobCommandPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public BulkDeleteJobCommand() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
     /// UploadArtifactCommand
     /// </summary>
     /// <summary>

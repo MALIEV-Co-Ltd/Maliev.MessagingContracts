@@ -1025,11 +1025,13 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <summary>
     /// Payload data for PreviewImagesGeneratedEvent.
     /// </summary>
+    /// <param name="FileId">Authoritative UploadService file identifier for resolving the current storage path after file migration</param>
     /// <param name="StoragePath">Original 3D file storage path (used as join key with OrderFile)</param>
     /// <param name="PreviewImages">Preview images for 6 sides of the 3D model</param>
     /// <param name="GeneratedAt">Timestamp when preview images were generated</param>
     /// <param name="Failed">True when preview image generation failed; consumers should transition to Failed state</param>
     public record PreviewImagesGeneratedEventPayload(
+        [property: JsonPropertyName("fileId")] string? FileId,
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("previewImages")] PreviewImagesGeneratedEventPayloadPreviewImages PreviewImages,
         [property: JsonPropertyName("generatedAt")] System.DateTimeOffset GeneratedAt,
@@ -1038,7 +1040,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PreviewImagesGeneratedEventPayload() : this(string.Empty, default!, default(System.DateTimeOffset), default(bool)) { }
+        public PreviewImagesGeneratedEventPayload() : this(default, string.Empty, default!, default(System.DateTimeOffset), default(bool)) { }
     }
     /// <summary>
     /// Published when 6-side preview images are generated for a 3D file
