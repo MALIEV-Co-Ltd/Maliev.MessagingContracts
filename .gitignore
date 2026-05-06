@@ -10,6 +10,9 @@ build/
 *.swp
 *.swo
 *.user
+*.csproj.user
+*.rsuser
+*.DotSettings.user
 *.suo
 
 # NuGet & Node Packages
