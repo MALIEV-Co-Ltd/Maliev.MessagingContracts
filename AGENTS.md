@@ -48,7 +48,7 @@ To add or modify a message contract, follow this exact sequence:
 2. **Register Topology**: Update `asyncapi/asyncapi.yaml`.
    - Add the message definition.
    - Define the channel and RabbitMQ address.
-3. **Validate Schemas**: Run `npm test` to validate JSON and AsyncAPI syntax.
+3. **Validate Schemas**: Run `npm test` to validate JSON and AsyncAPI syntax through `scripts/validate-contracts.cjs`.
 4. **Generate Code**: Run `./scripts/build.ps1` to generate C# models.
 5. **Verify C#**: Run `dotnet test` to ensure serialization works.
 
@@ -84,9 +84,15 @@ dotnet format Maliev.MessagingContracts.slnx
 # Validate JSON Schemas & AsyncAPI (Fast)
 npm test
 
+# Validate one side only
+npm run validate:asyncapi
+npm run validate:schemas
+
 # Generate C# Models (validates schemas + runs custom C# generator)
 ./scripts/build.ps1
 ```
+
+The tracked validation path intentionally avoids `@asyncapi/cli` and `ajv-cli`; use the local validator unless a replacement CLI has been security-reviewed.
 
 ---
 

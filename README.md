@@ -16,6 +16,7 @@ The authoritative, contract-first source of truth for all message types used acr
 - **Schema Format**: JSON Schema (Draft-07)
 - **Messaging Spec**: AsyncAPI 3.0
 - **Generator**: Custom C# Source Generator (Zero-dependency)
+- **Validation**: Local AJV validator using official AsyncAPI schemas
 - **Message Bus**: RabbitMQ via MassTransit
 - **Serialization**: System.Text.Json (Source Generated)
 - **Distribution**: NuGet via GitHub Packages
@@ -108,6 +109,7 @@ To use these contracts in your .NET service:
 
 We ensure contract integrity through automated validation:
 - **Schema Validation**: Ensures all JSON Schemas are syntactically correct.
+- **AsyncAPI Validation**: Validates `asyncapi/asyncapi.yaml` with the official AsyncAPI JSON Schema via `npm test`.
 - **Serialization Tests**: Verifies that generated C# models correctly round-trip via `System.Text.Json`.
 - **Inheritance Checks**: Confirms all messages adhere to the `BaseMessage` structure.
 

@@ -7,10 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "asyncapi validate asyncapi/asyncapi.yaml && ajv compile -c ajv-formats -s \"contracts/schemas/shared/*.json\" --all-errors",
-    "validate:asyncapi": "asyncapi validate asyncapi/asyncapi.yaml",
-    "validate:schemas": "ajv compile -c ajv-formats -s \"contracts/schemas/shared/*.json\" --all-errors",
-    "gen-docs": "asyncapi generate fromTemplate asyncapi/asyncapi.yaml @asyncapi/html-template -o docs --force-write"
+    "test": "node scripts/validate-contracts.cjs",
+    "validate:asyncapi": "node scripts/validate-contracts.cjs --asyncapi",
+    "validate:schemas": "node scripts/validate-contracts.cjs --schemas"
   },
   "repository": {
     "type": "git",
@@ -24,13 +23,10 @@
     "url": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts/issues"
   },
   "homepage": "https://github.com/MALIEV-Co-Ltd/Maliev.MessagingContracts#readme",
-  "dependencies": {
-    "@asyncapi/generator": "^3.2.0",
-    "@asyncapi/markdown-template": "^2.0.0"
-  },
   "devDependencies": {
-    "@asyncapi/cli": "^6.0.0",
-    "ajv-cli": "^5.0.0",
-    "ajv-formats": "^3.0.1"
+    "@asyncapi/specs": "^6.11.1",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.9.0"
   }
 }
