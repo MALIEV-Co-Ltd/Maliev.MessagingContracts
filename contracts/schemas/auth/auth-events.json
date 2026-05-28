@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "maliev/auth-events",
     "title": "Authentication Domain Events",
-    "description": "Events published by the Auth Service for security auditing and monitoring",
+    "description": "Events published by the Auth Service for security auditing, monitoring, and customer onboarding",
     "definitions": {
         "UserLoggedInEvent": {
             "type": "object",
@@ -193,6 +193,83 @@
                 }
             },
             "required": ["jti", "userId", "revokedAt"]
+        },
+        "EmailVerifiedEvent": {
+            "type": "object",
+            "description": "Published when a customer completes email verification",
+            "properties": {
+                "principalId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The principal ID of the verified user"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The verified email address"
+                },
+                "verifiedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the email was verified"
+                }
+            },
+            "required": ["principalId", "email", "verifiedAt"]
+        },
+        "VerificationEmailRequestedEvent": {
+            "type": "object",
+            "description": "Published when a verification email needs to be sent to a new user",
+            "properties": {
+                "principalId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The principal ID of the user"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The recipient email address"
+                },
+                "firstName": {
+                    "type": "string",
+                    "description": "The user's first name for personalization"
+                },
+                "verificationToken": {
+                    "type": "string",
+                    "description": "The verification token to include in the email link"
+                },
+                "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the verification token expires"
+                }
+            },
+            "required": ["principalId", "email", "firstName", "verificationToken", "expiresAt"]
+        },
+        "PasskeyRegisteredEvent": {
+            "type": "object",
+            "description": "Published when a user registers a new passkey",
+            "properties": {
+                "principalId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The principal ID of the user"
+                },
+                "credentialId": {
+                    "type": "string",
+                    "description": "The credential ID of the registered passkey"
+                },
+                "deviceName": {
+                    "type": ["string", "null"],
+                    "description": "Optional device name for the passkey"
+                },
+                "registeredAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the passkey was registered"
+                }
+            },
+            "required": ["principalId", "credentialId", "registeredAt"]
         }
     }
 }

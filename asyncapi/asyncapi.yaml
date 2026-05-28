@@ -5,7 +5,7 @@ info:
   description: |
     Comprehensive event-driven architecture for Maliev microservices ecosystem.
 
-    **Total Events**: 112 (46 HR services + 66 business services)
+    **Total Events**: 115 (46 HR services + 69 business services)
     **Services**: 23 microservices with async messaging
     **Message Bus**: RabbitMQ via MassTransit
     **Event Format**: CloudEvents-compatible with base metadata
@@ -23,7 +23,7 @@ info:
     - MaterialService: Inventory management (3 events)
     - SupplierService: Supplier lifecycle (3 events)
     - AccountingService: Financial transactions (5 events)
-    - AuthService: Authentication & security (6 events)
+    - AuthService: Authentication & security (9 events)
     - UploadService: File management (2 events)
     - PdfService: PDF generation (3 events)
 
@@ -437,6 +437,24 @@ channels:
     messages:
       SuspiciousActivityDetectedEvent:
         $ref: '#/components/messages/SuspiciousActivityDetectedEvent'
+
+  auth/email-verified:
+    address: maliev.auth.events.email-verified
+    messages:
+      EmailVerifiedEvent:
+        $ref: '#/components/messages/EmailVerifiedEvent'
+
+  auth/verification-email-requested:
+    address: maliev.auth.events.verification-email-requested
+    messages:
+      VerificationEmailRequestedEvent:
+        $ref: '#/components/messages/VerificationEmailRequestedEvent'
+
+  auth/passkey-registered:
+    address: maliev.auth.events.passkey-registered
+    messages:
+      PasskeyRegisteredEvent:
+        $ref: '#/components/messages/PasskeyRegisteredEvent'
 
   # ==================== UPLOAD SERVICE ====================
   upload/file-uploaded:
@@ -1133,6 +1151,21 @@ components:
       payload:
         $ref: '../contracts/schemas/auth/auth-events.json#/definitions/SuspiciousActivityDetectedEvent'
       description: Published on security events like token reuse
+
+    EmailVerifiedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/EmailVerifiedEvent'
+      description: Published when a customer completes email verification
+
+    VerificationEmailRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/VerificationEmailRequestedEvent'
+      description: Published when a verification email needs to be sent to a new user
+
+    PasskeyRegisteredEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/PasskeyRegisteredEvent'
+      description: Published when a user registers a new passkey
 
     # ==================== UPLOAD SERVICE MESSAGES ====================
     FileUploadedEvent:

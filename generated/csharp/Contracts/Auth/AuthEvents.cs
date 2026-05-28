@@ -381,4 +381,157 @@ namespace Maliev.MessagingContracts.Contracts.Auth
         public AccessTokenRevokedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
+    /// <summary>
+    /// Payload data for EmailVerifiedEvent.
+    /// </summary>
+    /// <param name="PrincipalId">The principal ID of the verified user</param>
+    /// <param name="Email">The verified email address</param>
+    /// <param name="VerifiedAt">When the email was verified</param>
+    public record EmailVerifiedEventPayload(
+        [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
+        [property: JsonPropertyName("email")] string Email,
+        [property: JsonPropertyName("verifiedAt")] System.DateTimeOffset VerifiedAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmailVerifiedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a customer completes email verification
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record EmailVerifiedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] EmailVerifiedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public EmailVerifiedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for VerificationEmailRequestedEvent.
+    /// </summary>
+    /// <param name="PrincipalId">The principal ID of the user</param>
+    /// <param name="Email">The recipient email address</param>
+    /// <param name="FirstName">The user's first name for personalization</param>
+    /// <param name="VerificationToken">The verification token to include in the email link</param>
+    /// <param name="ExpiresAt">When the verification token expires</param>
+    public record VerificationEmailRequestedEventPayload(
+        [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
+        [property: JsonPropertyName("email")] string Email,
+        [property: JsonPropertyName("firstName")] string FirstName,
+        [property: JsonPropertyName("verificationToken")] string VerificationToken,
+        [property: JsonPropertyName("expiresAt")] System.DateTimeOffset ExpiresAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public VerificationEmailRequestedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a verification email needs to be sent to a new user
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record VerificationEmailRequestedEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] VerificationEmailRequestedEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public VerificationEmailRequestedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+    /// <summary>
+    /// Payload data for PasskeyRegisteredEvent.
+    /// </summary>
+    /// <param name="PrincipalId">The principal ID of the user</param>
+    /// <param name="CredentialId">The credential ID of the registered passkey</param>
+    /// <param name="DeviceName">Optional device name for the passkey</param>
+    /// <param name="RegisteredAt">When the passkey was registered</param>
+    public record PasskeyRegisteredEventPayload(
+        [property: JsonPropertyName("principalId")] System.Guid PrincipalId,
+        [property: JsonPropertyName("credentialId")] string CredentialId,
+        [property: JsonPropertyName("deviceName")] string? DeviceName,
+        [property: JsonPropertyName("registeredAt")] System.DateTimeOffset RegisteredAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PasskeyRegisteredEventPayload() : this(default(System.Guid), string.Empty, default, default(System.DateTimeOffset)) { }
+    }
+    /// <summary>
+    /// Published when a user registers a new passkey
+    /// </summary>
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The specific data associated with this message.</param>
+    public record PasskeyRegisteredEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PasskeyRegisteredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PasskeyRegisteredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
 }
