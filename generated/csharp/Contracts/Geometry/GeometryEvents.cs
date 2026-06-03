@@ -290,6 +290,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// <param name="CustomerId">Unique identifier for the customer who uploaded the file</param>
     /// <param name="Metrics">Geometry metrics for the analyzed file</param>
     /// <param name="GlbStoragePath">GCS storage path of the generated GLB file</param>
+    /// <param name="ViewerStoragePath">GCS storage path the browser viewer should load. For generated viewer artifacts this is the GLB path; for browser-loadable mesh uploads this may be the original storagePath.</param>
+    /// <param name="ViewerFileExtension">Dot-prefixed file extension for the browser viewer loader, such as .glb, .stl, or .obj.</param>
     /// <param name="ThumbnailStoragePath">GCS storage path of the generated thumbnail image</param>
     /// <param name="StoragePath">GCS storage path of the original 3D file</param>
     /// <param name="ProcessedAt">The processed At</param>
@@ -305,6 +307,8 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("metrics")] FileAnalyzedEventPayloadMetrics Metrics,
         [property: JsonPropertyName("glbStoragePath")] string? GlbStoragePath,
+        [property: JsonPropertyName("viewerStoragePath")] string? ViewerStoragePath,
+        [property: JsonPropertyName("viewerFileExtension")] string? ViewerFileExtension,
         [property: JsonPropertyName("thumbnailStoragePath")] string? ThumbnailStoragePath,
         [property: JsonPropertyName("storagePath")] string StoragePath,
         [property: JsonPropertyName("processedAt")] System.DateTimeOffset ProcessedAt,
@@ -319,7 +323,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, string.Empty, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty, default, Array.Empty<FileAnalyzedEventPayloadBodiesItem>()) { }
+        public FileAnalyzedEventPayload() : this(string.Empty, default(System.Guid), default!, default, default, default, default, string.Empty, default(System.DateTimeOffset), default!, default(System.Guid), string.Empty, default(System.Guid), string.Empty, default, Array.Empty<FileAnalyzedEventPayloadBodiesItem>()) { }
     }
     /// <summary>
     /// Published when a 3D file analysis completes successfully

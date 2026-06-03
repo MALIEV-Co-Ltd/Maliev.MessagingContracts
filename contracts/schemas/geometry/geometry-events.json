@@ -147,6 +147,14 @@
                     "type": ["string", "null"],
                     "description": "GCS storage path of the generated GLB file"
                 },
+                "viewerStoragePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS storage path the browser viewer should load. For generated viewer artifacts this is the GLB path; for browser-loadable mesh uploads this may be the original storagePath."
+                },
+                "viewerFileExtension": {
+                    "type": ["string", "null"],
+                    "description": "Dot-prefixed file extension for the browser viewer loader, such as .glb, .stl, or .obj."
+                },
                 "thumbnailStoragePath": {
                     "type": ["string", "null"],
                     "description": "GCS storage path of the generated thumbnail image"
