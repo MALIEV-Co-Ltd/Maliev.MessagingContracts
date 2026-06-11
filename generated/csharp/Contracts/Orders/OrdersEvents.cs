@@ -447,6 +447,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     /// </summary>
     /// <param name="OrderId">Order ID that was completed</param>
     /// <param name="OrderNumber">Human-readable order number</param>
+    /// <param name="CustomerId">Customer who owns the order</param>
     /// <param name="QuotationId">Quotation ID the order was created from</param>
     /// <param name="OrderCreatedAt">When the order was created</param>
     /// <param name="CompletedAt">When the order was completed</param>
@@ -460,6 +461,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     public record OrderCompletedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("quotationId")] System.Guid QuotationId,
         [property: JsonPropertyName("orderCreatedAt")] System.DateTimeOffset OrderCreatedAt,
         [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt,
@@ -474,7 +476,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset), default(System.Guid), default(bool), default, default, default, default, Array.Empty<OrderCompletedEventPayloadItemsItem>()) { }
+        public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset), default(System.Guid), default(bool), default, default, default, default, Array.Empty<OrderCompletedEventPayloadItemsItem>()) { }
     }
     /// <summary>
     /// Published when order production is finished (InProgress → Finished)
@@ -514,6 +516,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     /// </summary>
     /// <param name="OrderId">The order Id</param>
     /// <param name="OrderNumber">The order Number</param>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="ShippedAt">The shipped At</param>
     /// <param name="TrackingNumber">The tracking Number</param>
     /// <param name="Carrier">The carrier</param>
@@ -521,6 +524,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     public record OrderShippedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("shippedAt")] System.DateTimeOffset ShippedAt,
         [property: JsonPropertyName("trackingNumber")] string? TrackingNumber,
         [property: JsonPropertyName("carrier")] string? Carrier,
@@ -529,7 +533,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderShippedEventPayload() : this(default(System.Guid), string.Empty, default(System.DateTimeOffset), default, default, default) { }
+        public OrderShippedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default, default, default) { }
     }
     /// <summary>
     /// Published when order is shipped to customer (Finished → Shipped)

@@ -240,6 +240,11 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Customer who owns the order"
+                },
                 "quotationId": {
                     "type": "string",
                     "format": "uuid",
@@ -317,7 +322,7 @@
                     "description": "List of items in the order"
                 }
             },
-            "required": ["orderId", "orderNumber", "quotationId", "orderCreatedAt", "completedAt", "completedBy", "jobSucceeded", "items"]
+            "required": ["orderId", "orderNumber", "customerId", "quotationId", "orderCreatedAt", "completedAt", "completedBy", "jobSucceeded", "items"]
         },
         "OrderShippedEvent": {
             "type": "object",
@@ -329,6 +334,10 @@
                 },
                 "orderNumber": {
                     "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
                 },
                 "shippedAt": {
                     "type": "string",
@@ -345,7 +354,7 @@
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "shippedAt"]
+            "required": ["orderId", "orderNumber", "customerId", "shippedAt"]
         },
         "OrderCancelledEvent": {
             "type": "object",
