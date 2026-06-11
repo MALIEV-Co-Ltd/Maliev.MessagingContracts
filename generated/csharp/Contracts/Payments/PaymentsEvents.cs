@@ -20,12 +20,14 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// </summary>
     /// <param name="OrderId">Unique identifier of the order</param>
     /// <param name="OrderNumber">Human-readable order number</param>
+    /// <param name="CustomerId">Customer identifier associated with the paid order</param>
     /// <param name="PaymentId">Unique identifier of the payment</param>
     /// <param name="Amount">Amount paid</param>
     /// <param name="Currency">Currency code (ISO 4217)</param>
     public record PaymentCompletedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
+        [property: JsonPropertyName("customerId")] string CustomerId,
         [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
         [property: JsonPropertyName("amount")] double Amount,
         [property: JsonPropertyName("currency")] string Currency)
@@ -33,7 +35,7 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty) { }
+        public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.Guid), default(double), string.Empty) { }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>

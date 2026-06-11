@@ -21,6 +21,10 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
+                "customerId": {
+                    "type": "string",
+                    "description": "Customer identifier associated with the paid order"
+                },
                 "paymentId": {
                     "type": "string",
                     "format": "uuid",
@@ -39,6 +43,7 @@
             "required": [
                 "orderId",
                 "orderNumber",
+                "customerId",
                 "paymentId",
                 "amount",
                 "currency"
