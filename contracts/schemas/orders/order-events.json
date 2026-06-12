@@ -89,7 +89,7 @@
                     "enum": [
                         "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
                         "Declined", "Accepted", "Expired", "Paid", "POIssued",
-                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                        "InProgress", "OnHold", "Finished", "QualityReleased", "Shipped", "Cancelled", "Reopened"
                     ]
                 },
                 "newStatus": {
@@ -97,7 +97,7 @@
                     "enum": [
                         "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
                         "Declined", "Accepted", "Expired", "Paid", "POIssued",
-                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                        "InProgress", "OnHold", "Finished", "QualityReleased", "Shipped", "Cancelled", "Reopened"
                     ]
                 },
                 "changedBy": {
@@ -229,7 +229,7 @@
         },
         "OrderCompletedEvent": {
             "type": "object",
-            "description": "Published when order production is finished (InProgress → Finished)",
+            "description": "Published when quality control releases a finished order for shipping (Finished → QualityReleased)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -326,7 +326,7 @@
         },
         "OrderShippedEvent": {
             "type": "object",
-            "description": "Published when order is shipped to customer (Finished → Shipped)",
+            "description": "Published when order is shipped to customer (QualityReleased → Shipped)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -436,7 +436,7 @@
         },
         "OrderReopenedEvent": {
             "type": "object",
-            "description": "Published when completed/shipped order is reopened (Finished/Shipped → Reopened)",
+            "description": "Published when finished, quality-released, or shipped order is reopened (Finished/QualityReleased/Shipped → Reopened)",
             "properties": {
                 "orderId": {
                     "type": "string",

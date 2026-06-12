@@ -479,7 +479,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         public OrderCompletedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.Guid), default(System.DateTimeOffset), default(System.DateTimeOffset), default(System.Guid), default(bool), default, default, default, default, Array.Empty<OrderCompletedEventPayloadItemsItem>()) { }
     }
     /// <summary>
-    /// Published when order production is finished (InProgress → Finished)
+    /// Published when quality control releases a finished order for shipping (Finished → QualityReleased)
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -536,7 +536,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         public OrderShippedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), default, default, default) { }
     }
     /// <summary>
-    /// Published when order is shipped to customer (Finished → Shipped)
+    /// Published when order is shipped to customer (QualityReleased → Shipped)
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -750,7 +750,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         public OrderReopenedEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
     }
     /// <summary>
-    /// Published when completed/shipped order is reopened (Finished/Shipped → Reopened)
+    /// Published when finished, quality-released, or shipped order is reopened (Finished/QualityReleased/Shipped → Reopened)
     /// </summary>
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
