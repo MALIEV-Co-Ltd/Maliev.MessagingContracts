@@ -13,6 +13,70 @@ using Maliev.MessagingContracts.Contracts.Shared;
 namespace Maliev.MessagingContracts.Contracts.Payments
 {
     /// <summary>
+    /// Provider-neutral event published when a payment is cancelled before completion.
+    /// </summary>
+    /// <summary>
+    /// Nested data for PaymentCancelledEventPayload.
+    /// </summary>
+    /// <param name="TransactionId">The transaction Id</param>
+    /// <param name="IdempotencyKey">The idempotency Key</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="Reason">The reason</param>
+    /// <param name="ProviderEventCode">The provider Event Code</param>
+    /// <param name="CancelledAt">The cancelled At</param>
+    public record PaymentCancelledEventPayload(
+        [property: JsonPropertyName("transactionId")] System.Guid TransactionId,
+        [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
+        [property: JsonPropertyName("amount")] double Amount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("customerId")] string CustomerId,
+        [property: JsonPropertyName("orderId")] string OrderId,
+        [property: JsonPropertyName("providerName")] string ProviderName,
+        [property: JsonPropertyName("reason")] string Reason,
+        [property: JsonPropertyName("providerEventCode")] string ProviderEventCode,
+        [property: JsonPropertyName("cancelledAt")] System.DateTimeOffset CancelledAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentCancelledEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
+    public record PaymentCancelledEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PaymentCancelledEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentCancelledEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
     /// Event indicating that a payment has been successfully processed.
     /// </summary>
     /// <summary>
@@ -127,6 +191,70 @@ namespace Maliev.MessagingContracts.Contracts.Payments
 
 
     /// <summary>
+    /// Provider-neutral event published when a payment authorization or hosted checkout session expires before completion.
+    /// </summary>
+    /// <summary>
+    /// Nested data for PaymentExpiredEventPayload.
+    /// </summary>
+    /// <param name="TransactionId">The transaction Id</param>
+    /// <param name="IdempotencyKey">The idempotency Key</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="Reason">The reason</param>
+    /// <param name="ProviderEventCode">The provider Event Code</param>
+    /// <param name="ExpiredAt">The expired At</param>
+    public record PaymentExpiredEventPayload(
+        [property: JsonPropertyName("transactionId")] System.Guid TransactionId,
+        [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
+        [property: JsonPropertyName("amount")] double Amount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("customerId")] string CustomerId,
+        [property: JsonPropertyName("orderId")] string OrderId,
+        [property: JsonPropertyName("providerName")] string ProviderName,
+        [property: JsonPropertyName("reason")] string Reason,
+        [property: JsonPropertyName("providerEventCode")] string ProviderEventCode,
+        [property: JsonPropertyName("expiredAt")] System.DateTimeOffset ExpiredAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentExpiredEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
+    public record PaymentExpiredEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PaymentExpiredEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentExpiredEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
     /// Event published when a payment transaction fails.
     /// </summary>
     /// <summary>
@@ -187,6 +315,68 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// Parameterless constructor for deserialization.
         /// </summary>
         public PaymentFailedEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
+    /// Provider-neutral event published when a payment remains pending or processing after provider acknowledgement.
+    /// </summary>
+    /// <summary>
+    /// Nested data for PaymentPendingEventPayload.
+    /// </summary>
+    /// <param name="TransactionId">The transaction Id</param>
+    /// <param name="IdempotencyKey">The idempotency Key</param>
+    /// <param name="Amount">The amount</param>
+    /// <param name="Currency">The currency</param>
+    /// <param name="CustomerId">The customer Id</param>
+    /// <param name="OrderId">The order Id</param>
+    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ProviderEventCode">The provider Event Code</param>
+    /// <param name="PendingAt">The pending At</param>
+    public record PaymentPendingEventPayload(
+        [property: JsonPropertyName("transactionId")] System.Guid TransactionId,
+        [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
+        [property: JsonPropertyName("amount")] double Amount,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("customerId")] string CustomerId,
+        [property: JsonPropertyName("orderId")] string OrderId,
+        [property: JsonPropertyName("providerName")] string ProviderName,
+        [property: JsonPropertyName("providerEventCode")] string ProviderEventCode,
+        [property: JsonPropertyName("pendingAt")] System.DateTimeOffset PendingAt)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentPendingEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The payload</param>
+    public record PaymentPendingEvent(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PaymentPendingEventPayload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PaymentPendingEvent() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
     }
 
 

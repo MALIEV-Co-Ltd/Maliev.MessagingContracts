@@ -4,6 +4,7 @@ using Maliev.MessagingContracts.Contracts.Shared;
 using Maliev.MessagingContracts.Contracts.Geometry;
 using Maliev.MessagingContracts.Contracts.Orders;
 using Maliev.MessagingContracts.Contracts.Jobs;
+using Maliev.MessagingContracts.Contracts.Payments;
 using Maliev.MessagingContracts.Contracts.Search;
 
 namespace Maliev.MessagingContracts.Tests;
@@ -198,5 +199,100 @@ public class SerializationTests
         Assert.NotNull(deserialized);
         Assert.Null(deserialized.Payload.SourceService);
         Assert.Equal("system", deserialized.Payload.RequestedBy);
+    }
+
+    /// <summary>
+    /// Tests that provider-neutral non-paid payment events preserve their transaction and status context.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_PaymentTerminalAndPendingEvents()
+    {
+        var transactionId = System.Guid.NewGuid();
+        var now = System.DateTimeOffset.UtcNow;
+
+        var cancelled = new PaymentCancelledEvent(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: nameof(PaymentCancelledEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0.0",
+            PublishedBy: "PaymentService",
+            ConsumedBy: new[] { "NotificationService" },
+            CorrelationId: System.Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: now,
+            IsPublic: true,
+            Payload: new PaymentCancelledEventPayload(
+                TransactionId: transactionId,
+                IdempotencyKey: "idem-123",
+                Amount: 1200,
+                Currency: "THB",
+                CustomerId: "customer-1",
+                OrderId: "order-1",
+                ProviderName: "omise",
+                Reason: "Customer cancelled checkout",
+                ProviderEventCode: "payment.cancelled",
+                CancelledAt: now
+            )
+        );
+        var expired = new PaymentExpiredEvent(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: nameof(PaymentExpiredEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0.0",
+            PublishedBy: "PaymentService",
+            ConsumedBy: new[] { "NotificationService" },
+            CorrelationId: System.Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: now,
+            IsPublic: true,
+            Payload: new PaymentExpiredEventPayload(
+                TransactionId: transactionId,
+                IdempotencyKey: "idem-123",
+                Amount: 1200,
+                Currency: "THB",
+                CustomerId: "customer-1",
+                OrderId: "order-1",
+                ProviderName: "omise",
+                Reason: "Hosted payment session expired",
+                ProviderEventCode: "checkout.session.expired",
+                ExpiredAt: now
+            )
+        );
+        var pending = new PaymentPendingEvent(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: nameof(PaymentPendingEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0.0",
+            PublishedBy: "PaymentService",
+            ConsumedBy: new[] { "NotificationService" },
+            CorrelationId: System.Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: now,
+            IsPublic: true,
+            Payload: new PaymentPendingEventPayload(
+                TransactionId: transactionId,
+                IdempotencyKey: "idem-123",
+                Amount: 1200,
+                Currency: "THB",
+                CustomerId: "customer-1",
+                OrderId: "order-1",
+                ProviderName: "omise",
+                ProviderEventCode: "payment.pending",
+                PendingAt: now
+            )
+        );
+
+        Assert.Equal("payment.cancelled", RoundTrip(cancelled).Payload.ProviderEventCode);
+        Assert.Equal("checkout.session.expired", RoundTrip(expired).Payload.ProviderEventCode);
+        Assert.Equal("payment.pending", RoundTrip(pending).Payload.ProviderEventCode);
+    }
+
+    private T RoundTrip<T>(T message)
+    {
+        var json = JsonSerializer.Serialize(message, _options);
+        var deserialized = JsonSerializer.Deserialize<T>(json, _options);
+
+        Assert.NotNull(deserialized);
+        return deserialized;
     }
 }
