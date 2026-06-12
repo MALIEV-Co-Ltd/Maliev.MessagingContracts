@@ -38,6 +38,10 @@
                     "type": "string",
                     "pattern": "^[A-Z]{3}$",
                     "description": "Currency code (ISO 4217)"
+                },
+                "providerName": {
+                    "type": "string",
+                    "description": "Payment provider that completed the transaction"
                 }
             },
             "required": [

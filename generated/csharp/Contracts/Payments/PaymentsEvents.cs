@@ -97,6 +97,12 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         [property: JsonPropertyName("currency")] string Currency)
     {
         /// <summary>
+        /// Payment provider that completed the transaction.
+        /// </summary>
+        [JsonPropertyName("providerName")]
+        public string ProviderName { get; init; } = string.Empty;
+
+        /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
         public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.Guid), default(double), string.Empty) { }
