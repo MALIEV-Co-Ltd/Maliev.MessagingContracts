@@ -129,6 +129,7 @@ namespace Maliev.MessagingContracts.Contracts.Jobs
     /// </summary>
     /// <param name="JobId">Unique job identifier</param>
     /// <param name="OrderId">Parent order identifier</param>
+    /// <param name="OrderNumber">Human-readable parent order number used by OrderService APIs</param>
     /// <param name="PreviousStatus">Job status before this transition</param>
     /// <param name="NewStatus">Job status after this transition</param>
     /// <param name="Technology">Manufacturing technology: Fdm, Sla, Cnc, Scanning, or Design</param>
@@ -138,6 +139,7 @@ namespace Maliev.MessagingContracts.Contracts.Jobs
     public record JobStatusChangedEventPayload(
         [property: JsonPropertyName("jobId")] System.Guid JobId,
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
+        [property: JsonPropertyName("orderNumber")] string? OrderNumber,
         [property: JsonPropertyName("previousStatus")] string PreviousStatus,
         [property: JsonPropertyName("newStatus")] string NewStatus,
         [property: JsonPropertyName("technology")] string Technology,
@@ -148,7 +150,7 @@ namespace Maliev.MessagingContracts.Contracts.Jobs
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public JobStatusChangedEventPayload() : this(default(System.Guid), default(System.Guid), string.Empty, string.Empty, string.Empty, default, default(System.DateTimeOffset), string.Empty) { }
+        public JobStatusChangedEventPayload() : this(default(System.Guid), default(System.Guid), default, string.Empty, string.Empty, string.Empty, default, default(System.DateTimeOffset), string.Empty) { }
     }
     /// <summary>
     /// Published when a job status changes (e.g., Pending → InProgress → Completed)
