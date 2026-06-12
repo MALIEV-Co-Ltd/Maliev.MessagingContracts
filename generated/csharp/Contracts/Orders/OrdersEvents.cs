@@ -332,6 +332,12 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         [property: JsonPropertyName("paidAt")] System.DateTimeOffset PaidAt)
     {
         /// <summary>
+        /// Payment provider that completed the order payment.
+        /// </summary>
+        [JsonPropertyName("providerName")]
+        public string ProviderName { get; init; } = string.Empty;
+
+        /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
         public OrderPaidEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset)) { }

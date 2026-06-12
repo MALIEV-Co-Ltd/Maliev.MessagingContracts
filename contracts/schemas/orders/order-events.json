@@ -201,6 +201,10 @@
                 "paidAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "providerName": {
+                    "type": "string",
+                    "description": "Payment provider that completed the order payment"
                 }
             },
             "required": ["orderId", "orderNumber", "paymentId", "paidAmount", "currency", "paidAt"]
