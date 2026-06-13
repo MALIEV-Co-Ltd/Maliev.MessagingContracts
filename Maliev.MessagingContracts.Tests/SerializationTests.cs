@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Xunit;
+using Maliev.MessagingContracts.Contracts.Delivery;
 using Maliev.MessagingContracts.Contracts.Shared;
 using Maliev.MessagingContracts.Contracts.Geometry;
 using Maliev.MessagingContracts.Contracts.Orders;
@@ -285,6 +286,73 @@ public class SerializationTests
         Assert.Equal("payment.cancelled", RoundTrip(cancelled).Payload.ProviderEventCode);
         Assert.Equal("checkout.session.expired", RoundTrip(expired).Payload.ProviderEventCode);
         Assert.Equal("payment.pending", RoundTrip(pending).Payload.ProviderEventCode);
+    }
+
+    /// <summary>
+    /// Tests that delivery lifecycle events preserve customer notification routing and payload wire names.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_DeliveryLifecycleNotificationEvents()
+    {
+        var customerId = System.Guid.NewGuid();
+        var changedAt = System.DateTimeOffset.UtcNow;
+        var completedAt = changedAt.AddHours(2);
+
+        var statusChanged = new DeliveryStatusChangedEvent(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: nameof(DeliveryStatusChangedEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0",
+            PublishedBy: "DeliveryService",
+            ConsumedBy: new[] { "NotificationService" },
+            CorrelationId: System.Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: changedAt,
+            IsPublic: false,
+            Payload: new DeliveryStatusChangedEventPayload(
+                DeliveryNoteId: "DN-2026-0002",
+                OrderId: "ORD-2026-0002",
+                CustomerId: customerId,
+                PreviousStatus: "Pending",
+                NewStatus: "InTransit",
+                ActualDeliveryTime: null,
+                ReceivedByName: null,
+                ChangedAt: changedAt,
+                ChangedBy: "employee-1"));
+
+        var completed = new DeliveryCompletedEvent(
+            MessageId: System.Guid.NewGuid(),
+            MessageName: nameof(DeliveryCompletedEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0",
+            PublishedBy: "DeliveryService",
+            ConsumedBy: new[] { "NotificationService" },
+            CorrelationId: statusChanged.CorrelationId,
+            CausationId: statusChanged.MessageId,
+            OccurredAtUtc: completedAt,
+            IsPublic: false,
+            Payload: new DeliveryCompletedEventPayload(
+                DeliveryNoteId: "DN-2026-0002",
+                OrderId: "ORD-2026-0002",
+                PurchaseOrderId: 20260002,
+                CustomerId: customerId,
+                CompletedAt: completedAt,
+                ReceivedByName: "John Doe"));
+
+        var statusJson = JsonSerializer.Serialize(statusChanged, _options);
+        var completedJson = JsonSerializer.Serialize(completed, _options);
+
+        Assert.Contains("\"consumedBy\"", statusJson, System.StringComparison.Ordinal);
+        Assert.Contains("NotificationService", statusJson, System.StringComparison.Ordinal);
+        Assert.Contains("\"customerId\"", statusJson, System.StringComparison.Ordinal);
+        Assert.Contains("\"newStatus\"", statusJson, System.StringComparison.Ordinal);
+        Assert.Contains("\"receivedByName\"", completedJson, System.StringComparison.Ordinal);
+        Assert.Contains("\"purchaseOrderId\"", completedJson, System.StringComparison.Ordinal);
+
+        Assert.Equal(customerId, RoundTrip(statusChanged).Payload.CustomerId);
+        Assert.Equal("NotificationService", Assert.Single(RoundTrip(statusChanged).ConsumedBy));
+        Assert.Equal(customerId, RoundTrip(completed).Payload.CustomerId);
+        Assert.Equal("NotificationService", Assert.Single(RoundTrip(completed).ConsumedBy));
     }
 
     private T RoundTrip<T>(T message)
