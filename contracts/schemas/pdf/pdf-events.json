@@ -42,7 +42,7 @@
                 },
                 "documentType": {
                     "type": "string",
-                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report", "DeliveryNote"],
                     "description": "Type of document that was generated"
                 },
                 "storageUrl": {
@@ -70,7 +70,7 @@
                 },
                 "documentType": {
                     "type": "string",
-                    "enum": ["Quotation", "Invoice", "Receipt", "Report"],
+                    "enum": ["Quotation", "Invoice", "Receipt", "Report", "DeliveryNote"],
                     "description": "Type of document that failed to generate"
                 },
                 "errorMessage": {
