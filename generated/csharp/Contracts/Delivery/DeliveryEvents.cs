@@ -76,6 +76,7 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// </summary>
     /// <param name="DeliveryNoteId">The delivery Note Id</param>
     /// <param name="OrderId">The order Id</param>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="PreviousStatus">The previous Statu</param>
     /// <param name="NewStatus">The new Statu</param>
     /// <param name="ActualDeliveryTime">The actual Delivery Time</param>
@@ -85,6 +86,7 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     public record DeliveryStatusChangedEventPayload(
         [property: JsonPropertyName("deliveryNoteId")] string DeliveryNoteId,
         [property: JsonPropertyName("orderId")] string? OrderId,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("previousStatus")] string PreviousStatus,
         [property: JsonPropertyName("newStatus")] string NewStatus,
         [property: JsonPropertyName("actualDeliveryTime")] System.DateTimeOffset? ActualDeliveryTime,
@@ -95,7 +97,7 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public DeliveryStatusChangedEventPayload() : this(string.Empty, default, string.Empty, string.Empty, default, default, default(System.DateTimeOffset), string.Empty) { }
+        public DeliveryStatusChangedEventPayload() : this(string.Empty, default, default(System.Guid), string.Empty, string.Empty, default, default, default(System.DateTimeOffset), string.Empty) { }
     }
     /// <summary>
     /// Published when delivery status changes
@@ -136,19 +138,21 @@ namespace Maliev.MessagingContracts.Contracts.Delivery
     /// <param name="DeliveryNoteId">The delivery Note Id</param>
     /// <param name="OrderId">The order Id</param>
     /// <param name="PurchaseOrderId">The purchase Order Id</param>
+    /// <param name="CustomerId">The customer Id</param>
     /// <param name="CompletedAt">The completed At</param>
     /// <param name="ReceivedByName">The received By Name</param>
     public record DeliveryCompletedEventPayload(
         [property: JsonPropertyName("deliveryNoteId")] string DeliveryNoteId,
         [property: JsonPropertyName("orderId")] string? OrderId,
         [property: JsonPropertyName("purchaseOrderId")] int? PurchaseOrderId,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
         [property: JsonPropertyName("completedAt")] System.DateTimeOffset CompletedAt,
         [property: JsonPropertyName("receivedByName")] string ReceivedByName)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public DeliveryCompletedEventPayload() : this(string.Empty, default, default, default(System.DateTimeOffset), string.Empty) { }
+        public DeliveryCompletedEventPayload() : this(string.Empty, default, default, default(System.Guid), default(System.DateTimeOffset), string.Empty) { }
     }
     /// <summary>
     /// Published when delivery is completed

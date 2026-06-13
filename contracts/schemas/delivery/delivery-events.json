@@ -25,6 +25,7 @@
             "properties": {
                 "deliveryNoteId": { "type": "string" },
                 "orderId": { "type": ["string", "null"] },
+                "customerId": { "type": "string", "format": "uuid" },
                 "previousStatus": { "type": "string" },
                 "newStatus": { "type": "string" },
                 "actualDeliveryTime": { "type": ["string", "null"], "format": "date-time" },
@@ -32,7 +33,7 @@
                 "changedAt": { "type": "string", "format": "date-time" },
                 "changedBy": { "type": "string" }
             },
-            "required": ["deliveryNoteId", "previousStatus", "newStatus", "changedAt", "changedBy"]
+            "required": ["deliveryNoteId", "customerId", "previousStatus", "newStatus", "changedAt", "changedBy"]
         },
         "DeliveryCompletedEvent": {
             "type": "object",
@@ -41,10 +42,11 @@
                 "deliveryNoteId": { "type": "string" },
                 "orderId": { "type": ["string", "null"] },
                 "purchaseOrderId": { "type": ["integer", "null"] },
+                "customerId": { "type": "string", "format": "uuid" },
                 "completedAt": { "type": "string", "format": "date-time" },
                 "receivedByName": { "type": "string" }
             },
-            "required": ["deliveryNoteId", "completedAt", "receivedByName"]
+            "required": ["deliveryNoteId", "customerId", "completedAt", "receivedByName"]
         },
         "DeliveryNotePdfRequestedEvent": {
             "type": "object",
