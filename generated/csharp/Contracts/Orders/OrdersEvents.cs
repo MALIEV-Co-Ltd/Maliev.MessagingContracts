@@ -70,6 +70,8 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     /// <param name="ProductId">Unique identifier of the product</param>
     /// <param name="ProductCode">SKU or human-readable code of the product</param>
     /// <param name="ProductName">Name of the product</param>
+    /// <param name="SourceProjectId">Source ProjectService project identifier when the order line came from a configured project</param>
+    /// <param name="SourceProjectPartId">Source ProjectService part identifier when the order line came from a configured project part</param>
     /// <param name="Quantity">Quantity ordered</param>
     /// <param name="UnitPrice">Price per unit</param>
     /// <param name="LineTotal">Total price for this line item</param>
@@ -77,6 +79,8 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         [property: JsonPropertyName("productId")] System.Guid ProductId,
         [property: JsonPropertyName("productCode")] string ProductCode,
         [property: JsonPropertyName("productName")] string ProductName,
+        [property: JsonPropertyName("sourceProjectId")] System.Guid? SourceProjectId,
+        [property: JsonPropertyName("sourceProjectPartId")] System.Guid? SourceProjectPartId,
         [property: JsonPropertyName("quantity")] double Quantity,
         [property: JsonPropertyName("unitPrice")] double UnitPrice,
         [property: JsonPropertyName("lineTotal")] double LineTotal)
@@ -84,7 +88,7 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderCreatedEventPayloadItemsItem() : this(default(System.Guid), string.Empty, string.Empty, default(double), default(double), default(double)) { }
+        public OrderCreatedEventPayloadItemsItem() : this(default(System.Guid), string.Empty, string.Empty, default, default, default(double), default(double), default(double)) { }
     }
     /// <summary>
     /// Payload data for OrderCreatedEvent.

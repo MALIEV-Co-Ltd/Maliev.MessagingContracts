@@ -53,6 +53,16 @@
                                 "type": "string",
                                 "description": "Name of the product"
                             },
+                            "sourceProjectId": {
+                                "type": ["string", "null"],
+                                "format": "uuid",
+                                "description": "Source ProjectService project identifier when the order line came from a configured project"
+                            },
+                            "sourceProjectPartId": {
+                                "type": ["string", "null"],
+                                "format": "uuid",
+                                "description": "Source ProjectService part identifier when the order line came from a configured project part"
+                            },
                             "quantity": {
                                 "type": "number",
                                 "description": "Quantity ordered"
