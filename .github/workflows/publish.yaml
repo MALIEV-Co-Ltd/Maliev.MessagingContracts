@@ -16,6 +16,14 @@ on:
       - 'package-lock.json'
       - 'Maliev.MessagingContracts.slnx'
       - '.config/**'
+      - 'Directory.Build.props'
+      - 'Directory.Build.targets'
+      - 'Directory.Packages.props'
+      - 'global.json'
+      - 'NuGet.Config'
+      - 'NuGet.config'
+      - 'nuget.Config'
+      - 'nuget.config'
   release:
     types: [published]
   workflow_dispatch:
@@ -72,7 +80,7 @@ jobs:
         shell: pwsh
 
       - name: Verify generated C# is current
-        run: git diff --exit-code -- generated/csharp
+        run: node scripts/verify-generated-clean.cjs
 
   publish:
     needs: validate
@@ -84,6 +92,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: '24'
 
       - name: Set up .NET
         uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
@@ -99,39 +112,13 @@ jobs:
       - name: Determine version
         id: version
         env:
-          BRANCH_NAME: ${{ github.ref_name }}
           EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           REQUESTED_VERSION: ${{ github.event.inputs.version }}
           RUN_NUMBER: ${{ github.run_number }}
         run: |
-          if [ -n "$REQUESTED_VERSION" ]; then
-            VERSION="$REQUESTED_VERSION"
-          elif [ "$EVENT_NAME" == "release" ]; then
-            VERSION="$RELEASE_TAG"
-            VERSION="${VERSION#v}"
-          else
-            # Version based on branch and run number
-            if [ "$BRANCH_NAME" == "main" ]; then
-              # Stable release
-              VERSION="1.0.$RUN_NUMBER"
-            elif [ "$BRANCH_NAME" == "staging" ]; then
-              # Beta pre-release
-              VERSION="1.0.$RUN_NUMBER-beta"
-            elif [ "$BRANCH_NAME" == "develop" ]; then
-              # Alpha pre-release
-              VERSION="1.0.$RUN_NUMBER-alpha"
-            else
-              # Fallback
-              VERSION="1.0.$RUN_NUMBER"
-            fi
-          fi
-
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
-            echo "Invalid package version: $VERSION" >&2
-            exit 1
-          fi
-
+          VERSION="$(node scripts/resolve-package-version.cjs)"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Package version: $VERSION"
 

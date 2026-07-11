@@ -16,6 +16,15 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'Maliev.MessagingContracts.slnx'
+      - '.config/**'
+      - 'Directory.Build.props'
+      - 'Directory.Build.targets'
+      - 'Directory.Packages.props'
+      - 'global.json'
+      - 'NuGet.Config'
+      - 'NuGet.config'
+      - 'nuget.Config'
+      - 'nuget.config'
       - '.github/workflows/validate-contracts.yaml'
       - '.github/workflows/publish.yaml'
 
@@ -80,4 +89,4 @@ jobs:
         shell: pwsh
 
       - name: Verify generated C# is current
-        run: git diff --exit-code -- generated/csharp
+        run: node scripts/verify-generated-clean.cjs
