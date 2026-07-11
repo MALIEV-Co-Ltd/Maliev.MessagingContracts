@@ -108,7 +108,8 @@ jobs:
         id: version
         env:
           EVENT_NAME: ${{ github.event_name }}
-          REF_NAME: ${{ github.ref_name }}
+          REF: ${{ github.ref }}
+          REF_TYPE: ${{ github.ref_type }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           RUN_NUMBER: ${{ github.run_number }}
         run: |

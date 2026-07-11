@@ -11,59 +11,81 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
-  normalizePackageVersion,
+  normalizeReleaseTag,
   resolvePackageVersion,
 } = require('./resolve-package-version.cjs');
 const { verifyGeneratedClean } = require('./verify-generated-clean.cjs');
 
 const versionScript = path.join(__dirname, 'resolve-package-version.cjs');
 
-test('normalizePackageVersion accepts and normalizes supported release forms', () => {
-  for (const input of ['release/v1.2.3', 'v1.2.3', '1.2.3']) {
-    assert.equal(normalizePackageVersion(input), '1.2.3');
-  }
+test('normalizeReleaseTag accepts only the protected release tag namespace', () => {
+  assert.equal(normalizeReleaseTag('release/v1.2.3'), '1.2.3');
+  assert.equal(normalizeReleaseTag('release/v1.2.3-alpha.1+build.5'), '1.2.3-alpha.1+build.5');
+  assert.equal(normalizeReleaseTag('release/v1.2.3+01'), '1.2.3+01');
 
-  assert.equal(normalizePackageVersion('release/v1.2.3-alpha.1+build.5'), '1.2.3-alpha.1+build.5');
-  assert.equal(normalizePackageVersion('v1.2.3+01'), '1.2.3+01');
+  for (const input of ['v1.2.3', '1.2.3', 'release/1.2.3']) {
+    assert.throws(() => normalizeReleaseTag(input), /Invalid protected release tag/);
+  }
 });
 
 test('resolvePackageVersion derives branch versions only for supported push refs', () => {
-  assert.equal(resolvePackageVersion({ eventName: 'push', refName: 'main', runNumber: '42' }), '1.0.42');
-  assert.equal(resolvePackageVersion({ eventName: 'push', refName: 'staging', runNumber: '42' }), '1.0.42-beta');
-  assert.equal(resolvePackageVersion({ eventName: 'push', refName: 'develop', runNumber: '42' }), '1.0.42-alpha');
+  assert.equal(resolvePackageVersion({ eventName: 'push', ref: 'refs/heads/main', refType: 'branch', runNumber: '42' }), '1.0.42');
+  assert.equal(resolvePackageVersion({ eventName: 'push', ref: 'refs/heads/staging', refType: 'branch', runNumber: '42' }), '1.0.42-beta');
+  assert.equal(resolvePackageVersion({ eventName: 'push', ref: 'refs/heads/develop', refType: 'branch', runNumber: '42' }), '1.0.42-alpha');
   assert.throws(
-    () => resolvePackageVersion({ eventName: 'push', refName: 'feature/unsafe', runNumber: '42' }),
+    () => resolvePackageVersion({ eventName: 'push', ref: 'refs/heads/feature/unsafe', refType: 'branch', runNumber: '42' }),
     /Unsupported push ref/);
 });
 
-test('resolvePackageVersion normalizes all supported release-event tag forms', () => {
-  for (const releaseTag of ['release/v1.2.3', 'v1.2.3', '1.2.3']) {
-    assert.equal(
-      resolvePackageVersion({ eventName: 'release', releaseTag }),
-      '1.2.3');
+test('resolvePackageVersion accepts release events only from matching protected tags', () => {
+  assert.equal(resolvePackageVersion({
+    eventName: 'release',
+    ref: 'refs/tags/release/v1.2.3',
+    refType: 'tag',
+    releaseTag: 'release/v1.2.3',
+  }), '1.2.3');
+
+  for (const releaseTag of ['v1.2.3', '1.2.3']) {
+    assert.throws(
+      () => resolvePackageVersion({
+        eventName: 'release',
+        ref: `refs/tags/${releaseTag}`,
+        refType: 'tag',
+        releaseTag,
+      }),
+      /Invalid protected release tag/);
   }
 });
 
 test('workflow dispatch derives versions only from authorized channel or release refs', () => {
   assert.equal(
-    resolvePackageVersion({ eventName: 'workflow_dispatch', refName: 'release/v1.2.3', runNumber: '42' }),
+    resolvePackageVersion({ eventName: 'workflow_dispatch', ref: 'refs/tags/release/v1.2.3', refType: 'tag', runNumber: '42' }),
     '1.2.3');
   assert.equal(
-    resolvePackageVersion({ eventName: 'workflow_dispatch', refName: 'develop', runNumber: '42' }),
+    resolvePackageVersion({ eventName: 'workflow_dispatch', ref: 'refs/heads/develop', refType: 'branch', runNumber: '42' }),
     '1.0.42-alpha');
 });
 
-test('workflow dispatch rejects unsupported refs and explicit-version escape hatches', () => {
-  for (const refName of ['feature/unsafe', 'v1.2.3', '1.2.3']) {
+test('workflow dispatch rejects unsupported refs, namespace spoofing, and explicit-version escape hatches', () => {
+  for (const [ref, refType] of [
+    ['refs/heads/feature/unsafe', 'branch'],
+    ['refs/heads/release/v1.2.3', 'branch'],
+    ['refs/tags/main', 'tag'],
+    ['refs/tags/staging', 'tag'],
+    ['refs/tags/develop', 'tag'],
+    ['refs/tags/v1.2.3', 'tag'],
+    ['refs/tags/1.2.3', 'tag'],
+  ]) {
     assert.throws(
-      () => resolvePackageVersion({ eventName: 'workflow_dispatch', refName, runNumber: '42' }),
+      () => resolvePackageVersion({ eventName: 'workflow_dispatch', ref, refType, runNumber: '42' }),
       /Unsupported workflow_dispatch ref/);
   }
 
   assert.throws(
     () => resolvePackageVersion({
       eventName: 'workflow_dispatch',
-      refName: 'feature/manual',
+      ref: 'refs/heads/feature/manual',
+      refType: 'branch',
       requestedVersion: 'v1.2.3',
       runNumber: '42',
     }),
@@ -84,13 +106,24 @@ test('version resolution rejects invalid or malicious values', () => {
     '01.2.3',
     '1.2.3-01',
     'v1.2.3-alpha.01',
+    'release/v1.2.3-alpha.01',
   ]) {
-    assert.throws(() => normalizePackageVersion(value), /Invalid package version/);
+    assert.throws(() => normalizeReleaseTag(value), /Invalid protected release tag/);
   }
 
   assert.throws(
-    () => resolvePackageVersion({ eventName: 'push', refName: 'main', runNumber: '4;2' }),
+    () => resolvePackageVersion({ eventName: 'push', ref: 'refs/heads/main', refType: 'branch', runNumber: '4;2' }),
     /Invalid run number/);
+
+  assert.throws(
+    () => resolvePackageVersion({ eventName: 'push', ref: 'refs/tags/main', refType: 'tag', runNumber: '42' }),
+    /Unsupported push ref/);
+  assert.throws(
+    () => resolvePackageVersion({ eventName: 'release', ref: 'refs/heads/release/v1.2.3', refType: 'branch', releaseTag: 'release/v1.2.3' }),
+    /Unsupported release ref/);
+  assert.throws(
+    () => resolvePackageVersion({ eventName: 'release', ref: 'refs/tags/release/v1.2.4', refType: 'tag', releaseTag: 'release/v1.2.3' }),
+    /does not match release tag/);
 });
 
 test('version CLI writes only the normalized version and exits nonzero on invalid input', () => {
@@ -99,7 +132,8 @@ test('version CLI writes only the normalized version and exits nonzero on invali
     env: {
       ...process.env,
       EVENT_NAME: 'release',
-      REF_NAME: '',
+      REF: 'refs/tags/release/v1.2.3',
+      REF_TYPE: 'tag',
       RELEASE_TAG: 'release/v1.2.3',
       REQUESTED_VERSION: '',
       RUN_NUMBER: '42',
@@ -113,7 +147,8 @@ test('version CLI writes only the normalized version and exits nonzero on invali
     env: {
       ...process.env,
       EVENT_NAME: 'workflow_dispatch',
-      REF_NAME: 'feature/unsafe',
+      REF: 'refs/heads/feature/unsafe',
+      REF_TYPE: 'branch',
       RELEASE_TAG: '',
       REQUESTED_VERSION: '',
       RUN_NUMBER: '42',
