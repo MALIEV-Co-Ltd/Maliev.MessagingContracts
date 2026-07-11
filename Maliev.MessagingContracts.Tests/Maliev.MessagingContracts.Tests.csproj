@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\tools\Generator\Generator.csproj" />
     <ProjectReference Include="..\generated\csharp\Maliev.MessagingContracts.csproj" />
   </ItemGroup>
 

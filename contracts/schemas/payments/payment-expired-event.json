@@ -32,7 +32,8 @@
                     "type": "string"
                 },
                 "providerName": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Required provider identifier for this provider-neutral v1 expiration event"
                 },
                 "reason": {
                     "type": "string"

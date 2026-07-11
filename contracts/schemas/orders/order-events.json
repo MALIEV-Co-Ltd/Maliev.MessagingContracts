@@ -214,7 +214,8 @@
                 },
                 "providerName": {
                     "type": "string",
-                    "description": "Payment provider that completed the order payment"
+                    "default": "",
+                    "description": "Optional in v1 so historical paid-order events may omit the payment provider identifier"
                 }
             },
             "required": ["orderId", "orderNumber", "paymentId", "paidAmount", "currency", "paidAt"]
