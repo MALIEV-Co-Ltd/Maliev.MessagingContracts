@@ -379,6 +379,7 @@ namespace Generator
         private void GeneratePayloadRecord(StringBuilder sb, JsonElement schema, string typeName)
         {
             var properties = new List<(string Name, string JsonName, string Type, string Description)>();
+            var requiredProperties = GetRequiredPropertyNames(schema);
 
             if (schema.TryGetProperty("properties", out var props))
             {
@@ -457,6 +458,7 @@ namespace Generator
             var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
             sb.Append(string.Join(", ", defaultValues));
             sb.AppendLine(") { }");
+            AppendOptionalProviderNameCompatibilityMembers(sb, typeName, properties, requiredProperties);
             sb.AppendLine("    }");
         }
 
@@ -620,6 +622,7 @@ namespace Generator
         private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema)
         {
             var properties = new List<(string Name, string JsonName, string Type, string Description)>();
+            var requiredProperties = GetRequiredPropertyNames(schema);
 
             if (schema.TryGetProperty("properties", out var props))
             {
@@ -695,7 +698,114 @@ namespace Generator
             var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
             sb.Append(string.Join(", ", defaultValues));
             sb.AppendLine(") { }");
+            AppendOptionalProviderNameCompatibilityMembers(sb, typeName, properties, requiredProperties);
             sb.AppendLine("    }");
+        }
+
+        private void AppendOptionalProviderNameCompatibilityMembers(
+            StringBuilder sb,
+            string typeName,
+            IReadOnlyList<(string Name, string JsonName, string Type, string Description)> properties,
+            ISet<string> requiredProperties)
+        {
+            var providerNameIndex = -1;
+            for (var index = 0; index < properties.Count; index++)
+            {
+                if (string.Equals(properties[index].JsonName, "providerName", StringComparison.Ordinal))
+                {
+                    providerNameIndex = index;
+                    break;
+                }
+            }
+
+            if (providerNameIndex < 0 || requiredProperties.Contains("providerName"))
+            {
+                return;
+            }
+
+            var constructorProperties = properties
+                .Where((_, index) => index != providerNameIndex)
+                .ToArray();
+            if (constructorProperties.Length == 0)
+            {
+                return;
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Initializes the payload while defaulting the optional v1 ProviderName field.");
+            sb.AppendLine("        /// </summary>");
+            foreach (var property in constructorProperties)
+            {
+                var description = string.IsNullOrEmpty(property.Description)
+                    ? GenerateDescriptionFromPropertyName(property.Name)
+                    : property.Description;
+                sb.AppendLine($"        /// <param name=\"{property.Name}\">{description}</param>");
+            }
+
+            sb.Append($"        public {typeName}(");
+            sb.Append(string.Join(", ", constructorProperties.Select(property => $"{property.Type} {property.Name}")));
+            sb.Append(") : this(");
+            sb.Append(string.Join(", ", properties.Select((property, index) =>
+                index == providerNameIndex ? GetDefaultValue(property.Type) : property.Name)));
+            sb.AppendLine(") { }");
+
+            sb.AppendLine();
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Deconstructs the payload using the provider-omitting v1 shape.");
+            sb.AppendLine("        /// </summary>");
+            foreach (var property in constructorProperties)
+            {
+                var description = string.IsNullOrEmpty(property.Description)
+                    ? GenerateDescriptionFromPropertyName(property.Name)
+                    : property.Description;
+                sb.AppendLine($"        /// <param name=\"{property.Name}\">{description}</param>");
+            }
+
+            sb.Append($"        public void Deconstruct(");
+            sb.Append(string.Join(", ", constructorProperties.Select(property => $"out {property.Type} {property.Name}")));
+            sb.AppendLine(")");
+            sb.AppendLine("        {");
+            foreach (var property in constructorProperties)
+            {
+                sb.AppendLine($"            {property.Name} = this.{property.Name};");
+            }
+            sb.AppendLine("        }");
+        }
+
+        private static HashSet<string> GetRequiredPropertyNames(JsonElement schema)
+        {
+            var requiredProperties = new HashSet<string>(StringComparer.Ordinal);
+            if (!schema.TryGetProperty("required", out var requiredArray))
+            {
+                return requiredProperties;
+            }
+
+            if (requiredArray.ValueKind != JsonValueKind.Array)
+            {
+                throw new InvalidDataException(
+                    "Schema 'required' must be an array when present.");
+            }
+
+            foreach (var requiredProperty in requiredArray.EnumerateArray())
+            {
+                if (requiredProperty.ValueKind != JsonValueKind.String)
+                {
+                    throw new InvalidDataException(
+                        "Schema 'required' entries must be non-empty strings.");
+                }
+
+                var propertyName = requiredProperty.GetString();
+                if (string.IsNullOrEmpty(propertyName))
+                {
+                    throw new InvalidDataException(
+                        "Schema 'required' entries must be non-empty strings.");
+                }
+
+                requiredProperties.Add(propertyName);
+            }
+
+            return requiredProperties;
         }
 
         private async Task GenerateStandaloneMessage(StringBuilder sb, JsonElement root, string className)

@@ -16,20 +16,69 @@ on:
       - 'package-lock.json'
       - 'Maliev.MessagingContracts.slnx'
       - '.config/**'
+      - 'Directory.Build.props'
+      - 'Directory.Build.targets'
+      - 'Directory.Packages.props'
+      - 'global.json'
+      - 'NuGet.Config'
+      - 'NuGet.config'
+      - 'nuget.Config'
+      - 'nuget.config'
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Package version (e.g., 1.0.0)'
-        required: false
-        type: string
+  workflow_dispatch: {}
 
 env:
   PROJECT_PATH: 'generated/csharp/Maliev.MessagingContracts.csproj'
 
+concurrency:
+  group: publish-nuget-package
+  cancel-in-progress: false
+
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: '24'
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate AsyncAPI and schemas
+        run: npm test
+
+      - name: Restore .NET dependencies
+        run: dotnet restore Maliev.MessagingContracts.slnx
+
+      - name: Build .NET solution
+        run: dotnet build Maliev.MessagingContracts.slnx --configuration Release --no-restore
+
+      - name: Test .NET solution
+        run: dotnet test Maliev.MessagingContracts.slnx --configuration Release --no-build --no-restore
+
+      - name: Generate contracts
+        run: ./scripts/build.ps1
+        shell: pwsh
+
+      - name: Verify generated C# is current
+        run: node scripts/verify-generated-clean.cjs
+
   publish:
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -37,18 +86,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: '24'
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           dotnet-version: '10.0.x'
-
-      - name: Generate Contracts
-        run: dotnet run --project tools/Generator/Generator.csproj
-
-      - name: List generated files
-        run: ls -R generated/csharp
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
@@ -58,49 +106,40 @@ jobs:
 
       - name: Determine version
         id: version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          REF_TYPE: ${{ github.ref_type }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RUN_NUMBER: ${{ github.run_number }}
         run: |
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          elif [ "${{ github.event_name }}" == "release" ]; then
-            VERSION="${{ github.event.release.tag_name }}"
-            VERSION="${VERSION#v}"
-          else
-            # Version based on branch and run number
-            BRANCH="${{ github.ref_name }}"
-            if [ "$BRANCH" == "main" ]; then
-              # Stable release
-              VERSION="1.0.${{ github.run_number }}"
-            elif [ "$BRANCH" == "staging" ]; then
-              # Beta pre-release
-              VERSION="1.0.${{ github.run_number }}-beta"
-            elif [ "$BRANCH" == "develop" ]; then
-              # Alpha pre-release
-              VERSION="1.0.${{ github.run_number }}-alpha"
-            else
-              # Fallback
-              VERSION="1.0.${{ github.run_number }}"
-            fi
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION="$(node scripts/resolve-package-version.cjs)"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Package version: $VERSION"
 
       - name: Pack
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.version }}
         run: >
           dotnet pack ${{ env.PROJECT_PATH }}
           --configuration Release
           --no-build
-          -p:PackageVersion=${{ steps.version.outputs.version }}
+          -p:PackageVersion="$PACKAGE_VERSION"
           --output ./nupkg
 
       - name: Push to GitHub Packages
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUGET_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         run: >
           dotnet nuget push ./nupkg/*.nupkg
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
-          --api-key ${{ secrets.GITHUB_TOKEN }}
+          --source "$NUGET_SOURCE"
+          --api-key "$NUGET_AUTH_TOKEN"
           --skip-duplicate
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: nuget-package
           path: ./nupkg/*.nupkg
+          retention-days: 14

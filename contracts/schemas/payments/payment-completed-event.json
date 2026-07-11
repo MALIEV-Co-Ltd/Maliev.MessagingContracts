@@ -41,7 +41,8 @@
                 },
                 "providerName": {
                     "type": "string",
-                    "description": "Payment provider that completed the transaction"
+                    "default": "",
+                    "description": "Optional in v1 so historical payment-completed events may omit the provider identifier"
                 }
             },
             "required": [

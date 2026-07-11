@@ -32,7 +32,9 @@
                     "type": "string"
                 },
                 "providerName": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional in v1 so historical payment-created events may omit the provider identifier"
                 }
             },
             "required": [

@@ -327,24 +327,50 @@ namespace Maliev.MessagingContracts.Contracts.Orders
     /// <param name="PaidAmount">The paid Amount</param>
     /// <param name="Currency">The currency</param>
     /// <param name="PaidAt">The paid At</param>
+    /// <param name="ProviderName">Optional in v1 so historical paid-order events may omit the payment provider identifier</param>
     public record OrderPaidEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
         [property: JsonPropertyName("paidAmount")] double PaidAmount,
         [property: JsonPropertyName("currency")] string Currency,
-        [property: JsonPropertyName("paidAt")] System.DateTimeOffset PaidAt)
+        [property: JsonPropertyName("paidAt")] System.DateTimeOffset PaidAt,
+        [property: JsonPropertyName("providerName")] string ProviderName)
     {
-        /// <summary>
-        /// Payment provider that completed the order payment.
-        /// </summary>
-        [JsonPropertyName("providerName")]
-        public string ProviderName { get; init; } = string.Empty;
-
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public OrderPaidEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset)) { }
+        public OrderPaidEventPayload() : this(default(System.Guid), string.Empty, default(System.Guid), default(double), string.Empty, default(System.DateTimeOffset), string.Empty) { }
+
+        /// <summary>
+        /// Initializes the payload while defaulting the optional v1 ProviderName field.
+        /// </summary>
+        /// <param name="OrderId">The order Id</param>
+        /// <param name="OrderNumber">The order Number</param>
+        /// <param name="PaymentId">The payment Id</param>
+        /// <param name="PaidAmount">The paid Amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="PaidAt">The paid At</param>
+        public OrderPaidEventPayload(System.Guid OrderId, string OrderNumber, System.Guid PaymentId, double PaidAmount, string Currency, System.DateTimeOffset PaidAt) : this(OrderId, OrderNumber, PaymentId, PaidAmount, Currency, PaidAt, string.Empty) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="OrderId">The order Id</param>
+        /// <param name="OrderNumber">The order Number</param>
+        /// <param name="PaymentId">The payment Id</param>
+        /// <param name="PaidAmount">The paid Amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="PaidAt">The paid At</param>
+        public void Deconstruct(out System.Guid OrderId, out string OrderNumber, out System.Guid PaymentId, out double PaidAmount, out string Currency, out System.DateTimeOffset PaidAt)
+        {
+            OrderId = this.OrderId;
+            OrderNumber = this.OrderNumber;
+            PaymentId = this.PaymentId;
+            PaidAmount = this.PaidAmount;
+            Currency = this.Currency;
+            PaidAt = this.PaidAt;
+        }
     }
     /// <summary>
     /// Published when payment is completed (Accepted → Paid)

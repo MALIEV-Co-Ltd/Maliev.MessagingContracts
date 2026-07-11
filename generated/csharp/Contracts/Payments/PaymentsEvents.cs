@@ -24,7 +24,7 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <param name="Currency">The currency</param>
     /// <param name="CustomerId">The customer Id</param>
     /// <param name="OrderId">The order Id</param>
-    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ProviderName">Required provider identifier for this provider-neutral v1 cancellation event</param>
     /// <param name="Reason">The reason</param>
     /// <param name="ProviderEventCode">The provider Event Code</param>
     /// <param name="CancelledAt">The cancelled At</param>
@@ -88,24 +88,50 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <param name="PaymentId">Unique identifier of the payment</param>
     /// <param name="Amount">Amount paid</param>
     /// <param name="Currency">Currency code (ISO 4217)</param>
+    /// <param name="ProviderName">Optional in v1 so historical payment-completed events may omit the provider identifier</param>
     public record PaymentCompletedEventPayload(
         [property: JsonPropertyName("orderId")] System.Guid OrderId,
         [property: JsonPropertyName("orderNumber")] string OrderNumber,
         [property: JsonPropertyName("customerId")] string CustomerId,
         [property: JsonPropertyName("paymentId")] System.Guid PaymentId,
         [property: JsonPropertyName("amount")] double Amount,
-        [property: JsonPropertyName("currency")] string Currency)
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("providerName")] string ProviderName)
     {
-        /// <summary>
-        /// Payment provider that completed the transaction.
-        /// </summary>
-        [JsonPropertyName("providerName")]
-        public string ProviderName { get; init; } = string.Empty;
-
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.Guid), default(double), string.Empty) { }
+        public PaymentCompletedEventPayload() : this(default(System.Guid), string.Empty, string.Empty, default(System.Guid), default(double), string.Empty, string.Empty) { }
+
+        /// <summary>
+        /// Initializes the payload while defaulting the optional v1 ProviderName field.
+        /// </summary>
+        /// <param name="OrderId">Unique identifier of the order</param>
+        /// <param name="OrderNumber">Human-readable order number</param>
+        /// <param name="CustomerId">Customer identifier associated with the paid order</param>
+        /// <param name="PaymentId">Unique identifier of the payment</param>
+        /// <param name="Amount">Amount paid</param>
+        /// <param name="Currency">Currency code (ISO 4217)</param>
+        public PaymentCompletedEventPayload(System.Guid OrderId, string OrderNumber, string CustomerId, System.Guid PaymentId, double Amount, string Currency) : this(OrderId, OrderNumber, CustomerId, PaymentId, Amount, Currency, string.Empty) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="OrderId">Unique identifier of the order</param>
+        /// <param name="OrderNumber">Human-readable order number</param>
+        /// <param name="CustomerId">Customer identifier associated with the paid order</param>
+        /// <param name="PaymentId">Unique identifier of the payment</param>
+        /// <param name="Amount">Amount paid</param>
+        /// <param name="Currency">Currency code (ISO 4217)</param>
+        public void Deconstruct(out System.Guid OrderId, out string OrderNumber, out string CustomerId, out System.Guid PaymentId, out double Amount, out string Currency)
+        {
+            OrderId = this.OrderId;
+            OrderNumber = this.OrderNumber;
+            CustomerId = this.CustomerId;
+            PaymentId = this.PaymentId;
+            Amount = this.Amount;
+            Currency = this.Currency;
+        }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -150,7 +176,7 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <param name="Currency">The currency</param>
     /// <param name="CustomerId">The customer Id</param>
     /// <param name="OrderId">The order Id</param>
-    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ProviderName">Optional in v1 so historical payment-created events may omit the provider identifier</param>
     public record PaymentCreatedEventPayload(
         [property: JsonPropertyName("transactionId")] System.Guid TransactionId,
         [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
@@ -164,6 +190,36 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// Parameterless constructor for deserialization.
         /// </summary>
         public PaymentCreatedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty) { }
+
+        /// <summary>
+        /// Initializes the payload while defaulting the optional v1 ProviderName field.
+        /// </summary>
+        /// <param name="TransactionId">The transaction Id</param>
+        /// <param name="IdempotencyKey">The idempotency Key</param>
+        /// <param name="Amount">The amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="CustomerId">The customer Id</param>
+        /// <param name="OrderId">The order Id</param>
+        public PaymentCreatedEventPayload(System.Guid TransactionId, string IdempotencyKey, double Amount, string Currency, string CustomerId, string OrderId) : this(TransactionId, IdempotencyKey, Amount, Currency, CustomerId, OrderId, string.Empty) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="TransactionId">The transaction Id</param>
+        /// <param name="IdempotencyKey">The idempotency Key</param>
+        /// <param name="Amount">The amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="CustomerId">The customer Id</param>
+        /// <param name="OrderId">The order Id</param>
+        public void Deconstruct(out System.Guid TransactionId, out string IdempotencyKey, out double Amount, out string Currency, out string CustomerId, out string OrderId)
+        {
+            TransactionId = this.TransactionId;
+            IdempotencyKey = this.IdempotencyKey;
+            Amount = this.Amount;
+            Currency = this.Currency;
+            CustomerId = this.CustomerId;
+            OrderId = this.OrderId;
+        }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -208,7 +264,7 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <param name="Currency">The currency</param>
     /// <param name="CustomerId">The customer Id</param>
     /// <param name="OrderId">The order Id</param>
-    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ProviderName">Required provider identifier for this provider-neutral v1 expiration event</param>
     /// <param name="Reason">The reason</param>
     /// <param name="ProviderEventCode">The provider Event Code</param>
     /// <param name="ExpiredAt">The expired At</param>
@@ -272,7 +328,7 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <param name="Currency">The currency</param>
     /// <param name="CustomerId">The customer Id</param>
     /// <param name="OrderId">The order Id</param>
-    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ProviderName">Optional in v1 so historical payment-failed events may omit the provider identifier</param>
     /// <param name="ErrorMessage">The error Message</param>
     /// <param name="ProviderErrorCode">The provider Error Code</param>
     /// <param name="FailedAt">The failed At</param>
@@ -292,6 +348,45 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// Parameterless constructor for deserialization.
         /// </summary>
         public PaymentFailedEventPayload() : this(default(System.Guid), string.Empty, default(double), string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, default(System.DateTimeOffset)) { }
+
+        /// <summary>
+        /// Initializes the payload while defaulting the optional v1 ProviderName field.
+        /// </summary>
+        /// <param name="TransactionId">The transaction Id</param>
+        /// <param name="IdempotencyKey">The idempotency Key</param>
+        /// <param name="Amount">The amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="CustomerId">The customer Id</param>
+        /// <param name="OrderId">The order Id</param>
+        /// <param name="ErrorMessage">The error Message</param>
+        /// <param name="ProviderErrorCode">The provider Error Code</param>
+        /// <param name="FailedAt">The failed At</param>
+        public PaymentFailedEventPayload(System.Guid TransactionId, string IdempotencyKey, double Amount, string Currency, string CustomerId, string OrderId, string ErrorMessage, string ProviderErrorCode, System.DateTimeOffset FailedAt) : this(TransactionId, IdempotencyKey, Amount, Currency, CustomerId, OrderId, string.Empty, ErrorMessage, ProviderErrorCode, FailedAt) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="TransactionId">The transaction Id</param>
+        /// <param name="IdempotencyKey">The idempotency Key</param>
+        /// <param name="Amount">The amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="CustomerId">The customer Id</param>
+        /// <param name="OrderId">The order Id</param>
+        /// <param name="ErrorMessage">The error Message</param>
+        /// <param name="ProviderErrorCode">The provider Error Code</param>
+        /// <param name="FailedAt">The failed At</param>
+        public void Deconstruct(out System.Guid TransactionId, out string IdempotencyKey, out double Amount, out string Currency, out string CustomerId, out string OrderId, out string ErrorMessage, out string ProviderErrorCode, out System.DateTimeOffset FailedAt)
+        {
+            TransactionId = this.TransactionId;
+            IdempotencyKey = this.IdempotencyKey;
+            Amount = this.Amount;
+            Currency = this.Currency;
+            CustomerId = this.CustomerId;
+            OrderId = this.OrderId;
+            ErrorMessage = this.ErrorMessage;
+            ProviderErrorCode = this.ProviderErrorCode;
+            FailedAt = this.FailedAt;
+        }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -336,7 +431,7 @@ namespace Maliev.MessagingContracts.Contracts.Payments
     /// <param name="Currency">The currency</param>
     /// <param name="CustomerId">The customer Id</param>
     /// <param name="OrderId">The order Id</param>
-    /// <param name="ProviderName">The provider Name</param>
+    /// <param name="ProviderName">Required provider identifier for this provider-neutral v1 pending event</param>
     /// <param name="ProviderEventCode">The provider Event Code</param>
     /// <param name="PendingAt">The pending At</param>
     public record PaymentPendingEventPayload(
