@@ -47,6 +47,200 @@ public class ProviderNameContractTests
     }
 
     /// <summary>
+    /// Optional ProviderName payloads retain the full package Deconstruct and the exact provider-omitting shape.
+    /// </summary>
+    [Fact]
+    public void OptionalProviderNamePayload_DeconstructSignaturesPreserveBothApiShapes()
+    {
+        AssertDeconstructSignatures(
+            typeof(PaymentCreatedEventPayload),
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string)),
+                new("ProviderName", typeof(string))
+            ],
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string))
+            ]);
+        AssertDeconstructSignatures(
+            typeof(PaymentCompletedEventPayload),
+            [
+                new("OrderId", typeof(Guid)),
+                new("OrderNumber", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("PaymentId", typeof(Guid)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("ProviderName", typeof(string))
+            ],
+            [
+                new("OrderId", typeof(Guid)),
+                new("OrderNumber", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("PaymentId", typeof(Guid)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string))
+            ]);
+        AssertDeconstructSignatures(
+            typeof(PaymentFailedEventPayload),
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string)),
+                new("ProviderName", typeof(string)),
+                new("ErrorMessage", typeof(string)),
+                new("ProviderErrorCode", typeof(string)),
+                new("FailedAt", typeof(DateTimeOffset))
+            ],
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string)),
+                new("ErrorMessage", typeof(string)),
+                new("ProviderErrorCode", typeof(string)),
+                new("FailedAt", typeof(DateTimeOffset))
+            ]);
+        AssertDeconstructSignatures(
+            typeof(OrderPaidEventPayload),
+            [
+                new("OrderId", typeof(Guid)),
+                new("OrderNumber", typeof(string)),
+                new("PaymentId", typeof(Guid)),
+                new("PaidAmount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("PaidAt", typeof(DateTimeOffset)),
+                new("ProviderName", typeof(string))
+            ],
+            [
+                new("OrderId", typeof(Guid)),
+                new("OrderNumber", typeof(string)),
+                new("PaymentId", typeof(Guid)),
+                new("PaidAmount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("PaidAt", typeof(DateTimeOffset))
+            ]);
+    }
+
+    /// <summary>
+    /// Required ProviderName payloads expose only their full compiler-generated Deconstruct signature.
+    /// </summary>
+    [Fact]
+    public void RequiredProviderNamePayload_DeconstructSignaturesRemainFullOnly()
+    {
+        AssertSingleDeconstructSignature(
+            typeof(PaymentCancelledEventPayload),
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string)),
+                new("ProviderName", typeof(string)),
+                new("Reason", typeof(string)),
+                new("ProviderEventCode", typeof(string)),
+                new("CancelledAt", typeof(DateTimeOffset))
+            ]);
+        AssertSingleDeconstructSignature(
+            typeof(PaymentExpiredEventPayload),
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string)),
+                new("ProviderName", typeof(string)),
+                new("Reason", typeof(string)),
+                new("ProviderEventCode", typeof(string)),
+                new("ExpiredAt", typeof(DateTimeOffset))
+            ]);
+        AssertSingleDeconstructSignature(
+            typeof(PaymentPendingEventPayload),
+            [
+                new("TransactionId", typeof(Guid)),
+                new("IdempotencyKey", typeof(string)),
+                new("Amount", typeof(double)),
+                new("Currency", typeof(string)),
+                new("CustomerId", typeof(string)),
+                new("OrderId", typeof(string)),
+                new("ProviderName", typeof(string)),
+                new("ProviderEventCode", typeof(string)),
+                new("PendingAt", typeof(DateTimeOffset))
+            ]);
+    }
+
+    /// <summary>
+    /// The legacy PaymentCompleted deconstruction remains source-compatible and ordered.
+    /// </summary>
+    [Fact]
+    public void PaymentCompletedEventPayload_LegacyDeconstruction_CompilesInOriginalOrder()
+    {
+        var expectedOrderId = Guid.NewGuid();
+        var expectedPaymentId = Guid.NewGuid();
+        var payload = new PaymentCompletedEventPayload(
+            expectedOrderId,
+            "ORD-1001",
+            "customer-1001",
+            expectedPaymentId,
+            1500,
+            "THB",
+            "omise");
+
+        var (orderId, orderNumber, customerId, paymentId, amount, currency) = payload;
+
+        Assert.Equal(expectedOrderId, orderId);
+        Assert.Equal("ORD-1001", orderNumber);
+        Assert.Equal("customer-1001", customerId);
+        Assert.Equal(expectedPaymentId, paymentId);
+        Assert.Equal(1500, amount);
+        Assert.Equal("THB", currency);
+    }
+
+    /// <summary>
+    /// The legacy OrderPaid deconstruction remains source-compatible and ordered.
+    /// </summary>
+    [Fact]
+    public void OrderPaidEventPayload_LegacyDeconstruction_CompilesInOriginalOrder()
+    {
+        var expectedOrderId = Guid.NewGuid();
+        var expectedPaymentId = Guid.NewGuid();
+        var expectedPaidAt = DateTimeOffset.UtcNow;
+        var payload = new OrderPaidEventPayload(
+            expectedOrderId,
+            "ORD-1001",
+            expectedPaymentId,
+            1500,
+            "THB",
+            expectedPaidAt,
+            "omise");
+
+        var (orderId, orderNumber, paymentId, paidAmount, currency, paidAt) = payload;
+
+        Assert.Equal(expectedOrderId, orderId);
+        Assert.Equal("ORD-1001", orderNumber);
+        Assert.Equal(expectedPaymentId, paymentId);
+        Assert.Equal(1500, paidAmount);
+        Assert.Equal("THB", currency);
+        Assert.Equal(expectedPaidAt, paidAt);
+    }
+
+    /// <summary>
     /// Optional ProviderName schemas explicitly document their v1 default and required schemas remain strict.
     /// </summary>
     [Theory]
@@ -110,6 +304,32 @@ public class ProviderNameContractTests
     }
 
     /// <summary>
+    /// Existing OrderPaid v1 JSON without ProviderName still deserializes with the canonical default.
+    /// </summary>
+    [Fact]
+    public void OrderPaidEventPayload_OmittedProviderName_PreservesV1JsonCompatibility()
+    {
+        var withoutProviderName = $$"""
+            {
+              "orderId": "{{Guid.NewGuid():D}}",
+              "orderNumber": "ORD-1001",
+              "paymentId": "{{Guid.NewGuid():D}}",
+              "paidAmount": 1500.0,
+              "currency": "THB",
+              "paidAt": "{{DateTimeOffset.UtcNow:O}}"
+            }
+            """;
+
+        var deserialized = JsonSerializer.Deserialize<OrderPaidEventPayload>(withoutProviderName);
+        Assert.NotNull(deserialized);
+        Assert.Equal(string.Empty, deserialized.ProviderName);
+
+        var json = JsonSerializer.Serialize(deserialized with { ProviderName = "omise" });
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal("omise", document.RootElement.GetProperty("providerName").GetString());
+    }
+
+    /// <summary>
     /// Gets payloads where ProviderName is optional for v1 compatibility.
     /// </summary>
     public static IEnumerable<object[]> OptionalProviderNamePayloadTypes()
@@ -148,6 +368,55 @@ public class ProviderNameContractTests
         constructor.GetParameters().Any(parameter =>
             string.Equals(parameter.Name, "ProviderName", StringComparison.OrdinalIgnoreCase));
 
+    private static void AssertDeconstructSignatures(
+        Type payloadType,
+        ParameterSignature[] fullSignature,
+        ParameterSignature[] compatibilitySignature)
+    {
+        var methods = GetDeclaredDeconstructMethods(payloadType);
+
+        Assert.Equal(2, methods.Length);
+        Assert.Contains(methods, method => HasExactSignature(method, fullSignature));
+        Assert.Contains(methods, method => HasExactSignature(method, compatibilitySignature));
+    }
+
+    private static void AssertSingleDeconstructSignature(Type payloadType, ParameterSignature[] expectedSignature)
+    {
+        var method = Assert.Single(GetDeclaredDeconstructMethods(payloadType));
+
+        Assert.True(
+            HasExactSignature(method, expectedSignature),
+            $"{payloadType.Name}.Deconstruct does not match the expected full signature.");
+    }
+
+    private static MethodInfo[] GetDeclaredDeconstructMethods(Type payloadType) =>
+        payloadType
+            .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+            .Where(method => string.Equals(method.Name, "Deconstruct", StringComparison.Ordinal))
+            .ToArray();
+
+    private static bool HasExactSignature(MethodInfo method, ParameterSignature[] expectedSignature)
+    {
+        var parameters = method.GetParameters();
+        if (method.ReturnType != typeof(void) || parameters.Length != expectedSignature.Length)
+        {
+            return false;
+        }
+
+        for (var index = 0; index < parameters.Length; index++)
+        {
+            var actualType = parameters[index].ParameterType.GetElementType();
+            if (!parameters[index].IsOut ||
+                actualType != expectedSignature[index].Type ||
+                !string.Equals(parameters[index].Name, expectedSignature[index].Name, StringComparison.Ordinal))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static string FindSchemaRoot()
     {
         var current = Directory.GetCurrentDirectory();
@@ -160,4 +429,6 @@ public class ProviderNameContractTests
             ? Path.Combine(current, "contracts", "schemas")
             : throw new DirectoryNotFoundException("Could not locate contracts/schemas.");
     }
+
+    private readonly record struct ParameterSignature(string Name, Type Type);
 }

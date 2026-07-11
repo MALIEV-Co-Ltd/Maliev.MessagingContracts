@@ -28,10 +28,10 @@ public class GeneratorTests
                 "RequiredProviderEvent": {
                   "type": "object",
                   "properties": {
-                    "requiredId": { "type": "string", "format": "uuid" },
+                    "requiredEventId": { "type": "string", "format": "uuid" },
                     "providerName": { "type": "string" }
                   },
-                  "required": ["requiredId", "providerName"]
+                  "required": ["requiredEventId", "providerName"]
                 }
               }
             }
@@ -44,7 +44,19 @@ public class GeneratorTests
             source,
             StringComparison.Ordinal);
         Assert.DoesNotContain(
-            "public RequiredProviderEventPayload(System.Guid RequiredId) :",
+            "public RequiredProviderEventPayload(System.Guid RequiredEventId) :",
+            source,
+            StringComparison.Ordinal);
+        Assert.Contains(
+            "public void Deconstruct(out System.Guid RequiredId)",
+            source,
+            StringComparison.Ordinal);
+        Assert.Contains(
+            "RequiredId = this.RequiredId;",
+            source,
+            StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            "public void Deconstruct(out System.Guid RequiredEventId)",
             source,
             StringComparison.Ordinal);
     }
@@ -80,6 +92,40 @@ public class GeneratorTests
         Assert.Contains(
             "public OptionalProviderEventPayload(System.Guid RequiredId) : this(RequiredId, string.Empty) { }",
             source,
+            StringComparison.Ordinal);
+        Assert.Contains(
+            "public void Deconstruct(out System.Guid RequiredId)",
+            source,
+            StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Malformed non-string required entries fail closed before optional compatibility members are emitted.
+    /// </summary>
+    [Fact]
+    public async Task GenerateAsync_RequiredArrayContainsNonStringEntry_ThrowsClearSchemaError()
+    {
+        const string schema = """
+            {
+              "definitions": {
+                "MalformedRequiredEvent": {
+                  "type": "object",
+                  "properties": {
+                    "requiredId": { "type": "string", "format": "uuid" },
+                    "providerName": { "type": "string", "default": "" }
+                  },
+                  "required": ["requiredId", 42]
+                }
+              }
+            }
+            """;
+
+        var exception = await Assert.ThrowsAsync<InvalidDataException>(
+            () => GenerateDomainAsync("orders", "malformed-required-event.json", schema));
+
+        Assert.Contains(
+            "Schema 'required' entries must be non-empty strings.",
+            exception.Message,
             StringComparison.Ordinal);
     }
 

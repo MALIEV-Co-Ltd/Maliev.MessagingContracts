@@ -458,7 +458,7 @@ namespace Generator
             var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
             sb.Append(string.Join(", ", defaultValues));
             sb.AppendLine(") { }");
-            AppendOptionalProviderNameConstructor(sb, typeName, properties, requiredProperties);
+            AppendOptionalProviderNameCompatibilityMembers(sb, typeName, properties, requiredProperties);
             sb.AppendLine("    }");
         }
 
@@ -698,11 +698,11 @@ namespace Generator
             var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
             sb.Append(string.Join(", ", defaultValues));
             sb.AppendLine(") { }");
-            AppendOptionalProviderNameConstructor(sb, typeName, properties, requiredProperties);
+            AppendOptionalProviderNameCompatibilityMembers(sb, typeName, properties, requiredProperties);
             sb.AppendLine("    }");
         }
 
-        private void AppendOptionalProviderNameConstructor(
+        private void AppendOptionalProviderNameCompatibilityMembers(
             StringBuilder sb,
             string typeName,
             IReadOnlyList<(string Name, string JsonName, string Type, string Description)> properties,
@@ -749,6 +749,28 @@ namespace Generator
             sb.Append(string.Join(", ", properties.Select((property, index) =>
                 index == providerNameIndex ? GetDefaultValue(property.Type) : property.Name)));
             sb.AppendLine(") { }");
+
+            sb.AppendLine();
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Deconstructs the payload using the provider-omitting v1 shape.");
+            sb.AppendLine("        /// </summary>");
+            foreach (var property in constructorProperties)
+            {
+                var description = string.IsNullOrEmpty(property.Description)
+                    ? GenerateDescriptionFromPropertyName(property.Name)
+                    : property.Description;
+                sb.AppendLine($"        /// <param name=\"{property.Name}\">{description}</param>");
+            }
+
+            sb.Append($"        public void Deconstruct(");
+            sb.Append(string.Join(", ", constructorProperties.Select(property => $"out {property.Type} {property.Name}")));
+            sb.AppendLine(")");
+            sb.AppendLine("        {");
+            foreach (var property in constructorProperties)
+            {
+                sb.AppendLine($"            {property.Name} = this.{property.Name};");
+            }
+            sb.AppendLine("        }");
         }
 
         private static HashSet<string> GetRequiredPropertyNames(JsonElement schema)
@@ -762,11 +784,20 @@ namespace Generator
 
             foreach (var requiredProperty in requiredArray.EnumerateArray())
             {
-                var propertyName = requiredProperty.GetString();
-                if (!string.IsNullOrEmpty(propertyName))
+                if (requiredProperty.ValueKind != JsonValueKind.String)
                 {
-                    requiredProperties.Add(propertyName);
+                    throw new InvalidDataException(
+                        "Schema 'required' entries must be non-empty strings.");
                 }
+
+                var propertyName = requiredProperty.GetString();
+                if (string.IsNullOrEmpty(propertyName))
+                {
+                    throw new InvalidDataException(
+                        "Schema 'required' entries must be non-empty strings.");
+                }
+
+                requiredProperties.Add(propertyName);
             }
 
             return requiredProperties;

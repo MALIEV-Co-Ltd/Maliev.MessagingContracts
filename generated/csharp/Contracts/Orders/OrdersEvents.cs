@@ -352,6 +352,25 @@ namespace Maliev.MessagingContracts.Contracts.Orders
         /// <param name="Currency">The currency</param>
         /// <param name="PaidAt">The paid At</param>
         public OrderPaidEventPayload(System.Guid OrderId, string OrderNumber, System.Guid PaymentId, double PaidAmount, string Currency, System.DateTimeOffset PaidAt) : this(OrderId, OrderNumber, PaymentId, PaidAmount, Currency, PaidAt, string.Empty) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="OrderId">The order Id</param>
+        /// <param name="OrderNumber">The order Number</param>
+        /// <param name="PaymentId">The payment Id</param>
+        /// <param name="PaidAmount">The paid Amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="PaidAt">The paid At</param>
+        public void Deconstruct(out System.Guid OrderId, out string OrderNumber, out System.Guid PaymentId, out double PaidAmount, out string Currency, out System.DateTimeOffset PaidAt)
+        {
+            OrderId = this.OrderId;
+            OrderNumber = this.OrderNumber;
+            PaymentId = this.PaymentId;
+            PaidAmount = this.PaidAmount;
+            Currency = this.Currency;
+            PaidAt = this.PaidAt;
+        }
     }
     /// <summary>
     /// Published when payment is completed (Accepted → Paid)

@@ -113,6 +113,25 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// <param name="Amount">Amount paid</param>
         /// <param name="Currency">Currency code (ISO 4217)</param>
         public PaymentCompletedEventPayload(System.Guid OrderId, string OrderNumber, string CustomerId, System.Guid PaymentId, double Amount, string Currency) : this(OrderId, OrderNumber, CustomerId, PaymentId, Amount, Currency, string.Empty) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="OrderId">Unique identifier of the order</param>
+        /// <param name="OrderNumber">Human-readable order number</param>
+        /// <param name="CustomerId">Customer identifier associated with the paid order</param>
+        /// <param name="PaymentId">Unique identifier of the payment</param>
+        /// <param name="Amount">Amount paid</param>
+        /// <param name="Currency">Currency code (ISO 4217)</param>
+        public void Deconstruct(out System.Guid OrderId, out string OrderNumber, out string CustomerId, out System.Guid PaymentId, out double Amount, out string Currency)
+        {
+            OrderId = this.OrderId;
+            OrderNumber = this.OrderNumber;
+            CustomerId = this.CustomerId;
+            PaymentId = this.PaymentId;
+            Amount = this.Amount;
+            Currency = this.Currency;
+        }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -182,6 +201,25 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// <param name="CustomerId">The customer Id</param>
         /// <param name="OrderId">The order Id</param>
         public PaymentCreatedEventPayload(System.Guid TransactionId, string IdempotencyKey, double Amount, string Currency, string CustomerId, string OrderId) : this(TransactionId, IdempotencyKey, Amount, Currency, CustomerId, OrderId, string.Empty) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="TransactionId">The transaction Id</param>
+        /// <param name="IdempotencyKey">The idempotency Key</param>
+        /// <param name="Amount">The amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="CustomerId">The customer Id</param>
+        /// <param name="OrderId">The order Id</param>
+        public void Deconstruct(out System.Guid TransactionId, out string IdempotencyKey, out double Amount, out string Currency, out string CustomerId, out string OrderId)
+        {
+            TransactionId = this.TransactionId;
+            IdempotencyKey = this.IdempotencyKey;
+            Amount = this.Amount;
+            Currency = this.Currency;
+            CustomerId = this.CustomerId;
+            OrderId = this.OrderId;
+        }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
@@ -324,6 +362,31 @@ namespace Maliev.MessagingContracts.Contracts.Payments
         /// <param name="ProviderErrorCode">The provider Error Code</param>
         /// <param name="FailedAt">The failed At</param>
         public PaymentFailedEventPayload(System.Guid TransactionId, string IdempotencyKey, double Amount, string Currency, string CustomerId, string OrderId, string ErrorMessage, string ProviderErrorCode, System.DateTimeOffset FailedAt) : this(TransactionId, IdempotencyKey, Amount, Currency, CustomerId, OrderId, string.Empty, ErrorMessage, ProviderErrorCode, FailedAt) { }
+
+        /// <summary>
+        /// Deconstructs the payload using the provider-omitting v1 shape.
+        /// </summary>
+        /// <param name="TransactionId">The transaction Id</param>
+        /// <param name="IdempotencyKey">The idempotency Key</param>
+        /// <param name="Amount">The amount</param>
+        /// <param name="Currency">The currency</param>
+        /// <param name="CustomerId">The customer Id</param>
+        /// <param name="OrderId">The order Id</param>
+        /// <param name="ErrorMessage">The error Message</param>
+        /// <param name="ProviderErrorCode">The provider Error Code</param>
+        /// <param name="FailedAt">The failed At</param>
+        public void Deconstruct(out System.Guid TransactionId, out string IdempotencyKey, out double Amount, out string Currency, out string CustomerId, out string OrderId, out string ErrorMessage, out string ProviderErrorCode, out System.DateTimeOffset FailedAt)
+        {
+            TransactionId = this.TransactionId;
+            IdempotencyKey = this.IdempotencyKey;
+            Amount = this.Amount;
+            Currency = this.Currency;
+            CustomerId = this.CustomerId;
+            OrderId = this.OrderId;
+            ErrorMessage = this.ErrorMessage;
+            ProviderErrorCode = this.ProviderErrorCode;
+            FailedAt = this.FailedAt;
+        }
     }
     /// <param name="MessageId">Unique identifier for the message.</param>
     /// <param name="MessageName">Descriptive name of the message.</param>
