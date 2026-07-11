@@ -36,39 +36,38 @@ test('resolvePackageVersion derives branch versions only for supported push refs
     /Unsupported push ref/);
 });
 
-test('resolvePackageVersion normalizes release tags and explicit dispatch versions', () => {
-  assert.equal(
-    resolvePackageVersion({ eventName: 'release', releaseTag: 'release/v1.2.3' }),
-    '1.2.3');
-  assert.equal(
-    resolvePackageVersion({
-      eventName: 'workflow_dispatch',
-      refName: 'feature/manual',
-      requestedVersion: 'v1.2.3',
-    }),
-    '1.2.3');
-});
-
-test('workflow dispatch without an explicit version accepts supported version refs', () => {
-  for (const refName of ['release/v1.2.3', 'v1.2.3', '1.2.3']) {
+test('resolvePackageVersion normalizes all supported release-event tag forms', () => {
+  for (const releaseTag of ['release/v1.2.3', 'v1.2.3', '1.2.3']) {
     assert.equal(
-      resolvePackageVersion({ eventName: 'workflow_dispatch', refName, runNumber: '42' }),
+      resolvePackageVersion({ eventName: 'release', releaseTag }),
       '1.2.3');
   }
+});
 
+test('workflow dispatch derives versions only from authorized channel or release refs', () => {
+  assert.equal(
+    resolvePackageVersion({ eventName: 'workflow_dispatch', refName: 'release/v1.2.3', runNumber: '42' }),
+    '1.2.3');
   assert.equal(
     resolvePackageVersion({ eventName: 'workflow_dispatch', refName: 'develop', runNumber: '42' }),
     '1.0.42-alpha');
 });
 
-test('workflow dispatch without an explicit version rejects unsupported refs', () => {
+test('workflow dispatch rejects unsupported refs and explicit-version escape hatches', () => {
+  for (const refName of ['feature/unsafe', 'v1.2.3', '1.2.3']) {
+    assert.throws(
+      () => resolvePackageVersion({ eventName: 'workflow_dispatch', refName, runNumber: '42' }),
+      /Unsupported workflow_dispatch ref/);
+  }
+
   assert.throws(
     () => resolvePackageVersion({
       eventName: 'workflow_dispatch',
-      refName: 'feature/unsafe',
+      refName: 'feature/manual',
+      requestedVersion: 'v1.2.3',
       runNumber: '42',
     }),
-    /Unsupported workflow_dispatch ref/);
+    /Explicit package versions are not supported/);
 });
 
 test('version resolution rejects invalid or malicious values', () => {

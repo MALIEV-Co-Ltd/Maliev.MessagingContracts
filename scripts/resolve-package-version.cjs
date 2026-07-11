@@ -37,14 +37,14 @@ function versionForBranch(eventName, refName, runNumber) {
     }
 
     if (eventName === "workflow_dispatch") {
-        try {
+        if (refName.startsWith("release/v")) {
             return normalizePackageVersion(refName);
-        } catch {
-            throw new Error(
-                `Unsupported workflow_dispatch ref: ${JSON.stringify(refName)}. ` +
-                "Provide an explicit version or use main, staging, develop, release/vX.Y.Z, vX.Y.Z, or X.Y.Z."
-            );
         }
+
+        throw new Error(
+            `Unsupported workflow_dispatch ref: ${JSON.stringify(refName)}. ` +
+            "Use main, staging, develop, or release/vX.Y.Z."
+        );
     }
 
     throw new Error(`Unsupported ${eventName} ref: ${JSON.stringify(refName)}.`);
@@ -58,11 +58,9 @@ function resolvePackageVersion({
     runNumber = ""
 }) {
     if (requestedVersion !== "") {
-        if (eventName !== "workflow_dispatch") {
-            throw new Error("An explicit package version is supported only for workflow_dispatch.");
-        }
-
-        return normalizePackageVersion(requestedVersion);
+        throw new Error(
+            "Explicit package versions are not supported; select an authorized branch or release/vX.Y.Z ref."
+        );
     }
 
     if (eventName === "release") {
