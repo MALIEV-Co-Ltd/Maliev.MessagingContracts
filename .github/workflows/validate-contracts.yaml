@@ -9,28 +9,54 @@ on:
       - 'contracts/**'
       - 'asyncapi/**'
       - 'topology/**'
+      - 'generated/csharp/**'
+      - 'tools/Generator/**'
+      - 'Maliev.MessagingContracts.Tests/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'Maliev.MessagingContracts.slnx'
+      - '.github/workflows/validate-contracts.yaml'
+      - '.github/workflows/publish.yaml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: '18'
+          node-version: '24'
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: '10.0.x'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Validate AsyncAPI and schemas
+        run: npm test
 
       - name: Detect Schema Changes
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
           # Only check if base_ref is available (pull requests)
-          if [ -n "${{ github.base_ref }}" ]; then
-            git diff --quiet origin/${{ github.base_ref }} -- contracts/schemas/ || {
+          if [ -n "$BASE_REF" ]; then
+            git diff --quiet "origin/$BASE_REF" -- contracts/schemas/ || {
               echo "::warning::Schema changes detected. Ensure messageVersion is incremented if this were a production environment."
             }
           fi
@@ -40,5 +66,18 @@ jobs:
         run: ./scripts/validate-consumers.ps1
         shell: pwsh
 
-      - name: Validate AsyncAPI
-        run: npm test
+      - name: Restore .NET dependencies
+        run: dotnet restore Maliev.MessagingContracts.slnx
+
+      - name: Build .NET solution
+        run: dotnet build Maliev.MessagingContracts.slnx --configuration Release --no-restore
+
+      - name: Test .NET solution
+        run: dotnet test Maliev.MessagingContracts.slnx --configuration Release --no-build --no-restore
+
+      - name: Generate contracts
+        run: ./scripts/build.ps1
+        shell: pwsh
+
+      - name: Verify generated C# is current
+        run: git diff --exit-code -- generated/csharp
