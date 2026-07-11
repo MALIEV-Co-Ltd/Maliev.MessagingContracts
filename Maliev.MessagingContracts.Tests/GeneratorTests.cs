@@ -100,6 +100,39 @@ public class GeneratorTests
     }
 
     /// <summary>
+    /// A present required keyword must be an array; wrong container kinds fail closed.
+    /// </summary>
+    [Theory]
+    [InlineData("null")]
+    [InlineData("{ }")]
+    [InlineData("\"requiredId\"")]
+    public async Task GenerateAsync_RequiredUsesWrongContainerKind_ThrowsClearSchemaError(string requiredJson)
+    {
+        var schema = $$"""
+            {
+              "definitions": {
+                "MalformedRequiredEvent": {
+                  "type": "object",
+                  "properties": {
+                    "requiredId": { "type": "string", "format": "uuid" },
+                    "providerName": { "type": "string", "default": "" }
+                  },
+                  "required": {{requiredJson}}
+                }
+              }
+            }
+            """;
+
+        var exception = await Assert.ThrowsAsync<InvalidDataException>(
+            () => GenerateDomainAsync("orders", "malformed-required-event.json", schema));
+
+        Assert.Contains(
+            "Schema 'required' must be an array when present.",
+            exception.Message,
+            StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// Malformed non-string required entries fail closed before optional compatibility members are emitted.
     /// </summary>
     [Fact]

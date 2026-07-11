@@ -13,37 +13,35 @@ public class ProviderNameContractTests
     private static readonly string SchemaRoot = FindSchemaRoot();
 
     /// <summary>
-    /// Payloads whose v1 schema makes ProviderName optional support both constructor shapes.
+    /// Optional ProviderName payload constructors exactly match their full and compatibility API shapes.
     /// </summary>
     [Theory]
     [MemberData(nameof(OptionalProviderNamePayloadTypes))]
-    public void OptionalProviderNamePayload_ExposesConstructorsWithAndWithoutProviderName(Type payloadType)
+    public void OptionalProviderNamePayload_ConstructorsMatchExactDeconstructSignatures(Type payloadType)
     {
-        var constructors = payloadType
-            .GetConstructors(BindingFlags.Instance | BindingFlags.Public)
-            .Where(constructor => constructor.GetParameters().Length > 0)
-            .ToArray();
+        var constructors = GetNonDefaultConstructors(payloadType);
+        var deconstructMethods = GetDeclaredDeconstructMethods(payloadType);
 
-        Assert.Contains(constructors, HasProviderNameParameter);
-        Assert.Contains(constructors, constructor => !HasProviderNameParameter(constructor));
+        Assert.Equal(2, constructors.Length);
+        Assert.Equal(2, deconstructMethods.Length);
+        Assert.All(constructors, constructor => Assert.Contains(
+            deconstructMethods,
+            method => HasMatchingParameterSignature(constructor, method)));
     }
 
     /// <summary>
-    /// Payloads whose v1 schema requires ProviderName never expose a non-default constructor that omits it.
+    /// Required ProviderName payload constructors exactly match their sole full API shape.
     /// </summary>
     [Theory]
     [MemberData(nameof(RequiredProviderNamePayloadTypes))]
-    public void RequiredProviderNamePayload_NonDefaultConstructorsRequireProviderName(Type payloadType)
+    public void RequiredProviderNamePayload_ConstructorMatchesExactFullDeconstructSignature(Type payloadType)
     {
-        var constructors = payloadType
-            .GetConstructors(BindingFlags.Instance | BindingFlags.Public)
-            .Where(constructor => constructor.GetParameters().Length > 0)
-            .ToArray();
+        var constructor = Assert.Single(GetNonDefaultConstructors(payloadType));
+        var deconstructMethod = Assert.Single(GetDeclaredDeconstructMethods(payloadType));
 
-        Assert.NotEmpty(constructors);
-        Assert.All(constructors, constructor => Assert.True(
-            HasProviderNameParameter(constructor),
-            $"{payloadType.Name} exposes a non-default constructor that omits ProviderName."));
+        Assert.True(
+            HasMatchingParameterSignature(constructor, deconstructMethod),
+            $"{payloadType.Name} constructor does not match its exact full Deconstruct signature.");
     }
 
     /// <summary>
@@ -364,9 +362,36 @@ public class ProviderNameContractTests
         yield return ["payments/payment-pending-event.json", string.Empty, true];
     }
 
-    private static bool HasProviderNameParameter(ConstructorInfo constructor) =>
-        constructor.GetParameters().Any(parameter =>
-            string.Equals(parameter.Name, "ProviderName", StringComparison.OrdinalIgnoreCase));
+    private static ConstructorInfo[] GetNonDefaultConstructors(Type payloadType) =>
+        payloadType
+            .GetConstructors(BindingFlags.Instance | BindingFlags.Public)
+            .Where(constructor => constructor.GetParameters().Length > 0)
+            .ToArray();
+
+    private static bool HasMatchingParameterSignature(ConstructorInfo constructor, MethodInfo deconstructMethod)
+    {
+        var constructorParameters = constructor.GetParameters();
+        var deconstructParameters = deconstructMethod.GetParameters();
+        if (constructorParameters.Length != deconstructParameters.Length)
+        {
+            return false;
+        }
+
+        for (var index = 0; index < constructorParameters.Length; index++)
+        {
+            if (!deconstructParameters[index].IsOut ||
+                constructorParameters[index].ParameterType != deconstructParameters[index].ParameterType.GetElementType() ||
+                !string.Equals(
+                    constructorParameters[index].Name,
+                    deconstructParameters[index].Name,
+                    StringComparison.Ordinal))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private static void AssertDeconstructSignatures(
         Type payloadType,

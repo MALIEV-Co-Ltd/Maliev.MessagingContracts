@@ -776,10 +776,15 @@ namespace Generator
         private static HashSet<string> GetRequiredPropertyNames(JsonElement schema)
         {
             var requiredProperties = new HashSet<string>(StringComparer.Ordinal);
-            if (!schema.TryGetProperty("required", out var requiredArray) ||
-                requiredArray.ValueKind != JsonValueKind.Array)
+            if (!schema.TryGetProperty("required", out var requiredArray))
             {
                 return requiredProperties;
+            }
+
+            if (requiredArray.ValueKind != JsonValueKind.Array)
+            {
+                throw new InvalidDataException(
+                    "Schema 'required' must be an array when present.");
             }
 
             foreach (var requiredProperty in requiredArray.EnumerateArray())
