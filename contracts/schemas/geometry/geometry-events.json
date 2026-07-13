@@ -743,7 +743,7 @@
                     "description": "When analysis completed"
                 },
                 "overlayPaths": {
-                    "type": "object",
+                    "type": ["object", "null"],
                     "description": "Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall)",
                     "additionalProperties": {
                         "type": "string"
