@@ -44,6 +44,7 @@ test("FileAnalyzedEvent requires only fields present in the GeometryService v1 c
         viewerFileExtension: ".glb",
         thumbnailStoragePath: null,
         storagePath: "uploads/file-123.stl",
+        dfmReport: null,
         bodyCount: 1,
         bodies: []
     };
@@ -52,6 +53,15 @@ test("FileAnalyzedEvent requires only fields present in the GeometryService v1 c
     assert.deepEqual(
         schema.definitions.FileAnalyzedEvent.required,
         ["fileId", "metrics", "processedAt"]
+    );
+    assert.deepEqual(
+        schema.definitions.FileAnalyzedEvent.properties.dfmReport.oneOf,
+        [
+            { type: "null" },
+            { $ref: "#/definitions/FdmDfmReport" },
+            { $ref: "#/definitions/SlaDfmReport" },
+            { $ref: "#/definitions/CncDfmReport" }
+        ]
     );
 });
 

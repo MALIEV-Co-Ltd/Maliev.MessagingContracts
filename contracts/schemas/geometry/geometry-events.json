@@ -171,6 +171,7 @@
                     "type": ["object", "null"],
                     "description": "Optional DFM analysis results. Null if analysis failed or not applicable. Process-specific report type is determined by manufacturingProcessName.",
                     "oneOf": [
+                        { "type": "null" },
                         { "$ref": "#/definitions/FdmDfmReport" },
                         { "$ref": "#/definitions/SlaDfmReport" },
                         { "$ref": "#/definitions/CncDfmReport" }
