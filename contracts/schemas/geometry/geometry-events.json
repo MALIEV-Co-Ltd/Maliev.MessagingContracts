@@ -240,13 +240,8 @@
             },
             "required": [
                 "fileId",
-                "customerId",
                 "metrics",
-                "processedAt",
-                "materialId",
-                "materialCode",
-                "manufacturingProcessId",
-                "manufacturingProcessName"
+                "processedAt"
             ]
         },
         "FileMetricsReadyEvent": {

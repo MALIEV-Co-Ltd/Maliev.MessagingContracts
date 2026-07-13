@@ -775,10 +775,20 @@ channels:
 
   # ==================== GEOMETRY SERVICE ====================
   geometry/file-analyzed:
-    address: maliev.geometry.events.file-analyzed
+    address: maliev.geometryservice.v1.analysis.completed
     messages:
       FileAnalyzedEvent:
         $ref: '#/components/messages/FileAnalyzedEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
 
   geometry/file-analysis-failed:
     address: maliev.geometry.events.file-analysis-failed
