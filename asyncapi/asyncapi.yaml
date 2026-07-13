@@ -790,11 +790,53 @@ channels:
           vhost: /
         bindingVersion: '0.3.0'
 
+  geometry/file-metrics-ready:
+    address: maliev.geometryservice.v1.metrics.ready
+    messages:
+      FileMetricsReadyEvent:
+        $ref: '#/components/messages/FileMetricsReadyEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
+
   geometry/file-analysis-failed:
-    address: maliev.geometry.events.file-analysis-failed
+    address: maliev.geometryservice.v1.analysis.failed
     messages:
       FileAnalysisFailedEvent:
         $ref: '#/components/messages/FileAnalysisFailedEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
+
+  geometry/dfm-analysis-ready:
+    address: maliev.geometryservice.v1.dfm.ready
+    messages:
+      DfmAnalysisReadyEvent:
+        $ref: '#/components/messages/DfmAnalysisReadyEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
 
   # ==================== JOBS SERVICE ====================
   job/started:
@@ -1449,10 +1491,20 @@ components:
         $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileAnalyzedEvent'
       description: Published when a 3D file analysis completes successfully
 
+    FileMetricsReadyEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileMetricsReadyEvent'
+      description: Published when initial 3D file metrics are ready
+
     FileAnalysisFailedEvent:
       payload:
         $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileAnalysisFailedEvent'
       description: Published when a 3D file analysis fails
+
+    DfmAnalysisReadyEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/DfmAnalysisReadyEvent'
+      description: Published when process-specific DFM analysis is ready
 
     # ==================== JOBS SERVICE MESSAGES ====================
     JobStartedEvent:
