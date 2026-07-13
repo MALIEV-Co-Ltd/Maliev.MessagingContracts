@@ -29,7 +29,7 @@ public class FileAnalyzedContractTests
                 "messageType": "Event",
                 "messageVersion": "1.0.0",
                 "publishedBy": "GeometryService",
-                "consumedBy": ["IntranetBff"],
+                "consumedBy": ["IntranetBff", "QuoteEngineBff"],
                 "correlationId": "b88bcb26-a294-4ea2-835d-a78bce21f0db",
                 "causationId": null,
                 "occurredAtUtc": "2026-07-13T12:00:00Z",
@@ -64,6 +64,9 @@ public class FileAnalyzedContractTests
         var envelope = JsonSerializer.Deserialize<MassTransitEnvelope<FileAnalyzedEvent>>(json);
 
         Assert.NotNull(envelope);
+        Assert.Equal(
+            new[] { "IntranetBff", "QuoteEngineBff" },
+            envelope.Message.ConsumedBy);
         Assert.Equal("file-123", envelope.Message.Payload.FileId);
         Assert.Equal(12.5, envelope.Message.Payload.Metrics.VolumeCm3);
         Assert.Equal("uploads/file-123.stl", envelope.Message.Payload.StoragePath);
