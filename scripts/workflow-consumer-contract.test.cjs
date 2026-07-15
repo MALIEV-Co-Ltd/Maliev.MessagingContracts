@@ -107,6 +107,9 @@ test('schema-first validation remains local without duplicated .NET gate steps',
   const setupNode = findStep(steps, 'Setup Node.js');
   assert.equal(setupNode.uses, setupNodeAction);
   assert.deepEqual(setupNode.with, { 'node-version': '24' });
+  const setupDotnet = findStep(steps, 'Set up .NET');
+  assert.equal(setupDotnet.uses, setupDotnetAction);
+  assert.deepEqual(setupDotnet.with, { 'dotnet-version': '10.0.302' });
   assert.deepEqual(findStep(steps, 'Install dependencies'), {
     name: 'Install dependencies',
     run: 'npm ci',
@@ -146,10 +149,6 @@ fi
     typeof step.run === 'string' && /(?:^|\s)dotnet\s+(?:restore|build|test)(?:\s|$)/m.test(step.run),
   );
   assert.deepEqual(duplicatedDotnetCommands, []);
-  assert.equal(
-    steps.some((step) => typeof step.uses === 'string' && step.uses.startsWith('actions/setup-dotnet@')),
-    false,
-  );
 });
 
 test('workflow references are immutable and concurrency cancels stale runs', () => {
