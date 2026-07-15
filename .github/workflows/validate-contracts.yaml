@@ -33,11 +33,15 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 jobs:
   validate:
+    name: Validate schemas and generated contracts
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
@@ -48,18 +52,13 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
-        with:
-          dotnet-version: '10.0.x'
-
       - name: Install dependencies
         run: npm ci
 
       - name: Validate AsyncAPI and schemas
         run: npm test
 
-      - name: Detect Schema Changes
+      - name: Detect schema changes
         env:
           BASE_REF: ${{ github.base_ref }}
         run: |
@@ -71,18 +70,9 @@ jobs:
           fi
         shell: bash
 
-      - name: Validate Consumers
+      - name: Validate consumers
         run: ./scripts/validate-consumers.ps1
         shell: pwsh
-
-      - name: Restore .NET dependencies
-        run: dotnet restore Maliev.MessagingContracts.slnx
-
-      - name: Build .NET solution
-        run: dotnet build Maliev.MessagingContracts.slnx --configuration Release --no-restore
-
-      - name: Test .NET solution
-        run: dotnet test Maliev.MessagingContracts.slnx --configuration Release --no-build --no-restore
 
       - name: Generate contracts
         run: ./scripts/build.ps1
@@ -90,3 +80,27 @@ jobs:
 
       - name: Verify generated C# is current
         run: node scripts/verify-generated-clean.cjs
+
+  dotnet-pr-gate:
+    name: Central .NET quality gate
+    permissions:
+      contents: read
+    uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/dotnet-pr-gate.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
+    with:
+      target-path: Maliev.MessagingContracts.slnx
+      working-directory: .
+      dotnet-version: 10.0.302
+      configuration: Release
+      coverage-threshold: 80
+      artifact-retention-days: 7
+
+  codeql-dotnet:
+    name: Central CodeQL analysis
+    permissions:
+      contents: read
+      security-events: write
+    uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/codeql-dotnet.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
+    with:
+      target-path: Maliev.MessagingContracts.slnx
+      working-directory: .
+      dotnet-version: 10.0.302

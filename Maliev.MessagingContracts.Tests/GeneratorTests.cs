@@ -162,6 +162,61 @@ public class GeneratorTests
             StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// Standalone schemas generate nested object and array records without requiring BaseMessage inheritance.
+    /// </summary>
+    [Fact]
+    public async Task GenerateAsync_StandaloneSchema_EmitsNestedRecordsAndDefaults()
+    {
+        const string schema = """
+            {
+              "title": "Standalone probe",
+              "type": "object",
+              "properties": {
+                "requestId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "The request identifier."
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "source": { "type": "string" }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "quantity": { "type": "integer" }
+                    }
+                  }
+                },
+                "labels": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+            """;
+
+        var source = await GenerateDomainAsync("pricing", "standalone-probe.json", schema);
+
+        Assert.Contains("public record StandaloneProbe(", source, StringComparison.Ordinal);
+        Assert.Contains("public record StandaloneProbeMetadata(", source, StringComparison.Ordinal);
+        Assert.Contains("public record StandaloneProbeItemsItem(", source, StringComparison.Ordinal);
+        Assert.Contains(
+            "System.Collections.Generic.IReadOnlyList<StandaloneProbeItemsItem> Items",
+            source,
+            StringComparison.Ordinal);
+        Assert.Contains(
+            "System.Collections.Generic.IReadOnlyList<string> Labels",
+            source,
+            StringComparison.Ordinal);
+        Assert.Contains("public StandaloneProbe() : this(", source, StringComparison.Ordinal);
+    }
+
     private static async Task<string> GenerateDomainAsync(string domain, string fileName, string schema)
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), $"messaging-contract-generator-{Guid.NewGuid():N}");
