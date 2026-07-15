@@ -166,7 +166,7 @@ public class GeneratorTests
     /// Standalone schemas generate nested object and array records without requiring BaseMessage inheritance.
     /// </summary>
     [Fact]
-    public async Task GenerateAsync_StandaloneSchema_EmitsNestedRecordsAndDefaults()
+    public async Task GenerateAsync_StandaloneSchema_EmitsNestedRecordsAndExactParameterlessDefaults()
     {
         const string schema = """
             {
@@ -214,7 +214,11 @@ public class GeneratorTests
             "System.Collections.Generic.IReadOnlyList<string> Labels",
             source,
             StringComparison.Ordinal);
-        Assert.Contains("public StandaloneProbe() : this(", source, StringComparison.Ordinal);
+        Assert.Contains(
+            "public StandaloneProbe() : this(default(System.Guid), default!, " +
+            "Array.Empty<StandaloneProbeItemsItem>(), Array.Empty<string>()) { }",
+            source,
+            StringComparison.Ordinal);
     }
 
     private static async Task<string> GenerateDomainAsync(string domain, string fileName, string schema)
