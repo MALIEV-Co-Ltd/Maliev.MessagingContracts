@@ -38,11 +38,11 @@ namespace Maliev.MessagingContracts.Tests
         }
 
         /// <summary>
-        /// Tests that all contracts have valid consumers if specified.
+        /// Tests that only events may be declared before their first consumer is implemented.
         /// </summary>
         [Theory]
         [MemberData(nameof(GetSchemaFiles))]
-        public void All_Contracts_Must_Have_Consumers_If_Specified(string schemaPath)
+        public void Contracts_May_Have_No_Consumers_Only_For_Events(string schemaPath)
         {
             var schemaContent = File.ReadAllText(schemaPath);
             var jsonNode = JsonNode.Parse(schemaContent);
@@ -56,7 +56,18 @@ namespace Maliev.MessagingContracts.Tests
 
             var consumers = consumedByNode as JsonArray;
             Assert.NotNull(consumers);
-            Assert.True(consumers.Count > 0, $"Schema {Path.GetFileName(schemaPath)} must have at least one consumer.");
+
+            var messageType = allOf
+                .Select(n => n?["properties"]?["messageType"]?["const"]?.GetValue<string>())
+                .FirstOrDefault(value => value != null);
+            if (string.Equals(messageType, "Event", StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            Assert.True(
+                consumers.Count > 0,
+                $"Schema {Path.GetFileName(schemaPath)} is a routed {messageType ?? "contract"} and must have at least one consumer.");
         }
     }
 }

@@ -32,8 +32,8 @@
                 },
                 "consumedBy": {
                     "type": "array",
-                    "const": ["IntranetBff", "QuotationService"],
-                    "description": "The intended consumers during the v2 migration."
+                    "const": [],
+                    "description": "The intended consumers; empty until a v2 consumer is implemented."
                 }
             },
             "required": [
