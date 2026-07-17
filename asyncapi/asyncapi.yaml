@@ -909,7 +909,7 @@ components:
     PriceCalculatedEventV2:
       payload:
         $ref: '../contracts/schemas/pricing/price-calculated-event-v2.json'
-      description: Published when pricing completes with explicit fixed DFM allocation
+      description: Published when pricing completes with reconstructable variable and fixed DFM allocation and commercial factors
 
     # ==================== ORDER SERVICE MESSAGES ====================
     OrderCreatedEvent:

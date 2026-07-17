@@ -15,10 +15,10 @@ public class PricingContractTests
     };
 
     /// <summary>
-    /// The additive v2 event preserves fixed-cost allocation details on a round trip.
+    /// The additive v2 event preserves enough commercial factors to reconstruct a multi-unit total.
     /// </summary>
     [Fact]
-    public void PriceCalculatedEventV2_RoundTrip_PreservesFixedDfmAllocation()
+    public void PriceCalculatedEventV2_RoundTrip_PreservesVariableAndFixedDfmAllocation()
     {
         var occurredAt = DateTimeOffset.Parse("2026-07-17T01:00:00Z");
         var message = new PriceCalculatedEventV2(
@@ -39,9 +39,51 @@ public class PricingContractTests
 
         Assert.NotNull(roundTrip);
         Assert.Equal("2.0.0", roundTrip.MessageVersion);
-        Assert.Equal(25d, roundTrip.Payload.Breakdown.SetupCost);
-        Assert.Equal(1.25d, roundTrip.Payload.Breakdown.FixedDfmSurcharge);
-        Assert.Contains("\"fixedDfmSurcharge\":1.25", json, StringComparison.Ordinal);
+        var breakdown = roundTrip.Payload.Breakdown;
+        Assert.Equal(50d, breakdown.SetupCost);
+        Assert.Equal(10d, breakdown.VariableDfmSurcharge);
+        Assert.Equal(5d, breakdown.FixedDfmSurcharge);
+        Assert.Equal(
+            breakdown.SubtotalBeforeMargin,
+            (breakdown.MaterialCost
+            + breakdown.SupportCost
+            + breakdown.MachineTimeCost
+            + breakdown.VariableDfmSurcharge
+            + breakdown.ComplexitySurcharge) * roundTrip.Payload.Quantity
+            + breakdown.SetupCost
+            + breakdown.FixedDfmSurcharge);
+        Assert.Equal(
+            breakdown.SubtotalBeforeMargin * (breakdown.MarginMultiplier - 1d),
+            breakdown.MarginAmount,
+            precision: 8);
+
+        var variableUnitCost = breakdown.MaterialCost
+            + breakdown.SupportCost
+            + breakdown.MachineTimeCost
+            + breakdown.VariableDfmSurcharge
+            + breakdown.ComplexitySurcharge;
+        var fixedLineCost = breakdown.SetupCost + breakdown.FixedDfmSurcharge;
+        var discountedVariableUnitPrice = variableUnitCost
+            * breakdown.MarginMultiplier
+            * (1d - breakdown.VolumeDiscountPercent / 100d);
+        var marginedFixedLineCost = fixedLineCost * breakdown.MarginMultiplier;
+        var rawBaseCurrencyLineTotal = (discountedVariableUnitPrice * roundTrip.Payload.Quantity
+            + marginedFixedLineCost)
+            * breakdown.LeadTimeMultiplier
+            * breakdown.ToleranceMultiplier;
+        var flooredBaseCurrencyLineTotal = Math.Max(
+            rawBaseCurrencyLineTotal,
+            breakdown.MinimumOrderPriceFloorThb);
+        var reconstructedTotal = flooredBaseCurrencyLineTotal * breakdown.ExchangeRate;
+
+        Assert.Equal(899.514d, rawBaseCurrencyLineTotal, precision: 8);
+        Assert.Equal(30d, reconstructedTotal, precision: 8);
+        Assert.Equal(reconstructedTotal, roundTrip.Payload.TotalPrice, precision: 8);
+        Assert.Equal(roundTrip.Payload.TotalPrice, breakdown.TotalPrice, precision: 8);
+        Assert.Equal(reconstructedTotal / roundTrip.Payload.Quantity, roundTrip.Payload.TotalUnitPrice, precision: 8);
+        Assert.Equal("THB", breakdown.BaseCurrency);
+        Assert.Contains("\"variableDfmSurcharge\":10", json, StringComparison.Ordinal);
+        Assert.Contains("\"fixedDfmSurcharge\":5", json, StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -90,7 +132,7 @@ public class PricingContractTests
             CustomerId: Guid.NewGuid(),
             MaterialId: Guid.NewGuid(),
             ProcessId: Guid.NewGuid(),
-            Quantity: 5,
+            Quantity: 3,
             InputVolumeCm3: 100,
             InputSupportVolumeCm3: 5,
             InputSurfaceAreaCm2: 60,
@@ -99,18 +141,26 @@ public class PricingContractTests
             ConfidenceLevel: 1,
             PricingConfigurationId: Guid.NewGuid(),
             Breakdown: new PriceCalculatedEventV2PayloadBreakdown(
-                MaterialCost: 10,
-                SupportCost: 2,
-                MachineTimeCost: 30,
-                SetupCost: 25,
-                FixedDfmSurcharge: 1.25,
-                ComplexitySurcharge: 4,
-                SubtotalBeforeMargin: 72.25,
-                MarginAmount: 14.45,
-                TotalPrice: 86.70),
-            TotalUnitPrice: 17.34,
-            TotalPrice: 86.70,
-            Currency: "THB",
+                MaterialCost: 100,
+                SupportCost: 20,
+                MachineTimeCost: 80,
+                SetupCost: 50,
+                VariableDfmSurcharge: 10,
+                FixedDfmSurcharge: 5,
+                ComplexitySurcharge: 10,
+                SubtotalBeforeMargin: 715,
+                MarginAmount: 143,
+                MarginMultiplier: 1.2,
+                VolumeDiscountPercent: 10,
+                LeadTimeMultiplier: 1.1,
+                ToleranceMultiplier: 1.05,
+                MinimumOrderPriceFloorThb: 1000,
+                ExchangeRate: 0.03,
+                BaseCurrency: "THB",
+                TotalPrice: 30),
+            TotalUnitPrice: 10,
+            TotalPrice: 30,
+            Currency: "USD",
             ValidUntil: calculatedAt.AddDays(7),
             CalculatedAt: calculatedAt,
             StoragePath: "quotes/part.stl",

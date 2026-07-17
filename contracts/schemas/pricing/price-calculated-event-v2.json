@@ -83,6 +83,7 @@
                 },
                 "quantity": {
                     "type": "integer",
+                    "minimum": 1,
                     "description": "Quantity of items priced."
                 },
                 "inputVolumeCm3": {
@@ -120,39 +121,79 @@
                     "properties": {
                         "materialCost": {
                             "type": "number",
-                            "description": "Raw material cost."
+                            "description": "Per-unit raw material cost in baseCurrency before margin."
                         },
                         "supportCost": {
                             "type": "number",
-                            "description": "Support material cost."
+                            "description": "Per-unit support material cost in baseCurrency before margin."
                         },
                         "machineTimeCost": {
                             "type": "number",
-                            "description": "Machine time cost."
+                            "description": "Per-unit machine time cost in baseCurrency before margin."
                         },
                         "setupCost": {
                             "type": "number",
-                            "description": "Raw setup cost allocated once per priced line."
+                            "description": "One-time setup cost in baseCurrency, applied once to the priced line before margin."
+                        },
+                        "variableDfmSurcharge": {
+                            "type": "number",
+                            "description": "Per-unit variable DFM surcharge in baseCurrency before margin, excluding fixedDfmSurcharge."
                         },
                         "fixedDfmSurcharge": {
                             "type": "number",
-                            "description": "The setup-derived DFM surcharge allocated once per priced line."
+                            "description": "One-time setup-derived DFM surcharge in baseCurrency, applied once to the priced line before margin."
                         },
                         "complexitySurcharge": {
                             "type": "number",
-                            "description": "Complexity surcharge excluding the fixed DFM allocation."
+                            "description": "Per-unit complexity surcharge in baseCurrency before margin, excluding both DFM components."
                         },
                         "subtotalBeforeMargin": {
                             "type": "number",
-                            "description": "Subtotal before margin."
+                            "description": "Full THB line subtotal before margin: ((materialCost + supportCost + machineTimeCost + variableDfmSurcharge + complexitySurcharge) * quantity) + setupCost + fixedDfmSurcharge."
                         },
                         "marginAmount": {
                             "type": "number",
-                            "description": "Margin amount added."
+                            "description": "Full THB line margin before volume discount: subtotalBeforeMargin * (marginMultiplier - 1)."
+                        },
+                        "marginMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Multiplier applied separately to the per-unit variable total and the one-time fixed line total."
+                        },
+                        "volumeDiscountPercent": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                            "description": "Percentage discount applied only to the margined per-unit variable components."
+                        },
+                        "leadTimeMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Lead-time multiplier applied to both the discounted variable line total and the margined one-time fixed line total."
+                        },
+                        "toleranceMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Tolerance multiplier applied to both the discounted variable line total and the margined one-time fixed line total."
+                        },
+                        "minimumOrderPriceFloorThb": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum THB line total applied after quantity and the one-time fixed line cost, before exchangeRate."
+                        },
+                        "exchangeRate": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Multiplicative rate from baseCurrency to the payload currency, applied after the THB minimum floor."
+                        },
+                        "baseCurrency": {
+                            "type": "string",
+                            "const": "THB",
+                            "description": "ISO 4217 base currency for all breakdown inputs; fixed to THB."
                         },
                         "totalPrice": {
                             "type": "number",
-                            "description": "Total price after margin."
+                            "description": "Final line total in the payload currency after margin, variable-only discount, quantity, one-time fixed costs, lead-time and tolerance multipliers, THB floor, and exchangeRate."
                         }
                     },
                     "required": [
@@ -160,10 +201,18 @@
                         "supportCost",
                         "machineTimeCost",
                         "setupCost",
+                        "variableDfmSurcharge",
                         "fixedDfmSurcharge",
                         "complexitySurcharge",
                         "subtotalBeforeMargin",
                         "marginAmount",
+                        "marginMultiplier",
+                        "volumeDiscountPercent",
+                        "leadTimeMultiplier",
+                        "toleranceMultiplier",
+                        "minimumOrderPriceFloorThb",
+                        "exchangeRate",
+                        "baseCurrency",
                         "totalPrice"
                     ]
                 },

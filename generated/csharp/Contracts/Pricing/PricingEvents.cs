@@ -18,30 +18,46 @@ namespace Maliev.MessagingContracts.Contracts.Pricing
     /// <summary>
     /// Nested data for PriceCalculatedEventV2PayloadBreakdown.
     /// </summary>
-    /// <param name="MaterialCost">Raw material cost.</param>
-    /// <param name="SupportCost">Support material cost.</param>
-    /// <param name="MachineTimeCost">Machine time cost.</param>
-    /// <param name="SetupCost">Raw setup cost allocated once per priced line.</param>
-    /// <param name="FixedDfmSurcharge">The setup-derived DFM surcharge allocated once per priced line.</param>
-    /// <param name="ComplexitySurcharge">Complexity surcharge excluding the fixed DFM allocation.</param>
-    /// <param name="SubtotalBeforeMargin">Subtotal before margin.</param>
-    /// <param name="MarginAmount">Margin amount added.</param>
-    /// <param name="TotalPrice">Total price after margin.</param>
+    /// <param name="MaterialCost">Per-unit raw material cost in baseCurrency before margin.</param>
+    /// <param name="SupportCost">Per-unit support material cost in baseCurrency before margin.</param>
+    /// <param name="MachineTimeCost">Per-unit machine time cost in baseCurrency before margin.</param>
+    /// <param name="SetupCost">One-time setup cost in baseCurrency, applied once to the priced line before margin.</param>
+    /// <param name="VariableDfmSurcharge">Per-unit variable DFM surcharge in baseCurrency before margin, excluding fixedDfmSurcharge.</param>
+    /// <param name="FixedDfmSurcharge">One-time setup-derived DFM surcharge in baseCurrency, applied once to the priced line before margin.</param>
+    /// <param name="ComplexitySurcharge">Per-unit complexity surcharge in baseCurrency before margin, excluding both DFM components.</param>
+    /// <param name="SubtotalBeforeMargin">Full THB line subtotal before margin: ((materialCost + supportCost + machineTimeCost + variableDfmSurcharge + complexitySurcharge) * quantity) + setupCost + fixedDfmSurcharge.</param>
+    /// <param name="MarginAmount">Full THB line margin before volume discount: subtotalBeforeMargin * (marginMultiplier - 1).</param>
+    /// <param name="MarginMultiplier">Multiplier applied separately to the per-unit variable total and the one-time fixed line total.</param>
+    /// <param name="VolumeDiscountPercent">Percentage discount applied only to the margined per-unit variable components.</param>
+    /// <param name="LeadTimeMultiplier">Lead-time multiplier applied to both the discounted variable line total and the margined one-time fixed line total.</param>
+    /// <param name="ToleranceMultiplier">Tolerance multiplier applied to both the discounted variable line total and the margined one-time fixed line total.</param>
+    /// <param name="MinimumOrderPriceFloorThb">Minimum THB line total applied after quantity and the one-time fixed line cost, before exchangeRate.</param>
+    /// <param name="ExchangeRate">Multiplicative rate from baseCurrency to the payload currency, applied after the THB minimum floor.</param>
+    /// <param name="BaseCurrency">ISO 4217 base currency for all breakdown inputs; fixed to THB.</param>
+    /// <param name="TotalPrice">Final line total in the payload currency after margin, variable-only discount, quantity, one-time fixed costs, lead-time and tolerance multipliers, THB floor, and exchangeRate.</param>
     public record PriceCalculatedEventV2PayloadBreakdown(
         [property: JsonPropertyName("materialCost")] double MaterialCost,
         [property: JsonPropertyName("supportCost")] double SupportCost,
         [property: JsonPropertyName("machineTimeCost")] double MachineTimeCost,
         [property: JsonPropertyName("setupCost")] double SetupCost,
+        [property: JsonPropertyName("variableDfmSurcharge")] double VariableDfmSurcharge,
         [property: JsonPropertyName("fixedDfmSurcharge")] double FixedDfmSurcharge,
         [property: JsonPropertyName("complexitySurcharge")] double ComplexitySurcharge,
         [property: JsonPropertyName("subtotalBeforeMargin")] double SubtotalBeforeMargin,
         [property: JsonPropertyName("marginAmount")] double MarginAmount,
+        [property: JsonPropertyName("marginMultiplier")] double MarginMultiplier,
+        [property: JsonPropertyName("volumeDiscountPercent")] double VolumeDiscountPercent,
+        [property: JsonPropertyName("leadTimeMultiplier")] double LeadTimeMultiplier,
+        [property: JsonPropertyName("toleranceMultiplier")] double ToleranceMultiplier,
+        [property: JsonPropertyName("minimumOrderPriceFloorThb")] double MinimumOrderPriceFloorThb,
+        [property: JsonPropertyName("exchangeRate")] double ExchangeRate,
+        [property: JsonPropertyName("baseCurrency")] string BaseCurrency,
         [property: JsonPropertyName("totalPrice")] double TotalPrice)
     {
         /// <summary>
         /// Parameterless constructor for deserialization.
         /// </summary>
-        public PriceCalculatedEventV2PayloadBreakdown() : this(default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double)) { }
+        public PriceCalculatedEventV2PayloadBreakdown() : this(default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), string.Empty, default(double)) { }
     }
     /// <summary>
     /// Nested data for PriceCalculatedEventV2Payload.
