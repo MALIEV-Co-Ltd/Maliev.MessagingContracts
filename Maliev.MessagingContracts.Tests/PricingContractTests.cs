@@ -27,7 +27,7 @@ public class PricingContractTests
             MessageType: MessageType.Event,
             MessageVersion: "2.0.0",
             PublishedBy: "PricingService",
-            ConsumedBy: ["IntranetBff", "QuotationService"],
+            ConsumedBy: [],
             CorrelationId: Guid.NewGuid(),
             CausationId: null,
             OccurredAtUtc: occurredAt,

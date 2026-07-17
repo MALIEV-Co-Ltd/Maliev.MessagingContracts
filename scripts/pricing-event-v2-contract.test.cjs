@@ -22,7 +22,7 @@ function canonicalMessage() {
         messageType: "Event",
         messageVersion: "2.0.0",
         publishedBy: "PricingService",
-        consumedBy: ["IntranetBff", "QuotationService"],
+        consumedBy: [],
         correlationId: "22222222-2222-2222-2222-222222222222",
         causationId: null,
         occurredAtUtc: "2026-07-17T01:00:00Z",
@@ -95,4 +95,33 @@ test("PriceCalculatedEventV2 AsyncAPI channel references the additive v2 schema"
     assert.deepEqual(document.components.messages.PriceCalculatedEventV2.payload, {
         $ref: "../contracts/schemas/pricing/price-calculated-event-v2.json"
     });
+});
+
+test("Base message permits pre-consumer events but keeps routed messages fail closed", () => {
+    const schema = loadJson("contracts", "schemas", "shared", "base-message.json");
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    addFormats(ajv);
+    const validate = ajv.compile(schema);
+    const envelope = {
+        messageId: "11111111-1111-1111-1111-111111111111",
+        messageName: "ContractProbe",
+        messageType: "Event",
+        messageVersion: "1.0.0",
+        publishedBy: "PricingService",
+        consumedBy: [],
+        correlationId: "22222222-2222-2222-2222-222222222222",
+        causationId: null,
+        occurredAtUtc: "2026-07-17T01:00:00Z",
+        isPublic: false
+    };
+
+    assert.equal(validate(envelope), true, "An event may precede its first implemented consumer.");
+
+    for (const routedType of ["Command", "Request", "Response"]) {
+        const routed = { ...envelope, messageType: routedType };
+        assert.equal(validate(routed), false, `${routedType} must retain at least one consumer.`);
+
+        const routedWithConsumer = { ...routed, consumedBy: ["PricingService"] };
+        assert.equal(validate(routedWithConsumer), true, `${routedType} accepts a routed consumer.`);
+    }
 });
