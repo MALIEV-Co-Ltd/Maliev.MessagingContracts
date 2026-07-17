@@ -13,6 +13,122 @@ using Maliev.MessagingContracts.Contracts.Shared;
 namespace Maliev.MessagingContracts.Contracts.Pricing
 {
     /// <summary>
+    /// Published when a price calculation completes using the v2 fixed-cost allocation model.
+    /// </summary>
+    /// <summary>
+    /// Nested data for PriceCalculatedEventV2PayloadBreakdown.
+    /// </summary>
+    /// <param name="MaterialCost">Raw material cost.</param>
+    /// <param name="SupportCost">Support material cost.</param>
+    /// <param name="MachineTimeCost">Machine time cost.</param>
+    /// <param name="SetupCost">Raw setup cost allocated once per priced line.</param>
+    /// <param name="FixedDfmSurcharge">The setup-derived DFM surcharge allocated once per priced line.</param>
+    /// <param name="ComplexitySurcharge">Complexity surcharge excluding the fixed DFM allocation.</param>
+    /// <param name="SubtotalBeforeMargin">Subtotal before margin.</param>
+    /// <param name="MarginAmount">Margin amount added.</param>
+    /// <param name="TotalPrice">Total price after margin.</param>
+    public record PriceCalculatedEventV2PayloadBreakdown(
+        [property: JsonPropertyName("materialCost")] double MaterialCost,
+        [property: JsonPropertyName("supportCost")] double SupportCost,
+        [property: JsonPropertyName("machineTimeCost")] double MachineTimeCost,
+        [property: JsonPropertyName("setupCost")] double SetupCost,
+        [property: JsonPropertyName("fixedDfmSurcharge")] double FixedDfmSurcharge,
+        [property: JsonPropertyName("complexitySurcharge")] double ComplexitySurcharge,
+        [property: JsonPropertyName("subtotalBeforeMargin")] double SubtotalBeforeMargin,
+        [property: JsonPropertyName("marginAmount")] double MarginAmount,
+        [property: JsonPropertyName("totalPrice")] double TotalPrice)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PriceCalculatedEventV2PayloadBreakdown() : this(default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double), default(double)) { }
+    }
+    /// <summary>
+    /// Nested data for PriceCalculatedEventV2Payload.
+    /// </summary>
+    /// <param name="PricingAuditId">Unique identifier for the pricing audit record.</param>
+    /// <param name="QuotationId">Quotation identifier when the price is linked to a quotation.</param>
+    /// <param name="FileId">Unique identifier for the priced file.</param>
+    /// <param name="CustomerId">Unique identifier for the customer.</param>
+    /// <param name="MaterialId">Material used for the pricing calculation.</param>
+    /// <param name="ProcessId">Manufacturing process used for pricing.</param>
+    /// <param name="Quantity">Quantity of items priced.</param>
+    /// <param name="InputVolumeCm3">Part volume in cubic centimetres used as input.</param>
+    /// <param name="InputSupportVolumeCm3">Support material volume in cubic centimetres.</param>
+    /// <param name="InputSurfaceAreaCm2">Surface area in square centimetres used as input.</param>
+    /// <param name="Strategy">Pricing strategy used for the calculation.</param>
+    /// <param name="MlModelVersion">Machine-learning model version when applicable.</param>
+    /// <param name="ConfidenceLevel">Confidence level of the price calculation from zero to one.</param>
+    /// <param name="PricingConfigurationId">Pricing configuration record used for the calculation.</param>
+    /// <param name="Breakdown">Detailed cost breakdown with explicit fixed-cost allocation.</param>
+    /// <param name="TotalUnitPrice">Final calculated unit price.</param>
+    /// <param name="TotalPrice">Total price including quantity.</param>
+    /// <param name="Currency">ISO 4217 currency code.</param>
+    /// <param name="ValidUntil">Price validity expiry timestamp.</param>
+    /// <param name="CalculatedAt">Timestamp when the price was calculated.</param>
+    /// <param name="StoragePath">Storage path used as a frontend join key.</param>
+    /// <param name="EstimatedLeadTimeDays">Estimated production and shipping lead time in days.</param>
+    public record PriceCalculatedEventV2Payload(
+        [property: JsonPropertyName("pricingAuditId")] System.Guid PricingAuditId,
+        [property: JsonPropertyName("quotationId")] System.Guid? QuotationId,
+        [property: JsonPropertyName("fileId")] System.Guid FileId,
+        [property: JsonPropertyName("customerId")] System.Guid CustomerId,
+        [property: JsonPropertyName("materialId")] System.Guid MaterialId,
+        [property: JsonPropertyName("processId")] System.Guid ProcessId,
+        [property: JsonPropertyName("quantity")] int Quantity,
+        [property: JsonPropertyName("inputVolumeCm3")] double InputVolumeCm3,
+        [property: JsonPropertyName("inputSupportVolumeCm3")] double InputSupportVolumeCm3,
+        [property: JsonPropertyName("inputSurfaceAreaCm2")] double InputSurfaceAreaCm2,
+        [property: JsonPropertyName("strategy")] string Strategy,
+        [property: JsonPropertyName("mlModelVersion")] string? MlModelVersion,
+        [property: JsonPropertyName("confidenceLevel")] double ConfidenceLevel,
+        [property: JsonPropertyName("pricingConfigurationId")] System.Guid PricingConfigurationId,
+        [property: JsonPropertyName("breakdown")] PriceCalculatedEventV2PayloadBreakdown Breakdown,
+        [property: JsonPropertyName("totalUnitPrice")] double TotalUnitPrice,
+        [property: JsonPropertyName("totalPrice")] double TotalPrice,
+        [property: JsonPropertyName("currency")] string Currency,
+        [property: JsonPropertyName("validUntil")] System.DateTimeOffset ValidUntil,
+        [property: JsonPropertyName("calculatedAt")] System.DateTimeOffset CalculatedAt,
+        [property: JsonPropertyName("storagePath")] string? StoragePath,
+        [property: JsonPropertyName("estimatedLeadTimeDays")] int? EstimatedLeadTimeDays)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PriceCalculatedEventV2Payload() : this(default(System.Guid), default, default(System.Guid), default(System.Guid), default(System.Guid), default(System.Guid), default(int), default(double), default(double), default(double), string.Empty, default, default(double), default(System.Guid), default!, default(double), default(double), string.Empty, default(System.DateTimeOffset), default(System.DateTimeOffset), default, default) { }
+    }
+    /// <param name="MessageId">Unique identifier for the message.</param>
+    /// <param name="MessageName">Descriptive name of the message.</param>
+    /// <param name="MessageType">The type of message (Command, Event, etc.).</param>
+    /// <param name="MessageVersion">Semantic version of the message contract.</param>
+    /// <param name="PublishedBy">The service that published the message.</param>
+    /// <param name="ConsumedBy">List of services intended to consume the message.</param>
+    /// <param name="CorrelationId">Id used to correlate related messages across a flow.</param>
+    /// <param name="CausationId">Id of the message that caused this one.</param>
+    /// <param name="OccurredAtUtc">Timestamp of when the message occurred.</param>
+    /// <param name="IsPublic">True if the message is intended for external systems.</param>
+    /// <param name="Payload">The complete v2 pricing calculation result.</param>
+    public record PriceCalculatedEventV2(
+        System.Guid MessageId,
+        string MessageName,
+        MessageType MessageType,
+        string MessageVersion,
+        string PublishedBy,
+        System.Collections.Generic.IReadOnlyList<string> ConsumedBy,
+        System.Guid CorrelationId,
+        System.Guid? CausationId,
+        System.DateTimeOffset OccurredAtUtc,
+        bool IsPublic,
+        [property: JsonPropertyName("payload")] PriceCalculatedEventV2Payload Payload) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)
+    {
+        /// <summary>
+        /// Parameterless constructor for deserialization.
+        /// </summary>
+        public PriceCalculatedEventV2() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) { }
+    }
+
+
+    /// <summary>
     /// Payload data for PriceCalculatedEventBreakdown.
     /// </summary>
     /// <param name="MaterialCost">Raw material cost</param>

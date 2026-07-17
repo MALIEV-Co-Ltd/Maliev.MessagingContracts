@@ -73,6 +73,13 @@ channels:
       SearchReindexRequestedCommand:
         $ref: '#/components/messages/SearchReindexRequestedCommand'
 
+  # ==================== PRICING SERVICE ====================
+  pricing/price-calculated-v2:
+    address: maliev.pricing.events.price-calculated-v2
+    messages:
+      PriceCalculatedEventV2:
+        $ref: '#/components/messages/PriceCalculatedEventV2'
+
   # ==================== ORDER SERVICE ====================
   order/created:
     address: maliev.orders.events.order-created
@@ -898,6 +905,12 @@ channels:
 
 components:
   messages:
+    # ==================== PRICING SERVICE MESSAGES ====================
+    PriceCalculatedEventV2:
+      payload:
+        $ref: '../contracts/schemas/pricing/price-calculated-event-v2.json'
+      description: Published when pricing completes with explicit fixed DFM allocation
+
     # ==================== ORDER SERVICE MESSAGES ====================
     OrderCreatedEvent:
       payload:
