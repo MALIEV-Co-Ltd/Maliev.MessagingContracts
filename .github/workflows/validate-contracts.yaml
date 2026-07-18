@@ -29,10 +29,10 @@ concurrency:
 
 jobs:
   scope:
-    name: Detect policy-only scope
+    name: Classify validation scope
     runs-on: ubuntu-latest
     outputs:
-      config_only: ${{ steps.changed.outputs.config_only }}
+      runtime_changed: ${{ steps.changed.outputs.runtime_changed }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
@@ -47,16 +47,16 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "$BASE_REF" ]]; then
-            echo "config_only=false" >> "$GITHUB_OUTPUT"
+            echo "runtime_changed=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git fetch origin "$BASE_REF" --depth=1
           changed_files="$(git diff --name-only "origin/$BASE_REF"...HEAD)"
           printf '%s\n' "$changed_files"
           if grep -Ev '^\.github/(dependabot\.yml|workflows/validate-contracts\.yaml)$' <<< "$changed_files" | grep -q .; then
-            echo "config_only=false" >> "$GITHUB_OUTPUT"
+            echo "runtime_changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "config_only=true" >> "$GITHUB_OUTPUT"
+            echo "runtime_changed=false" >> "$GITHUB_OUTPUT"
           fi
 
   validate:
@@ -93,34 +93,6 @@ jobs:
         run: ./scripts/build.ps1
         shell: pwsh
 
-  dotnet-pr-gate:
-    name: Central .NET quality gate
-    needs: scope
-    if: needs.scope.outputs.config_only != 'true'
-    permissions:
-      contents: read
-    uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/dotnet-pr-gate.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
-    with:
-      target-path: Maliev.MessagingContracts.sln
-      working-directory: .
-      dotnet-version: 10.0.x
-      configuration: Release
-      coverage-threshold: 80
-      artifact-retention-days: 7
-
-  dotnet-policy-gate:
-    name: Central .NET quality gate / Build, test, and inspect
-    needs:
-      - scope
-      - validate
-    if: needs.scope.outputs.config_only == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-        with:
-          persist-credentials: false
-
       - name: Validate bounded Dependabot policy
         shell: ruby {0}
         run: |
@@ -141,8 +113,25 @@ jobs:
             abort "Only minor and patch may be grouped" unless group["update-types"].sort == ["minor", "patch"]
           end
 
+  dotnet-pr-gate:
+    name: Central .NET quality gate
+    needs: scope
+    if: needs.scope.outputs.runtime_changed == 'true'
+    permissions:
+      contents: read
+    uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/dotnet-pr-gate.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
+    with:
+      target-path: Maliev.MessagingContracts.sln
+      working-directory: .
+      dotnet-version: 10.0.x
+      configuration: Release
+      coverage-threshold: 80
+      artifact-retention-days: 7
+
   codeql-dotnet:
     name: Central CodeQL analysis
+    needs: scope
+    if: needs.scope.outputs.runtime_changed == 'true'
     permissions:
       contents: read
       security-events: write
@@ -151,3 +140,35 @@ jobs:
       target-path: Maliev.MessagingContracts.sln
       working-directory: .
       dotnet-version: 10.0.x
+
+  required-summary:
+    name: Required validation summary
+    needs:
+      - scope
+      - validate
+      - dotnet-pr-gate
+      - codeql-dotnet
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Enforce required validation results
+        env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          SCHEMA_RESULT: ${{ needs.validate.result }}
+          RUNTIME_CHANGED: ${{ needs.scope.outputs.runtime_changed }}
+          DOTNET_RESULT: ${{ needs.dotnet-pr-gate.result }}
+          CODEQL_RESULT: ${{ needs.codeql-dotnet.result }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SCOPE_RESULT" = "success"
+          test "$SCHEMA_RESULT" = "success"
+          if [[ "$RUNTIME_CHANGED" == "true" ]]; then
+            test "$DOTNET_RESULT" = "success"
+            test "$CODEQL_RESULT" = "success"
+          else
+            test "$DOTNET_RESULT" = "skipped"
+            test "$CODEQL_RESULT" = "skipped"
+          fi
+          echo "Required validation contract satisfied."
