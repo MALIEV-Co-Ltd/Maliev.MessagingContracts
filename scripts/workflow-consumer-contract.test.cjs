@@ -9,9 +9,9 @@ const workflowPath = path.join(repositoryRoot, '.github', 'workflows', 'validate
 const publishWorkflowPath = path.join(repositoryRoot, '.github', 'workflows', 'publish.yaml');
 const globalJsonPath = path.join(repositoryRoot, 'global.json');
 const approvedWorkflowSha = '183ddf5d7b841aa3583f7961a21084d2f4e54b23';
-const checkoutAction = 'actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10';
-const setupNodeAction = 'actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e';
-const setupDotnetAction = 'actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1';
+const checkoutAction = 'actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0';
+const setupNodeAction = 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020';
+const setupDotnetAction = 'actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68';
 
 function readWorkflow() {
   return YAML.parse(fs.readFileSync(workflowPath, 'utf8'));
@@ -121,8 +121,7 @@ test('schema-first validation remains local without duplicated .NET gate steps',
   assert.deepEqual(findStep(steps, 'Detect schema changes'), {
     name: 'Detect schema changes',
     env: { BASE_REF: '${{ github.base_ref }}' },
-    run: `# Only check if base_ref is available (pull requests)
-if [ -n "$BASE_REF" ]; then
+    run: `if [ -n "$BASE_REF" ]; then
   git diff --quiet "origin/$BASE_REF" -- contracts/schemas/ || {
     echo "::warning::Schema changes detected. Ensure messageVersion is incremented if this were a production environment."
   }
@@ -161,4 +160,14 @@ test('workflow references are immutable and concurrency cancels stale runs', () 
   }
   assert.equal(workflow.concurrency['cancel-in-progress'], true);
   assert.match(workflow.concurrency.group, /github\.workflow/);
+});
+
+test('runtime scope classification cannot lose its output through a pipefail SIGPIPE', () => {
+  const workflow = readWorkflow();
+  const classifier = findStep(workflow.jobs.scope.steps, 'Classify changed files');
+
+  assert.match(classifier.run, /runtime_files=/);
+  assert.match(classifier.run, /runtime_changed=true/);
+  assert.match(classifier.run, /runtime_changed=false/);
+  assert.doesNotMatch(classifier.run, /grep -Ev[^\n]+\|\s*grep -q/);
 });

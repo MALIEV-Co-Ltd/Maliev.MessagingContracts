@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Xunit;
 using Maliev.MessagingContracts.Contracts.Delivery;
+using Maliev.MessagingContracts.Contracts.Facility;
 using Maliev.MessagingContracts.Contracts.Shared;
 using Maliev.MessagingContracts.Contracts.Geometry;
 using Maliev.MessagingContracts.Contracts.Orders;
@@ -353,6 +354,83 @@ public class SerializationTests
         Assert.Equal("NotificationService", Assert.Single(RoundTrip(statusChanged).ConsumedBy));
         Assert.Equal(customerId, RoundTrip(completed).Payload.CustomerId);
         Assert.Equal("NotificationService", Assert.Single(RoundTrip(completed).ConsumedBy));
+    }
+
+    /// <summary>
+    /// Tests that equipment status changes preserve their facility payload fields.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_EquipmentStatusChangedEvent()
+    {
+        var message = new EquipmentStatusChangedEvent(
+            MessageId: Guid.NewGuid(),
+            MessageName: nameof(EquipmentStatusChangedEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0",
+            PublishedBy: "FacilityService",
+            ConsumedBy: ["NotificationService"],
+            CorrelationId: Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: DateTimeOffset.UtcNow,
+            IsPublic: false,
+            Payload: new EquipmentStatusChangedEventPayload(
+                EquipmentId: Guid.NewGuid(),
+                AssetCode: "MAL-CNC-0001",
+                Name: "CNC Mill",
+                Category: "CNC",
+                PreviousStatus: "Available",
+                NewStatus: "Maintenance"));
+
+        var json = JsonSerializer.Serialize(message, _options);
+        var deserialized = JsonSerializer.Deserialize<EquipmentStatusChangedEvent>(json, _options);
+
+        Assert.Contains("\"equipmentId\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"newStatus\"", json, StringComparison.Ordinal);
+        Assert.NotNull(deserialized);
+        Assert.Equal(message.Payload, deserialized.Payload);
+    }
+
+    /// <summary>
+    /// Tests that loan-document requests preserve borrower and document metadata.
+    /// </summary>
+    [Fact]
+    public void CanRoundTrip_LoanDocumentRequestedEvent()
+    {
+        var message = new LoanDocumentRequestedEvent(
+            MessageId: Guid.NewGuid(),
+            MessageName: nameof(LoanDocumentRequestedEvent),
+            MessageType: MessageType.Event,
+            MessageVersion: "1.0",
+            PublishedBy: "FacilityService",
+            ConsumedBy: ["PdfService"],
+            CorrelationId: Guid.NewGuid(),
+            CausationId: null,
+            OccurredAtUtc: DateTimeOffset.UtcNow,
+            IsPublic: false,
+            Payload: new LoanDocumentRequestedEventPayload(
+                LoanId: Guid.NewGuid(),
+                EquipmentId: Guid.NewGuid(),
+                AssetCode: "MAL-CNC-0001",
+                EquipmentName: "CNC Mill",
+                Brand: "MALIEV",
+                ModelName: "Mill-01",
+                ManufacturerSerial: "SN-001",
+                BorrowerId: Guid.NewGuid(),
+                BorrowerName: "Example Borrower",
+                BorrowerType: "Employee",
+                ApprovedByEmployeeId: Guid.NewGuid(),
+                LoanStartDate: "2026-07-18",
+                ExpectedReturnDate: "2026-07-25",
+                Purpose: "Training",
+                DocumentLanguage: "th"));
+
+        var json = JsonSerializer.Serialize(message, _options);
+        var deserialized = JsonSerializer.Deserialize<LoanDocumentRequestedEvent>(json, _options);
+
+        Assert.Contains("\"loanId\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"documentLanguage\"", json, StringComparison.Ordinal);
+        Assert.NotNull(deserialized);
+        Assert.Equal(message.Payload, deserialized.Payload);
     }
 
     private T RoundTrip<T>(T message)

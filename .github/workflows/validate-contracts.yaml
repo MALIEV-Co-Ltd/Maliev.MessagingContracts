@@ -25,6 +25,7 @@ on:
       - 'NuGet.config'
       - 'nuget.Config'
       - 'nuget.config'
+      - '.github/dependabot.yml'
       - '.github/workflows/validate-contracts.yaml'
       - '.github/workflows/publish.yaml'
 
@@ -36,6 +37,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  scope:
+    name: Classify validation scope
+    runs-on: ubuntu-latest
+    outputs:
+      runtime_changed: ${{ steps.changed.outputs.runtime_changed }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Classify changed files
+        id: changed
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$BASE_REF" ]]; then
+            echo "runtime_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git fetch origin "$BASE_REF" --depth=1
+          changed_files="$(git diff --name-only "origin/$BASE_REF"...HEAD)"
+          printf '%s\n' "$changed_files"
+          runtime_files="$(grep -Ev '^\.github/(dependabot\.yml|workflows/validate-contracts\.yaml)$' <<< "$changed_files" || true)"
+          if [[ -n "$runtime_files" ]]; then
+            echo "runtime_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "runtime_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
   validate:
     name: Validate schemas and generated contracts
     runs-on: ubuntu-latest
@@ -43,18 +76,18 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: '10.0.302'
 
@@ -68,7 +101,6 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
         run: |
-          # Only check if base_ref is available (pull requests)
           if [ -n "$BASE_REF" ]; then
             git diff --quiet "origin/$BASE_REF" -- contracts/schemas/ || {
               echo "::warning::Schema changes detected. Ensure messageVersion is incremented if this were a production environment."
@@ -87,8 +119,30 @@ jobs:
       - name: Verify generated C# is current
         run: node scripts/verify-generated-clean.cjs
 
+      - name: Validate bounded Dependabot policy
+        shell: ruby {0}
+        run: |
+          require "yaml"
+          path = ".github/dependabot.yml"
+          bytes = File.binread(path)
+          abort "UTF-8 BOM is not allowed" if bytes.start_with?("\xEF\xBB\xBF".b)
+          config = YAML.safe_load(bytes, aliases: false)
+          abort "Dependabot v2 is required" unless config["version"] == 2
+          updates = config.fetch("updates")
+          expected = { "github-actions" => 5, "nuget" => 10, "npm" => 10 }
+          abort "Unexpected ecosystems" unless updates.map { |update| update["package-ecosystem"] }.sort == expected.keys.sort
+          updates.each do |update|
+            ecosystem = update.fetch("package-ecosystem")
+            abort "Unexpected limit" unless update["open-pull-requests-limit"] == expected.fetch(ecosystem)
+            abort "Weekly schedule required" unless update.dig("schedule", "interval") == "weekly"
+            group = update.fetch("groups").values.fetch(0)
+            abort "Only minor and patch may be grouped" unless group["update-types"].sort == ["minor", "patch"]
+          end
+
   dotnet-pr-gate:
     name: Central .NET quality gate
+    needs: scope
+    if: needs.scope.outputs.runtime_changed == 'true'
     permissions:
       contents: read
     uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/dotnet-pr-gate.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
@@ -102,6 +156,8 @@ jobs:
 
   codeql-dotnet:
     name: Central CodeQL analysis
+    needs: scope
+    if: needs.scope.outputs.runtime_changed == 'true'
     permissions:
       contents: read
       security-events: write
@@ -110,3 +166,35 @@ jobs:
       target-path: Maliev.MessagingContracts.slnx
       working-directory: .
       dotnet-version: 10.0.302
+
+  required-summary:
+    name: Required validation summary
+    needs:
+      - scope
+      - validate
+      - dotnet-pr-gate
+      - codeql-dotnet
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Enforce required validation results
+        env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          SCHEMA_RESULT: ${{ needs.validate.result }}
+          RUNTIME_CHANGED: ${{ needs.scope.outputs.runtime_changed }}
+          DOTNET_RESULT: ${{ needs.dotnet-pr-gate.result }}
+          CODEQL_RESULT: ${{ needs.codeql-dotnet.result }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SCOPE_RESULT" = "success"
+          test "$SCHEMA_RESULT" = "success"
+          if [[ "$RUNTIME_CHANGED" == "true" ]]; then
+            test "$DOTNET_RESULT" = "success"
+            test "$CODEQL_RESULT" = "success"
+          else
+            test "$DOTNET_RESULT" = "skipped"
+            test "$CODEQL_RESULT" = "skipped"
+          fi
+          echo "Required validation contract satisfied."
