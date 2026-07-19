@@ -62,7 +62,8 @@ jobs:
           git fetch origin "$BASE_REF" --depth=1
           changed_files="$(git diff --name-only "origin/$BASE_REF"...HEAD)"
           printf '%s\n' "$changed_files"
-          if grep -Ev '^\.github/(dependabot\.yml|workflows/validate-contracts\.yaml)$' <<< "$changed_files" | grep -q .; then
+          runtime_files="$(grep -Ev '^\.github/(dependabot\.yml|workflows/validate-contracts\.yaml)$' <<< "$changed_files" || true)"
+          if [[ -n "$runtime_files" ]]; then
             echo "runtime_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "runtime_changed=false" >> "$GITHUB_OUTPUT"

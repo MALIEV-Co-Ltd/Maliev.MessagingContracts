@@ -161,3 +161,13 @@ test('workflow references are immutable and concurrency cancels stale runs', () 
   assert.equal(workflow.concurrency['cancel-in-progress'], true);
   assert.match(workflow.concurrency.group, /github\.workflow/);
 });
+
+test('runtime scope classification cannot lose its output through a pipefail SIGPIPE', () => {
+  const workflow = readWorkflow();
+  const classifier = findStep(workflow.jobs.scope.steps, 'Classify changed files');
+
+  assert.match(classifier.run, /runtime_files=/);
+  assert.match(classifier.run, /runtime_changed=true/);
+  assert.match(classifier.run, /runtime_changed=false/);
+  assert.doesNotMatch(classifier.run, /grep -Ev[^\n]+\|\s*grep -q/);
+});
