@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/geometry-preview-images",
+    "title": "Geometry Preview Images Events",
+    "description": "Events published by the Geometry Service for 6-side + isometric preview images",
+    "definitions": {
+        "PreviewImagesGeneratedEvent": {
+            "type": "object",
+            "description": "Published when 6-side preview images are generated for a 3D file",
+            "properties": {
+                "fileId": {
+                    "type": ["string", "null"],
+                    "description": "Authoritative UploadService file identifier for resolving the current storage path after file migration"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "Original 3D file storage path (used as join key with OrderFile)"
+                },
+                "previewImages": {
+                    "type": "object",
+                    "description": "Preview images for 6 sides of the 3D model",
+                    "properties": {
+                        "frontSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to front preview WebP (small)"
+                        },
+                        "leftSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to left preview WebP (small)"
+                        },
+                        "rightSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to right preview WebP (small)"
+                        },
+                        "backSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to back preview WebP (small)"
+                        },
+                        "topSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to top preview WebP (small)"
+                        },
+                        "bottomSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to bottom preview WebP (small)"
+                        },
+                        "thumbnailSmall": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to isometric thumbnail WebP (small, ~256px)"
+                        },
+                        "thumbnailLarge": {
+                            "type": ["string", "null"],
+                            "description": "GCS storage path to isometric thumbnail WebP (large, 1200px, hi-res fallback)"
+                        }
+                    }
+                },
+                "generatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when preview images were generated"
+                },
+                "failed": {
+                    "type": ["boolean"],
+                    "description": "True when preview image generation failed; consumers should transition to Failed state"
+                }
+            },
+            "required": [
+                "storagePath",
+                "previewImages",
+                "generatedAt"
+            ]
+        }
+    }
+}

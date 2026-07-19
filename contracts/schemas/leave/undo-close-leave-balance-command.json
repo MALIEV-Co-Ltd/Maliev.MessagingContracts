@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UndoCloseLeaveBalanceCommand",
+  "description": "Command to restore leave balances after a failed termination flow.",
+  "allOf": [
+    {
+      "$ref": "../shared/base-message.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "messageName": { "const": "UndoCloseLeaveBalanceCommand" },
+        "messageType": { "const": "Command" },
+        "messageVersion": { "const": "1.0" },
+        "publishedBy": { "const": "EmployeeService" },
+        "consumedBy": { "const": ["LeaveService"] },
+        "isPublic": { "const": false }
+      }
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "payload": {
+      "type": "object",
+      "description": "The payload for restoring leave balances.",
+      "properties": {
+        "employeeId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "The unique identifier of the employee."
+        }
+      },
+      "required": [
+        "employeeId"
+      ]
+    }
+  },
+  "required": [
+    "payload"
+  ]
+}

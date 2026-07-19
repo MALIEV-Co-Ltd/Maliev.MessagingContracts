@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "PermissionRegistrationRequest",
+    "description": "Request published by services to register their permissions and roles with the IAM service via RabbitMQ.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "serviceName": {
+            "type": "string",
+            "description": "The name of the service registering permissions (e.g., 'customer', 'order')."
+        },
+        "permissions": {
+            "type": "array",
+            "description": "List of permissions to register.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "permissionId": {
+                        "type": "string",
+                        "description": "The unique permission identifier in service.resource.action format."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Human-readable description of the permission."
+                    }
+                },
+                "required": [
+                    "permissionId"
+                ]
+            }
+        },
+        "roles": {
+            "type": "array",
+            "description": "Optional list of predefined roles to register.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "roleId": {
+                        "type": "string",
+                        "description": "The unique role identifier."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Human-readable description of the role."
+                    },
+                    "permissionIds": {
+                        "type": "array",
+                        "description": "List of permission IDs assigned to this role.",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "roleId",
+                    "permissionIds"
+                ]
+            }
+        }
+    },
+    "required": [
+        "serviceName",
+        "permissions"
+    ]
+}

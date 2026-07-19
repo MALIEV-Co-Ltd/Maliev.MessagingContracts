@@ -4,6 +4,86 @@
     "title": "Geometry Domain Events",
     "description": "Events published by the Geometry Service after 3D file analysis",
     "definitions": {
+        "BoundingBox": {
+            "type": "object",
+            "description": "Bounding box dimensions",
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "z": {
+                    "type": "number"
+                }
+            }
+        },
+        "BodyInfo": {
+            "type": "object",
+            "description": "Per-body metadata for multi-body CAD files",
+            "properties": {
+                "index": {
+                    "type": "integer",
+                    "description": "Zero-based body index"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Stable body name from glTF node or generated Body_NN format"
+                },
+                "volumeCm3": {
+                    "type": "number",
+                    "description": "Volume of this body in cm³"
+                },
+                "bboxMin": {
+                    "$ref": "#/definitions/BoundingBox",
+                    "description": "Minimum XYZ coordinates in mm"
+                },
+                "bboxMax": {
+                    "$ref": "#/definitions/BoundingBox",
+                    "description": "Maximum XYZ coordinates in mm"
+                }
+            },
+            "required": ["index", "name"]
+        },
+        "FileMetrics": {
+            "type": "object",
+            "description": "Geometry metrics for a 3D file",
+            "properties": {
+                "volumeCm3": {
+                    "type": "number"
+                },
+                "supportVolumeCm3": {
+                    "type": "number"
+                },
+                "surfaceAreaCm2": {
+                    "type": "number"
+                },
+                "boundingBox": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "number"
+                        },
+                        "y": {
+                            "type": "number"
+                        },
+                        "z": {
+                            "type": "number"
+                        }
+                    }
+                },
+                "isManifold": {
+                    "type": "boolean"
+                },
+                "triangleCount": {
+                    "type": "integer"
+                },
+                "eulerNumber": {
+                    "type": "integer"
+                }
+            }
+        },
         "FileAnalyzedEvent": {
             "type": "object",
             "description": "Published when a 3D file analysis completes successfully",
@@ -12,8 +92,14 @@
                     "type": "string",
                     "description": "Unique identifier for the file"
                 },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the customer who uploaded the file"
+                },
                 "metrics": {
                     "type": "object",
+                    "description": "Geometry metrics for the analyzed file",
                     "properties": {
                         "volumeCm3": {
                             "type": "number"
@@ -46,12 +132,111 @@
                         },
                         "eulerNumber": {
                             "type": "integer"
+                        },
+                        "nonManifoldReason": {
+                            "type": ["string", "null"],
+                            "description": "Human-readable reason why the mesh is non-manifold; null when manifold."
+                        },
+                        "nonManifoldFaceCount": {
+                            "type": ["integer", "null"],
+                            "description": "Approximate count of broken/non-manifold faces; null when manifold."
                         }
                     }
+                },
+                "glbStoragePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS storage path of the generated GLB file"
+                },
+                "viewerStoragePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS storage path the browser viewer should load. For generated viewer artifacts this is the GLB path; for browser-loadable mesh uploads this may be the original storagePath."
+                },
+                "viewerFileExtension": {
+                    "type": ["string", "null"],
+                    "description": "Dot-prefixed file extension for the browser viewer loader, such as .glb, .stl, or .obj."
+                },
+                "thumbnailStoragePath": {
+                    "type": ["string", "null"],
+                    "description": "GCS storage path of the generated thumbnail image"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the original 3D file"
                 },
                 "processedAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "dfmReport": {
+                    "type": ["object", "null"],
+                    "description": "Optional DFM analysis results. Null if analysis failed or not applicable. Process-specific report type is determined by manufacturingProcessName.",
+                    "oneOf": [
+                        { "type": "null" },
+                        { "$ref": "#/definitions/FdmDfmReport" },
+                        { "$ref": "#/definitions/SlaDfmReport" },
+                        { "$ref": "#/definitions/CncDfmReport" }
+                    ]
+                },
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the material"
+                },
+                "materialCode": {
+                    "type": "string",
+                    "description": "Material code (e.g., 'PLA', 'ABS', 'PETG')"
+                },
+                "manufacturingProcessId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the manufacturing process"
+                },
+                "manufacturingProcessName": {
+                    "type": "string",
+                    "description": "Manufacturing process name (e.g., 'FDM', 'SLA', 'DLP', 'CNC')"
+                },
+                "bodyCount": {
+                    "type": ["integer", "null"],
+                    "description": "Number of bodies in the CAD file (1 for single-body, >1 for assemblies)"
+                },
+                "bodies": {
+                    "type": ["array", "null"],
+                    "description": "Per-body metadata for multi-body files",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "index": {
+                                "type": "integer",
+                                "description": "Zero-based body index"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Stable body name from glTF node or generated Body_NN format"
+                            },
+                            "volumeCm3": {
+                                "type": ["number", "null"],
+                                "description": "Volume of this body in cm³"
+                            },
+                            "bboxMin": {
+                                "type": ["object", "null"],
+                                "description": "Minimum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            },
+                            "bboxMax": {
+                                "type": ["object", "null"],
+                                "description": "Maximum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            }
+                        }
+                    }
                 }
             },
             "required": [
@@ -59,6 +244,133 @@
                 "metrics",
                 "processedAt"
             ]
+        },
+        "FileMetricsReadyEvent": {
+            "type": "object",
+            "description": "Published immediately after mesh metrics are computed, before preview generation",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the original 3D file"
+                },
+                "metrics": {
+                    "type": "object",
+                    "description": "Geometry metrics for the analyzed file",
+                    "properties": {
+                        "volumeCm3": {
+                            "type": "number"
+                        },
+                        "supportVolumeCm3": {
+                            "type": "number"
+                        },
+                        "surfaceAreaCm2": {
+                            "type": "number"
+                        },
+                        "boundingBox": {
+                            "type": "object",
+                            "properties": {
+                                "x": {
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "type": "number"
+                                },
+                                "z": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "isManifold": {
+                            "type": "boolean"
+                        },
+                        "triangleCount": {
+                            "type": "integer"
+                        },
+                        "eulerNumber": {
+                            "type": "integer"
+                        },
+                        "nonManifoldReason": {
+                            "type": ["string", "null"],
+                            "description": "Human-readable reason why the mesh is non-manifold; null when manifold."
+                        },
+                        "nonManifoldFaceCount": {
+                            "type": ["integer", "null"],
+                            "description": "Approximate count of broken/non-manifold faces; null when manifold."
+                        }
+                    }
+                },
+                "processedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "bodyCount": {
+                    "type": ["integer", "null"],
+                    "description": "Number of bodies in the CAD file (1 for single-body, >1 for assemblies)"
+                },
+                "bodies": {
+                    "type": ["array", "null"],
+                    "description": "Per-body metadata for multi-body files",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "index": {
+                                "type": "integer",
+                                "description": "Zero-based body index"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Stable body name from glTF node or generated Body_NN format"
+                            },
+                            "volumeCm3": {
+                                "type": ["number", "null"],
+                                "description": "Volume of this body in cm³"
+                            },
+                            "bboxMin": {
+                                "type": ["object", "null"],
+                                "description": "Minimum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            },
+                            "bboxMax": {
+                                "type": ["object", "null"],
+                                "description": "Maximum XYZ coordinates in mm",
+                                "properties": {
+                                    "x": {"type": "number"},
+                                    "y": {"type": "number"},
+                                    "z": {"type": "number"}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "required": ["fileId", "storagePath", "metrics", "processedAt"]
+        },
+        "SmallThumbnailReadyEvent": {
+            "type": "object",
+            "description": "Published when the 256px isometric thumbnail is ready for fast frontend delivery",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the original 3D file"
+                },
+                "thumbnailStoragePath": {
+                    "type": "string",
+                    "description": "GCS path of the generated 256px isometric WebP thumbnail"
+                }
+            },
+            "required": ["fileId", "storagePath", "thumbnailStoragePath"]
         },
         "FileAnalysisFailedEvent": {
             "type": "object",
@@ -68,20 +380,389 @@
                     "type": "string",
                     "description": "Unique identifier for the file"
                 },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS storage path of the file that failed analysis"
+                },
                 "errorCode": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The error Code"
                 },
                 "details": {
                     "type": [
                         "string",
                         "null"
-                    ]
+                    ],
+                    "description": "The detail"
                 }
             },
             "required": [
                 "fileId",
+                "storagePath",
                 "errorCode"
             ]
+        },
+        "DfmIssueItem": {
+            "type": "object",
+            "description": "A single DFM issue with human-readable description and threshold context. Included in each report payload so the frontend displays backend-generated descriptions without duplicating threshold values.",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "description": "Short machine-readable key, e.g. 'thin_wall', 'overhang', 'internal_radius'"
+                },
+                "severity": {
+                    "type": "string",
+                    "description": "Issue severity: 'info', 'warning', or 'error'",
+                    "enum": ["info", "warning", "error"]
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Short human-readable title shown in the overlay panel, e.g. 'Thin Walls (3 regions)'"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Detailed message including measured vs. required values, e.g. '3 wall region(s) below the FDM minimum of 0.8mm'"
+                },
+                "value": {
+                    "type": ["number", "null"],
+                    "description": "Measured value for this issue (mm, deg, ratio, etc.)"
+                },
+                "threshold": {
+                    "type": ["number", "null"],
+                    "description": "Rule threshold that was violated"
+                }
+            },
+            "required": ["category", "severity", "title", "description"]
+        },
+        "FdmDfmReport": {
+            "type": "object",
+            "description": "DFM analysis results specific to FDM 3D printing",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "const": "FDM"
+                },
+                "thinWallCount": {
+                    "type": "integer",
+                    "description": "Number of detected thin-wall regions (wall thickness < 0.8mm)"
+                },
+                "thinWallRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each thin-wall region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "overhangFaceCount": {
+                    "type": "integer",
+                    "description": "Number of mesh faces with overhang angle > 45 degrees from vertical"
+                },
+                "overhangAreaCm2": {
+                    "type": "number",
+                    "description": "Total projected area (cm²) of overhanging faces"
+                },
+                "overhangRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each overhang region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "supportRequired": {
+                    "type": "boolean",
+                    "description": "True if the model requires support structures"
+                },
+                "estimatedSupportVolumeCm3": {
+                    "type": ["number", "null"],
+                    "description": "Estimated volume of support structures needed (null when no support is required)"
+                },
+                "smallDetailCount": {
+                    "type": "integer",
+                    "description": "Number of small details that may be lost during printing"
+                },
+                "issues": {
+                    "type": "array",
+                    "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": { "type": "string", "description": "Short machine-readable key, e.g. 'thin_wall', 'overhang'" },
+                            "severity": { "type": "string", "description": "Issue severity: info, warning, or error" },
+                            "title": { "type": "string", "description": "Short human-readable title, e.g. 'Thin Walls (3 regions)'" },
+                            "description": { "type": "string", "description": "Detailed message with measured vs. required values" },
+                            "value": { "type": "number", "description": "Measured value for this issue (mm, deg, ratio, etc.)" },
+                            "threshold": { "type": "number", "description": "Rule threshold that was violated" }
+                        }
+                    }
+                }
+            },
+            "required": ["reportType", "thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2", "overhangRegions", "supportRequired"]
+        },
+        "SlaDfmReport": {
+            "type": "object",
+            "description": "DFM analysis results specific to SLA/DLP resin printing",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "const": "SLA"
+                },
+                "thinWallCount": {
+                    "type": "integer",
+                    "description": "Number of detected thin-wall regions"
+                },
+                "thinWallRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each thin-wall region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "overhangFaceCount": {
+                    "type": "integer",
+                    "description": "Number of mesh faces with overhang"
+                },
+                "overhangAreaCm2": {
+                    "type": "number",
+                    "description": "Total projected area (cm²) of overhanging faces"
+                },
+                "overhangRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each overhang region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "resinTrappingRisk": {
+                    "type": "boolean",
+                    "description": "True if there are closed cavities where resin could be trapped"
+                },
+                "resinTrappingRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each resin trapping region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "suctionRisk": {
+                    "type": "boolean",
+                    "description": "True if there are regions that could create vacuum suction during peeling"
+                },
+                "suctionRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of each suction risk region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "hollowRegions": {
+                    "type": "array",
+                    "description": "Centroid coordinates (mm) of hollow regions that may need drainage holes",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "issues": {
+                    "type": "array",
+                    "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": { "type": "string", "description": "Short machine-readable key, e.g. 'thin_wall', 'overhang'" },
+                            "severity": { "type": "string", "description": "Issue severity: info, warning, or error" },
+                            "title": { "type": "string", "description": "Short human-readable title, e.g. 'Thin Walls (3 regions)'" },
+                            "description": { "type": "string", "description": "Detailed message with measured vs. required values" },
+                            "value": { "type": "number", "description": "Measured value for this issue (mm, deg, ratio, etc.)" },
+                            "threshold": { "type": "number", "description": "Rule threshold that was violated" }
+                        }
+                    }
+                }
+            },
+            "required": ["reportType", "thinWallCount", "thinWallRegions", "overhangFaceCount", "overhangAreaCm2", "overhangRegions", "resinTrappingRisk", "suctionRisk"]
+        },
+        "CncDfmReport": {
+            "type": "object",
+            "description": "DFM analysis results specific to CNC machining",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "const": "CNC"
+                },
+                "sharpCornerCount": {
+                    "type": "integer",
+                    "description": "Number of sharp corners that could cause tool breakage (radius < 2mm)"
+                },
+                "sharpCornerRegions": {
+                    "type": "array",
+                    "description": "Coordinates (mm) of each sharp corner region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "hasUndercuts": {
+                    "type": "boolean",
+                    "description": "True if the part has undercut features that require special tooling"
+                },
+                "undercutRegions": {
+                    "type": "array",
+                    "description": "Coordinates (mm) of each undercut region",
+                    "items": {
+                        "type": "array",
+                        "items": { "type": "number" },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                },
+                "hasDrillHoles": {
+                    "type": "boolean",
+                    "description": "True if the part has tap or cross-drilled holes"
+                },
+                "drillHoleCount": {
+                    "type": "integer",
+                    "description": "Number of drill holes detected"
+                },
+                "requiresEdm": {
+                    "type": "boolean",
+                    "description": "True if EDM/wirecut is required for complex features"
+                },
+                "requiresGrinding": {
+                    "type": "boolean",
+                    "description": "True if grinding is required for flat surfaces"
+                },
+                "minimumFeatureSizeMm": {
+                    "type": "number",
+                    "description": "Smallest detectable feature size in mm"
+                },
+                "isTurnable": {
+                    "type": "boolean",
+                    "description": "True when the part is suitable for CNC turning based on detected axial symmetry"
+                },
+                "primaryAxis": {
+                    "type": ["string", "null"],
+                    "description": "Detected axis of turning direction: X, Y, Z, or null when no turnable axis was found"
+                },
+                "axisVector": {
+                    "type": "array",
+                    "description": "Unit vector for the detected turning axis in model coordinates",
+                    "items": { "type": "number" },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
+                "axisPoint": {
+                    "type": "array",
+                    "description": "Point on the detected turning axis in model coordinates, centered from round or bore feature geometry instead of the part bounding box",
+                    "items": { "type": "number" },
+                    "minItems": 3,
+                    "maxItems": 3
+                },
+                "lengthDiameterRatio": {
+                    "type": "number",
+                    "description": "Length-to-diameter ratio measured along the detected turning axis"
+                },
+                "symmetryDeviation": {
+                    "type": "number",
+                    "description": "Mean cross-section circularity deviation for the detected turning axis"
+                },
+                "issues": {
+                    "type": "array",
+                    "description": "Per-issue details with human-readable descriptions and threshold context. Single source of truth — frontend should prefer these over hardcoded strings.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "category": { "type": "string", "description": "Short machine-readable key, e.g. 'internal_radius', 'overhang'" },
+                            "severity": { "type": "string", "description": "Issue severity: info, warning, or error" },
+                            "title": { "type": "string", "description": "Short human-readable title" },
+                            "description": { "type": "string", "description": "Detailed message with measured vs. required values" },
+                            "value": { "type": "number", "description": "Measured value for this issue (mm, deg, ratio, etc.)" },
+                            "threshold": { "type": "number", "description": "Rule threshold that was violated" }
+                        }
+                    }
+                }
+            },
+            "required": ["reportType", "sharpCornerCount", "sharpCornerRegions", "hasUndercuts", "requiresEdm", "requiresGrinding"]
+        },
+        "DfmAnalysisReadyEvent": {
+            "type": "object",
+            "description": "Published when DFM analysis is complete with all three process-specific reports",
+            "properties": {
+                "fileId": {
+                    "type": "string",
+                    "description": "Unique identifier for the file"
+                },
+                "storagePath": {
+                    "type": "string",
+                    "description": "GCS path, used as join key by frontend"
+                },
+                "fdmReport": {
+                    "oneOf": [
+                        { "$ref": "#/definitions/FdmDfmReport" },
+                        { "type": "null" }
+                    ],
+                    "description": "FDM-specific DFM data, or null if not applicable"
+                },
+                "slaReport": {
+                    "oneOf": [
+                        { "$ref": "#/definitions/SlaDfmReport" },
+                        { "type": "null" }
+                    ],
+                    "description": "SLA-specific DFM data, or null if not applicable"
+                },
+                "cncReport": {
+                    "oneOf": [
+                        { "$ref": "#/definitions/CncDfmReport" },
+                        { "type": "null" }
+                    ],
+                    "description": "CNC-specific DFM data, or null if not applicable"
+                },
+                "analyzedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When analysis completed"
+                },
+                "overlayPaths": {
+                    "type": ["object", "null"],
+                    "description": "Overlay GLB storage paths keyed by PROCESS__category (e.g. FDM__thin_wall)",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "bodyCount": {
+                    "type": ["integer", "null"],
+                    "description": "Number of distinct bodies in the file (null if not computed)"
+                },
+                "nonManifoldReason": {
+                    "type": ["string", "null"],
+                    "description": "Human-readable mesh-integrity description forwarded from tessellation; null when manifold."
+                },
+                "nonManifoldFaceCount": {
+                    "type": ["integer", "null"],
+                    "description": "Approximate count of broken/non-manifold faces; null when manifold."
+                }
+            },
+            "required": ["fileId", "storagePath", "analyzedAt"]
         }
     }
 }

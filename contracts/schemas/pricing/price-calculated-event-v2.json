@@ -1,0 +1,273 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://maliev.com/schemas/pricing/price-calculated-event-v2.json",
+    "title": "PriceCalculatedEventV2",
+    "description": "Published when a price calculation completes using the v2 fixed-cost allocation model.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        },
+        {
+            "type": "object",
+            "properties": {
+                "messageName": {
+                    "type": "string",
+                    "const": "PriceCalculatedEventV2",
+                    "description": "The canonical v2 pricing event name."
+                },
+                "messageType": {
+                    "type": "string",
+                    "const": "Event",
+                    "description": "The pricing contract message type."
+                },
+                "messageVersion": {
+                    "type": "string",
+                    "const": "2.0.0",
+                    "description": "The fixed semantic version of this additive pricing contract."
+                },
+                "publishedBy": {
+                    "type": "string",
+                    "const": "PricingService",
+                    "description": "The service that publishes calculated prices."
+                },
+                "consumedBy": {
+                    "type": "array",
+                    "const": [],
+                    "description": "The intended consumers; empty until a v2 consumer is implemented."
+                }
+            },
+            "required": [
+                "messageName",
+                "messageType",
+                "messageVersion",
+                "publishedBy",
+                "consumedBy"
+            ]
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "description": "The complete v2 pricing calculation result.",
+            "properties": {
+                "pricingAuditId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the pricing audit record."
+                },
+                "quotationId": {
+                    "type": ["string", "null"],
+                    "format": "uuid",
+                    "description": "Quotation identifier when the price is linked to a quotation."
+                },
+                "fileId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the priced file."
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier for the customer."
+                },
+                "materialId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Material used for the pricing calculation."
+                },
+                "processId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Manufacturing process used for pricing."
+                },
+                "quantity": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Quantity of items priced."
+                },
+                "inputVolumeCm3": {
+                    "type": "number",
+                    "description": "Part volume in cubic centimetres used as input."
+                },
+                "inputSupportVolumeCm3": {
+                    "type": "number",
+                    "description": "Support material volume in cubic centimetres."
+                },
+                "inputSurfaceAreaCm2": {
+                    "type": "number",
+                    "description": "Surface area in square centimetres used as input."
+                },
+                "strategy": {
+                    "type": "string",
+                    "description": "Pricing strategy used for the calculation."
+                },
+                "mlModelVersion": {
+                    "type": ["string", "null"],
+                    "description": "Machine-learning model version when applicable."
+                },
+                "confidenceLevel": {
+                    "type": "number",
+                    "description": "Confidence level of the price calculation from zero to one."
+                },
+                "pricingConfigurationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Pricing configuration record used for the calculation."
+                },
+                "breakdown": {
+                    "type": "object",
+                    "description": "Detailed cost breakdown with explicit fixed-cost allocation.",
+                    "properties": {
+                        "materialCost": {
+                            "type": "number",
+                            "description": "Per-unit raw material cost in baseCurrency before margin."
+                        },
+                        "supportCost": {
+                            "type": "number",
+                            "description": "Per-unit support material cost in baseCurrency before margin."
+                        },
+                        "machineTimeCost": {
+                            "type": "number",
+                            "description": "Per-unit machine time cost in baseCurrency before margin."
+                        },
+                        "setupCost": {
+                            "type": "number",
+                            "description": "One-time setup cost in baseCurrency, applied once to the priced line before margin."
+                        },
+                        "variableDfmSurcharge": {
+                            "type": "number",
+                            "description": "Per-unit variable DFM surcharge in baseCurrency before margin, excluding fixedDfmSurcharge."
+                        },
+                        "fixedDfmSurcharge": {
+                            "type": "number",
+                            "description": "One-time setup-derived DFM surcharge in baseCurrency, applied once to the priced line before margin."
+                        },
+                        "complexitySurcharge": {
+                            "type": "number",
+                            "description": "Per-unit complexity surcharge in baseCurrency before margin, excluding both DFM components."
+                        },
+                        "subtotalBeforeMargin": {
+                            "type": "number",
+                            "description": "Full THB line subtotal before margin: ((materialCost + supportCost + machineTimeCost + variableDfmSurcharge + complexitySurcharge) * quantity) + setupCost + fixedDfmSurcharge."
+                        },
+                        "marginAmount": {
+                            "type": "number",
+                            "description": "Full THB line margin before volume discount: subtotalBeforeMargin * (marginMultiplier - 1)."
+                        },
+                        "marginMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Multiplier applied separately to the per-unit variable total and the one-time fixed line total."
+                        },
+                        "volumeDiscountPercent": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 100,
+                            "description": "Percentage discount applied only to the margined per-unit variable components."
+                        },
+                        "leadTimeMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Lead-time multiplier applied to both the discounted variable line total and the margined one-time fixed line total."
+                        },
+                        "toleranceMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Tolerance multiplier applied to both the discounted variable line total and the margined one-time fixed line total."
+                        },
+                        "minimumOrderPriceFloorThb": {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "Minimum THB line total applied after quantity and the one-time fixed line cost, before exchangeRate."
+                        },
+                        "exchangeRate": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Multiplicative rate from baseCurrency to the payload currency, applied after the THB minimum floor."
+                        },
+                        "baseCurrency": {
+                            "type": "string",
+                            "const": "THB",
+                            "description": "ISO 4217 base currency for all breakdown inputs; fixed to THB."
+                        },
+                        "totalPrice": {
+                            "type": "number",
+                            "description": "Final line total in the payload currency after margin, variable-only discount, quantity, one-time fixed costs, lead-time and tolerance multipliers, THB floor, and exchangeRate."
+                        }
+                    },
+                    "required": [
+                        "materialCost",
+                        "supportCost",
+                        "machineTimeCost",
+                        "setupCost",
+                        "variableDfmSurcharge",
+                        "fixedDfmSurcharge",
+                        "complexitySurcharge",
+                        "subtotalBeforeMargin",
+                        "marginAmount",
+                        "marginMultiplier",
+                        "volumeDiscountPercent",
+                        "leadTimeMultiplier",
+                        "toleranceMultiplier",
+                        "minimumOrderPriceFloorThb",
+                        "exchangeRate",
+                        "baseCurrency",
+                        "totalPrice"
+                    ]
+                },
+                "totalUnitPrice": {
+                    "type": "number",
+                    "description": "Final calculated unit price."
+                },
+                "totalPrice": {
+                    "type": "number",
+                    "description": "Total price including quantity."
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "ISO 4217 currency code."
+                },
+                "validUntil": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Price validity expiry timestamp."
+                },
+                "calculatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the price was calculated."
+                },
+                "storagePath": {
+                    "type": ["string", "null"],
+                    "description": "Storage path used as a frontend join key."
+                },
+                "estimatedLeadTimeDays": {
+                    "type": ["integer", "null"],
+                    "description": "Estimated production and shipping lead time in days."
+                }
+            },
+            "required": [
+                "pricingAuditId",
+                "fileId",
+                "customerId",
+                "materialId",
+                "processId",
+                "quantity",
+                "inputVolumeCm3",
+                "inputSupportVolumeCm3",
+                "inputSurfaceAreaCm2",
+                "strategy",
+                "confidenceLevel",
+                "pricingConfigurationId",
+                "breakdown",
+                "totalUnitPrice",
+                "totalPrice",
+                "currency",
+                "validUntil",
+                "calculatedAt"
+            ]
+        }
+    },
+    "required": ["payload"]
+}

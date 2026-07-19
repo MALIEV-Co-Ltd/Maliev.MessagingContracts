@@ -21,8 +21,8 @@
         },
         "messageVersion": {
             "type": "string",
-            "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
-            "description": "The semantic version of the schema (MAJOR.MINOR)."
+            "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(\\.(0|[1-9]\\d*))?$",
+            "description": "The semantic version of the schema (MAJOR.MINOR or MAJOR.MINOR.PATCH)."
         },
         "publishedBy": {
             "type": "string",
@@ -33,8 +33,8 @@
             "items": {
                 "type": "string"
             },
-            "minItems": 1,
-            "description": "An explicit array of service identifiers for the intended consumers."
+            "minItems": 0,
+            "description": "An explicit array of service identifiers for intended consumers; events may be declared before their first consumer is implemented."
         },
         "correlationId": {
             "type": "string",
@@ -66,5 +66,24 @@
         "correlationId",
         "occurredAtUtc",
         "isPublic"
+    ],
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "messageType": {
+                        "enum": ["Command", "Request", "Response"]
+                    }
+                },
+                "required": ["messageType"]
+            },
+            "then": {
+                "properties": {
+                    "consumedBy": {
+                        "minItems": 1
+                    }
+                }
+            }
+        }
     ]
 }

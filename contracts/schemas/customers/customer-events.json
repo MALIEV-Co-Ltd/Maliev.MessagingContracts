@@ -27,8 +27,17 @@
                     "type": "string",
                     "format": "email"
                 },
-                "phone": {
-                    "type": ["string", "null"]
+                "mobile": {
+                    "type": ["string", "null"],
+                    "description": "Customer's mobile phone number"
+                },
+                "extension": {
+                    "type": ["string", "null"],
+                    "description": "Customer's desk extension for company landline"
+                },
+                "landline": {
+                    "type": ["string", "null"],
+                    "description": "Customer's personal or company landline number"
                 },
                 "segment": {
                     "type": "string",
@@ -100,6 +109,78 @@
                 }
             },
             "required": ["customerId", "deletedBy", "actorType", "deletedAt"]
+        },
+        "CustomerRegisteredEvent": {
+            "type": "object",
+            "description": "Published when a customer self-registers (not employee-created)",
+            "properties": {
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The newly created customer ID"
+                },
+                "principalId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The IAM principal ID"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The customer's email"
+                },
+                "firstName": {
+                    "type": "string",
+                    "description": "First name"
+                },
+                "lastName": {
+                    "type": "string",
+                    "description": "Last name"
+                },
+                "registrationMethod": {
+                    "type": "string",
+                    "description": "Registration method: Google or Email"
+                },
+                "registeredAtUtc": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When registration occurred"
+                }
+            },
+            "required": ["customerId", "principalId", "email", "firstName", "lastName", "registrationMethod", "registeredAtUtc"]
+        },
+        "CompanyTierChangedEvent": {
+            "type": "object",
+            "description": "Published by CustomerService when a company's tier is promoted or demoted",
+            "properties": {
+                "companyId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique identifier of the company whose tier changed"
+                },
+                "previousTier": {
+                    "type": "string",
+                    "description": "Tier before the change (Classic, Silver, Gold)"
+                },
+                "newTier": {
+                    "type": "string",
+                    "description": "Tier after the change (Classic, Silver, Gold)"
+                },
+                "currentYearPurchaseValue": {
+                    "type": "number",
+                    "description": "Year-to-date purchase value in THB at the time of the tier change"
+                },
+                "currentYearOrderCount": {
+                    "type": "integer",
+                    "description": "Year-to-date order count at the time of the tier change"
+                },
+                "occurredAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "UTC timestamp when the tier change occurred"
+                }
+            },
+            "required": ["companyId", "previousTier", "newTier", "currentYearPurchaseValue", "currentYearOrderCount", "occurredAt"]
         }
     }
 }

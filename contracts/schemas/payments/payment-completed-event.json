@@ -21,6 +21,10 @@
                     "type": "string",
                     "description": "Human-readable order number"
                 },
+                "customerId": {
+                    "type": "string",
+                    "description": "Customer identifier associated with the paid order"
+                },
                 "paymentId": {
                     "type": "string",
                     "format": "uuid",
@@ -34,11 +38,17 @@
                     "type": "string",
                     "pattern": "^[A-Z]{3}$",
                     "description": "Currency code (ISO 4217)"
+                },
+                "providerName": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional in v1 so historical payment-completed events may omit the provider identifier"
                 }
             },
             "required": [
                 "orderId",
                 "orderNumber",
+                "customerId",
                 "paymentId",
                 "amount",
                 "currency"
