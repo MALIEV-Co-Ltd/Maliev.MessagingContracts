@@ -6,142 +6,202 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Generator
 {
+    /// <summary>
+    /// Generator program for C# messaging contracts.
+    /// </summary>
     class Program
     {
+        private static ILogger<Program>? _logger;
+
         static async Task Main(string[] args)
         {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+            _logger = loggerFactory.CreateLogger<Program>();
+
             var workspaceRoot = GetWorkspaceRoot(Directory.GetCurrentDirectory());
             var schemaRoot = Path.Combine(workspaceRoot, "contracts", "schemas");
             var outputDir = Path.Combine(workspaceRoot, "generated", "csharp", "Contracts");
-            var outputFile = Path.Combine(outputDir, "MessagingContracts.cs");
 
-            Console.WriteLine("Cleaning up existing generated files...");
+            var generator = new ManualCSharpGenerator(schemaRoot, loggerFactory.CreateLogger<ManualCSharpGenerator>());
+            var results = await generator.GenerateAsync();
+
+            _logger.LogInformation("Cleaning up output directory...");
             if (Directory.Exists(outputDir))
             {
-                var filesToDelete = Directory.EnumerateFiles(outputDir, "*.cs", SearchOption.AllDirectories);
-                foreach (var file in filesToDelete)
-                {
-                    File.Delete(file);
-                }
+                Directory.Delete(outputDir, recursive: true);
             }
-            else
+            Directory.CreateDirectory(outputDir);
+
+            _logger.LogInformation("Writing generated files...");
+            foreach (var result in results)
             {
-                Directory.CreateDirectory(outputDir);
-            }
+                var targetFile = Path.Combine(outputDir, result.Key);
+                var targetDir = Path.GetDirectoryName(targetFile);
 
-            var generator = new ManualCSharpGenerator(schemaRoot);
-            var code = await generator.GenerateAsync();
-
-            if (File.Exists(outputFile))
-            {
-                var existingCode = await File.ReadAllTextAsync(outputFile);
-                if (existingCode == code)
+                if (targetDir != null && !Directory.Exists(targetDir))
                 {
-                    Console.WriteLine("\u2713 No changes detected. Generation skipped.");
-                    return;
+                    Directory.CreateDirectory(targetDir);
                 }
+
+                if (File.Exists(targetFile))
+                {
+                    var existingCode = await File.ReadAllTextAsync(targetFile);
+                    if (existingCode == result.Value)
+                    {
+                        _logger.LogInformation("No changes for {targetFile}", targetFile);
+                        continue;
+                    }
+                }
+
+                await File.WriteAllTextAsync(targetFile, result.Value);
+                _logger.LogInformation("Updated {targetFile}", targetFile);
             }
 
-            await File.WriteAllTextAsync(outputFile, code);
-
-            Console.WriteLine($"\u2713 C# contract generation complete.");
-            Console.WriteLine($"\u2713 All contracts written to {outputFile}");
+            _logger.LogInformation("[OK] C# contract generation complete.");
         }
 
         static string GetWorkspaceRoot(string currentDir)
         {
             var dir = new DirectoryInfo(currentDir);
-            while (dir != null && !dir.GetFiles("*.sln").Any())
+            while (dir != null && !dir.GetFiles("*.slnx").Any() && !dir.GetFiles("*.sln").Any())
             {
                 dir = dir.Parent;
             }
-            return dir?.FullName ?? throw new DirectoryNotFoundException("Could not find workspace root containing a .sln file.");
+            return dir?.FullName ?? throw new DirectoryNotFoundException("Could not find workspace root containing a .slnx or .sln file.");
         }
+
     }
 
+    /// <summary>
+    /// Generates C# contract classes from JSON schemas.
+    /// </summary>
     public class ManualCSharpGenerator
     {
         private readonly string _schemaRoot;
+        private readonly ILogger<ManualCSharpGenerator> _logger;
 
-        public ManualCSharpGenerator(string schemaRoot)
+        /// <summary>
+        /// Initializes a new instance of the ManualCSharpGenerator.
+        /// </summary>
+        /// <param name="schemaRoot">Path to the JSON schema root directory.</param>
+        /// <param name="logger">Logger instance.</param>
+        public ManualCSharpGenerator(string schemaRoot, ILogger<ManualCSharpGenerator> logger)
         {
             _schemaRoot = schemaRoot;
+            _logger = logger;
         }
 
-        public async Task<string> GenerateAsync()
+        /// <summary>
+        /// Generates C# contract files from JSON schemas.
+        /// </summary>
+        /// <returns>Dictionary of generated filename to content.</returns>
+        public async Task<IDictionary<string, string>> GenerateAsync()
         {
-            var sb = new StringBuilder();
+            var results = new Dictionary<string, string>();
 
-            // File header
-            sb.AppendLine("//----------------------");
-            sb.AppendLine("// <auto-generated>");
-            sb.AppendLine("//     Generated from schemas");
-            sb.AppendLine("// </auto-generated>");
-            sb.AppendLine("//----------------------");
-            sb.AppendLine();
-            sb.AppendLine("#nullable enable");
-            sb.AppendLine();
-            sb.AppendLine("using System.Text.Json.Serialization;");
-            sb.AppendLine();
-            sb.AppendLine("namespace Maliev.MessagingContracts.Generated");
-            sb.AppendLine("{");            // Generate BaseMessage first
-            Console.WriteLine("Generating BaseMessage...");
-            await GenerateBaseMessage(sb);
+            // 1. Shared Base File
+            var sharedSb = new StringBuilder();
+            sharedSb.AppendLine("//----------------------");
+            sharedSb.AppendLine("// <auto-generated>");
+            sharedSb.AppendLine("//     Generated from schemas");
+            sharedSb.AppendLine("// </auto-generated>");
+            sharedSb.AppendLine("//----------------------");
+            sharedSb.AppendLine();
+            sharedSb.AppendLine("#nullable enable");
+            sharedSb.AppendLine();
+            sharedSb.AppendLine("using System;");
+            sharedSb.AppendLine("using System.Text.Json.Serialization;");
+            sharedSb.AppendLine();
+            sharedSb.AppendLine("namespace Maliev.MessagingContracts.Contracts.Shared");
+            sharedSb.AppendLine("{");
+            _logger.LogInformation("Generating BaseMessage...");
+            await GenerateBaseMessage(sharedSb);
+            GenerateMessageTypeEnum(sharedSb);
+            sharedSb.AppendLine("}");
+            results["MessagingContracts.cs"] = sharedSb.ToString();
 
-            // Generate enum for MessageType
-            GenerateMessageTypeEnum(sb);
+            // 2. Domain Files
+            var domains = new[] {
+                "commands", "orders", "payments", "customers", "iam", "shared",
+                "career", "compensation", "compliance", "employee", "leave",
+                "lifecycle", "performance", "chatbot", "invoices", "quotations",
+                "purchase-orders", "receipts", "materials", "suppliers", "auth",
+                "uploads", "pdf", "geometry", "accounting", "delivery", "nda",
+                "jobs", "inventory", "pricing", "facility", "projects", "search"
+            };
 
-            // Collect and generate message contracts
-            var messageSchemaFiles = new List<string>();
-            foreach (var domainDir in new[] { "commands", "orders", "payments", "customers", "iam", "shared", "career", "compensation", "compliance", "employee", "leave", "lifecycle", "performance", "chatbot", "invoices", "quotations", "purchase-orders", "receipts", "materials", "suppliers", "auth", "uploads", "pdf", "geometry", "facility" })
+            foreach (var domainDir in domains)
             {
                 var domainPath = Path.Combine(_schemaRoot, domainDir);
-                if (Directory.Exists(domainPath))
-                {
-                    var files = Directory.GetFiles(domainPath, "*.json", SearchOption.AllDirectories);
-                    // Filter out only the exact base schemas, not anything ending with them
-                    var filtered = files.Where(f =>
-                        !f.EndsWith("base-message.json", StringComparison.OrdinalIgnoreCase) &&
-                        !f.EndsWith("envelope.json", StringComparison.OrdinalIgnoreCase) &&
-                        !Path.GetFileName(f).Equals("command.json", StringComparison.OrdinalIgnoreCase) &&
-                        !Path.GetFileName(f).Equals("domain-event.json", StringComparison.OrdinalIgnoreCase) &&
-                        !Path.GetFileName(f).Equals("integration-event.json", StringComparison.OrdinalIgnoreCase)
-                    ).ToList();
-                    messageSchemaFiles.AddRange(filtered);
-                }
-            }
+                if (!Directory.Exists(domainPath)) continue;
 
-            foreach (var file in messageSchemaFiles.OrderBy(f => f))
-            {
-                var schemaJson = await File.ReadAllTextAsync(file);
-                var schema = JsonDocument.Parse(schemaJson);
-                var root = schema.RootElement;
+                var files = Directory.GetFiles(domainPath, "*.json", SearchOption.AllDirectories);
+                var filtered = files.Where(f =>
+                    !f.EndsWith("base-message.json", StringComparison.OrdinalIgnoreCase) &&
+                    !f.EndsWith("envelope.json", StringComparison.OrdinalIgnoreCase) &&
+                    !Path.GetFileName(f).Equals("command.json", StringComparison.OrdinalIgnoreCase) &&
+                    !Path.GetFileName(f).Equals("domain-event.json", StringComparison.OrdinalIgnoreCase) &&
+                    !Path.GetFileName(f).Equals("integration-event.json", StringComparison.OrdinalIgnoreCase)
+                ).ToList();
 
-                // Check if this file contains a "definitions" object with multiple events
-                if (root.TryGetProperty("definitions", out var definitions))
+                if (!filtered.Any()) continue;
+
+                var domainSb = new StringBuilder();
+                domainSb.AppendLine("//----------------------");
+                domainSb.AppendLine("// <auto-generated>");
+                domainSb.AppendLine("//     Generated from schemas");
+                domainSb.AppendLine("// </auto-generated>");
+                domainSb.AppendLine("//----------------------");
+                domainSb.AppendLine();
+                domainSb.AppendLine("#nullable enable");
+                domainSb.AppendLine();
+                domainSb.AppendLine("using System;");
+                domainSb.AppendLine("using System.Text.Json.Serialization;");
+                domainSb.AppendLine("using Maliev.MessagingContracts.Contracts.Shared;"); // Reference shared types
+                domainSb.AppendLine();
+
+                var pascalDomain = ToPascalCase(domainDir);
+                domainSb.AppendLine($"namespace Maliev.MessagingContracts.Contracts.{pascalDomain}");
+                domainSb.AppendLine("{");
+
+                foreach (var file in filtered.OrderBy(f => f))
                 {
-                    // Generate a class for each definition
-                    foreach (var definition in definitions.EnumerateObject())
+                    var schemaJson = await File.ReadAllTextAsync(file);
+                    var schema = JsonDocument.Parse(schemaJson);
+                    var root = schema.RootElement;
+
+                    if (root.TryGetProperty("definitions", out var definitions))
                     {
-                        var className = definition.Name;
-                        Console.WriteLine($"Generating {className}...");
-                        await GenerateMessageClassFromDefinition(sb, definition.Value, className);
+                        foreach (var definition in definitions.EnumerateObject())
+                        {
+                            _logger.LogInformation("Generating {className} in {domainDir}...", definition.Name, domainDir);
+                            await GenerateMessageClassFromDefinition(domainSb, definition.Value, definition.Name);
+                            domainSb.AppendLine();
+                        }
+                    }
+                    else
+                    {
+                        var className = GetClassName(file);
+                        _logger.LogInformation("Generating {className} in {domainDir}...", className, domainDir);
+                        await GenerateMessageClass(domainSb, file, className);
+                        domainSb.AppendLine();
                     }
                 }
-                else
-                {
-                    // Generate as a single message class (existing behavior)
-                    var className = GetClassName(file);
-                    Console.WriteLine($"Generating {className}...");
-                    await GenerateMessageClass(sb, file, className);
-                }
+
+                domainSb.AppendLine("}");
+
+                var targetFileName = Path.Combine(pascalDomain, $"{pascalDomain}Events.cs");
+                results[targetFileName] = domainSb.ToString();
             }
 
-            sb.AppendLine("}");
-            return sb.ToString();
+            return results;
         }
 
         private async Task GenerateBaseMessage(StringBuilder sb)
@@ -169,9 +229,13 @@ namespace Generator
             sb.AppendLine("        [property: JsonPropertyName(\"correlationId\")] System.Guid CorrelationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"causationId\")] System.Guid? CausationId,");
             sb.AppendLine("        [property: JsonPropertyName(\"occurredAtUtc\")] System.DateTimeOffset OccurredAtUtc,");
-            sb.AppendLine("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic");
-            sb.AppendLine("    );");
-            sb.AppendLine();
+            sb.AppendLine("        [property: JsonPropertyName(\"isPublic\")] bool IsPublic)");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine("        public BaseMessage() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool)) { }");
+            sb.AppendLine("    }");
         }
 
         private void GenerateMessageTypeEnum(StringBuilder sb)
@@ -264,6 +328,16 @@ namespace Generator
                 sb.AppendLine($"    /// {description}");
                 sb.AppendLine("    /// </summary>");
             }
+            sb.AppendLine("    /// <param name=\"MessageId\">Unique identifier for the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageName\">Descriptive name of the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageType\">The type of message (Command, Event, etc.).</param>");
+            sb.AppendLine("    /// <param name=\"MessageVersion\">Semantic version of the message contract.</param>");
+            sb.AppendLine("    /// <param name=\"PublishedBy\">The service that published the message.</param>");
+            sb.AppendLine("    /// <param name=\"ConsumedBy\">List of services intended to consume the message.</param>");
+            sb.AppendLine("    /// <param name=\"CorrelationId\">Id used to correlate related messages across a flow.</param>");
+            sb.AppendLine("    /// <param name=\"CausationId\">Id of the message that caused this one.</param>");
+            sb.AppendLine("    /// <param name=\"OccurredAtUtc\">Timestamp of when the message occurred.</param>");
+            sb.AppendLine("    /// <param name=\"IsPublic\">True if the message is intended for external systems.</param>");
             sb.AppendLine("    /// <param name=\"Payload\">The specific data associated with this message.</param>");
             sb.AppendLine($"    public record {className}(");
 
@@ -285,7 +359,6 @@ namespace Generator
             var allParams = baseParams.ToList();
             allParams.Add($"[property: JsonPropertyName(\"payload\")] {className}Payload Payload");
 
-            sb.AppendLine();
             for (int i = 0; i < allParams.Count; i++)
             {
                 sb.Append($"        {allParams[i]}");
@@ -294,15 +367,19 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
-            sb.AppendLine();
-            sb.AppendLine();
+            sb.AppendLine(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine($"        public {className}() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool), default!) {{ }}");
+            sb.AppendLine("    }");
         }
 
         private void GeneratePayloadRecord(StringBuilder sb, JsonElement schema, string typeName)
         {
             var properties = new List<(string Name, string JsonName, string Type, string Description)>();
+            var requiredProperties = GetRequiredPropertyNames(schema);
 
             if (schema.TryGetProperty("properties", out var props))
             {
@@ -357,23 +434,32 @@ namespace Generator
             sb.AppendLine("    /// </summary>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
 
-            sb.Append($"    public record {typeName}(");
+            sb.AppendLine($"    public record {typeName}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                sb.Append($"        [property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
-                    sb.Append(", ");
+                    sb.AppendLine(",");
                 }
             }
-            sb.AppendLine(");");
-            sb.AppendLine();
+            sb.AppendLine(")");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {typeName}() : this(");
+            var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
+            sb.Append(string.Join(", ", defaultValues));
+            sb.AppendLine(") { }");
+            AppendOptionalProviderNameCompatibilityMembers(sb, typeName, properties, requiredProperties);
+            sb.AppendLine("    }");
         }
 
         private string GetTypeString(JsonElement element)
@@ -421,8 +507,8 @@ namespace Generator
 
                     // Check if this is a payload object and generate nested type
                     string propType;
-                    if (prop.Value.TryGetProperty("type", out var typeEl) &&
-                        typeEl.GetString() == "object" &&
+                    var typeStr = GetTypeString(prop.Value);
+                    if (typeStr == "object" &&
                         prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
                         // Generate nested record
@@ -430,19 +516,35 @@ namespace Generator
                             ? $"{className}Payload"
                             : $"{className}{propName}";
 
-                        GenerateNestedRecord(sb, nestedTypeName, prop.Value, className);
-                        propType = nestedTypeName;
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value);
+
+                        // Handle nullability
+                        if (prop.Value.TryGetProperty("type", out var typesProp) &&
+                            typesProp.ValueKind == JsonValueKind.Array &&
+                            typesProp.EnumerateArray().Any(t => t.ValueKind == JsonValueKind.String && t.GetString() == "null"))
+                        {
+                            propType = $"{nestedTypeName}?";
+                        }
+                        else
+                        {
+                            propType = nestedTypeName;
+                        }
                     }
-                    else if (prop.Value.TryGetProperty("type", out var arrayType) &&
-                             arrayType.GetString() == "array" &&
-                             prop.Value.TryGetProperty("items", out var itemsEl) &&
-                             itemsEl.TryGetProperty("type", out var itemTypeEl) &&
-                             itemTypeEl.GetString() == "object")
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
                     {
-                        // Generate record for array items
-                        var itemTypeName = $"{className}{propName}Item";
-                        GenerateNestedRecord(sb, itemTypeName, itemsEl, className);
-                        propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            // Generate record for array items
+                            var itemTypeName = $"{className}{propName}Item";
+                            GenerateNestedRecord(sb, itemTypeName, itemsEl);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
                     }
                     else
                     {
@@ -455,14 +557,24 @@ namespace Generator
             }
 
             // Generate the message record that extends BaseMessage
+            sb.AppendLine("    /// <param name=\"MessageId\">Unique identifier for the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageName\">Descriptive name of the message.</param>");
+            sb.AppendLine("    /// <param name=\"MessageType\">The type of message (Command, Event, etc.).</param>");
+            sb.AppendLine("    /// <param name=\"MessageVersion\">Semantic version of the message contract.</param>");
+            sb.AppendLine("    /// <param name=\"PublishedBy\">The service that published the message.</param>");
+            sb.AppendLine("    /// <param name=\"ConsumedBy\">List of services intended to consume the message.</param>");
+            sb.AppendLine("    /// <param name=\"CorrelationId\">Id used to correlate related messages across a flow.</param>");
+            sb.AppendLine("    /// <param name=\"CausationId\">Id of the message that caused this one.</param>");
+            sb.AppendLine("    /// <param name=\"OccurredAtUtc\">Timestamp of when the message occurred.</param>");
+            sb.AppendLine("    /// <param name=\"IsPublic\">True if the message is intended for external systems.</param>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
-            sb.Append($"    public record {className}(");
+            sb.AppendLine($"    public record {className}(");
 
             // Base class parameters first
             var baseParams = new[]
@@ -485,7 +597,6 @@ namespace Generator
                 allParams.Add($"[property: JsonPropertyName(\"{JsonName}\")] {Type} {Name}");
             }
 
-            sb.AppendLine();
             for (int i = 0; i < allParams.Count; i++)
             {
                 sb.Append($"        {allParams[i]}");
@@ -494,14 +605,24 @@ namespace Generator
                     sb.AppendLine(",");
                 }
             }
-            sb.AppendLine();
-            sb.Append("    ) : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic);");
-            sb.AppendLine();
+            sb.AppendLine(") : BaseMessage(MessageId, MessageName, MessageType, MessageVersion, PublishedBy, ConsumedBy, CorrelationId, CausationId, OccurredAtUtc, IsPublic)");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {className}() : this(default(System.Guid), string.Empty, default(MessageType), string.Empty, string.Empty, Array.Empty<string>(), default(System.Guid), default, default(System.DateTimeOffset), default(bool)");
+            foreach (var (_, _, Type, _, _) in properties)
+            {
+                sb.Append($", {GetDefaultValue(Type)}");
+            }
+            sb.AppendLine(") { }");
+            sb.AppendLine("    }");
         }
 
-        private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema, string parentClassName)
+        private void GenerateNestedRecord(StringBuilder sb, string typeName, JsonElement schema)
         {
             var properties = new List<(string Name, string JsonName, string Type, string Description)>();
+            var requiredProperties = GetRequiredPropertyNames(schema);
 
             if (schema.TryGetProperty("properties", out var props))
             {
@@ -516,26 +637,28 @@ namespace Generator
                         propDescription = pDesc.GetString() ?? "";
                     }
 
-                    if (prop.Value.TryGetProperty("type", out var typeEl) &&
-                        typeEl.ValueKind == JsonValueKind.String &&
-                        typeEl.GetString() == "object" &&
+                    var typeStr = GetTypeString(prop.Value);
+                    if (typeStr == "object" &&
                         prop.Value.TryGetProperty("properties", out var nestedProps))
                     {
                         var nestedTypeName = $"{typeName}{propName}";
-                        GenerateNestedRecord(sb, nestedTypeName, prop.Value, parentClassName);
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value);
                         propType = nestedTypeName;
                     }
-                    else if (prop.Value.TryGetProperty("type", out var arrayType) &&
-                             arrayType.ValueKind == JsonValueKind.String &&
-                             arrayType.GetString() == "array" &&
-                             prop.Value.TryGetProperty("items", out var itemsEl) &&
-                             itemsEl.TryGetProperty("type", out var itemTypeEl) &&
-                             itemTypeEl.ValueKind == JsonValueKind.String &&
-                             itemTypeEl.GetString() == "object")
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
                     {
-                        var itemTypeName = $"{typeName}{propName}Item";
-                        GenerateNestedRecord(sb, itemTypeName, itemsEl, parentClassName);
-                        propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            var itemTypeName = $"{typeName}{propName}Item";
+                            GenerateNestedRecord(sb, itemTypeName, itemsEl);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
                     }
                     else
                     {
@@ -551,22 +674,138 @@ namespace Generator
             sb.AppendLine("    /// </summary>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
-            sb.Append($"    public record {typeName}(");
+
+            sb.AppendLine($"    public record {typeName}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                sb.Append($"        [property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
-                    sb.Append(", ");
+                    sb.AppendLine(",");
                 }
             }
-            sb.AppendLine(");");
+            sb.AppendLine(")");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {typeName}() : this(");
+            var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
+            sb.Append(string.Join(", ", defaultValues));
+            sb.AppendLine(") { }");
+            AppendOptionalProviderNameCompatibilityMembers(sb, typeName, properties, requiredProperties);
+            sb.AppendLine("    }");
+        }
+
+        private void AppendOptionalProviderNameCompatibilityMembers(
+            StringBuilder sb,
+            string typeName,
+            IReadOnlyList<(string Name, string JsonName, string Type, string Description)> properties,
+            ISet<string> requiredProperties)
+        {
+            var providerNameIndex = -1;
+            for (var index = 0; index < properties.Count; index++)
+            {
+                if (string.Equals(properties[index].JsonName, "providerName", StringComparison.Ordinal))
+                {
+                    providerNameIndex = index;
+                    break;
+                }
+            }
+
+            if (providerNameIndex < 0 || requiredProperties.Contains("providerName"))
+            {
+                return;
+            }
+
+            var constructorProperties = properties
+                .Where((_, index) => index != providerNameIndex)
+                .ToArray();
+            if (constructorProperties.Length == 0)
+            {
+                return;
+            }
+
             sb.AppendLine();
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Initializes the payload while defaulting the optional v1 ProviderName field.");
+            sb.AppendLine("        /// </summary>");
+            foreach (var property in constructorProperties)
+            {
+                var description = string.IsNullOrEmpty(property.Description)
+                    ? GenerateDescriptionFromPropertyName(property.Name)
+                    : property.Description;
+                sb.AppendLine($"        /// <param name=\"{property.Name}\">{description}</param>");
+            }
+
+            sb.Append($"        public {typeName}(");
+            sb.Append(string.Join(", ", constructorProperties.Select(property => $"{property.Type} {property.Name}")));
+            sb.Append(") : this(");
+            sb.Append(string.Join(", ", properties.Select((property, index) =>
+                index == providerNameIndex ? GetDefaultValue(property.Type) : property.Name)));
+            sb.AppendLine(") { }");
+
+            sb.AppendLine();
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Deconstructs the payload using the provider-omitting v1 shape.");
+            sb.AppendLine("        /// </summary>");
+            foreach (var property in constructorProperties)
+            {
+                var description = string.IsNullOrEmpty(property.Description)
+                    ? GenerateDescriptionFromPropertyName(property.Name)
+                    : property.Description;
+                sb.AppendLine($"        /// <param name=\"{property.Name}\">{description}</param>");
+            }
+
+            sb.Append($"        public void Deconstruct(");
+            sb.Append(string.Join(", ", constructorProperties.Select(property => $"out {property.Type} {property.Name}")));
+            sb.AppendLine(")");
+            sb.AppendLine("        {");
+            foreach (var property in constructorProperties)
+            {
+                sb.AppendLine($"            {property.Name} = this.{property.Name};");
+            }
+            sb.AppendLine("        }");
+        }
+
+        private static HashSet<string> GetRequiredPropertyNames(JsonElement schema)
+        {
+            var requiredProperties = new HashSet<string>(StringComparer.Ordinal);
+            if (!schema.TryGetProperty("required", out var requiredArray))
+            {
+                return requiredProperties;
+            }
+
+            if (requiredArray.ValueKind != JsonValueKind.Array)
+            {
+                throw new InvalidDataException(
+                    "Schema 'required' must be an array when present.");
+            }
+
+            foreach (var requiredProperty in requiredArray.EnumerateArray())
+            {
+                if (requiredProperty.ValueKind != JsonValueKind.String)
+                {
+                    throw new InvalidDataException(
+                        "Schema 'required' entries must be non-empty strings.");
+                }
+
+                var propertyName = requiredProperty.GetString();
+                if (string.IsNullOrEmpty(propertyName))
+                {
+                    throw new InvalidDataException(
+                        "Schema 'required' entries must be non-empty strings.");
+                }
+
+                requiredProperties.Add(propertyName);
+            }
+
+            return requiredProperties;
         }
 
         private async Task GenerateStandaloneMessage(StringBuilder sb, JsonElement root, string className)
@@ -584,31 +823,67 @@ namespace Generator
                     {
                         propDescription = pDesc.GetString() ?? "";
                     }
-                    var propType = GetCSharpType(prop.Value, propName);
+
+                    // Check for nested objects or arrays of objects to generate types
+                    string propType;
+                    var typeStr = GetTypeString(prop.Value);
+                    if (typeStr == "object" &&
+                        prop.Value.TryGetProperty("properties", out var nestedProps))
+                    {
+                        var nestedTypeName = $"{className}{propName}";
+                        GenerateNestedRecord(sb, nestedTypeName, prop.Value);
+                        propType = nestedTypeName;
+                    }
+                    else if (typeStr == "array" &&
+                             prop.Value.TryGetProperty("items", out var itemsEl))
+                    {
+                        var itemTypeStr = GetTypeString(itemsEl);
+                        if (itemTypeStr == "object")
+                        {
+                            var itemTypeName = $"{className}{propName}Item";
+                            GenerateNestedRecord(sb, itemTypeName, itemsEl);
+                            propType = $"System.Collections.Generic.IReadOnlyList<{itemTypeName}>";
+                        }
+                        else
+                        {
+                            propType = GetCSharpType(prop.Value, propName);
+                        }
+                    }
+                    else
+                    {
+                        propType = GetCSharpType(prop.Value, propName);
+                    }
+
                     properties.Add((propName, jsonName, propType, propDescription));
                 }
             }
 
-            sb.AppendLine("    /// <summary>");
-            sb.AppendLine($"    /// Standalone message {className}.");
-            sb.AppendLine("    /// </summary>");
             foreach (var prop in properties)
             {
-                if (!string.IsNullOrEmpty(prop.Description))
-                {
-                    sb.AppendLine($"    /// <param name=\"{prop.Name}\">{prop.Description}</param>");
-                }
+                var description = string.IsNullOrEmpty(prop.Description)
+                    ? GenerateDescriptionFromPropertyName(prop.Name)
+                    : prop.Description;
+                sb.AppendLine($"    /// <param name=\"{prop.Name}\">{description}</param>");
             }
-            sb.Append($"    public record {className}(");
+            sb.AppendLine($"    public record {className}(");
             for (int i = 0; i < properties.Count; i++)
             {
-                sb.Append($"[property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
+                sb.Append($"        [property: JsonPropertyName(\"{properties[i].JsonName}\")] {properties[i].Type} {properties[i].Name}");
                 if (i < properties.Count - 1)
                 {
-                    sb.Append(", ");
+                    sb.AppendLine(",");
                 }
             }
-            sb.AppendLine(");");
+            sb.AppendLine(")");
+            sb.AppendLine("    {");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Parameterless constructor for deserialization.");
+            sb.AppendLine("        /// </summary>");
+            sb.Append($"        public {className}() : this(");
+            var defaultValues = properties.Select(p => GetDefaultValue(p.Type)).ToArray();
+            sb.Append(string.Join(", ", defaultValues));
+            sb.AppendLine(") { }");
+            sb.AppendLine("    }");
         }
 
         private string GetCSharpType(JsonElement propertySchema, string propertyName = "")
@@ -666,6 +941,12 @@ namespace Generator
                 }
                 else if (typeStr == "integer")
                 {
+                    if (propertySchema.TryGetProperty("format", out var format) &&
+                        string.Equals(format.GetString(), "int64", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return isNullable ? "long?" : "long";
+                    }
+
                     return isNullable ? "int?" : "int";
                 }
                 else if (typeStr == "boolean")
@@ -684,6 +965,40 @@ namespace Generator
             }
 
             return "object";
+        }
+
+        private string GetDefaultValue(string csharpType)
+        {
+            // Handle nullable types
+            if (csharpType.EndsWith("?"))
+            {
+                return "default";
+            }
+
+            // Handle collection types - extract the inner type and create properly typed Array.Empty
+            if (csharpType.StartsWith("System.Collections.Generic.IReadOnlyList<"))
+            {
+                // Extract type between < and >
+                var innerType = csharpType.Substring(
+                    "System.Collections.Generic.IReadOnlyList<".Length,
+                    csharpType.Length - "System.Collections.Generic.IReadOnlyList<".Length - 1);
+                return $"Array.Empty<{innerType}>()";
+            }
+
+            // Handle specific types with explicit typing to avoid ambiguity
+            return csharpType switch
+            {
+                "string" => "string.Empty",
+                "System.Guid" => "default(System.Guid)",
+                "System.DateTimeOffset" => "default(System.DateTimeOffset)",
+                "int" => "default(int)",
+                "long" => "default(long)",
+                "double" => "default(double)",
+                "bool" => "default(bool)",
+                "MessageType" => "default(MessageType)",
+                _ when csharpType.EndsWith("Payload") || csharpType.Contains("Item") => "default!",
+                _ => "default!"
+            };
         }
 
         private string ToPascalCase(string input)
@@ -705,7 +1020,35 @@ namespace Generator
         private string GetClassName(string filePath)
         {
             var baseName = Path.GetFileNameWithoutExtension(filePath);
-            return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(baseName.Replace('-', ' ')).Replace(" ", "");
+            return string.Join("", baseName.Split('-').Select(w => ToPascalCase(w)));
+        }
+
+        private string GenerateDescriptionFromPropertyName(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                return "The property value";
+
+            var words = new List<string>();
+            var currentWord = new System.Text.StringBuilder();
+
+            foreach (var c in propertyName)
+            {
+                if (char.IsUpper(c) && currentWord.Length > 0)
+                {
+                    words.Add(currentWord.ToString());
+                    currentWord.Clear();
+                }
+                currentWord.Append(c);
+            }
+            if (currentWord.Length > 0)
+                words.Add(currentWord.ToString());
+
+            if (words.Count == 0)
+                return "The property value";
+
+            var description = string.Join(" ", words);
+            description = description.TrimEnd('s');
+            return $"The {char.ToLower(description[0])}{description.Substring(1)}";
         }
     }
 }

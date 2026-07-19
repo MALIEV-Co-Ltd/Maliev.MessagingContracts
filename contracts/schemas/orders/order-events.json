@@ -33,9 +33,55 @@
                 "assignedEmployeeId": {
                     "type": ["string", "null"],
                     "format": "uuid"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "description": "Information about a single item in an order",
+                        "properties": {
+                            "productId": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "Unique identifier of the product"
+                            },
+                            "productCode": {
+                                "type": "string",
+                                "description": "SKU or human-readable code of the product"
+                            },
+                            "productName": {
+                                "type": "string",
+                                "description": "Name of the product"
+                            },
+                            "sourceProjectId": {
+                                "type": ["string", "null"],
+                                "format": "uuid",
+                                "description": "Source ProjectService project identifier when the order line came from a configured project"
+                            },
+                            "sourceProjectPartId": {
+                                "type": ["string", "null"],
+                                "format": "uuid",
+                                "description": "Source ProjectService part identifier when the order line came from a configured project part"
+                            },
+                            "quantity": {
+                                "type": "number",
+                                "description": "Quantity ordered"
+                            },
+                            "unitPrice": {
+                                "type": "number",
+                                "description": "Price per unit"
+                            },
+                            "lineTotal": {
+                                "type": "number",
+                                "description": "Total price for this line item"
+                            }
+                        },
+                        "required": ["productId", "productCode", "productName", "quantity", "unitPrice", "lineTotal"]
+                    },
+                    "description": "List of items in the order"
                 }
             },
-            "required": ["orderId", "orderNumber", "customerId", "totalAmount", "currency", "createdAt"]
+            "required": ["orderId", "orderNumber", "customerId", "totalAmount", "currency", "createdAt", "items"]
         },
         "OrderStatusChangedEvent": {
             "type": "object",
@@ -53,7 +99,7 @@
                     "enum": [
                         "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
                         "Declined", "Accepted", "Expired", "Paid", "POIssued",
-                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                        "InProgress", "OnHold", "Finished", "QualityReleased", "Shipped", "Cancelled", "Reopened"
                     ]
                 },
                 "newStatus": {
@@ -61,7 +107,7 @@
                     "enum": [
                         "New", "Reviewing", "Rejected", "Reviewed", "Quoted",
                         "Declined", "Accepted", "Expired", "Paid", "POIssued",
-                        "InProgress", "OnHold", "Finished", "Shipped", "Cancelled", "Reopened"
+                        "InProgress", "OnHold", "Finished", "QualityReleased", "Shipped", "Cancelled", "Reopened"
                     ]
                 },
                 "changedBy": {
@@ -165,6 +211,11 @@
                 "paidAt": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "providerName": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Optional in v1 so historical paid-order events may omit the payment provider identifier"
                 }
             },
             "required": ["orderId", "orderNumber", "paymentId", "paidAmount", "currency", "paidAt"]
@@ -193,29 +244,104 @@
         },
         "OrderCompletedEvent": {
             "type": "object",
-            "description": "Published when order production is finished (InProgress → Finished)",
+            "description": "Published when quality control releases a finished order for shipping (Finished → QualityReleased)",
             "properties": {
                 "orderId": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "Order ID that was completed"
                 },
                 "orderNumber": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Human-readable order number"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Customer who owns the order"
+                },
+                "quotationId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Quotation ID the order was created from"
+                },
+                "orderCreatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the order was created"
                 },
                 "completedAt": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "When the order was completed"
                 },
                 "completedBy": {
                     "type": "string",
-                    "format": "uuid"
+                    "format": "uuid",
+                    "description": "User who completed the order"
+                },
+                "jobSucceeded": {
+                    "type": "boolean",
+                    "description": "Whether the manufacturing job succeeded"
+                },
+                "actualMaterialUsedCm3": {
+                    "type": ["number", "null"],
+                    "description": "Actual material used in cubic centimeters"
+                },
+                "actualPrintTimeHours": {
+                    "type": ["number", "null"],
+                    "description": "Actual print time in hours"
+                },
+                "actualLaborHours": {
+                    "type": ["number", "null"],
+                    "description": "Actual labor hours spent"
+                },
+                "actualTotalCost": {
+                    "type": ["number", "null"],
+                    "description": "Actual total cost of the job"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "description": "Information about a single item in an order",
+                        "properties": {
+                            "productId": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "Unique identifier of the product"
+                            },
+                            "productCode": {
+                                "type": "string",
+                                "description": "SKU or human-readable code of the product"
+                            },
+                            "productName": {
+                                "type": "string",
+                                "description": "Name of the product"
+                            },
+                            "quantity": {
+                                "type": "number",
+                                "description": "Quantity ordered"
+                            },
+                            "unitPrice": {
+                                "type": "number",
+                                "description": "Price per unit"
+                            },
+                            "lineTotal": {
+                                "type": "number",
+                                "description": "Total price for this line item"
+                            }
+                        },
+                        "required": ["productId", "productCode", "productName", "quantity", "unitPrice", "lineTotal"]
+                    },
+                    "description": "List of items in the order"
                 }
             },
-            "required": ["orderId", "orderNumber", "completedAt", "completedBy"]
+            "required": ["orderId", "orderNumber", "customerId", "quotationId", "orderCreatedAt", "completedAt", "completedBy", "jobSucceeded", "items"]
         },
         "OrderShippedEvent": {
             "type": "object",
-            "description": "Published when order is shipped to customer (Finished → Shipped)",
+            "description": "Published when order is shipped to customer (QualityReleased → Shipped)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -223,6 +349,10 @@
                 },
                 "orderNumber": {
                     "type": "string"
+                },
+                "customerId": {
+                    "type": "string",
+                    "format": "uuid"
                 },
                 "shippedAt": {
                     "type": "string",
@@ -239,7 +369,7 @@
                     "format": "date-time"
                 }
             },
-            "required": ["orderId", "orderNumber", "shippedAt"]
+            "required": ["orderId", "orderNumber", "customerId", "shippedAt"]
         },
         "OrderCancelledEvent": {
             "type": "object",
@@ -321,7 +451,7 @@
         },
         "OrderReopenedEvent": {
             "type": "object",
-            "description": "Published when completed/shipped order is reopened (Finished/Shipped → Reopened)",
+            "description": "Published when finished, quality-released, or shipped order is reopened (Finished/QualityReleased/Shipped → Reopened)",
             "properties": {
                 "orderId": {
                     "type": "string",
@@ -343,6 +473,40 @@
                 }
             },
             "required": ["orderId", "orderNumber", "reopenedBy", "reopenedAt", "reopenReason"]
+        },
+        "OrderOutsourcingChangedEvent": {
+            "type": "object",
+            "description": "Published when the outsourcing state of an order is changed by an employee",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The order that was changed"
+                },
+                "isOutsourced": {
+                    "type": "boolean",
+                    "description": "The new outsourcing state"
+                },
+                "supplierName": {
+                    "type": ["string", "null"],
+                    "description": "Supplier name when outsourced"
+                },
+                "supplierCostTHB": {
+                    "type": ["number", "null"],
+                    "description": "Supplier cost in THB"
+                },
+                "changedBy": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The employee who made the change"
+                },
+                "changedAtUtc": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the change occurred"
+                }
+            },
+            "required": ["orderId", "isOutsourced", "changedBy", "changedAtUtc"]
         }
     }
 }

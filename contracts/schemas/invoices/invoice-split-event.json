@@ -1,0 +1,72 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://maliev.com/schemas/invoices/invoice-split.json",
+    "title": "Invoice Split Event",
+    "description": "Event published when an invoice is split into multiple child invoices.",
+    "type": "object",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "properties": {
+        "payload": {
+            "type": "object",
+            "properties": {
+                "parentInvoiceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the parent invoice that was split."
+                },
+                "parentInvoiceNumber": {
+                    "type": "string",
+                    "description": "The invoice number of the parent invoice."
+                },
+                "childInvoices": {
+                    "type": "array",
+                    "description": "List of child invoices created from the split.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier of the child invoice."
+                            },
+                            "invoiceNumber": {
+                                "type": "string",
+                                "description": "The invoice number of the child invoice."
+                            },
+                            "grandTotal": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "The grand total amount of the child invoice."
+                            },
+                            "percentage": {
+                                "type": "number",
+                                "format": "double",
+                                "description": "The percentage of the parent invoice this child represents."
+                            }
+                        },
+                        "required": ["id", "invoiceNumber", "grandTotal", "percentage"]
+                    }
+                },
+                "splitBy": {
+                    "type": "string",
+                    "description": "The user ID of the person who performed the split."
+                },
+                "splitAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The timestamp when the split occurred."
+                },
+                "reason": {
+                    "type": "string",
+                    "description": "The reason for splitting the invoice."
+                }
+            },
+            "required": ["parentInvoiceId", "parentInvoiceNumber", "childInvoices", "splitBy", "splitAt"]
+        }
+    },
+    "required": ["payload"]
+}

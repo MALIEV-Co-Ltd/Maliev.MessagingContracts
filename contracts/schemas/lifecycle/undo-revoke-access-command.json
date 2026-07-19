@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Undo Revoke Access Command",
+    "description": "Command to undo access revocation for an employee.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        },
+        {
+            "type": "object",
+            "properties": {
+                "messageName": { "const": "UndoRevokeAccessCommand" },
+                "messageType": { "const": "Command" },
+                "messageVersion": { "const": "1.0" },
+                "publishedBy": { "const": "LifecycleService" },
+                "consumedBy": { "const": ["LifecycleService"] },
+                "isPublic": { "const": false }
+            }
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "payload": {
+            "type": "object",
+            "description": "The payload for undoing access revocation.",
+            "properties": {
+                "employeeId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The unique identifier of the employee."
+                }
+            },
+            "required": [
+                "employeeId"
+            ]
+        }
+    },
+    "required": [
+        "payload"
+    ]
+}

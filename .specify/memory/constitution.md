@@ -1,16 +1,19 @@
 <!--
 SYNC IMPACT REPORT
-Version: 1.1.0 (Major Update - Schema-First Pivot)
+Version: 1.2.0 (Structure Alignment)
 - AMENDED: Constitution to support Schema-First workflow (User Requirement).
 - AMENDED: .NET Version allowed (added .NET 10).
 - AMENDED: JSON Schema version (Draft-07).
-- AMENDED: Directory structure (contracts/ subfolders).
-- STATUS: Constitution now aligns with Feature 001.
+- AMENDED: Directory structure (contracts/schemas/{domain}/ organization).
+- AMENDED: Section V - Domain-based schema organization.
+- AMENDED: Section VI - Removed topology/ reference (not used).
+- AMENDED: Section IX - Updated repository structure to match actual layout.
+- STATUS: Constitution now aligns with actual repository structure.
 -->
 
 # **MALIEV MessagingContracts Constitution**
 
-**Version:** 1.1.0
+**Version:** 1.2.0
 **Purpose:** Define strict governance for shared messaging contracts across all MALIEV microservices.
 
 ---
@@ -88,24 +91,22 @@ Explicitly forbidden dependencies in the *runtime* package:
 
 # **V. Contract Categories and Naming Standards**
 
-Contracts must be organized as follows:
+Contracts must be organized by **domain** under `contracts/schemas/`:
 
-* `contracts/commands/`
-* `contracts/events/`
-* `contracts/requests/`
-* `contracts/responses/`
-* `contracts/shared/`
+* `contracts/schemas/{domain}/` - Domain-specific schemas (e.g., `geometry/`, `jobs/`, `inventory/`, `orders/`)
+* `contracts/schemas/shared/` - Shared definitions (base-message.json, envelope.json, etc.)
 
 Naming:
-* Schema Files: `kebab-case.json` (e.g., `create-order.json`)
-* Message Types: `PascalCase` (e.g., `CreateOrderCommand`)
+* Schema Files: `kebab-case.json` (e.g., `job-events.json`)
+* Message Types: `PascalCase` (e.g., `JobStartedEvent`)
+* Schema properties: `camelCase`
+* C# properties: `PascalCase`
 
 ---
 
 # **VI. Topology & Documentation**
 
 * **AsyncAPI**: Defined in `asyncapi/asyncapi.yaml`.
-* **Topology**: Exchange/Queue definitions in `topology/`.
 * **Documentation**: Generated HTML/Markdown from schemas.
 
 ---
@@ -129,22 +130,29 @@ Naming:
 Root structure:
 
 ```
-/MessagingContracts.sln
+/Maliev.MessagingContracts.slnx
 /contracts
-    /commands
-    /events
-    /requests
-    /responses
-    /shared
+    /schemas
+        /{domain}/              # e.g., geometry/, jobs/, inventory/, orders/
+            {domain}-events.json
+        /shared/                # Shared definitions (base-message.json, etc.)
 /asyncapi
-/topology
+    /asyncapi.yaml
 /generated
     /csharp
+        /Contracts
+            /{Domain}/          # e.g., Geometry/, Jobs/, Inventory/
 /tests
 README.md
-CONSTITUTION.md
+CONSTITUTION.md (or .specify/memory/constitution.md)
 nuget.config
 ```
+
+**Naming Conventions:**
+- Schema files: `kebab-case.json` (e.g., `job-events.json`)
+- Message types: `PascalCase` (e.g., `JobStartedEvent`)
+- Schema properties: `camelCase`
+- C# properties: `PascalCase`
 
 ---
 

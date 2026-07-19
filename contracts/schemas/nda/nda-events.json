@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "maliev/nda-events",
+    "title": "NDA Domain Events",
+    "description": "Events related to Non-Disclosure Agreements",
+    "definitions": {
+        "NdaExpiringEvent": {
+            "type": "object",
+            "description": "Published when an NDA is approaching expiration",
+            "properties": {
+                "ndaId": { "type": "string", "format": "uuid" },
+                "customerId": { "type": "string", "format": "uuid" },
+                "expiresAt": { "type": "string", "format": "date-time" },
+                "daysUntilExpiration": { "type": "integer" },
+                "warningGeneratedAt": { "type": "string", "format": "date-time" }
+            },
+            "required": ["ndaId", "customerId", "expiresAt", "daysUntilExpiration", "warningGeneratedAt"]
+        },
+        "NdaExpiredEvent": {
+            "type": "object",
+            "description": "Published when an NDA has expired",
+            "properties": {
+                "ndaId": { "type": "string", "format": "uuid" },
+                "customerId": { "type": "string", "format": "uuid" },
+                "expiredAt": { "type": "string", "format": "date-time" },
+                "processedAt": { "type": "string", "format": "date-time" }
+            },
+            "required": ["ndaId", "customerId", "expiredAt", "processedAt"]
+        }
+    }
+}

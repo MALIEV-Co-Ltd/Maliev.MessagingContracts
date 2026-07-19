@@ -5,16 +5,16 @@ info:
   description: |
     Comprehensive event-driven architecture for Maliev microservices ecosystem.
 
-    **Total Events**: 98 (39 HR services + 59 business services)
-    **Services**: 22 microservices with async messaging
+    **Total Events**: 115 (46 HR services + 69 business services)
+    **Services**: 23 microservices with async messaging
     **Message Bus**: RabbitMQ via MassTransit
     **Event Format**: CloudEvents-compatible with base metadata
 
     ## Service Categories
 
-    ### Business Services (12)
-    - OrderService: 16-state order workflow (12 events)
-    - InvoiceService: Invoice lifecycle (7 events)
+    ### Business Services (13)
+    - OrderService: 16-state order workflow (13 events)
+    - InvoiceService: Invoice lifecycle (8 events)
     - PaymentService: Payment processing (3 events)
     - CustomerService: Customer management (3 events)
     - PurchaseOrderService: Procurement workflow (5 events)
@@ -22,17 +22,18 @@ info:
     - ReceiptService: Receipt generation (4 events)
     - MaterialService: Inventory management (3 events)
     - SupplierService: Supplier lifecycle (3 events)
-    - AuthService: Authentication & security (6 events)
+    - AccountingService: Financial transactions (5 events)
+    - AuthService: Authentication & security (9 events)
     - UploadService: File management (2 events)
     - PdfService: PDF generation (3 events)
 
     ### HR Services (10)
-    - EmployeeService: Employee lifecycle (3 events)
-    - LeaveService: Leave management (5 events)
+    - EmployeeService: Employee lifecycle & teams (7 events)
+    - LeaveService: Leave management (6 events)
     - PerformanceService: Performance reviews (5 events)
-    - LifecycleService: Onboarding/offboarding (6 events)
+    - LifecycleService: Onboarding/offboarding (7 events)
     - CareerService: Training & development (4 events)
-    - CompensationService: Salary & benefits (3 events)
+    - CompensationService: Salary & benefits (4 events)
     - ComplianceService: Work authorization (2 events)
     - ChatbotService: AI chatbot (4 events)
     - IAMService: Identity & access (4 events)
@@ -53,6 +54,32 @@ servers:
     description: Production RabbitMQ cluster
 
 channels:
+  # ==================== SEARCH SERVICE ====================
+  search/document-upserted:
+    address: maliev.search.events.search-document-upserted
+    messages:
+      SearchDocumentUpsertedEvent:
+        $ref: '#/components/messages/SearchDocumentUpsertedEvent'
+
+  search/document-deleted:
+    address: maliev.search.events.search-document-deleted
+    messages:
+      SearchDocumentDeletedEvent:
+        $ref: '#/components/messages/SearchDocumentDeletedEvent'
+
+  search/reindex-requested:
+    address: maliev.search.commands.search-reindex-requested
+    messages:
+      SearchReindexRequestedCommand:
+        $ref: '#/components/messages/SearchReindexRequestedCommand'
+
+  # ==================== PRICING SERVICE ====================
+  pricing/price-calculated-v2:
+    address: maliev.pricing.events.price-calculated-v2
+    messages:
+      PriceCalculatedEventV2:
+        $ref: '#/components/messages/PriceCalculatedEventV2'
+
   # ==================== ORDER SERVICE ====================
   order/created:
     address: maliev.orders.events.order-created
@@ -126,6 +153,12 @@ channels:
       OrderReopenedEvent:
         $ref: '#/components/messages/OrderReopenedEvent'
 
+  order/outsourcing-changed:
+    address: maliev.orders.events.order-outsourcing-changed
+    messages:
+      OrderOutsourcingChangedEvent:
+        $ref: '#/components/messages/OrderOutsourcingChangedEvent'
+
   # ==================== INVOICE SERVICE ====================
   invoice/created:
     address: maliev.invoices.events.invoice-created
@@ -156,6 +189,18 @@ channels:
     messages:
       InvoiceFullyPaidEvent:
         $ref: '#/components/messages/InvoiceFullyPaidEvent'
+
+  invoice/payment-allocated:
+    address: maliev.invoices.events.payment-allocated
+    messages:
+      PaymentAllocatedEvent:
+        $ref: '#/components/messages/PaymentAllocatedEvent'
+
+  invoice/split:
+    address: maliev.invoices.events.invoice-split
+    messages:
+      InvoiceSplitEvent:
+        $ref: '#/components/messages/InvoiceSplitEvent'
 
   # ==================== PAYMENT SERVICE ====================
   payment/created:
@@ -194,6 +239,12 @@ channels:
     messages:
       CustomerDeletedEvent:
         $ref: '#/components/messages/CustomerDeletedEvent'
+
+  customer/company-tier-changed:
+    address: maliev.customers.events.company-tier-changed
+    messages:
+      CompanyTierChangedEvent:
+        $ref: '#/components/messages/CompanyTierChangedEvent'
 
   # ==================== PURCHASE ORDER SERVICE ====================
   purchase-order/created:
@@ -276,6 +327,12 @@ channels:
       ReceiptVoidedEvent:
         $ref: '#/components/messages/ReceiptVoidedEvent'
 
+  receipt/pdf-requested:
+    address: maliev.receipts.events.pdf-requested
+    messages:
+      ReceiptPdfRequestedEvent:
+        $ref: '#/components/messages/ReceiptPdfRequestedEvent'
+
   # ==================== MATERIAL SERVICE ====================
   material/created:
     address: maliev.materials.events.material-created
@@ -313,6 +370,37 @@ channels:
     messages:
       SupplierStatusChangedEvent:
         $ref: '#/components/messages/SupplierStatusChangedEvent'
+
+  # ==================== ACCOUNTING SERVICE ====================
+  accounting/transaction-posted:
+    address: maliev.accounting.events.transaction-posted
+    messages:
+      TransactionPostedEvent:
+        $ref: '#/components/messages/TransactionPostedEvent'
+
+  accounting/inventory-movement:
+    address: maliev.accounting.events.inventory-movement
+    messages:
+      InventoryMovementEvent:
+        $ref: '#/components/messages/InventoryMovementEvent'
+
+  accounting/payroll-processed:
+    address: maliev.accounting.events.payroll-processed
+    messages:
+      PayrollProcessedEvent:
+        $ref: '#/components/messages/PayrollProcessedEvent'
+
+  accounting/supplier-invoice-received:
+    address: maliev.accounting.events.supplier-invoice-received
+    messages:
+      SupplierInvoiceReceivedEvent:
+        $ref: '#/components/messages/SupplierInvoiceReceivedEvent'
+
+  accounting/payment-recorded:
+    address: maliev.accounting.events.payment-recorded
+    messages:
+      PaymentRecordedEvent:
+        $ref: '#/components/messages/PaymentRecordedEvent'
 
   # ==================== AUTH SERVICE ====================
   auth/user-logged-in:
@@ -357,6 +445,24 @@ channels:
       SuspiciousActivityDetectedEvent:
         $ref: '#/components/messages/SuspiciousActivityDetectedEvent'
 
+  auth/email-verified:
+    address: maliev.auth.events.email-verified
+    messages:
+      EmailVerifiedEvent:
+        $ref: '#/components/messages/EmailVerifiedEvent'
+
+  auth/verification-email-requested:
+    address: maliev.auth.events.verification-email-requested
+    messages:
+      VerificationEmailRequestedEvent:
+        $ref: '#/components/messages/VerificationEmailRequestedEvent'
+
+  auth/passkey-registered:
+    address: maliev.auth.events.passkey-registered
+    messages:
+      PasskeyRegisteredEvent:
+        $ref: '#/components/messages/PasskeyRegisteredEvent'
+
   # ==================== UPLOAD SERVICE ====================
   upload/file-uploaded:
     address: maliev.uploads.events.file-uploaded
@@ -369,6 +475,12 @@ channels:
     messages:
       FileDeletedEvent:
         $ref: '#/components/messages/FileDeletedEvent'
+
+  upload/artifact:
+    address: maliev.uploads.commands.upload-artifact
+    messages:
+      UploadArtifactCommand:
+        $ref: '#/components/messages/UploadArtifactCommand'
 
   # ==================== PDF SERVICE ====================
   pdf/generation-requested:
@@ -389,6 +501,12 @@ channels:
       PdfGenerationFailedEvent:
         $ref: '#/components/messages/PdfGenerationFailedEvent'
 
+  pdf/report-pdf-requested:
+    address: maliev.pdf.events.report-pdf-requested
+    messages:
+      FinancialReportPdfRequestedEvent:
+        $ref: '#/components/messages/FinancialReportPdfRequestedEvent'
+
   # ==================== EMPLOYEE SERVICE ====================
   employee/created:
     address: maliev.employees.events.employee-created
@@ -407,6 +525,30 @@ channels:
     messages:
       EmployeeDepartmentTransferredEvent:
         $ref: '#/components/messages/EmployeeDepartmentTransferredEvent'
+
+  employee/team-created:
+    address: maliev.employees.events.team-created
+    messages:
+      TeamCreatedEvent:
+        $ref: '#/components/messages/TeamCreatedEvent'
+
+  employee/team-updated:
+    address: maliev.employees.events.team-updated
+    messages:
+      TeamUpdatedEvent:
+        $ref: '#/components/messages/TeamUpdatedEvent'
+
+  employee/team-member-added:
+    address: maliev.employees.events.team-member-added
+    messages:
+      TeamMemberAddedEvent:
+        $ref: '#/components/messages/TeamMemberAddedEvent'
+
+  employee/team-member-removed:
+    address: maliev.employees.events.team-member-removed
+    messages:
+      TeamMemberRemovedEvent:
+        $ref: '#/components/messages/TeamMemberRemovedEvent'
 
   # ==================== LEAVE SERVICE ====================
   leave/request-submitted:
@@ -438,6 +580,12 @@ channels:
     messages:
       LeaveBalanceAdjustedEvent:
         $ref: '#/components/messages/LeaveBalanceAdjustedEvent'
+
+  leave/balance-closed:
+    address: maliev.leave.events.leave-balance-closed
+    messages:
+      LeaveBalanceClosedEvent:
+        $ref: '#/components/messages/LeaveBalanceClosedEvent'
 
   # ==================== PERFORMANCE SERVICE ====================
   performance/review-created:
@@ -507,6 +655,18 @@ channels:
       LifecycleTaskCompletedEvent:
         $ref: '#/components/messages/LifecycleTaskCompletedEvent'
 
+  lifecycle/access-revoked:
+    address: maliev.lifecycle.events.access-revoked
+    messages:
+      AccessRevokedEvent:
+        $ref: '#/components/messages/AccessRevokedEvent'
+
+  lifecycle/undo-revoke-access:
+    address: maliev.lifecycle.commands.undo-revoke-access
+    messages:
+      UndoRevokeAccessCommand:
+        $ref: '#/components/messages/UndoRevokeAccessCommand'
+
   # ==================== CAREER SERVICE ====================
   career/training-enrolled:
     address: maliev.career.events.training-enrolled
@@ -550,6 +710,12 @@ channels:
     messages:
       BenefitEnrolledEvent:
         $ref: '#/components/messages/BenefitEnrolledEvent'
+
+  compensation/compensation-archived:
+    address: maliev.compensation.events.compensation-archived
+    messages:
+      CompensationArchivedEvent:
+        $ref: '#/components/messages/CompensationArchivedEvent'
 
   # ==================== COMPLIANCE SERVICE ====================
   compliance/work-authorization-expired:
@@ -614,8 +780,137 @@ channels:
       PermissionRegisteredEvent:
         $ref: '#/components/messages/PermissionRegisteredEvent'
 
+  # ==================== GEOMETRY SERVICE ====================
+  geometry/file-analyzed:
+    address: maliev.geometryservice.v1.analysis.completed
+    messages:
+      FileAnalyzedEvent:
+        $ref: '#/components/messages/FileAnalyzedEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
+
+  geometry/file-metrics-ready:
+    address: maliev.geometryservice.v1.metrics.ready
+    messages:
+      FileMetricsReadyEvent:
+        $ref: '#/components/messages/FileMetricsReadyEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
+
+  geometry/file-analysis-failed:
+    address: maliev.geometryservice.v1.analysis.failed
+    messages:
+      FileAnalysisFailedEvent:
+        $ref: '#/components/messages/FileAnalysisFailedEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
+
+  geometry/dfm-analysis-ready:
+    address: maliev.geometryservice.v1.dfm.ready
+    messages:
+      DfmAnalysisReadyEvent:
+        $ref: '#/components/messages/DfmAnalysisReadyEvent'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: maliev.events
+          type: topic
+          durable: true
+          autoDelete: false
+          vhost: /
+        bindingVersion: '0.3.0'
+
+  # ==================== JOBS SERVICE ====================
+  job/started:
+    address: maliev.jobs.events.job-started
+    messages:
+      JobStartedEvent:
+        $ref: '#/components/messages/JobStartedEvent'
+
+  job/status-changed:
+    address: maliev.jobs.events.job-status-changed
+    messages:
+      JobStatusChangedEvent:
+        $ref: '#/components/messages/JobStatusChangedEvent'
+
+  # ==================== INVENTORY SERVICE ====================
+  inventory/material-low-stock:
+    address: maliev.inventory.events.material-low-stock
+    messages:
+      MaterialLowStockEvent:
+        $ref: '#/components/messages/MaterialLowStockEvent'
+
+  # ==================== DELIVERY SERVICE ====================
+  delivery/note-created:
+    address: maliev.delivery.events.delivery-note-created
+    messages:
+      DeliveryNoteCreatedEvent:
+        $ref: '#/components/messages/DeliveryNoteCreatedEvent'
+
+  delivery/status-changed:
+    address: maliev.delivery.events.delivery-status-changed
+    messages:
+      DeliveryStatusChangedEvent:
+        $ref: '#/components/messages/DeliveryStatusChangedEvent'
+
+  delivery/completed:
+    address: maliev.delivery.events.delivery-completed
+    messages:
+      DeliveryCompletedEvent:
+        $ref: '#/components/messages/DeliveryCompletedEvent'
+
+  delivery/note-pdf-requested:
+    address: maliev.delivery.events.delivery-note-pdf-requested
+    messages:
+      DeliveryNotePdfRequestedEvent:
+        $ref: '#/components/messages/DeliveryNotePdfRequestedEvent'
+
+  # ==================== NDA SERVICE ====================
+  nda/expiring:
+    address: maliev.nda.events.nda-expiring
+    messages:
+      NdaExpiringEvent:
+        $ref: '#/components/messages/NdaExpiringEvent'
+
+  nda/expired:
+    address: maliev.nda.events.nda-expired
+    messages:
+      NdaExpiredEvent:
+        $ref: '#/components/messages/NdaExpiredEvent'
+
 components:
   messages:
+    # ==================== PRICING SERVICE MESSAGES ====================
+    PriceCalculatedEventV2:
+      payload:
+        $ref: '../contracts/schemas/pricing/price-calculated-event-v2.json'
+      description: Published when pricing completes with reconstructable variable and fixed DFM allocation and commercial factors
+
     # ==================== ORDER SERVICE MESSAGES ====================
     OrderCreatedEvent:
       payload:
@@ -677,6 +972,11 @@ components:
         $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderReopenedEvent'
       description: Published when finished/shipped order is reopened
 
+    OrderOutsourcingChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/orders/order-events.json#/definitions/OrderOutsourcingChangedEvent'
+      description: Published when the outsourcing state of an order is changed
+
     # ==================== INVOICE SERVICE MESSAGES ====================
     InvoiceCreatedEvent:
       payload:
@@ -702,6 +1002,16 @@ components:
       payload:
         $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/InvoiceFullyPaidEvent'
       description: Published when invoice is fully paid
+
+    PaymentAllocatedEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-events.json#/definitions/PaymentAllocatedEvent'
+      description: Published when a payment is allocated to an invoice
+
+    InvoiceSplitEvent:
+      payload:
+        $ref: '../contracts/schemas/invoices/invoice-split-event.json'
+      description: Published when an invoice is split into multiple child invoices
 
     # ==================== PAYMENT SERVICE MESSAGES ====================
     PaymentCreatedEvent:
@@ -734,6 +1044,11 @@ components:
       payload:
         $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CustomerDeletedEvent'
       description: Published when customer is soft-deleted
+
+    CompanyTierChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/customers/customer-events.json#/definitions/CompanyTierChangedEvent'
+      description: Published when a company's tier is promoted or demoted
 
     # ==================== PURCHASE ORDER SERVICE MESSAGES ====================
     PurchaseOrderCreatedEvent:
@@ -803,6 +1118,11 @@ components:
         $ref: '../contracts/schemas/receipts/receipt-events.json#/definitions/ReceiptVoidedEvent'
       description: Published when receipt is voided
 
+    ReceiptPdfRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/receipts/receipt-events.json#/definitions/ReceiptPdfRequestedEvent'
+      description: Published to request PDF generation for a receipt with rich data
+
     # ==================== MATERIAL SERVICE MESSAGES ====================
     MaterialCreatedEvent:
       payload:
@@ -834,6 +1154,32 @@ components:
       payload:
         $ref: '../contracts/schemas/suppliers/supplier-events.json#/definitions/SupplierStatusChangedEvent'
       description: Published when supplier status changes (Active/Suspended/Terminated)
+
+    # ==================== ACCOUNTING SERVICE MESSAGES ====================
+    TransactionPostedEvent:
+      payload:
+        $ref: '../contracts/schemas/accounting/accounting-events.json#/definitions/TransactionPostedEvent'
+      description: Published when a financial transaction is posted to the ledger
+
+    InventoryMovementEvent:
+      payload:
+        $ref: '../contracts/schemas/accounting/accounting-events.json#/definitions/InventoryMovementEvent'
+      description: Published when stock movement is recorded
+
+    PayrollProcessedEvent:
+      payload:
+        $ref: '../contracts/schemas/accounting/accounting-events.json#/definitions/PayrollProcessedEvent'
+      description: Published when payroll is processed
+
+    SupplierInvoiceReceivedEvent:
+      payload:
+        $ref: '../contracts/schemas/accounting/accounting-events.json#/definitions/SupplierInvoiceReceivedEvent'
+      description: Published when a supplier invoice is received
+
+    PaymentRecordedEvent:
+      payload:
+        $ref: '../contracts/schemas/accounting/accounting-events.json#/definitions/PaymentRecordedEvent'
+      description: Published when a payment is recorded in accounting
 
     # ==================== AUTH SERVICE MESSAGES ====================
     UserLoggedInEvent:
@@ -871,6 +1217,21 @@ components:
         $ref: '../contracts/schemas/auth/auth-events.json#/definitions/SuspiciousActivityDetectedEvent'
       description: Published on security events like token reuse
 
+    EmailVerifiedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/EmailVerifiedEvent'
+      description: Published when a customer completes email verification
+
+    VerificationEmailRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/VerificationEmailRequestedEvent'
+      description: Published when a verification email needs to be sent to a new user
+
+    PasskeyRegisteredEvent:
+      payload:
+        $ref: '../contracts/schemas/auth/auth-events.json#/definitions/PasskeyRegisteredEvent'
+      description: Published when a user registers a new passkey
+
     # ==================== UPLOAD SERVICE MESSAGES ====================
     FileUploadedEvent:
       payload:
@@ -879,8 +1240,13 @@ components:
 
     FileDeletedEvent:
       payload:
-        $ref: '../contracts/schemas/upload/file-deleted-event.json'
+        $ref: '../contracts/schemas/uploads/upload-events.json#/definitions/FileDeletedEvent'
       description: Published when file is deleted from storage
+
+    UploadArtifactCommand:
+      payload:
+        $ref: '../contracts/schemas/uploads/upload-artifact-command.json'
+      description: Command to upload processed artifact (GLB, thumbnails) to GCS
 
     # ==================== PDF SERVICE MESSAGES ====================
     PdfGenerationRequestedEvent:
@@ -898,6 +1264,11 @@ components:
         $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/PdfGenerationFailedEvent'
       description: Published when PDF generation fails
 
+    FinancialReportPdfRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/pdf/pdf-events.json#/definitions/FinancialReportPdfRequestedEvent'
+      description: Published when a financial report PDF is requested
+
     # ==================== EMPLOYEE SERVICE MESSAGES ====================
     EmployeeCreatedEvent:
       payload:
@@ -913,6 +1284,26 @@ components:
       payload:
         $ref: '../contracts/schemas/employee/employee-events.json#/definitions/EmployeeDepartmentTransferredEvent'
       description: Published when employee moves to different department
+
+    TeamCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/TeamCreatedEvent'
+      description: Published when a new team is created
+
+    TeamUpdatedEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/TeamUpdatedEvent'
+      description: Published when a team is updated
+
+    TeamMemberAddedEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/TeamMemberAddedEvent'
+      description: Published when a member is added to a team
+
+    TeamMemberRemovedEvent:
+      payload:
+        $ref: '../contracts/schemas/employee/employee-events.json#/definitions/TeamMemberRemovedEvent'
+      description: Published when a member is removed from a team
 
     # ==================== LEAVE SERVICE MESSAGES ====================
     LeaveRequestSubmittedEvent:
@@ -939,6 +1330,11 @@ components:
       payload:
         $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveBalanceAdjustedEvent'
       description: Published when leave balance is manually adjusted
+
+    LeaveBalanceClosedEvent:
+      payload:
+        $ref: '../contracts/schemas/leave/leave-events.json#/definitions/LeaveBalanceClosedEvent'
+      description: Published when an employee's leave balances are closed
 
     # ==================== PERFORMANCE SERVICE MESSAGES ====================
     PerformanceReviewCreatedEvent:
@@ -997,6 +1393,16 @@ components:
         $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/LifecycleTaskCompletedEvent'
       description: Published when lifecycle task is completed
 
+    AccessRevokedEvent:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/lifecycle-events.json#/definitions/AccessRevokedEvent'
+      description: Published when employee system access has been successfully revoked
+
+    UndoRevokeAccessCommand:
+      payload:
+        $ref: '../contracts/schemas/lifecycle/undo-revoke-access-command.json'
+      description: Command to undo access revocation for an employee
+
     # ==================== CAREER SERVICE MESSAGES ====================
     TrainingEnrolledEvent:
       payload:
@@ -1033,6 +1439,11 @@ components:
       payload:
         $ref: '../contracts/schemas/compensation/compensation-events.json#/definitions/BenefitEnrolledEvent'
       description: Published when employee enrolls in benefit
+
+    CompensationArchivedEvent:
+      payload:
+        $ref: '../contracts/schemas/compensation/compensation-events.json#/definitions/CompensationArchivedEvent'
+      description: Published when an employee's compensation records are archived
 
     # ==================== COMPLIANCE SERVICE MESSAGES ====================
     WorkAuthorizationExpiredEvent:
@@ -1086,6 +1497,92 @@ components:
       payload:
         $ref: '../contracts/schemas/iam/permission-registered-event.json'
       description: Published when service registers new permissions
+
+    # ==================== GEOMETRY SERVICE MESSAGES ====================
+    FileAnalyzedEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileAnalyzedEvent'
+      description: Published when a 3D file analysis completes successfully
+
+    FileMetricsReadyEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileMetricsReadyEvent'
+      description: Published when initial 3D file metrics are ready
+
+    FileAnalysisFailedEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/FileAnalysisFailedEvent'
+      description: Published when a 3D file analysis fails
+
+    DfmAnalysisReadyEvent:
+      payload:
+        $ref: '../contracts/schemas/geometry/geometry-events.json#/definitions/DfmAnalysisReadyEvent'
+      description: Published when process-specific DFM analysis is ready
+
+    # ==================== JOBS SERVICE MESSAGES ====================
+    JobStartedEvent:
+      payload:
+        $ref: '../contracts/schemas/jobs/job-events.json#/definitions/JobStartedEvent'
+      description: Published when a production job transitions to InProgress status
+
+    JobStatusChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/jobs/job-events.json#/definitions/JobStatusChangedEvent'
+      description: Published when a job status changes (e.g., Pending → InProgress → Completed)
+
+    # ==================== INVENTORY SERVICE MESSAGES ====================
+    MaterialLowStockEvent:
+      payload:
+        $ref: '../contracts/schemas/inventory/inventory-events.json#/definitions/MaterialLowStockEvent'
+      description: Published when remaining stock for a batch drops below threshold
+
+    # ==================== DELIVERY SERVICE MESSAGES ====================
+    DeliveryNoteCreatedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryNoteCreatedEvent'
+      description: Published when a delivery note is created
+
+    DeliveryStatusChangedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryStatusChangedEvent'
+      description: Published when delivery status changes
+
+    DeliveryCompletedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryCompletedEvent'
+      description: Published when delivery is completed
+
+    DeliveryNotePdfRequestedEvent:
+      payload:
+        $ref: '../contracts/schemas/delivery/delivery-events.json#/definitions/DeliveryNotePdfRequestedEvent'
+      description: Published when a delivery note PDF is requested
+
+    # ==================== NDA SERVICE MESSAGES ====================
+    NdaExpiringEvent:
+      payload:
+        $ref: '../contracts/schemas/nda/nda-events.json#/definitions/NdaExpiringEvent'
+      description: Published when an NDA is approaching expiration
+
+    NdaExpiredEvent:
+      payload:
+        $ref: '../contracts/schemas/nda/nda-events.json#/definitions/NdaExpiredEvent'
+      description: Published when an NDA has expired
+
+    # ==================== SEARCH SERVICE MESSAGES ====================
+    SearchDocumentUpsertedEvent:
+      payload:
+        $ref: '../contracts/schemas/search/search-events.json#/definitions/SearchDocumentUpsertedEvent'
+      description: Published when a service creates or updates a resource that should be indexed for global search
+
+    SearchDocumentDeletedEvent:
+      payload:
+        $ref: '../contracts/schemas/search/search-events.json#/definitions/SearchDocumentDeletedEvent'
+      description: Published when a service removes a resource from the global search index
+
+    SearchReindexRequestedCommand:
+      payload:
+        $ref: '../contracts/schemas/search/search-events.json#/definitions/SearchReindexRequestedCommand'
+      description: Published by SearchService to request services republish searchable documents
 
 operations:
   # Example operations showing publisher-subscriber relationships

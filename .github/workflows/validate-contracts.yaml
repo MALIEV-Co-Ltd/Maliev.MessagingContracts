@@ -11,14 +11,23 @@ on:
       - 'topology/**'
       - 'generated/csharp/**'
       - 'tools/Generator/**'
-      - 'tests/**'
+      - 'Maliev.MessagingContracts.Tests/**'
       - 'scripts/**'
       - 'package.json'
       - 'package-lock.json'
-      - 'Maliev.MessagingContracts.sln'
+      - 'Maliev.MessagingContracts.slnx'
       - '.config/**'
+      - 'Directory.Build.props'
+      - 'Directory.Build.targets'
+      - 'Directory.Packages.props'
+      - 'global.json'
+      - 'NuGet.Config'
+      - 'NuGet.config'
+      - 'nuget.Config'
+      - 'nuget.config'
       - '.github/dependabot.yml'
       - '.github/workflows/validate-contracts.yaml'
+      - '.github/workflows/publish.yaml'
 
 permissions:
   contents: read
@@ -53,7 +62,8 @@ jobs:
           git fetch origin "$BASE_REF" --depth=1
           changed_files="$(git diff --name-only "origin/$BASE_REF"...HEAD)"
           printf '%s\n' "$changed_files"
-          if grep -Ev '^\.github/(dependabot\.yml|workflows/validate-contracts\.yaml)$' <<< "$changed_files" | grep -q .; then
+          runtime_files="$(grep -Ev '^\.github/(dependabot\.yml|workflows/validate-contracts\.yaml)$' <<< "$changed_files" || true)"
+          if [[ -n "$runtime_files" ]]; then
             echo "runtime_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "runtime_changed=false" >> "$GITHUB_OUTPUT"
@@ -63,6 +73,8 @@ jobs:
     name: Validate schemas and generated contracts
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -77,13 +89,24 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: '10.0.302'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Validate AsyncAPI and schemas
         run: npm test
+
+      - name: Detect schema changes
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ -n "$BASE_REF" ]; then
+            git diff --quiet "origin/$BASE_REF" -- contracts/schemas/ || {
+              echo "::warning::Schema changes detected. Ensure messageVersion is incremented if this were a production environment."
+            }
+          fi
+        shell: bash
 
       - name: Validate consumers
         run: ./scripts/validate-consumers.ps1
@@ -92,6 +115,9 @@ jobs:
       - name: Generate contracts
         run: ./scripts/build.ps1
         shell: pwsh
+
+      - name: Verify generated C# is current
+        run: node scripts/verify-generated-clean.cjs
 
       - name: Validate bounded Dependabot policy
         shell: ruby {0}
@@ -121,9 +147,9 @@ jobs:
       contents: read
     uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/dotnet-pr-gate.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
     with:
-      target-path: Maliev.MessagingContracts.sln
+      target-path: Maliev.MessagingContracts.slnx
       working-directory: .
-      dotnet-version: 10.0.x
+      dotnet-version: 10.0.302
       configuration: Release
       coverage-threshold: 80
       artifact-retention-days: 7
@@ -137,9 +163,9 @@ jobs:
       security-events: write
     uses: MALIEV-Co-Ltd/Maliev.Workflows/.github/workflows/codeql-dotnet.yml@183ddf5d7b841aa3583f7961a21084d2f4e54b23
     with:
-      target-path: Maliev.MessagingContracts.sln
+      target-path: Maliev.MessagingContracts.slnx
       working-directory: .
-      dotnet-version: 10.0.x
+      dotnet-version: 10.0.302
 
   required-summary:
     name: Required validation summary

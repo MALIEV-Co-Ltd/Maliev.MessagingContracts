@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "PermissionRegistrationCompleted",
+    "description": "Event published by the IAM service when a service's permission registration is complete.",
+    "allOf": [
+        {
+            "$ref": "../shared/base-message.json"
+        }
+    ],
+    "type": "object",
+    "properties": {
+        "serviceName": {
+            "type": "string",
+            "description": "The name of the service whose permissions were registered."
+        },
+        "permissionCount": {
+            "type": "integer",
+            "description": "Number of permissions registered."
+        },
+        "roleCount": {
+            "type": "integer",
+            "description": "Number of roles registered."
+        },
+        "registeredAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when registration completed."
+        }
+    },
+    "required": [
+        "serviceName",
+        "permissionCount",
+        "roleCount",
+        "registeredAt"
+    ]
+}

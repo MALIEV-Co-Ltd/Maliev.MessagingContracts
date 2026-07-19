@@ -7,9 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "node scripts/validate-contracts.cjs",
+    "test": "node scripts/validate-contracts.cjs && node --test scripts/*.test.cjs",
     "validate:asyncapi": "node scripts/validate-contracts.cjs --asyncapi",
-    "validate:schemas": "node scripts/validate-contracts.cjs --schemas"
+    "validate:schemas": "node scripts/validate-contracts.cjs --schemas",
+    "test:workflow": "node --test scripts/workflow-helpers.test.cjs"
   },
   "repository": {
     "type": "git",

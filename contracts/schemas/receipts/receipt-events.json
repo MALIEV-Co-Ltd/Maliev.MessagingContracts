@@ -130,6 +130,67 @@
                 }
             },
             "required": ["receiptId", "receiptNumber", "voidedBy", "voidedAt", "voidReason"]
+        },
+        "ReceiptPdfRequestedEvent": {
+            "type": "object",
+            "description": "Published to request rich PDF generation for a receipt",
+            "properties": {
+                "receiptId": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "receiptNumber": {
+                    "type": "string"
+                },
+                "customerDetails": {
+                    "type": "object",
+                    "required": ["name"],
+                    "properties": {
+                        "name": { "type": "string" },
+                        "taxId": { "type": "string", "nullable": true },
+                        "address": { "type": "string", "nullable": true }
+                    }
+                },
+                "financialDetails": {
+                    "type": "object",
+                    "required": ["issueDate", "subtotal", "taxAmount", "totalAmount", "currency"],
+                    "properties": {
+                        "issueDate": { "type": "string", "format": "date-time" },
+                        "subtotal": { "type": "number" },
+                        "taxAmount": { "type": "number" },
+                        "withholdingTaxAmount": { "type": "number", "nullable": true },
+                        "totalAmount": { "type": "number" },
+                        "currency": { "type": "string" },
+                        "paymentMethod": { "type": "string", "nullable": true }
+                    }
+                },
+                "lineItems": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["lineNumber", "description", "quantity", "unitPrice", "taxRate", "lineTotal"],
+                        "properties": {
+                            "lineNumber": { "type": "integer" },
+                            "description": { "type": "string" },
+                            "quantity": { "type": "number" },
+                            "unitPrice": { "type": "number" },
+                            "taxRate": { "type": "number" },
+                            "lineTotal": { "type": "number" }
+                        }
+                    }
+                },
+                "taxFields": {
+                    "type": "object",
+                    "properties": {
+                        "taxId": { "type": "string" },
+                        "vatRate": { "type": "number" },
+                        "withholdingTaxType": { "type": "string", "nullable": true }
+                    }
+                },
+                "templateId": { "type": "string" },
+                "requestedAt": { "type": "string", "format": "date-time" }
+            },
+            "required": ["receiptId", "receiptNumber", "customerDetails", "financialDetails", "lineItems", "taxFields", "templateId", "requestedAt"]
         }
     }
 }
