@@ -9,7 +9,7 @@ const workflowPath = path.join(repositoryRoot, '.github', 'workflows', 'validate
 const publishWorkflowPath = path.join(repositoryRoot, '.github', 'workflows', 'publish.yaml');
 const globalJsonPath = path.join(repositoryRoot, 'global.json');
 const approvedWorkflowSha = '183ddf5d7b841aa3583f7961a21084d2f4e54b23';
-const checkoutAction = 'actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0';
+const checkoutAction = 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1';
 const setupNodeAction = 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020';
 const setupDotnetAction = 'actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68';
 
