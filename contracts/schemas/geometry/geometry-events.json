@@ -444,7 +444,7 @@
                 },
                 "thinWallCount": {
                     "type": "integer",
-                    "description": "Number of detected thin-wall regions (wall thickness < 0.8mm)"
+                    "description": "Number of detected thin-wall regions (wall thickness less than 0.8mm)"
                 },
                 "thinWallRegions": {
                     "type": "array",
@@ -610,7 +610,7 @@
                 },
                 "sharpCornerCount": {
                     "type": "integer",
-                    "description": "Number of sharp corners that could cause tool breakage (radius < 2mm)"
+                    "description": "Number of sharp corners that could cause tool breakage (radius less than 2mm)"
                 },
                 "sharpCornerRegions": {
                     "type": "array",

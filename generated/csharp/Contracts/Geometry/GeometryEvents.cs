@@ -690,7 +690,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// Payload data for FdmDfmReport.
     /// </summary>
     /// <param name="ReportType">The report Type</param>
-    /// <param name="ThinWallCount">Number of detected thin-wall regions (wall thickness < 0.8mm)</param>
+    /// <param name="ThinWallCount">Number of detected thin-wall regions (wall thickness less than 0.8mm)</param>
     /// <param name="ThinWallRegions">Centroid coordinates (mm) of each thin-wall region</param>
     /// <param name="OverhangFaceCount">Number of mesh faces with overhang angle > 45 degrees from vertical</param>
     /// <param name="OverhangAreaCm2">Total projected area (cm²) of overhanging faces</param>
@@ -864,7 +864,7 @@ namespace Maliev.MessagingContracts.Contracts.Geometry
     /// Payload data for CncDfmReport.
     /// </summary>
     /// <param name="ReportType">The report Type</param>
-    /// <param name="SharpCornerCount">Number of sharp corners that could cause tool breakage (radius < 2mm)</param>
+    /// <param name="SharpCornerCount">Number of sharp corners that could cause tool breakage (radius less than 2mm)</param>
     /// <param name="SharpCornerRegions">Coordinates (mm) of each sharp corner region</param>
     /// <param name="HasUndercuts">True if the part has undercut features that require special tooling</param>
     /// <param name="UndercutRegions">Coordinates (mm) of each undercut region</param>
